@@ -6,17 +6,23 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://Oooscar8.github.io">
-  <title>Archives: 2024/12 | Alex_Space</title>
+  <title>fileio | Alex_Space</title>
   <meta name="generator" content="hexo-theme-yilia-plus">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Alex_Space">
-<meta property="og:url" content="http://oooscar8.github.io/archives/2024/12/index.html">
+  <meta name="description" content="Project 3: Caching I&#x2F;O  Project核心  When a program asks the I&#x2F;O library to write a byte to a file, instead of immediately going to the disk, put that byte in a cache, then write the entire cache to di">
+<meta property="og:type" content="article">
+<meta property="og:title" content="fileio">
+<meta property="og:url" content="http://oooscar8.github.io/2024/12/27/fileio/index.html">
 <meta property="og:site_name" content="Alex_Space">
+<meta property="og:description" content="Project 3: Caching I&#x2F;O  Project核心  When a program asks the I&#x2F;O library to write a byte to a file, instead of immediately going to the disk, put that byte in a cache, then write the entire cache to di">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cs.brown.edu/courses/csci0300/2024/assign/projects/assets/fileio-overview.png">
+<meta property="article:published_time" content="2024-12-27T15:38:35.000Z">
+<meta property="article:modified_time" content="2024-12-27T15:40:15.665Z">
 <meta property="article:author" content="Alex Sun">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cs.brown.edu/courses/csci0300/2024/assign/projects/assets/fileio-overview.png">
   
     <link rel="alternative" href="/atom.xml" title="Alex_Space" type="application/atom+xml">
   
@@ -210,110 +216,237 @@
               class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
+            <article id="post-fileio" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
   
   
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2024" class="archive-year">2024</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	
+    <h1 class="article-title" itemprop="name">
+      fileio
+    </h1>
+  
+
+
+  
+  
+        
+        <span id="busuanzi_container_page_pv" style='display:none' class="archive-article-date">
+              <i class="icon-smile icon"></i> 阅读数：<span id="busuanzi_value_page_pv"></span>次
+        </span>
+
 <a href="/2024/12/27/fileio/" class="archive-article-date">
         <time datetime="2024-12-27T15:38:35.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2024-12-27</time>
 </a>
 
+  
+  
+    
+<div style="margin-top:10px;">
+  <span class="post-time">
+    <span class="post-meta-item-icon">
+      <!-- fonts.scss -->
+      <!-- 百度字体平台:http://fontstore.baidu.com/static/editor/index.html -->
+      <i class="icon-statistics"></i>
+      <span class="post-meta-item-text"> 字数统计:</span>
+      <span class="post-count">78字</span>
+    </span>
+  </span>
+
+  <span class="post-time">
+    &nbsp; | &nbsp;
+    <span class="post-meta-item-icon">
+      <i class="icon-book icon"></i>
+      <span class="post-meta-item-text"> 阅读时长≈</span>
+      <span class="post-count">1分</span>
+    </span>
+  </span>
+</div>
+
+
+  
+  </header>
+  
+  <div class="article-entry" itemprop="articleBody">
+    
+    <h1 id="project-3-caching-io"><a class="markdownIt-Anchor" href="#project-3-caching-io"></a> Project 3: Caching I/O</h1>
+<h3 id="project核心"><a class="markdownIt-Anchor" href="#project核心"></a> Project核心</h3>
+<blockquote>
+<p>When a program asks the I/O library to write a byte to a file, instead of immediately going to the disk, put that byte in a cache, then write the entire cache to disk at a later point.</p>
+</blockquote>
+<img src="https://cs.brown.edu/courses/csci0300/2024/assign/projects/assets/fileio-overview.png" alt="Cache vs. Buffer Visual" style="zoom: 67%;" />
+<h3 id="making-progress-readcwritec"><a class="markdownIt-Anchor" href="#making-progress-readcwritec"></a> Making progress – readc/writec</h3>
+<p>FAQS:</p>
+<blockquote>
+<p>如何keep track the last byte to writec and flush to disk?</p>
+</blockquote>
+<blockquote>
+<p>fetch进来后如何再在同样位置flush进disk？</p>
+</blockquote>
+
+    
+
+    
+    <div class="page-reward">
+      <a href="javascript:void(0);" class="page-reward-btn tooltip-top" target="_self">
+        <div class="tooltip tooltip-east">
+          <span class="tooltip-item">
+            赏
+          </span>
+          <span class="tooltip-content">
+            <span class="tooltip-text">
+              <span class="tooltip-inner">
+                <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i
+                    class="icon icon-quo-right"></i></p>
+                <div class="reward-box">
+                  
+                  <div class="reward-box-item">
+                    <img class="reward-img" src="/img/alipay.jpg">
+                    <span class="reward-type">支付宝</span>
+                  </div>
+                  
+                  
+                  <div class="reward-box-item">
+                    <img class="reward-img" src="/img/wechat.jpg">
+                    <span class="reward-type">微信</span>
+                  </div>
+                  
+                </div>
+              </span>
+            </span>
+          </span>
         </div>
-    	 
-  
-    <h1 itemprop="name">
-	
-	  <a class="archive-article-title" href="/2024/12/27/fileio/" target="_blank">fileio</a>
-  
-    </h1>
-  
+      </a>
+    </div>
+    
 
-
-        <div class="article-info info-on-right">
+    
+    <div class="declare"> 
+      <ul class="post-copyright">
+        <li>
+          <strong>本文作者：</strong>
+          Alex Sun
+        </li>
+        <li>
+          <strong>本文链接：</strong>
+          <a href="http://Oooscar8.github.io/2024/12/27/fileio/" title="fileio" target="_blank">http://Oooscar8.github.io/2024/12/27/fileio/</a>
+        </li>
+        
+        <li>
+          <strong>版权声明： </strong>
           
-          
+          本博客所有文章除特别声明外，均采用 <a href="https://github.com/JoeyBling/hexo-theme-yilia-plus/blob/master/LICENSE" rel="external nofollow" target="_blank">MIT</a> 许可协议。转载请注明出处！
+        </li>
+        
+      </ul>
+    </div>
+    
 
+  </div>
+  <div class="article-info article-info-index">
+    
+    
+    
+
+    
+
+    
+    
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <!-- <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a> -->
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+     <!-- <img src="//pan.baidu.com/share/qrcode?url=http://oooscar8.github.io/2024/12/27/fileio/" alt="微信分享二维码"> -->
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+
+    
+    <div class="clearfix"></div>
+  </div>
   </div>
 </article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	
-<a href="/2024/12/27/Instruction/" class="archive-article-date">
-        <time datetime="2024-12-27T09:41:56.680Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2024-12-27</time>
-</a>
 
+
+<nav id="article-nav">
+  
+  
+    <a href="/2024/12/27/Instruction/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title"></div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-    	 
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	
-<a href="/2024/12/27/Chapter1/" class="archive-article-date">
-        <time datetime="2024-12-26T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2024-12-27</time>
-</a>
-
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-	
-	  <a class="archive-article-title" href="/2024/12/27/Chapter1/" target="_blank">Chapter1</a>
-  
-    </h1>
-  
+        
+        
+    </div>
+</aside>
 
 
-        <div class="article-info info-on-right">
-          
-          
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
-  
 
-    
+
+
+
+
+
+
+
+
 
 
           </div>
@@ -354,8 +487,8 @@
 	var yiliaConfig = {
 		mathjax: ,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: true,
