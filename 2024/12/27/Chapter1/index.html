@@ -10,12 +10,12 @@
   <meta name="generator" content="hexo-theme-yilia-plus">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
-  <meta name="description" content="What is the Internet?A Nuts-and-Bolts Descriptionbasic conceptsDevices connected to the Internet: hosts or end system End systems are connected together by a network of communication links and packet">
+  <meta name="description" content="What is the Internet?  A Nuts-and-Bolts Description  basic concepts Devices connected to the Internet: hosts or end system End systems are connected together by a network of communication links and p">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Chapter1">
 <meta property="og:url" content="http://oooscar8.github.io/2024/12/27/Chapter1/index.html">
 <meta property="og:site_name" content="Alex_Space">
-<meta property="og:description" content="What is the Internet?A Nuts-and-Bolts Descriptionbasic conceptsDevices connected to the Internet: hosts or end system End systems are connected together by a network of communication links and packet">
+<meta property="og:description" content="What is the Internet?  A Nuts-and-Bolts Description  basic concepts Devices connected to the Internet: hosts or end system End systems are connected together by a network of communication links and p">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://gitee.com/OooAlex/study_note/raw/master/img/202409032148948.png">
 <meta property="og:image" content="http://gitee.com/OooAlex/study_note/raw/master/img/202409041100101.png">
@@ -267,7 +267,7 @@
       <!-- 百度字体平台:http://fontstore.baidu.com/static/editor/index.html -->
       <i class="icon-statistics"></i>
       <span class="post-meta-item-text"> 字数统计:</span>
-      <span class="post-count">850字</span>
+      <span class="post-count">873字</span>
     </span>
   </span>
 
@@ -287,16 +287,21 @@
   
   <div class="article-entry" itemprop="articleBody">
     
-    <h2 id="What-is-the-Internet"><a href="#What-is-the-Internet" class="headerlink" title="What is the Internet?"></a>What is the Internet?</h2><h3 id="A-Nuts-and-Bolts-Description"><a href="#A-Nuts-and-Bolts-Description" class="headerlink" title="A Nuts-and-Bolts Description"></a>A Nuts-and-Bolts Description</h3><h4 id="basic-concepts"><a href="#basic-concepts" class="headerlink" title="basic concepts"></a>basic concepts</h4><p>Devices connected to the Internet: <strong>hosts</strong> or <strong>end system</strong></p>
-<p>End systems are connected together by a network of <strong>communication links</strong> and <strong>packet switches</strong>. </p>
-<hr>
-<h4 id="communication-links"><a href="#communication-links" class="headerlink" title="communication links"></a>communication links</h4><p>Made up of different types of physical media</p>
+    <h2 id="what-is-the-internet"><a class="markdownIt-Anchor" href="#what-is-the-internet"></a> What is the Internet?</h2>
+<h3 id="a-nuts-and-bolts-description"><a class="markdownIt-Anchor" href="#a-nuts-and-bolts-description"></a> A Nuts-and-Bolts Description</h3>
+<h4 id="basic-concepts"><a class="markdownIt-Anchor" href="#basic-concepts"></a> basic concepts</h4>
+<p>Devices connected to the Internet: <strong>hosts</strong> or <strong>end system</strong></p>
+<p>End systems are connected together by a network of <strong>communication links</strong> and <strong>packet switches</strong>.</p>
+<hr />
+<h4 id="communication-links"><a class="markdownIt-Anchor" href="#communication-links"></a> communication links</h4>
+<p>Made up of different types of physical media</p>
 <p>Different links have different <strong>transmission rate</strong>, measured in bits/seconds</p>
 <p>When one end system has data to send to another end system, the sending end system segments(分段) the data and adds header bytes to each segment(段). The resulting packages of information, known as <strong>packets</strong>(分组), are then sent through the network to the destination end system, where they are reassembled into the original data</p>
-<hr>
-<h4 id="packet-switch"><a href="#packet-switch" class="headerlink" title="packet switch"></a>packet switch</h4><p>Takes a packet arriving on one of its incoming communication links and forwards that packet on one of its outgoing communication links</p>
+<hr />
+<h4 id="packet-switch"><a class="markdownIt-Anchor" href="#packet-switch"></a> packet switch</h4>
+<p>Takes a packet arriving on one of its incoming communication links and forwards that packet on one of its outgoing communication links</p>
 <ul>
-<li><strong>routers</strong>(路由器) </li>
+<li><strong>routers</strong>(路由器)</li>
 </ul>
 <blockquote>
 <p>used in the network core</p>
@@ -307,13 +312,16 @@
 <blockquote>
 <p>used in access networks</p>
 </blockquote>
-<p>The sequence of communication links and packet switches traversed by a packet from the sending end system to the receiving end system is known as a <strong>route</strong> or <strong>path</strong> through the network. </p>
-<hr>
-<h4 id="Protocols"><a href="#Protocols" class="headerlink" title="Protocols"></a>Protocols</h4><p>End systems, packet switches, and other pieces of the Internet run protocols that  control the sending and receiving of information within the Internet.</p>
+<p>The sequence of communication links and packet switches traversed by a packet from the sending end system to the receiving end system is known as a <strong>route</strong> or <strong>path</strong> through the network.</p>
+<hr />
+<h4 id="protocols"><a class="markdownIt-Anchor" href="#protocols"></a> Protocols</h4>
+<p>End systems, packet switches, and other pieces of the Internet run protocols that  control the sending and receiving of information within the Internet.</p>
 <ul>
-<li><p>TCP(Transmission Control Protocol)</p>
+<li>
+<p>TCP(Transmission Control Protocol)</p>
 </li>
-<li><p>Internet Protocol (IP)</p>
+<li>
+<p>Internet Protocol (IP)</p>
 </li>
 </ul>
 <blockquote>
@@ -322,16 +330,23 @@
 <ul>
 <li>TCP/IP</li>
 </ul>
-<h3 id="A-services-Description"><a href="#A-services-Description" class="headerlink" title="A services Description"></a>A services Description</h3><h4 id="Definition"><a href="#Definition" class="headerlink" title="Definition"></a>Definition</h4><p>The Internet is an infrastructure that provides services to <strong>distributed applications</strong>.</p>
-<hr>
-<h4 id="socket-interface"><a href="#socket-interface" class="headerlink" title="socket interface"></a>socket interface</h4><p>Socket interface is a set of rules that the sending program must follow so that the data can be delivered to destination program.</p>
-<h3 id="What-is-a-Protocol"><a href="#What-is-a-Protocol" class="headerlink" title="What is a Protocol?"></a>What is a Protocol?</h3><h4 id="A-Human-Analogy"><a href="#A-Human-Analogy" class="headerlink" title="A Human Analogy"></a>A Human Analogy</h4><p><img src="http://gitee.com/OooAlex/study_note/raw/master/img/202409032148948.png" alt="image-20240903214826833" style="zoom: 33%;" /></p>
-<hr>
-<h4 id="Network-Protocols"><a href="#Network-Protocols" class="headerlink" title="Network Protocols"></a>Network Protocols</h4><p>A protocol defines the <strong>format</strong> and the <strong>order</strong> of messages exchanged between two or more communicating entities, as well as the <strong>actions</strong> taken on the transmission and/or receipt of a message or other event.</p>
-<h2 id="The-Network-Edge"><a href="#The-Network-Edge" class="headerlink" title="The Network Edge"></a>The Network Edge</h2><p><img src="http://gitee.com/OooAlex/study_note/raw/master/img/202409041100101.png" alt="image-20240904110050027" style="zoom:50%;" /></p>
-<p>hosts: </p>
+<h3 id="a-services-description"><a class="markdownIt-Anchor" href="#a-services-description"></a> A services Description</h3>
+<h4 id="definition"><a class="markdownIt-Anchor" href="#definition"></a> Definition</h4>
+<p>The Internet is an infrastructure that provides services to <strong>distributed applications</strong>.</p>
+<hr />
+<h4 id="socket-interface"><a class="markdownIt-Anchor" href="#socket-interface"></a> socket interface</h4>
+<p>Socket interface is a set of rules that the sending program must follow so that the data can be delivered to destination program.</p>
+<h3 id="what-is-a-protocol"><a class="markdownIt-Anchor" href="#what-is-a-protocol"></a> What is a Protocol?</h3>
+<h4 id="a-human-analogy"><a class="markdownIt-Anchor" href="#a-human-analogy"></a> A Human Analogy</h4>
+<img src="http://gitee.com/OooAlex/study_note/raw/master/img/202409032148948.png" alt="image-20240903214826833" style="zoom: 33%;" />
+<hr />
+<h4 id="network-protocols"><a class="markdownIt-Anchor" href="#network-protocols"></a> Network Protocols</h4>
+<p>A protocol defines the <strong>format</strong> and the <strong>order</strong> of messages exchanged between two or more communicating entities, as well as the <strong>actions</strong> taken on the transmission and/or receipt of a message or other event.</p>
+<h2 id="the-network-edge"><a class="markdownIt-Anchor" href="#the-network-edge"></a> The Network Edge</h2>
+<img src="http://gitee.com/OooAlex/study_note/raw/master/img/202409041100101.png" alt="image-20240904110050027" style="zoom:50%;" />
+<p>hosts:</p>
 <ul>
-<li>clients </li>
+<li>clients</li>
 </ul>
 <p>desktops, laptops, smartphones…</p>
 <ul>
@@ -339,7 +354,10 @@
 </ul>
 <p>powerful machines that store and distribute Web pages, stream video, relay e-mail…</p>
 <p><strong>in large data centers</strong></p>
-<h3 id="Access-Networks"><a href="#Access-Networks" class="headerlink" title="Access Networks"></a>Access Networks</h3><h4 id="Home-Access"><a href="#Home-Access" class="headerlink" title="Home Access"></a>Home Access</h4><h5 id="DSL-Internet-access"><a href="#DSL-Internet-access" class="headerlink" title="DSL Internet access"></a>DSL Internet access</h5><p><img src="http://gitee.com/OooAlex/study_note/raw/master/img/202409041120064.png" alt="image-20240904112018897" style="zoom:50%;" /></p>
+<h3 id="access-networks"><a class="markdownIt-Anchor" href="#access-networks"></a> Access Networks</h3>
+<h4 id="home-access"><a class="markdownIt-Anchor" href="#home-access"></a> Home Access</h4>
+<h5 id="dsl-internet-access"><a class="markdownIt-Anchor" href="#dsl-internet-access"></a> DSL Internet access</h5>
+<img src="http://gitee.com/OooAlex/study_note/raw/master/img/202409041120064.png" alt="image-20240904112018897" style="zoom:50%;" />
 <ul>
 <li>DSL modem</li>
 </ul>
@@ -354,33 +372,40 @@
 </ul>
 <p>On the customer side, a splitter separates the data and telephone signals arriving to the home and forwards the data signal to the DSL modem.</p>
 <p>Asymmetric: downstream transmission rate is larger than upstream transmission rate</p>
-<hr>
-<h5 id="cable-Internet-access"><a href="#cable-Internet-access" class="headerlink" title="cable Internet access"></a>cable Internet access</h5><p><img src="http://gitee.com/OooAlex/study_note/raw/master/img/202409041318239.png" style="zoom:50%;" /></p>
-<p><img src="https://gitee.com/OooAlex/study_note/raw/master/img/202409041509538.png" alt="image-20240904150914348" style="zoom:50%;" /></p>
-<p><img src="http://gitee.com/OooAlex/study_note/raw/master/img/202409041510599.png" alt="image-20240904151059445" style="zoom:50%;" /></p>
+<hr />
+<h5 id="cable-internet-access"><a class="markdownIt-Anchor" href="#cable-internet-access"></a> cable Internet access</h5>
+<img src="http://gitee.com/OooAlex/study_note/raw/master/img/202409041318239.png" style="zoom:50%;" />
+<img src="https://gitee.com/OooAlex/study_note/raw/master/img/202409041509538.png" alt="image-20240904150914348" style="zoom:50%;" />
+<img src="http://gitee.com/OooAlex/study_note/raw/master/img/202409041510599.png" alt="image-20240904151059445" style="zoom:50%;" />
 <p>Frequency division multiplexing(FDM): different channels transmitted in different frequency bands</p>
 <p>Asymmetric: downstream transmission rate is larger than upstream transmission rate</p>
 <p>CMTS‘s function is similar to DSLAM</p>
-<hr>
-<h5 id="fiber-to-the-home-FTTH"><a href="#fiber-to-the-home-FTTH" class="headerlink" title="fiber to the home (FTTH)"></a>fiber to the home (FTTH)</h5><p>even faster!</p>
+<hr />
+<h5 id="fiber-to-the-home-ftth"><a class="markdownIt-Anchor" href="#fiber-to-the-home-ftth"></a> fiber to the home (FTTH)</h5>
+<p>even faster!</p>
 <p>provide an optical fiber path from the CO directly to the home</p>
 <p>FTTH using the PON distribution architecture (passive optical networks):</p>
-<p><img src="http://gitee.com/OooAlex/study_note/raw/master/img/202409041339786.png" alt="image-20240904133946720" style="zoom:50%;" /></p>
+<img src="http://gitee.com/OooAlex/study_note/raw/master/img/202409041339786.png" alt="image-20240904133946720" style="zoom:50%;" />
 <p>packets sent from OLT are replicated at the splitter (similar to a cable head end)</p>
-<hr>
-<h5 id="5G-fixed-wireless"><a href="#5G-fixed-wireless" class="headerlink" title="5G fixed wireless"></a>5G fixed wireless</h5><p>without installing costly and failure-prone cabling</p>
-<h4 id="Access-in-the-Enterprise-and-the-Home-Ethernet-and-WiFi"><a href="#Access-in-the-Enterprise-and-the-Home-Ethernet-and-WiFi" class="headerlink" title="Access in the Enterprise (and the Home): Ethernet and WiFi"></a>Access in the Enterprise (and the Home): Ethernet and WiFi</h4><ul>
+<hr />
+<h5 id="5g-fixed-wireless"><a class="markdownIt-Anchor" href="#5g-fixed-wireless"></a> 5G fixed wireless</h5>
+<p>without installing costly and failure-prone cabling</p>
+<h4 id="access-in-the-enterprise-and-the-home-ethernet-and-wifi"><a class="markdownIt-Anchor" href="#access-in-the-enterprise-and-the-home-ethernet-and-wifi"></a> Access in the Enterprise (and the Home): Ethernet and WiFi</h4>
+<ul>
 <li>Ethernet</li>
 </ul>
-<p><img src="http://gitee.com/OooAlex/study_note/raw/master/img/202409041551016.png" alt="image-20240904155156845" style="zoom:50%;" /></p>
-<hr>
+<img src="http://gitee.com/OooAlex/study_note/raw/master/img/202409041551016.png" alt="image-20240904155156845" style="zoom:50%;" />
+<hr />
 <ul>
-<li><p>Home Network</p>
-<p><img src="http://gitee.com/OooAlex/study_note/raw/master/img/202409041558726.png" style="zoom:50%;" /></p>
+<li>
+<p>Home Network</p>
+<img src="http://gitee.com/OooAlex/study_note/raw/master/img/202409041558726.png" style="zoom:50%;" />
 </li>
 </ul>
-<h4 id="Wide-Area-Wireless-Access-3G-and-LTE-4G-and-5G"><a href="#Wide-Area-Wireless-Access-3G-and-LTE-4G-and-5G" class="headerlink" title="Wide-Area Wireless Access: 3G and LTE 4G and 5G"></a>Wide-Area Wireless Access: 3G and LTE 4G and 5G</h4><p>Employ the same wireless infrastructure used for cellular telephony to send/receive packets through a base station that is operated by the cellular network provider.</p>
-<h3 id="Physical-Media"><a href="#Physical-Media" class="headerlink" title="Physical Media"></a>Physical Media</h3><p>guided media / unguided media.</p>
+<h4 id="wide-area-wireless-access-3g-and-lte-4g-and-5g"><a class="markdownIt-Anchor" href="#wide-area-wireless-access-3g-and-lte-4g-and-5g"></a> Wide-Area Wireless Access: 3G and LTE 4G and 5G</h4>
+<p>Employ the same wireless infrastructure used for cellular telephony to send/receive packets through a base station that is operated by the cellular network provider.</p>
+<h3 id="physical-media"><a class="markdownIt-Anchor" href="#physical-media"></a> Physical Media</h3>
+<p>guided media / unguided media.</p>
 <ul>
 <li>Twisted-Pair Copper Wire</li>
 </ul>
@@ -390,58 +415,69 @@
 </ul>
 <p>Coaxial cable can be used as a guided shared medium</p>
 <ul>
-<li><p>Fiber Optics</p>
+<li>
+<p>Fiber Optics</p>
 </li>
-<li><p>Terrestrial Radio Channels</p>
+<li>
+<p>Terrestrial Radio Channels</p>
 </li>
 </ul>
 <p>Require no physical wire to be installed, can penetrate walls, provide connectivity to a mobile user, and can potentially carry a signal for long distances.</p>
 <ul>
 <li>Satellite Radio Channels</li>
 </ul>
-<h2 id="The-Network-Core"><a href="#The-Network-Core" class="headerlink" title="The Network Core"></a>The Network Core</h2><h3 id="Packet-Switching"><a href="#Packet-Switching" class="headerlink" title="Packet Switching"></a>Packet Switching</h3><p>R: transmission rate (bps)</p>
+<h2 id="the-network-core"><a class="markdownIt-Anchor" href="#the-network-core"></a> The Network Core</h2>
+<h3 id="packet-switching"><a class="markdownIt-Anchor" href="#packet-switching"></a> Packet Switching</h3>
+<p>R: transmission rate (bps)</p>
 <p>L: length of a packet</p>
 <p><strong>transmission delay</strong>:</p>
-<p><img src="http://gitee.com/OooAlex/study_note/raw/master/img/202409121311655.png" alt="image-20240912131136591" style="zoom:50%;" /></p>
-<h4 id="Store-and-Forward-Transmission"><a href="#Store-and-Forward-Transmission" class="headerlink" title="Store-and Forward Transmission"></a>Store-and Forward Transmission</h4><p>it takes 2L/R(time) for a packet to be sent from Source to Destination</p>
+<img src="http://gitee.com/OooAlex/study_note/raw/master/img/202409121311655.png" alt="image-20240912131136591" style="zoom:50%;" />
+<h4 id="store-and-forward-transmission"><a class="markdownIt-Anchor" href="#store-and-forward-transmission"></a> Store-and Forward Transmission</h4>
+<p>it takes 2L/R(time) for a packet to be sent from Source to Destination</p>
 <p>it takes 4L/R(time) for all three packets to be sent from Source to Destination</p>
-<p><img src="http://gitee.com/OooAlex/study_note/raw/master/img/202409121419327.png" alt="image-20240912141943199" style="zoom: 67%;" /></p>
+<img src="http://gitee.com/OooAlex/study_note/raw/master/img/202409121419327.png" alt="image-20240912141943199" style="zoom: 67%;" />
 <p>More general form: N links each of rate R</p>
 <p><strong>end-to-end delay</strong>:</p>
-<p><img src="http://gitee.com/OooAlex/study_note/raw/master/img/202409121426382.png" alt="image-20240912142622318"></p>
-<h4 id="Queuing-Delays-and-Packet-Loss"><a href="#Queuing-Delays-and-Packet-Loss" class="headerlink" title="Queuing Delays and Packet Loss"></a>Queuing Delays and Packet Loss</h4><p><strong>output buffer</strong> (<strong>output queue</strong>): the arriving packet <strong>wait</strong> here</p>
+<p><img src="http://gitee.com/OooAlex/study_note/raw/master/img/202409121426382.png" alt="image-20240912142622318" /></p>
+<h4 id="queuing-delays-and-packet-loss"><a class="markdownIt-Anchor" href="#queuing-delays-and-packet-loss"></a> Queuing Delays and Packet Loss</h4>
+<p><strong>output buffer</strong> (<strong>output queue</strong>): the arriving packet <strong>wait</strong> here</p>
 <p>result in output buffer <strong>queuing delays</strong></p>
 <p>if the output buffer is full, <strong>packet loss</strong> occurs</p>
-<p><img src="http://gitee.com/OooAlex/study_note/raw/master/img/202409121445872.png" alt="image-20240912144530808" style="zoom:67%;" /></p>
-<h4 id="Forwarding-Tables-and-Routing-Protocols"><a href="#Forwarding-Tables-and-Routing-Protocols" class="headerlink" title="Forwarding Tables and Routing Protocols"></a>Forwarding Tables and Routing Protocols</h4><blockquote>
+<img src="http://gitee.com/OooAlex/study_note/raw/master/img/202409121445872.png" alt="image-20240912144530808" style="zoom:67%;" />
+<h4 id="forwarding-tables-and-routing-protocols"><a class="markdownIt-Anchor" href="#forwarding-tables-and-routing-protocols"></a> Forwarding Tables and Routing Protocols</h4>
+<blockquote>
 <p>How do forwarding tables get set?</p>
 </blockquote>
 <p>The Internet has a number of special <strong>routing protocols</strong> that are used to <strong>automatically</strong> set the forwarding tables</p>
-<h3 id="Circuit-Switching"><a href="#Circuit-Switching" class="headerlink" title="Circuit Switching"></a>Circuit Switching</h3><p>When two hosts want to communicate, the network establishes <strong>a dedicated end-to-end connection.</strong></p>
+<h3 id="circuit-switching"><a class="markdownIt-Anchor" href="#circuit-switching"></a> Circuit Switching</h3>
+<p>When two hosts want to communicate, the network establishes <strong>a dedicated end-to-end connection.</strong></p>
 <blockquote>
 <p>Why is circuit switching less efficient than packet switching?</p>
 </blockquote>
 <p>Circuit switching pre-allocates use of the transmission link  regardless of demand, with allocated but unneeded link time going unused</p>
 <p>Packet switching allocates link use on demand</p>
-<p><img src="http://gitee.com/OooAlex/study_note/raw/master/img/202409221640398.png" alt="image-20240922164045198" style="zoom:50%;" /></p>
-<h3 id="Internet-is-a-“network-of-networks”"><a href="#Internet-is-a-“network-of-networks”" class="headerlink" title="Internet is a “network of networks”!"></a>Internet is a “network of networks”!</h3><p>Interconnection of ISPs:</p>
-<p><img src="http://gitee.com/OooAlex/study_note/raw/master/img/202409221614053.png" alt="image-20240922161449805" style="zoom: 25%;" /></p>
-<h2 id="Delay-Loss-and-Throughput-in-Packet-Switched-Networks"><a href="#Delay-Loss-and-Throughput-in-Packet-Switched-Networks" class="headerlink" title="Delay, Loss, and Throughput in Packet-Switched Networks"></a>Delay, Loss, and Throughput in Packet-Switched Networks</h2><p><strong>Four delays:</strong></p>
+<img src="http://gitee.com/OooAlex/study_note/raw/master/img/202409221640398.png" alt="image-20240922164045198" style="zoom:50%;" />
+<h3 id="internet-is-a-network-of-networks"><a class="markdownIt-Anchor" href="#internet-is-a-network-of-networks"></a> Internet is a &quot;network of networks&quot;!</h3>
+<p>Interconnection of ISPs:</p>
+<img src="http://gitee.com/OooAlex/study_note/raw/master/img/202409221614053.png" alt="image-20240922161449805" style="zoom: 25%;" />
+<h2 id="delay-loss-and-throughput-in-packet-switched-networks"><a class="markdownIt-Anchor" href="#delay-loss-and-throughput-in-packet-switched-networks"></a> Delay, Loss, and Throughput in Packet-Switched Networks</h2>
+<p><strong>Four delays:</strong></p>
 <ul>
 <li>transmission delay: time to <strong>push</strong> the entire packet onto the link</li>
 <li>processing delay</li>
 <li>propagation delay</li>
 <li>queueing delay -&gt; congestion and packet loss</li>
 </ul>
-<p><img src="http://gitee.com/OooAlex/study_note/raw/master/img/202409221917593.png" alt="image-20240922191750407" style="zoom: 33%;" /></p>
+<img src="http://gitee.com/OooAlex/study_note/raw/master/img/202409221917593.png" alt="image-20240922191750407" style="zoom: 33%;" />
 <p><strong>Throughput:</strong></p>
 <p>analogy to pipes</p>
 <p>rate(bits/time unit) at which bits are being sent from sender to receiver</p>
-<p><img src="http://gitee.com/OooAlex/study_note/raw/master/img/202409221937913.png" alt="image-20240922193702630" style="zoom:25%;" /></p>
-<h2 id="Layering-encapsulation-service-models"><a href="#Layering-encapsulation-service-models" class="headerlink" title="Layering, encapsulation, service models"></a>Layering, encapsulation, service models</h2><p>Layering and encapsulation:</p>
-<p><img src="http://gitee.com/OooAlex/study_note/raw/master/img/202409222317594.png" alt="image-20240922231747247" style="zoom: 33%;" /></p>
+<img src="http://gitee.com/OooAlex/study_note/raw/master/img/202409221937913.png" alt="image-20240922193702630" style="zoom:25%;" />
+<h2 id="layering-encapsulation-service-models"><a class="markdownIt-Anchor" href="#layering-encapsulation-service-models"></a> Layering, encapsulation, service models</h2>
+<p>Layering and encapsulation:</p>
+<img src="http://gitee.com/OooAlex/study_note/raw/master/img/202409222317594.png" alt="image-20240922231747247" style="zoom: 33%;" />
 <p>The switches and routers only implement the lower layer of the protocol stack:</p>
-<p><img src="http://gitee.com/OooAlex/study_note/raw/master/img/202409222320192.png" alt="image-20240922232032878" style="zoom: 33%;" /></p>
+<img src="http://gitee.com/OooAlex/study_note/raw/master/img/202409222320192.png" alt="image-20240922232032878" style="zoom: 33%;" />
 
     
 
