@@ -10,23 +10,22 @@
   <meta name="generator" content="hexo-theme-yilia-plus">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
-  <meta name="description" content="Lab Checkpoint 3: the TCP sender  https:&#x2F;&#x2F;cs144.github.io&#x2F;assignments&#x2F;check3.pdf In Checkpoint0, we implemented a flow-controlled byte stream(ByteStream). In Checkpoint1 and 2, we implement a Reassemb">
+  <meta name="description" content="Lab Checkpoint 3: the TCP sender   https:&#x2F;&#x2F;cs144.github.io&#x2F;assignments&#x2F;check3.pdf   In Checkpoint0, we implemented a flow-controlled byte stream(ByteStream). In Checkpoint1 and 2, we implement a Reas">
 <meta property="og:type" content="article">
 <meta property="og:title" content="CS144 Lab 3">
 <meta property="og:url" content="http://oooscar8.github.io/2025/02/20/cs144-lab3/index.html">
 <meta property="og:site_name" content="Alex_Space">
-<meta property="og:description" content="Lab Checkpoint 3: the TCP sender  https:&#x2F;&#x2F;cs144.github.io&#x2F;assignments&#x2F;check3.pdf In Checkpoint0, we implemented a flow-controlled byte stream(ByteStream). In Checkpoint1 and 2, we implement a Reassemb">
+<meta property="og:description" content="Lab Checkpoint 3: the TCP sender   https:&#x2F;&#x2F;cs144.github.io&#x2F;assignments&#x2F;check3.pdf   In Checkpoint0, we implemented a flow-controlled byte stream(ByteStream). In Checkpoint1 and 2, we implement a Reas">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://gitee.com/OooAlex/study_note/raw/master/img/202502132132652.jpeg">
-<meta property="og:image" content="https://gitee.com/OooAlex/study_note/raw/master/img/202502132139485.jpg">
-<meta property="og:image" content="https://gitee.com/OooAlex/study_note/raw/master/img/202502131916226.png">
-<meta property="og:image" content="https://gitee.com/OooAlex/study_note/raw/master/img/202502132342058.png">
-<meta property="og:image" content="https://gitee.com/OooAlex/study_note/raw/master/img/202502132342239.png">
+<meta property="og:image" content="http://oooscar8.github.io/2025/02/20/imgs/202502132132652.jpeg">
+<meta property="og:image" content="http://oooscar8.github.io/2025/02/20/imgs/202502132139485.jpg">
+<meta property="og:image" content="http://oooscar8.github.io/2025/02/20/imgs/202502131916226-1739984591383-24.png">
+<meta property="og:image" content="http://oooscar8.github.io/2025/02/20/imgs/202502132342058.png">
 <meta property="article:published_time" content="2025-02-19T16:00:00.000Z">
-<meta property="article:modified_time" content="2025-02-19T16:28:30.378Z">
+<meta property="article:modified_time" content="2025-02-19T17:04:22.611Z">
 <meta property="article:author" content="Alex Sun">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://gitee.com/OooAlex/study_note/raw/master/img/202502132132652.jpeg">
+<meta name="twitter:image" content="http://oooscar8.github.io/2025/02/20/imgs/202502132132652.jpeg">
   
     <link rel="alternative" href="/atom.xml" title="Alex_Space" type="application/atom+xml">
   
@@ -273,22 +272,26 @@
   
   <div class="article-entry" itemprop="articleBody">
     
-    <h1 id="Lab-Checkpoint-3-the-TCP-sender"><a href="#Lab-Checkpoint-3-the-TCP-sender" class="headerlink" title="Lab Checkpoint 3: the TCP sender"></a>Lab Checkpoint 3: the TCP sender</h1><hr>
+    <h1 id="lab-checkpoint-3-the-tcp-sender"><a class="markdownIt-Anchor" href="#lab-checkpoint-3-the-tcp-sender"></a> Lab Checkpoint 3: the TCP sender</h1>
+<hr />
 <blockquote>
 <p><a target="_blank" rel="noopener" href="https://cs144.github.io/assignments/check3.pdf">https://cs144.github.io/assignments/check3.pdf</a></p>
+</blockquote>
+<blockquote>
 <p>In Checkpoint0, we implemented a flow-controlled byte stream(<code>ByteStream</code>).</p>
 <p>In Checkpoint1 and 2, we implement a <code>Reassembler</code> and <code>TCPReceiver</code> to translate from segments carried in unreliable datagrams to an incoming byte stream.</p>
-<p>In Checkpoint3, we’ll implement the <strong>sender side</strong> of the TCP connection. The TCPSender translates from an outbound byte stream to segments that will become the payloads of unreliable datagrams.</p>
+<p>In Checkpoint3, we'll implement the <strong>sender side</strong> of the TCP connection. The TCPSender translates from an outbound byte stream to segments that will become the payloads of unreliable datagrams.</p>
 </blockquote>
-<h2 id="The-TCP-Sender"><a href="#The-TCP-Sender" class="headerlink" title="The TCP Sender"></a>The TCP Sender</h2><blockquote>
-<p>In this lab, you will implement the “<strong>sender</strong>“ part of TCP, responsible for reading from a <code>ByteStream</code>(created and written to by some sender-side application), and turning the stream into a sequence of outgoing TCP segments.</p>
+<h2 id="the-tcp-sender"><a class="markdownIt-Anchor" href="#the-tcp-sender"></a> The TCP Sender</h2>
+<blockquote>
+<p>In this lab, you will implement the &quot;<strong>sender</strong>&quot; part of TCP, responsible for reading from a <code>ByteStream</code>(created and written to by some sender-side application), and turning the stream into a sequence of outgoing TCP segments.</p>
 </blockquote>
 <p><strong><code>TCPSender</code></strong> is responsible for:</p>
 <ol>
-<li>Keep track of the receiver’s window.</li>
+<li>Keep track of the receiver's window.</li>
 <li>Keep sending segments until either the window is full or the outbound <code>ByteStream</code> has nothing more to send.</li>
-<li>Keep track of which segments have been sent but not yet acknowledged(“outstanding” segments) by the receiver.</li>
-<li>Re-send outstanding segments if enough time passes since they were sent, and they haven’t been acknowledged yet.</li>
+<li>Keep track of which segments have been sent but not yet acknowledged(&quot;outstanding&quot; segments) by the receiver.</li>
+<li>Re-send outstanding segments if enough time passes since they were sent, and they haven't been acknowledged yet.</li>
 </ol>
 <blockquote>
 <p>How does the <code>TCPSender</code> know if a segment was lost?</p>
@@ -296,23 +299,30 @@
 <p>Periodically, the owner of the TCPSender will call the <code>tick</code> method. The <code>TCPSender</code> is responsible for looking through its collection of outstanding <code>TCPSenderMessages</code> and deciding if the oldest-sent segment has been outstanding for too long without acknowledgement.</p>
 <p>To be specific:</p>
 <ol>
-<li><p>The <code>TCPSender</code> stores the initial value of RTO(retransmission timeout).</p>
+<li>
+<p>The <code>TCPSender</code> stores the initial value of RTO(retransmission timeout).</p>
 </li>
-<li><p>You will implement the <strong>retransmission timer</strong>: an alarm that can be started at a certain time, and the alarm expires once the RTO has elapsed. Every time a segment containing data is sent, if the timer is not running, start it running. <strong>When all outstanding data has been acknowledged, stop the retransmission timer.</strong></p>
+<li>
+<p>You will implement the <strong>retransmission timer</strong>: an alarm that can be started at a certain time, and the alarm expires once the RTO has elapsed. Every time a segment containing data is sent, if the timer is not running, start it running. <strong>When all outstanding data has been acknowledged, stop the retransmission timer.</strong></p>
 </li>
-<li><p>When <code>tick</code> is called and the retransmission timer has expired:</p>
+<li>
+<p>When <code>tick</code> is called and the retransmission timer has expired:</p>
 <ul>
-<li><p>Retransmit the earliest(lowest sequence number) segment that hasn’t been fully acknowledged by the TCP receiver. You should store the outstanding segments in some internal data structure.</p>
+<li>
+<p>Retransmit the earliest(lowest sequence number) segment that hasn't been fully acknowledged by the TCP receiver. You should store the outstanding segments in some internal data structure.</p>
 </li>
-<li><p>If the window size is nonzero:</p>
+<li>
+<p>If the window size is nonzero:</p>
 <p>(a). Keep track of and update the number of consecutive retransmissions.</p>
 <p>(b). Double the value of RTO.</p>
 </li>
-<li><p>Reset the retransmission timer and start it.</p>
+<li>
+<p>Reset the retransmission timer and start it.</p>
 </li>
 </ul>
 </li>
-<li><p>When the receiver gives the sender a new <code>ack</code> message:</p>
+<li>
+<p>When the receiver gives the sender a new <code>ack</code> message:</p>
 <ul>
 <li>Set the RTO back to its initial value.</li>
 <li>If the sender has any outstanding data, restart the retransmission timer.</li>
@@ -322,14 +332,15 @@
 </ol>
 <p>以上就是<code>TCPSender</code>的retransmission logic，详细见cs144官方spec。</p>
 <p>简单总结一下就是<code>TCPSender</code>会在内部存储outstanding segments。<code>TCPSender</code>的owner会周期性地调用<code>tick</code>函数查看retransmission timer是否expired，如果是则retransmit最早的outstanding segment，double RTO防止网络堵塞加剧retranmission的负担(exponential backoff)，并重启retransmission timer。当<code>TCPSender</code>接收到新的acknowledgement的时候，重设RTO为最初值并重启retransmission timer(如果还有outstanding segments)。</p>
-<h2 id="Implement-the-TCP-sender"><a href="#Implement-the-TCP-sender" class="headerlink" title="Implement the TCP sender"></a>Implement the TCP sender</h2><p>You should implement the interface that your <code>TCPSender</code> provides:</p>
+<h2 id="implement-the-tcp-sender"><a class="markdownIt-Anchor" href="#implement-the-tcp-sender"></a> Implement the TCP sender</h2>
+<p>You should implement the interface that your <code>TCPSender</code> provides:</p>
 <ul>
 <li><strong><code>void push( const TransmitFunction&amp; transmit );</code></strong></li>
 </ul>
 <p>Read from the outbound byte stream and <strong>send as many <code>TCPSenderMessages</code> as possible, as long as there are new bytes to be read and space available in the window</strong>.</p>
 <p>Make sure that every <code>TCPSenderMessage</code> you send fits fully inside the receiver’s window. Make each individual message as big as possible, but no bigger than the value given by <code>TCPConfig::MAX PAYLOAD SIZE</code>.</p>
 <blockquote>
-<p>What should my TCPSender assume as the receiver’s window size before the receive method informs it otherwise? </p>
+<p>What should my TCPSender assume as the receiver’s window size before the receive method informs it otherwise?</p>
 </blockquote>
 <p>One.</p>
 <blockquote>
@@ -350,7 +361,8 @@
 </ul>
 <p>The TCPSender should generate and send a zero-length message with the sequence number set correctly.</p>
 <p>Note: a segment like this one, which occupies no sequence numbers, doesn’t need to be kept track of as “outstanding” and won’t ever be retransmitted.</p>
-<h2 id="我的实现思路"><a href="#我的实现思路" class="headerlink" title="我的实现思路"></a>我的实现思路</h2><blockquote>
+<h2 id="我的实现思路"><a class="markdownIt-Anchor" href="#我的实现思路"></a> 我的实现思路</h2>
+<blockquote>
 <p>前言：认真读spec！至少将spec的第二板块读3遍再开始coding：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">2 Checkpoint 3: The TCP Sender</span><br></pre></td></tr></table></figure>
 <p>这个lab的整体实现难度不难，很大一部分原因是因为spec讲解得非常清晰。就我自己实现起来比lab2还要轻松一些。主要难度在于细节点和corner case非常多，因此需要大量的时间面向test来debug。我自己debug花的时间比coding的时间还要长。</p>
@@ -359,7 +371,7 @@
 <p>TCP Sender的实现可以分成3大部分，难度我认为也是逐级递增的：</p>
 <ol>
 <li>Retransmission (retransmission timer + tick)</li>
-<li>Window (sender’s window + receiver’s window)</li>
+<li>Window (sender's window + receiver's window)</li>
 <li>Push + Receive</li>
 </ol>
 <ul>
@@ -369,6 +381,8 @@
 <blockquote>
 <p>这里再放一下我总结的Retransmission logic，如果spec读起来有点费解的话可以参考：</p>
 <p><code>TCPSender</code>会在内部存储outstanding segments。<code>TCPSender</code>的owner会周期性地调用<code>tick</code>函数查看retransmission timer是否expired，如果是则retransmit最早的outstanding segment，double RTO防止网络堵塞加剧retranmission的负担(exponential backoff)，并重启retransmission timer。当<code>TCPSender</code>接收到新的acknowledgement的时候，重设RTO为最初值并重启retransmission timer(如果还有outstanding segments)。</p>
+</blockquote>
+<blockquote>
 <p>[!TIP]</p>
 <p>我建议单独创建一个Retransmission timer类，与TCPSender类区分开来，结构更清晰。</p>
 </blockquote>
@@ -379,11 +393,11 @@
 <p>[!CAUTION]</p>
 <p>这部分在spec中讲解得比较模糊，需要自行理解与实现！</p>
 </blockquote>
-<p>在spec中反复提到的window，其实指的是<code>TCPSender</code>接收到的acknowledge message中包含的Receiver’s window。回顾Checkpoint1，我们画过一张Receiver’s window:</p>
-<p><img src="https://gitee.com/OooAlex/study_note/raw/master/img/202502132132652.jpeg" alt=""></p>
-<p>但spec中没有提到，需要我们自己理解的是，<code>TCPSender</code>的window与<code>TCPReceiver</code>的window是不同的，为了区分这两端的window，我在<code>TCPSender</code>端维护了一个sender’s window，用来与上面的receiver’s window进行区分，如下图：</p>
-<p><img src="https://gitee.com/OooAlex/study_note/raw/master/img/202502132139485.jpg" alt="cb59ae62a3454aba49ae323f7a83226"></p>
-<p>希望这张图能帮助你理解Sender’s window和Receiver’s window的区别与联系。其中绿色区域代表的是Receiver已经acknowledge的bytes范围，红色区域代表的是outstanding segments，蓝色区域是<code>push</code>方法允许transmit的bytes范围，也就是Sender’s window。</p>
+<p>在spec中反复提到的window，其实指的是<code>TCPSender</code>接收到的acknowledge message中包含的Receiver's window。回顾Checkpoint1，我们画过一张Receiver's window:</p>
+<p><img src="../imgs/202502132132652.jpeg" alt="" /></p>
+<p>但spec中没有提到，需要我们自己理解的是，<code>TCPSender</code>的window与<code>TCPReceiver</code>的window是不同的，为了区分这两端的window，我在<code>TCPSender</code>端维护了一个sender's window，用来与上面的receiver's window进行区分，如下图：</p>
+<p><img src="../imgs/202502132139485.jpg" alt="cb59ae62a3454aba49ae323f7a83226" /></p>
+<p>希望这张图能帮助你理解Sender's window和Receiver’s window的区别与联系。其中绿色区域代表的是Receiver已经acknowledge的bytes范围，红色区域代表的是outstanding segments，蓝色区域是<code>push</code>方法允许transmit的bytes范围，也就是Sender's window。</p>
 <p><code>TCPSender</code>需要一种数据结构来存储outstanding segments，以便在传输过程中丢失时可以retransmit。由Retransmission logic可知我们每次retransmit的是earliest outstanding segment，也就是seqno最小的segment，所以思考可以用什么数据结构来存储outstanding segments？</p>
 <p>联系Checkpoint1，最容易想到的就是用map，这样每次retransmit只要移除map的第一个元素就可以了。</p>
 <ul>
@@ -391,23 +405,29 @@
 </ul>
 <p>这也是这个lab最tricky的部分，尤其是<code>push</code>的实现，细节点很多。主要的实现逻辑在spec中已经说明得比较详细，我在此提示一些注意点：</p>
 <ol>
-<li><blockquote>
+<li>
+<blockquote>
 <p><code>void push( const TransmitFunction&amp; transmit );</code></p>
 <p>The TCPSender is asked to fill the window from the outbound byte stream: it reads from the stream and <strong>sends as many TCPSenderMessages as possible, as long as there are new bytes to be read and space available in the window.</strong></p>
 </blockquote>
-<p>好好理解上面加粗的这段话，什么叫做只要outbound stream中还有可读取的new bytes和window(Sender’s window)还有空间就不停地send segments?</p>
+<p>好好理解上面加粗的这段话，什么叫做只要outbound stream中还有可读取的new bytes和window(Sender's window)还有空间就不停地send segments?</p>
 </li>
-<li><p>当<code>receive</code>方法接收到一个message告知自己Receiver’s window size = 0时，<code>push</code>需要将其作为special case处理，详细见spec。</p>
+<li>
+<p>当<code>receive</code>方法接收到一个message告知自己Receiver's window size = 0时，<code>push</code>需要将其作为special case处理，详细见spec。</p>
 </li>
-<li><p>在debug时尤其注意<code>SYN</code>和<code>FIN</code> flag带来的各种corner case。这部分我们在Checkpoint2中已经有一定的应对经验，但在这个lab中处理起来会更麻烦一点。</p>
+<li>
+<p>在debug时尤其注意<code>SYN</code>和<code>FIN</code> flag带来的各种corner case。这部分我们在Checkpoint2中已经有一定的应对经验，但在这个lab中处理起来会更麻烦一点。</p>
 </li>
-<li><p>在<code>push</code>和<code>receive</code>中，需要时刻注意Sender’s window的变化。</p>
+<li>
+<p>在<code>push</code>和<code>receive</code>中，需要时刻注意Sender's window的变化。</p>
 </li>
 </ol>
-<h2 id="TCP-Sender-Finish"><a href="#TCP-Sender-Finish" class="headerlink" title="TCP Sender Finish!"></a>TCP Sender Finish!</h2><p>All tests in check3 pass!</p>
-<p><img src="https://gitee.com/OooAlex/study_note/raw/master/img/202502131916226.png" alt="image-20250213191628781"></p>
+<h2 id="tcp-sender-finish"><a class="markdownIt-Anchor" href="#tcp-sender-finish"></a> TCP Sender Finish!</h2>
+<p>All tests in check3 pass!</p>
+<p><img src="../imgs/202502131916226-1739984591383-24.png" alt="image-20250213191628781" /></p>
 <p>恭喜！到这里你已经实现了一个完整可运行的TCP协议了！</p>
-<h2 id="Hands-on-activity"><a href="#Hands-on-activity" class="headerlink" title="Hands-on activity"></a>Hands-on activity</h2><p>恭喜！到这里你应该已经实现了一个完整可运行的TCP协议了！</p>
+<h2 id="hands-on-activity"><a class="markdownIt-Anchor" href="#hands-on-activity"></a> Hands-on activity</h2>
+<p>恭喜！到这里你应该已经实现了一个完整可运行的TCP协议了！</p>
 <p>在这一部分，我们要实际验证这个TCP协议栈确实能work，我们要：</p>
 <ol>
 <li>尝试让你的TCP协议与Linux的TCP协议对话</li>
@@ -416,10 +436,10 @@
 <li>在你的TCP协议栈之上重新实现Web fetcher</li>
 </ol>
 <p>我这里就只展示最后一条：</p>
-<h3 id="webget-revisited"><a href="#webget-revisited" class="headerlink" title="webget revisited"></a>webget revisited</h3><p>在lab0中，我们在Linux的TCP协议之上，实现了一个使用TCP Socket传输http协议信息，来获取网页的Web fetcher(<code>get_URL</code>)。</p>
+<h3 id="webget-revisited"><a class="markdownIt-Anchor" href="#webget-revisited"></a> webget revisited</h3>
+<p>在lab0中，我们在Linux的TCP协议之上，实现了一个使用TCP Socket传输http协议信息，来获取网页的Web fetcher(<code>get_URL</code>)。</p>
 <p>如今，尝试换成在<strong>我们自己实现的完整TCP协议栈</strong>之上，改写这个Web fetcher（只需要将Linux的TCPSocket换成我们自己的CS144TCPSocket）。</p>
-<p><img src="https://gitee.com/OooAlex/study_note/raw/master/img/202502132342058.png" alt="image-20250213234243889"></p>
-<p><img src="https://gitee.com/OooAlex/study_note/raw/master/img/202502132342239.png" alt="image-20250213234257070"></p>
+<p><img src="../imgs/202502132342058.png" alt="image-20250213234243889" /></p>
 <p>Our own TCP implementation works! 😊</p>
 
     
@@ -559,8 +579,8 @@
     </a>
   
   
-    <a href="/2024/12/27/fileio/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">fileio</div>
+    <a href="/2025/02/20/cs144-lab2/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">CS144 Lab 2</div>
       <i class="icon-circle-right"></i>
     </a>
   
