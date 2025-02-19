@@ -17,15 +17,15 @@
 <meta property="og:site_name" content="Alex_Space">
 <meta property="og:description" content="Lab Checkpoint 3: the TCP sender  https:&#x2F;&#x2F;cs144.github.io&#x2F;assignments&#x2F;check3.pdf In Checkpoint0, we implemented a flow-controlled byte stream(ByteStream). In Checkpoint1 and 2, we implement a Reassemb">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="d:/hexo_code/source/imgs/202502132132652-1739988789628-100.jpeg">
-<meta property="og:image" content="d:/hexo_code/source/imgs/202502132139485-1739988798925-102.jpg">
-<meta property="og:image" content="d:/hexo_code/source/imgs/202502131916226-1739984591383-24-1739988806450-104.png">
-<meta property="og:image" content="d:/hexo_code/source/imgs/202502132342058-1739988814201-106.png">
+<meta property="og:image" content="http://oooscar8.github.io/2025/02/20/imgs/202502132132652-1739988789628-100.jpeg">
+<meta property="og:image" content="http://oooscar8.github.io/2025/02/20/imgs/202502132139485-1739988798925-102.jpg">
+<meta property="og:image" content="http://oooscar8.github.io/2025/02/20/imgs/202502131916226-1739984591383-24-1739988806450-104.png">
+<meta property="og:image" content="http://oooscar8.github.io/2025/02/20/imgs/202502132342058-1739988814201-106.png">
 <meta property="article:published_time" content="2025-02-19T16:00:00.000Z">
-<meta property="article:modified_time" content="2025-02-19T18:13:37.251Z">
+<meta property="article:modified_time" content="2025-02-19T18:24:10.354Z">
 <meta property="article:author" content="Alex Sun">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="d:/hexo_code/source/imgs/202502132132652-1739988789628-100.jpeg">
+<meta name="twitter:image" content="http://oooscar8.github.io/2025/02/20/imgs/202502132132652-1739988789628-100.jpeg">
   
     <link rel="alternative" href="/atom.xml" title="Alex_Space" type="application/atom+xml">
   
@@ -379,9 +379,9 @@
 <p>这部分在spec中讲解得比较模糊，需要自行理解与实现！</p>
 </blockquote>
 <p>在spec中反复提到的window，其实指的是<code>TCPSender</code>接收到的acknowledge message中包含的Receiver’s window。回顾Checkpoint1，我们画过一张Receiver’s window:</p>
-<p><img src="D:/hexo_code/source/imgs/202502132132652-1739988789628-100.jpeg" alt=""></p>
+<p><img src="../imgs/202502132132652-1739988789628-100.jpeg" alt=""></p>
 <p>但spec中没有提到，需要我们自己理解的是，<code>TCPSender</code>的window与<code>TCPReceiver</code>的window是不同的，为了区分这两端的window，我在<code>TCPSender</code>端维护了一个sender’s window，用来与上面的receiver’s window进行区分，如下图：</p>
-<p><img src="D:/hexo_code/source/imgs/202502132139485-1739988798925-102.jpg" alt="cb59ae62a3454aba49ae323f7a83226"></p>
+<p><img src="../imgs/202502132139485-1739988798925-102.jpg" alt="cb59ae62a3454aba49ae323f7a83226"></p>
 <p>希望这张图能帮助你理解Sender’s window和Receiver’s window的区别与联系。其中绿色区域代表的是Receiver已经acknowledge的bytes范围，红色区域代表的是outstanding segments，蓝色区域是<code>push</code>方法允许transmit的bytes范围，也就是Sender’s window。</p>
 <p><code>TCPSender</code>需要一种数据结构来存储outstanding segments，以便在传输过程中丢失时可以retransmit。由Retransmission logic可知我们每次retransmit的是earliest outstanding segment，也就是seqno最小的segment，所以思考可以用什么数据结构来存储outstanding segments？</p>
 <p>联系Checkpoint1，最容易想到的就是用map，这样每次retransmit只要移除map的第一个元素就可以了。</p>
@@ -404,7 +404,7 @@
 </li>
 </ol>
 <h2 id="TCP-Sender-Finish"><a href="#TCP-Sender-Finish" class="headerlink" title="TCP Sender Finish!"></a>TCP Sender Finish!</h2><p>All tests in check3 pass!</p>
-<p><img src="D:/hexo_code/source/imgs/202502131916226-1739984591383-24-1739988806450-104.png" alt="image-20250213191628781"></p>
+<p><img src="../imgs/202502131916226-1739984591383-24-1739988806450-104.png" alt="image-20250213191628781"></p>
 <p>恭喜！到这里你已经实现了一个完整可运行的TCP协议了！</p>
 <h2 id="Hands-on-activity"><a href="#Hands-on-activity" class="headerlink" title="Hands-on activity"></a>Hands-on activity</h2><p>恭喜！到这里你应该已经实现了一个完整可运行的TCP协议了！</p>
 <p>在这一部分，我们要实际验证这个TCP协议栈确实能work，我们要：</p>
@@ -417,7 +417,7 @@
 <p>我这里就只展示最后一条：</p>
 <h3 id="webget-revisited"><a href="#webget-revisited" class="headerlink" title="webget revisited"></a>webget revisited</h3><p>在lab0中，我们在Linux的TCP协议之上，实现了一个使用TCP Socket传输http协议信息，来获取网页的Web fetcher(<code>get_URL</code>)。</p>
 <p>如今，尝试换成在<strong>我们自己实现的完整TCP协议栈</strong>之上，改写这个Web fetcher（只需要将Linux的TCPSocket换成我们自己的CS144TCPSocket）。</p>
-<p><img src="D:/hexo_code/source/imgs/202502132342058-1739988814201-106.png" alt="image-20250213234243889"></p>
+<p><img src="../imgs/202502132342058-1739988814201-106.png" alt="image-20250213234243889"></p>
 <p>Our own TCP implementation works! 😊</p>
 
     
@@ -547,11 +547,11 @@
 
 <nav id="article-nav">
   
-    <a href="/2025/02/20/cs144-lab2/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2025/02/20/cs144-lab1/" id="article-nav-newer" class="article-nav-link-wrap">
       <i class="icon-circle-left"></i>
       <div class="article-nav-title">
         
-          CS144 Lab 2
+          CS144 Lab 1
         
       </div>
     </a>

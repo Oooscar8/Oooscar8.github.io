@@ -17,13 +17,13 @@
 <meta property="og:site_name" content="Alex_Space">
 <meta property="og:description" content="Lab Checkpoint 5: down the stack (the network interface)  https:&#x2F;&#x2F;cs144.github.io&#x2F;assignments&#x2F;check5.pdf [!WARNING] 注意，这篇笔记My implementation的后半部分全程代码剧透！  OverviewIn this lab, you’ll go down the stack">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="d:/hexo_code/source/imgs/202502171212064-1739988824415-108.png">
-<meta property="og:image" content="d:/hexo_code/source/imgs/202502190143600-1739984763181-30-1739988835302-110.png">
+<meta property="og:image" content="http://oooscar8.github.io/2025/02/20/imgs/202502171212064-1739988824415-108.png">
+<meta property="og:image" content="http://oooscar8.github.io/2025/02/20/imgs/202502190143600-1739984763181-30-1739988835302-110.png">
 <meta property="article:published_time" content="2025-02-19T16:00:00.000Z">
-<meta property="article:modified_time" content="2025-02-19T18:14:07.133Z">
+<meta property="article:modified_time" content="2025-02-19T18:23:37.411Z">
 <meta property="article:author" content="Alex Sun">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="d:/hexo_code/source/imgs/202502171212064-1739988824415-108.png">
+<meta name="twitter:image" content="http://oooscar8.github.io/2025/02/20/imgs/202502171212064-1739988824415-108.png">
   
     <link rel="alternative" href="/atom.xml" title="Alex_Space" type="application/atom+xml">
   
@@ -278,7 +278,7 @@
 </blockquote>
 <h2 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h2><p>In this lab, you’ll go down the stack and implement the network interface:  the bridge between <strong>Internet datagrams</strong> that travel the world, and <strong>link-layer Ethernet frames</strong> that travel one hop.</p>
 <p>The figure below shows that the network interface we are going to implement is part of a host’s TCP/IP protocol stack and also a part of an IP router.</p>
-<p><img src="D:/hexo_code/source/imgs/202502171212064-1739988824415-108.png" alt="image-20250217121222984"></p>
+<p><img src="../imgs/202502171212064-1739988824415-108.png" alt="image-20250217121222984"></p>
 <blockquote>
 <p>What’s the responsibility of the network interface?</p>
 </blockquote>
@@ -388,7 +388,7 @@
 <p>在<code>recv_datagram</code>中：</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// If the inbound frame is ARP, parse the payload as an ARPMessage</span></span><br><span class="line"><span class="comment">// an if successful, add the IP-to-Ethernet mapping to the mappings.</span></span><br><span class="line"><span class="comment">// In addition, if it&#x27;s an ARP request asking for our IP address,</span></span><br><span class="line"><span class="comment">// send an appropriate ARP reply.</span></span><br><span class="line"><span class="keyword">if</span> ( frame.header.type == EthernetHeader::TYPE_ARP ) &#123;</span><br><span class="line">    Parser <span class="title function_">parser</span><span class="params">( frame.payload )</span>;</span><br><span class="line"></span><br><span class="line">    ARPMessage arp_message;</span><br><span class="line">    arp_message.parse( parser );</span><br><span class="line">    <span class="keyword">if</span> ( parser.has_error() )</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    addMapping( time_elapsed_, arp_message.sender_ethernet_address, arp_message.sender_ip_address );</span><br><span class="line">    <span class="keyword">if</span> ( arp_message.opcode == ARPMessage::OPCODE_REQUEST</span><br><span class="line">        &amp;&amp; arp_message.target_ip_address == ip_address_.ipv4_numeric() ) &#123;</span><br><span class="line">        EthernetFrame arp_reply = create_arp_message( ARPMessage::OPCODE_REPLY,</span><br><span class="line">                                                     ethernet_address_,</span><br><span class="line">                                                     ip_address_.ipv4_numeric(),</span><br><span class="line">                                                     arp_message.sender_ethernet_address,</span><br><span class="line">                                                     arp_message.sender_ip_address );</span><br><span class="line">        transmit( arp_reply );</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Since we have received an ARP message, we can probably send any queued datagrams</span></span><br><span class="line">    <span class="keyword">auto</span> it = datagrams_queued_.begin();</span><br><span class="line">    <span class="keyword">while</span> ( it != datagrams_queued_.end() ) &#123;</span><br><span class="line">        <span class="keyword">if</span> ( it-&gt;second.next_hop_ip == arp_message.sender_ip_address ) &#123;</span><br><span class="line">            send_datagram( it-&gt;second.dgram, Address::from_ipv4_numeric( it-&gt;second.next_hop_ip ) );</span><br><span class="line">            it = datagrams_queued_.erase( it );</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            ++it;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h2 id="Finish"><a href="#Finish" class="headerlink" title="Finish!"></a>Finish!</h2><p>All tests in check3 pass!</p>
-<p><img src="D:/hexo_code/source/imgs/202502190143600-1739984763181-30-1739988835302-110.png" alt="image-20250219014355179"></p>
+<p><img src="../imgs/202502190143600-1739984763181-30-1739988835302-110.png" alt="image-20250219014355179"></p>
 
     
 
