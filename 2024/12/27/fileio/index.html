@@ -10,12 +10,12 @@
   <meta name="generator" content="hexo-theme-yilia-plus">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
-  <meta name="description" content="Project 3: Caching I&#x2F;O  Prerequisite  what is cache&#x2F;caching(缓存)?  缓存就是将经常需要访问和修改的数据(popular data)存储在小型&#x2F;快速&#x2F;昂贵的存储空间，减少对大型&#x2F;缓慢&#x2F;便宜的存储空间的访问的行为。 缓存出现在计算机工程的各个领域： 在计算机的存储层次架构链中：hard drive → SSD → DRAM → L3-L">
+  <meta name="description" content="Project 3: Caching I&#x2F;OPrerequisite what is cache&#x2F;caching(缓存)?  缓存就是将经常需要访问和修改的数据(popular data)存储在小型&#x2F;快速&#x2F;昂贵的存储空间，减少对大型&#x2F;缓慢&#x2F;便宜的存储空间的访问的行为。 缓存出现在计算机工程的各个领域： 在计算机的存储层次架构链中：hard drive → SSD → DRAM → L3-L1 ca">
 <meta property="og:type" content="article">
 <meta property="og:title" content="fileio">
 <meta property="og:url" content="http://oooscar8.github.io/2024/12/27/fileio/index.html">
 <meta property="og:site_name" content="Alex_Space">
-<meta property="og:description" content="Project 3: Caching I&#x2F;O  Prerequisite  what is cache&#x2F;caching(缓存)?  缓存就是将经常需要访问和修改的数据(popular data)存储在小型&#x2F;快速&#x2F;昂贵的存储空间，减少对大型&#x2F;缓慢&#x2F;便宜的存储空间的访问的行为。 缓存出现在计算机工程的各个领域： 在计算机的存储层次架构链中：hard drive → SSD → DRAM → L3-L">
+<meta property="og:description" content="Project 3: Caching I&#x2F;OPrerequisite what is cache&#x2F;caching(缓存)?  缓存就是将经常需要访问和修改的数据(popular data)存储在小型&#x2F;快速&#x2F;昂贵的存储空间，减少对大型&#x2F;缓慢&#x2F;便宜的存储空间的访问的行为。 缓存出现在计算机工程的各个领域： 在计算机的存储层次架构链中：hard drive → SSD → DRAM → L3-L1 ca">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://cs.brown.edu/courses/csci0300/2024/assign/projects/assets/fileio-overview.png">
 <meta property="og:image" content="https://gitee.com/OooAlex/study_note/raw/master/img/202412281119591.png">
@@ -271,9 +271,7 @@
   
   <div class="article-entry" itemprop="articleBody">
     
-    <h1 id="project-3-caching-io"><a class="markdownIt-Anchor" href="#project-3-caching-io"></a> Project 3: Caching I/O</h1>
-<h2 id="prerequisite"><a class="markdownIt-Anchor" href="#prerequisite"></a> Prerequisite</h2>
-<blockquote>
+    <h1 id="Project-3-Caching-I-O"><a href="#Project-3-Caching-I-O" class="headerlink" title="Project 3: Caching I/O"></a>Project 3: Caching I/O</h1><h2 id="Prerequisite"><a href="#Prerequisite" class="headerlink" title="Prerequisite"></a>Prerequisite</h2><blockquote>
 <p>what is cache/caching(缓存)?</p>
 </blockquote>
 <p>缓存就是将经常需要访问和修改的数据(popular data)存储在小型/快速/昂贵的存储空间，减少对大型/缓慢/便宜的存储空间的访问的行为。</p>
@@ -281,8 +279,7 @@
 <p>在计算机的存储层次架构链中：hard drive → SSD → DRAM → L3-L1 cache → registers，架构链后面的存储空间都是前面存储空间的缓存（如CPU registers是作为L3-L1 cache的缓存）</p>
 <p>在计算机网络中，网页浏览器缓存会缓存用户最近访问的网页，减少冗余的网络请求</p>
 <p>等等…</p>
-<h2 id="task"><a class="markdownIt-Anchor" href="#task"></a> Task</h2>
-<p>任务:</p>
+<h2 id="Task"><a href="#Task" class="headerlink" title="Task"></a>Task</h2><p>任务: </p>
 <blockquote>
 <p>You will implement an Input/Output (I/O) library that supports operations such as <strong>reading data</strong> from files (<code>io300_readc</code> and <code>io300_read</code>), <strong>writing data</strong> to files (<code>io300_writec</code>, <code>io300_write</code>), or <strong>moving to a different offset</strong> within the file (<code>io300_seek</code>). Your I/O library uses a <strong>cache</strong> to speed up access to data and reduce the number of disk operations required.</p>
 </blockquote>
@@ -291,13 +288,12 @@
 <p>The core idea: When a program asks the I/O library to write a byte to a file, instead of immediately going to the disk, put that byte in a cache, then write the entire cache to disk at a later point.</p>
 </blockquote>
 <p>也就是说，我们将DRAM作为disk的缓存。具体的结构见下图：</p>
-<img src="https://cs.brown.edu/courses/csci0300/2024/assign/projects/assets/fileio-overview.png" alt="Cache vs. Buffer Visual" style="zoom: 67%;" />
-<h2 id="stencil-code"><a class="markdownIt-Anchor" href="#stencil-code"></a> Stencil Code</h2>
-<p>这个project提供了两种对io300 file I/O library的实现：</p>
+<p><img src="https://cs.brown.edu/courses/csci0300/2024/assign/projects/assets/fileio-overview.png" alt="Cache vs. Buffer Visual" style="zoom: 67%;" /></p>
+<h2 id="Stencil-Code"><a href="#Stencil-Code" class="headerlink" title="Stencil Code"></a>Stencil Code</h2><p>这个project提供了两种对io300 file I/O library的实现：</p>
 <blockquote>
 <ol>
 <li>The naive implementation (<code>impl/naive.c</code>) reads from and writes directly to the disk without any caching. The initial project stencil is identical to this implementation.</li>
-<li>The standard I/O implementation (<code>impl/stdio.c</code>) leverages the existing C Standard Library's &quot;buffered&quot; I/O, which does some clever caching.</li>
+<li>The standard I/O implementation (<code>impl/stdio.c</code>) leverages the existing C Standard Library’s “buffered” I/O, which does some clever caching.</li>
 </ol>
 </blockquote>
 <p>standard I/O的运行表现是naive I/O的100倍左右，而我们的任务是完成第三种实现:<code>impl/student.c</code>，尽可能使其表现接近<code>stdio</code>的实现.</p>
@@ -309,28 +305,19 @@
 <li>Naive implementation没有用到cache，每次用户程序调用io300 I/O library的函数都会触发系统调用：</li>
 </ol>
 <blockquote>
-<p>System calls are expensive: they require changing the processor's privilege mode, lots of safety checks, and they invoke OS code.</p>
+<p>System calls are expensive: they require changing the processor’s privilege mode, lots of safety checks, and they invoke OS code.</p>
 </blockquote>
-<ol start="2">
+<ol>
 <li><code>read</code> and <code>write</code> system calls go directly to disk.</li>
 </ol>
-<h2 id="design"><a class="markdownIt-Anchor" href="#design"></a> Design</h2>
-<p>这个project的难度主要在于他给了我们很大的设计空间，而不是像前两个project一样一步步为我们规划好了。Brown的学生是需要参与一个design discussion来讨论他们的设计的。让我们看看他们都需要思考哪些问题：</p>
+<h2 id="Design"><a href="#Design" class="headerlink" title="Design"></a>Design</h2><p>这个project的难度主要在于他给了我们很大的设计空间，而不是像前两个project一样一步步为我们规划好了。Brown的学生是需要参与一个design discussion来讨论他们的设计的。让我们看看他们都需要思考哪些问题：</p>
 <blockquote>
 <p>[!TIP]</p>
 <blockquote>
 <p>What metadata is needed to keep track of where to next read/write data (1) in the file and (2) in the cache?</p>
-</blockquote>
-<blockquote>
 <p>What metadata is needed to determine the parts of the file that are currently in the cache?</p>
-</blockquote>
-<blockquote>
 <p>When do you access the file versus the cache? Accessing the cache is preferable for speed, but not always possible.</p>
-</blockquote>
-<blockquote>
 <p>When do you transfer data in the cache to the file and vice versa? What data is then in the cache and in the file?</p>
-</blockquote>
-<blockquote>
 <p>How is your cache laid out in memory?</p>
 </blockquote>
 </blockquote>
@@ -339,51 +326,40 @@
 <p>[!TIP]</p>
 <blockquote>
 <p>When should I call <code>read()</code> and fill my cache?</p>
-</blockquote>
-<blockquote>
 <p>What happens to the data in the cache when a program reads or write the last byte in the cache? What about one byte past this?</p>
-</blockquote>
-<blockquote>
 <p>How do I know or keep track of the fact that the cache has been modified?</p>
-</blockquote>
-<blockquote>
 <p>What happens when <code>flush</code> is called, but nothing in the cache has been changed?</p>
-</blockquote>
-<blockquote>
 <p>What happens if a syscall fails?</p>
-</blockquote>
-<blockquote>
 <p>What happens when I read a byte from a file that is all <code>1</code>s (<code>0xFF</code>, <code>0b11111111</code>)? How is this different than the integer <code>-1</code>? How does this mess with return values from things like <code>read()</code> and <code>write()</code>? What is the deal with <code>unsigned</code> vs <code>signed char</code>? (some answers to these can be found in <code>example/io_return_example.c</code>).</p>
-</blockquote>
-<blockquote>
 <p>What happens if we seek to a location that is within the cache? How should this differ from seeking to a location outside of the cache?</p>
 </blockquote>
 </blockquote>
 <p>An example:</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">char</span> buffer[<span class="number">5</span>];</span><br><span class="line">io300_file* testFile = io300_open(<span class="string">&quot;testfiles/tiny.txt&quot;</span>, <span class="string">&quot;tiny!&quot;</span>); </span><br><span class="line"><span class="type">ssize_t</span> r = io300_read(testFile, buffer, <span class="number">5</span>);</span><br><span class="line"><span class="type">ssize_t</span> w = io300_write(testFile, <span class="string">&quot;aaa&quot;</span>, <span class="number">3</span>); </span><br><span class="line">r = io300_read(testFile, buffer, <span class="number">2</span>);</span><br><span class="line"><span class="type">ssize_t</span> s = io300_seek(testFile, <span class="number">12</span>);</span><br><span class="line">w = io300_write(testFile, <span class="string">&quot;aaa&quot;</span>, <span class="number">3</span>); </span><br><span class="line">r = io300_readc(testFile);</span><br><span class="line">io300_close(testFile);</span><br></pre></td></tr></table></figure>
-<img src="https://gitee.com/OooAlex/study_note/raw/master/img/202412281119591.png">
+<p><img src="https://gitee.com/OooAlex/study_note/raw/master/img/202412281119591.png"></p>
 <details>     <summary>After Line 2</summary>     
 File Contents: "this is a test\n"<br>
 Cache Contents: "this is "<br>
 Return: 5 
 </details>
+
 <details>     <summary>After Line 6</summary>     
 File Contents: "this aaaa test\n"<br>
 Cache Contents: "a teaaa"<br>
 Return: 3
 </details>
-<h2 id="get-coding"><a class="markdownIt-Anchor" href="#get-coding"></a> Get Coding!</h2>
-<blockquote>
+
+
+<h2 id="Get-Coding"><a href="#Get-Coding" class="headerlink" title="Get Coding!"></a>Get Coding!</h2><blockquote>
 <p>[!NOTE]</p>
 <p>注意<code>lseek</code>允许seek到EOF后面的位置：</p>
 <blockquote>
-<p><code>lseek</code> can be called on a position beyond the end of the file (EOF), though this will not change the file's size. If data is written at this position, then the file's size grows to this point and the space between between the old EOF and the written bytes should be filled with null bytes. <strong>You'll need to consider this edge case in your caching design!</strong></p>
+<p><code>lseek</code> can be called on a position beyond the end of the file (EOF), though this will not change the file’s size. If data is written at this position, then the file’s size grows to this point and the space between between the old EOF and the written bytes should be filled with null bytes. <strong>You’ll need to consider this edge case in your caching design!</strong></p>
 </blockquote>
 </blockquote>
-<h3 id="making-progress-readcwritec"><a class="markdownIt-Anchor" href="#making-progress-readcwritec"></a> Making progress – readc/writec</h3>
-<p>Our early goals: Get the <code>byte_cat</code> program working for a small text file.</p>
+<h3 id="Making-progress-–-readc-writec"><a href="#Making-progress-–-readc-writec" class="headerlink" title="Making progress – readc/writec"></a>Making progress – readc/writec</h3><p>Our early goals: Get the <code>byte_cat</code> program working for a small text file.</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">touch</span> /tmp/out.txt   <span class="comment"># creates empty file</span></span><br><span class="line">$ make clean all</span><br><span class="line">$ ./byte_cat test_files/tiny.txt /tmp/out.txt</span><br><span class="line">$ <span class="built_in">cat</span> /tmp/out.txt </span><br><span class="line">this is a <span class="built_in">test</span></span><br></pre></td></tr></table></figure>
-<p>Goals: <code>open</code>, <code>close</code>, <code>filesize</code>, <code>readc</code>, <code>writec</code></p>
+<p>Goals: <code>open</code>, <code>close</code>, <code>filesize</code>, <code>readc</code>, <code>writec</code>    </p>
 <p>我遇到的问题：</p>
 <blockquote>
 <p>如何keep track the last byte to writec and flush to disk?</p>
@@ -394,27 +370,23 @@ Return: 3
 <p>将data fetch进来后如何再在同样位置flush进disk？</p>
 </blockquote>
 <p>需要先seek到cache开始的位置(<code>cache_start</code>), 然后flush to disk.</p>
-<h3 id="my-progress"><a class="markdownIt-Anchor" href="#my-progress"></a> My Progress</h3>
-<p>My first working implementation:</p>
-<p><img src="https://gitee.com/OooAlex/study_note/raw/master/img/202501171602261.png" alt="image-20250117160223130" /></p>
+<h3 id="My-Progress"><a href="#My-Progress" class="headerlink" title="My Progress"></a>My Progress</h3><p>My first working implementation:</p>
+<p><img src="https://gitee.com/OooAlex/study_note/raw/master/img/202501171602261.png" alt="image-20250117160223130"></p>
 <p>Really poor performance!</p>
-<h2 id="debugging-tips"><a class="markdownIt-Anchor" href="#debugging-tips"></a> Debugging Tips</h2>
-<ol>
-<li>
-<p><strong>Make sure your program can handle non-ASCII characters!</strong> Not all files consist of text; for example, images or videos can contain arbitrary bytes, including the <code>NUL</code> byte that has special meaning for text, but not in other data.</p>
+<h2 id="Debugging-Tips"><a href="#Debugging-Tips" class="headerlink" title="Debugging Tips"></a>Debugging Tips</h2><ol>
+<li><p><strong>Make sure your program can handle non-ASCII characters!</strong> Not all files consist of text; for example, images or videos can contain arbitrary bytes, including the <code>NUL</code> byte that has special meaning for text, but not in other data.</p>
 </li>
-<li>
-<p>Use <code>strace</code> to see if anything unexpected happens during the test or if the <strong>performance is poor</strong>.</p>
+<li><p>Use <code>strace</code> to see if anything unexpected happens during the test or if the <strong>performance is poor</strong>.</p>
 </li>
 </ol>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">wc</span> -c test_files/words.rot13.txt </span><br><span class="line">755 test_files/words.rot13.txt</span><br><span class="line">$ strace ./byte_cat test_files/words.rot13.txt out.txt 2&gt;&amp;1 | grep <span class="built_in">read</span> | <span class="built_in">wc</span> -l</span><br><span class="line">804</span><br><span class="line">$ strace ./byte_cat test_files/words.rot13.txt out.txt 2&gt;&amp;1 | grep write | <span class="built_in">wc</span> -l</span><br><span class="line">758</span><br></pre></td></tr></table></figure>
-<ol start="3">
+<ol>
 <li>Use <code>debug()</code> instead of <code>printf()</code>:</li>
 </ol>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">    Wrapper around printf that provides information about the</span></span><br><span class="line"><span class="comment">    given file. You can silence this function with the DEBUG_PRINT macro.</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="type">static</span> <span class="type">void</span> <span class="title function_">dbg</span><span class="params">(<span class="keyword">struct</span> io300_file* f, <span class="type">char</span>* fmt, ...)</span></span><br></pre></td></tr></table></figure>
 <p>When you <strong>add fields to your file structure</strong>, be sure to include them in the format string after the <code>TODO</code> in <code>dbg()</code>. Here is an example of using it.</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">io300_writec</span><span class="params">(<span class="keyword">struct</span> io300_file *f, <span class="type">int</span> ch)</span> &#123;</span><br><span class="line">    dbg(f, <span class="string">&quot;writing char: %c\n&quot;</span>, ch);</span><br><span class="line">    ...</span><br></pre></td></tr></table></figure>
-<ol start="4">
+<ol>
 <li>Use gdb</li>
 </ol>
 <blockquote>
@@ -422,16 +394,14 @@ Return: 3
 <ul>
 <li>Run the command <code>gdb [test executable]</code> (e.g., <code>gdb stride_cat</code>)</li>
 <li>Set breakpoints using <code>b [location]</code> (e.g., <code>b io300_read</code>)</li>
-<li>Run <code>r [arguments]</code> (e.g., <code>r test_files/tiny.txt /tmp/out.txt</code>)
-<ul>
+<li>Run <code>r [arguments]</code> (e.g., <code>r test_files/tiny.txt /tmp/out.txt</code>)<ul>
 <li>You can see what parameters each test takes in by running the test executable with no parameters (e.g., <code>./block_cat</code>).</li>
 </ul>
 </li>
 </ul>
 </blockquote>
 <p>See the <a target="_blank" rel="noopener" href="https://docs.google.com/document/d/15tqnbCcs3QH-vPzYbJNJOgZm1PQfZywp4gf2o5wey34/edit">GDB guide</a> for more useful commands.</p>
-<h2 id="finish"><a class="markdownIt-Anchor" href="#finish"></a> Finish!</h2>
-<p>理想的效果：</p>
+<h2 id="Finish"><a href="#Finish" class="headerlink" title="Finish!"></a>Finish!</h2><p>理想的效果：</p>
 <blockquote>
 <ol>
 <li>Your implementation is <strong>within 10x</strong> of <code>stdio</code> on the <code>byte_cat</code> benchmarks (<code>byte_cat</code> and <code>reverse_byte_cat</code>).</li>

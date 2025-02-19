@@ -10,12 +10,12 @@
   <meta name="generator" content="hexo-theme-yilia-plus">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
-  <meta name="description" content="Lab Checkpoint 5: down the stack (the network interface)   https:&#x2F;&#x2F;cs144.github.io&#x2F;assignments&#x2F;check5.pdf   [!WARNING] 注意，这篇笔记My implementation的后半部分全程代码剧透！   Overview In this lab, you&#39;ll go down the">
+  <meta name="description" content="Lab Checkpoint 5: down the stack (the network interface)  https:&#x2F;&#x2F;cs144.github.io&#x2F;assignments&#x2F;check5.pdf [!WARNING] 注意，这篇笔记My implementation的后半部分全程代码剧透！  OverviewIn this lab, you’ll go down the stack">
 <meta property="og:type" content="article">
 <meta property="og:title" content="CS144 Lab 5">
 <meta property="og:url" content="http://oooscar8.github.io/2025/02/20/cs144-lab5/index.html">
 <meta property="og:site_name" content="Alex_Space">
-<meta property="og:description" content="Lab Checkpoint 5: down the stack (the network interface)   https:&#x2F;&#x2F;cs144.github.io&#x2F;assignments&#x2F;check5.pdf   [!WARNING] 注意，这篇笔记My implementation的后半部分全程代码剧透！   Overview In this lab, you&#39;ll go down the">
+<meta property="og:description" content="Lab Checkpoint 5: down the stack (the network interface)  https:&#x2F;&#x2F;cs144.github.io&#x2F;assignments&#x2F;check5.pdf [!WARNING] 注意，这篇笔记My implementation的后半部分全程代码剧透！  OverviewIn this lab, you’ll go down the stack">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://gitee.com/OooAlex/study_note/raw/master/img/202502171212064.png">
 <meta property="og:image" content="https://gitee.com/OooAlex/study_note/raw/master/img/202502190143600.png">
@@ -270,43 +270,37 @@
   
   <div class="article-entry" itemprop="articleBody">
     
-    <h1 id="lab-checkpoint-5-down-the-stack-the-network-interface"><a class="markdownIt-Anchor" href="#lab-checkpoint-5-down-the-stack-the-network-interface"></a> Lab Checkpoint 5: down the stack (the network interface)</h1>
-<hr />
+    <h1 id="Lab-Checkpoint-5-down-the-stack-the-network-interface"><a href="#Lab-Checkpoint-5-down-the-stack-the-network-interface" class="headerlink" title="Lab Checkpoint 5: down the stack (the network interface)"></a>Lab Checkpoint 5: down the stack (the network interface)</h1><hr>
 <blockquote>
 <p><a target="_blank" rel="noopener" href="https://cs144.github.io/assignments/check5.pdf">https://cs144.github.io/assignments/check5.pdf</a></p>
-</blockquote>
-<blockquote>
 <p>[!WARNING]</p>
 <p>注意，这篇笔记My implementation的后半部分全程代码剧透！</p>
 </blockquote>
-<h2 id="overview"><a class="markdownIt-Anchor" href="#overview"></a> Overview</h2>
-<p>In this lab, you'll go down the stack and implement the network interface:  the bridge between <strong>Internet datagrams</strong> that travel the world, and <strong>link-layer Ethernet frames</strong> that travel one hop.</p>
-<p>The figure below shows that the network interface we are going to implement is part of a host's TCP/IP protocol stack and also a part of an IP router.</p>
-<p><img src="https://gitee.com/OooAlex/study_note/raw/master/img/202502171212064.png" alt="image-20250217121222984" /></p>
+<h2 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h2><p>In this lab, you’ll go down the stack and implement the network interface:  the bridge between <strong>Internet datagrams</strong> that travel the world, and <strong>link-layer Ethernet frames</strong> that travel one hop.</p>
+<p>The figure below shows that the network interface we are going to implement is part of a host’s TCP/IP protocol stack and also a part of an IP router.</p>
+<p><img src="https://gitee.com/OooAlex/study_note/raw/master/img/202502171212064.png" alt="image-20250217121222984"></p>
 <blockquote>
-<p>What's the responsibility of the network interface?</p>
+<p>What’s the responsibility of the network interface?</p>
 </blockquote>
 <p>When an IP datagram is handed to the kernel, the kernel needs to construct an appropriate link-layer (Ethernet) frame with the IP datagram as its payload. This means the kernel needs to know its (IP address, Ethernet address) mapping. These functions are performed by the network interface.</p>
 <p>Most of the work you will do is to implement the <strong>Address Resolution Protocol(ARP)</strong>, which looks up (and cache) the Ethernet address for each next-hop IP address.</p>
 <p>In lab6, you will use this network interface as part of an IP router.</p>
-<h2 id="my-implementation"><a class="markdownIt-Anchor" href="#my-implementation"></a> My implementation</h2>
-<blockquote>
+<h2 id="My-implementation"><a href="#My-implementation" class="headerlink" title="My implementation"></a>My implementation</h2><blockquote>
 <p>[!TIP]</p>
 <p>前言：coding前一定要认真读spec，将逻辑细节清楚后再写code。这个lab的代码量会相对较大，一定要多写helper functions！否则函数内部实现就会很臃肿。spec将函数逻辑讲解得很清晰，而且不像lab2和lab3那样有那么多corner case，所以难度适中。如果test没有通过，那一定是你在函数的逻辑细节问题上疏漏了。</p>
 </blockquote>
 <p>这个lab需要我们实现网络层(IP)和链路层(Ethernet)之间的网络接口(Network Interface)，负责：</p>
 <ol>
 <li>将从host/router上层(IP)收到的network datagram包装成Ethernet frame发送给上层IP协议指定的下一个host(next hop)。可能需要发送ARP request并将datagram暂放在waiting area中等待发送（详见ARP协议）</li>
-<li>接收外来的Ethernet frame，解析出payload，并根据其类型决定下一步操作：
-<ul>
+<li>接收外来的Ethernet frame，解析出payload，并根据其类型决定下一步操作：<ul>
 <li>如果是IPv4 datagram, 则将其存入buffer中供上层协议读取</li>
-<li>如果是ARP message，则记录下sender's IP-to-Ethernet mapping，如果是ARP request for自己的Ethernet地址，那就回复相应的ARP reply</li>
+<li>如果是ARP message，则记录下sender’s IP-to-Ethernet mapping，如果是ARP request for自己的Ethernet地址，那就回复相应的ARP reply</li>
 </ul>
 </li>
 </ol>
 <p>如spec所说，这个Network Interface的关键在于实现<strong>ARP协议</strong>：</p>
 <p>这个Network Interface需要一个结构来缓存所有next hop的IP-to-Ethernet mapping。当需要发送一个network datagram的时候，如果next hop的Ethernet地址未知，就需要broadcast一个ARP request，并将这个datagram放入一个waiting area等待接收到ARP reply后再发送出去</p>
-<p>当Network Interface接收到一个ARP message的时候，需要将sender's IP-to-Ethernet mapping缓存下来。这时候需要检查waiting area中是否有正在等待这个mapping的datagram，如果有的话现在就可以发送这个datagram了。如果是一个ARP request，并且请求的还是自己的Ethernet地址，那么还需要将相应的ARP reply发送给sender</p>
+<p>当Network Interface接收到一个ARP message的时候，需要将sender’s IP-to-Ethernet mapping缓存下来。这时候需要检查waiting area中是否有正在等待这个mapping的datagram，如果有的话现在就可以发送这个datagram了。如果是一个ARP request，并且请求的还是自己的Ethernet地址，那么还需要将相应的ARP reply发送给sender</p>
 <blockquote>
 <p>[!CAUTION]</p>
 <p>需要注意的点：</p>
@@ -325,7 +319,7 @@
 <p>同样的道理，在waiting area中等待过期的datagrams也需要定期清除（每次调用<code>tick</code>时），因此我也用一个multimap存储queued datagram。注意queued datagram需要包含datagram本身，以及其需要去往的next hop的ip地址。</p>
 <blockquote>
 <p>[!NOTE]</p>
-<p>注意不要将<code>datagram_queued_</code>与<code>datagram_received_</code>搞混淆了，前者是需要等待ARP request收到回应后才能发送出去的pending(queued) datagrams，而datagram_received_是Network Interface从外部接收并解析出的IPv4 datagrams，暂存在Network Interface中供上层协议读取的。</p>
+<p>注意不要将<code>datagram_queued_</code>与<code>datagram_received_</code>搞混淆了，前者是需要等待ARP request收到回应后才能发送出去的pending(queued) datagrams，而datagram<em>received</em>是Network Interface从外部接收并解析出的IPv4 datagrams，暂存在Network Interface中供上层协议读取的。</p>
 </blockquote>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">QueuedDatagram</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">    <span class="type">uint32_t</span> next_hop_ip &#123;&#125;;</span><br><span class="line">    InternetDatagram dgram &#123;&#125;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Datagrams that queued to learn the Ethernet address of the next hop</span></span><br><span class="line"><span class="built_in">std</span>::<span class="built_in">multimap</span>&lt;<span class="type">uint64_t</span>, QueuedDatagram&gt; datagrams_queued_ &#123;&#125;;</span><br></pre></td></tr></table></figure>
 <p><code>send_datagram</code> method还需要一个结构来存储针对每一个ip地址发送的ARF request的上一次发送时间，以此来检查是否可以发送当前的ARP request，这里我选择使用<code>unordered_map</code>，ip地址作为key，时间戳作为value。因为访问该结构的时候是通过ip地址寻找的，无法进行顺序查找，因此不需要排序，用hash table存储访问效率较高。</p>
@@ -351,7 +345,7 @@
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Get mapping by IP address</span></span><br><span class="line"><span class="type">bool</span> <span class="title function_">getMapping</span><span class="params">( <span class="type">uint32_t</span> target_ip, EthernetAddress&amp; eth )</span> <span class="type">const</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">for</span> ( <span class="type">const</span> <span class="keyword">auto</span>&amp; [ts, mapping] : mappings ) &#123;</span><br><span class="line">        <span class="keyword">if</span> ( mapping.second == target_ip ) &#123;</span><br><span class="line">            eth = mapping.first;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>在<code>send_datagram</code>中：</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">EthernetFrame eframe;</span><br><span class="line"></span><br><span class="line"><span class="comment">// If the destination Ethernet address is already known, create a Ethernet frame and send it right away</span></span><br><span class="line"><span class="keyword">if</span> ( getMapping( next_hop.ipv4_numeric(), eframe.header.dst ) ) &#123;</span><br><span class="line">    <span class="comment">// Set up the Ethernet frame header</span></span><br><span class="line">    eframe.header.type = EthernetHeader::TYPE_IPv4;</span><br><span class="line">    eframe.header.src = ethernet_address_;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Set up the Ethernet frame payload to be the serialized datagram</span></span><br><span class="line">    Serializer serializer;</span><br><span class="line">    dgram.serialize( serializer );</span><br><span class="line">    eframe.payload = serializer.finish();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Send the Ethernet frame</span></span><br><span class="line">    transmit( eframe );</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<ol start="2">
+<ol>
 <li>未知next hop的Ethernet address（不在缓存中）</li>
 </ol>
 <p>需要发送一个请求next hop的ip地址的ARP request（如果5秒内没发送过请求该ip地址的ARP request），并将datagram放入waiting area中。</p>
@@ -361,18 +355,12 @@
 <p>[!NOTE]</p>
 <p>注意，<code>send_datagram</code>（可能）需要的ARP request message和<code>recv_frame</code>（可能）需要的ARP reply message都是用上面这个函数创建。创建request和reply message使用的参数模板都是一样的，不同的是：</p>
 <ol>
-<li>
-<p><code>opcode</code>不同</p>
+<li><p><code>opcode</code>不同</p>
 </li>
-<li>
-<p>request message的<code>target_ethernet_address</code>是<code>&#123; 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 &#125;</code>，而reply message的是要回复对象的Ethernet地址</p>
+<li><p>request message的<code>target_ethernet_address</code>是<code>&#123; 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 &#125;</code>，而reply message的是要回复对象的Ethernet地址</p>
 </li>
-<li>
-<p>request message的<code>target_ip_address</code>是请求的ip地址，reply message的是要回复对象的ip地址</p>
-</li>
-<li>
-<p>request message的frame header中的<code>dst</code>是Ethernet Broadcast地址，而reply message的就是要回复对象的Ethernet地址</p>
-</li>
+<li>request message的<code>target_ip_address</code>是请求的ip地址，reply message的是要回复对象的ip地址</li>
+<li>request message的frame header中的<code>dst</code>是Ethernet Broadcast地址，而reply message的就是要回复对象的Ethernet地址</li>
 </ol>
 </blockquote>
 <p>接下来，我用一个helper function来检查是否可以发送ARP request，再用一个来更新ARP request发送时间：</p>
@@ -389,9 +377,8 @@
 <li>如果接收到的是IPv4类型的frame，将payload解析为network datagram，如果解析成功就将其放入<code>datagram_received_</code> buffer中供上层协议读取</li>
 </ol>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// If inbound frame is IPv4, parse the payload as an InternetDatagram</span></span><br><span class="line"><span class="comment">// and if successful, push the resulting datagram to the datagrams_received_ queue</span></span><br><span class="line"><span class="keyword">if</span> ( frame.header.type == EthernetHeader::TYPE_IPv4 ) &#123;</span><br><span class="line">    Parser <span class="title function_">parser</span><span class="params">( frame.payload )</span>;</span><br><span class="line"></span><br><span class="line">    InternetDatagram dgram;</span><br><span class="line">    dgram.parse( parser );</span><br><span class="line">    <span class="keyword">if</span> ( parser.has_error() )</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    datagrams_received_.push( dgram );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<ol start="2">
-<li>
-<p>如果接收到的是ARP类型的frame，将payload解析为ARP message，如果解析成功就将sender的IP-to-Ethernet mapping写入缓存中。并且，如果是ARP request，那么还需要回复相应的ARP reply。</p>
+<ol>
+<li><p>如果接收到的是ARP类型的frame，将payload解析为ARP message，如果解析成功就将sender的IP-to-Ethernet mapping写入缓存中。并且，如果是ARP request，那么还需要回复相应的ARP reply。</p>
 <p>最后，我们需要遍历<code>datagram_queued_</code>检查刚接收到的IP-to-Ethernet mapping是否可以让我们发送等待在waiting area中的pending(queued) datagrams。</p>
 </li>
 </ol>
@@ -400,9 +387,8 @@
 <p>创建并设置ARP reply使用之前写的<code>create_arp_message</code> function。</p>
 <p>在<code>recv_datagram</code>中：</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// If the inbound frame is ARP, parse the payload as an ARPMessage</span></span><br><span class="line"><span class="comment">// an if successful, add the IP-to-Ethernet mapping to the mappings.</span></span><br><span class="line"><span class="comment">// In addition, if it&#x27;s an ARP request asking for our IP address,</span></span><br><span class="line"><span class="comment">// send an appropriate ARP reply.</span></span><br><span class="line"><span class="keyword">if</span> ( frame.header.type == EthernetHeader::TYPE_ARP ) &#123;</span><br><span class="line">    Parser <span class="title function_">parser</span><span class="params">( frame.payload )</span>;</span><br><span class="line"></span><br><span class="line">    ARPMessage arp_message;</span><br><span class="line">    arp_message.parse( parser );</span><br><span class="line">    <span class="keyword">if</span> ( parser.has_error() )</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    addMapping( time_elapsed_, arp_message.sender_ethernet_address, arp_message.sender_ip_address );</span><br><span class="line">    <span class="keyword">if</span> ( arp_message.opcode == ARPMessage::OPCODE_REQUEST</span><br><span class="line">        &amp;&amp; arp_message.target_ip_address == ip_address_.ipv4_numeric() ) &#123;</span><br><span class="line">        EthernetFrame arp_reply = create_arp_message( ARPMessage::OPCODE_REPLY,</span><br><span class="line">                                                     ethernet_address_,</span><br><span class="line">                                                     ip_address_.ipv4_numeric(),</span><br><span class="line">                                                     arp_message.sender_ethernet_address,</span><br><span class="line">                                                     arp_message.sender_ip_address );</span><br><span class="line">        transmit( arp_reply );</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Since we have received an ARP message, we can probably send any queued datagrams</span></span><br><span class="line">    <span class="keyword">auto</span> it = datagrams_queued_.begin();</span><br><span class="line">    <span class="keyword">while</span> ( it != datagrams_queued_.end() ) &#123;</span><br><span class="line">        <span class="keyword">if</span> ( it-&gt;second.next_hop_ip == arp_message.sender_ip_address ) &#123;</span><br><span class="line">            send_datagram( it-&gt;second.dgram, Address::from_ipv4_numeric( it-&gt;second.next_hop_ip ) );</span><br><span class="line">            it = datagrams_queued_.erase( it );</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            ++it;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="finish"><a class="markdownIt-Anchor" href="#finish"></a> Finish!</h2>
-<p>All tests in check3 pass!</p>
-<p><img src="https://gitee.com/OooAlex/study_note/raw/master/img/202502190143600.png" alt="image-20250219014355179" /></p>
+<h2 id="Finish"><a href="#Finish" class="headerlink" title="Finish!"></a>Finish!</h2><p>All tests in check3 pass!</p>
+<p><img src="https://gitee.com/OooAlex/study_note/raw/master/img/202502190143600.png" alt="image-20250219014355179"></p>
 
     
 
