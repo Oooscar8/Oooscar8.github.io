@@ -217,6 +217,916 @@
             
 
   
+    <article id="post-cs144-lab1" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+  
+  
+    <h1 itemprop="name">
+	
+	  <a class="article-title" href="/2025/02/20/cs144-lab1/" target="_blank">CS144 Lab 1</a>
+  
+    </h1>
+  
+
+
+  
+  
+<a href="/2025/02/20/cs144-lab1/" class="archive-article-date">
+        <time datetime="2025-02-19T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2025-02-20</time>
+</a>
+
+  
+  
+    
+
+  
+  </header>
+  
+  <div class="article-entry" itemprop="articleBody">
+    
+    <h1 id="lab-checkpoint-1-stitching-substrings-into-a-byte-stream"><a class="markdownIt-Anchor" href="#lab-checkpoint-1-stitching-substrings-into-a-byte-stream"></a> Lab Checkpoint 1: stitching substrings into a byte stream</h1>
+<hr />
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://cs144.github.io/assignments/check1.pdf">https://cs144.github.io/assignments/check1.pdf</a></p>
+</blockquote>
+<blockquote>
+<p>This checkpoint contains a “hands-on” component and an implementation component.</p>
+<p>hands-on部分是今年新加的，需要加入Stanford内部网络才能做，因此跳过</p>
+<p>在Lab1中，我们需要实现一个TCP接收端的重组器(Reassembler)，用来将TCP接收到的乱序的子字符串(substring)重组成原本的字节流，按照正确的顺序推送(push)到我们在Lab0实现的ByteStream中，供TCP的customer读出。</p>
+</blockquote>
+<h2 id="implementation-putting-substrings-in-sequence"><a class="markdownIt-Anchor" href="#implementation-putting-substrings-in-sequence"></a> Implementation: putting substrings in sequence</h2>
+<blockquote>
+<p>Why we need to implement the TCP receiver's reassembler? What does it do?</p>
+</blockquote>
+<p>The TCP receiver needs to handle duplication and reordering of segments, so it needs to have the ability to stitch arbitrary excerpts of the byte stream(unordered substrings) back into the original ordered stream.</p>
+<p>To achieve this, the TCP receiver needs a <strong>reassembler</strong> to reassemble out-of-order byte stream.</p>
+<p>The reassembler buffers unordered substrings that fit within the stream's available capacity until earlier gaps get filled in, discards substrings that lie beyond the stream's available capacity and push ordered substrings to the ByteStream. As the reader pops bytes from the ByteStream, the stream's sliding window slides across the stream and the reassembler can accept further bytes.</p>
+<p><img src="https://gitee.com/OooAlex/study_note/raw/master/img/202501211617490.png" alt="image-20250121161738173" /></p>
+<h3 id="my-solution"><a class="markdownIt-Anchor" href="#my-solution"></a> My Solution</h3>
+<p>这个lab的关键是理解上图的TCP Receiver's sliding window。我建议自己理解后手动画一遍图再开始coding:</p>
+<p><img src="https://gitee.com/OooAlex/study_note/raw/master/img/202502132129349.jpg" alt="afd089d7e0750b55eb9d32134828880" /></p>
+<blockquote>
+<ol>
+<li>当Reassembler接收到一个新的substring的时候，他要怎么做？</li>
+</ol>
+</blockquote>
+<p>根据上图，ByteStream的buffer空间（绿色区域）和Reassembler的internal storage空间（红色空间）合并起来是一个大小始终为capacity的sliding window。TCP的customer每从ByteStream中读出一个byte，sliding window就向右slide一个byte，Reassembler就可以接收更远一个byte。</p>
+<p>当Reassembler新收到一个substring，他需要将substring在红色区域(available capacity)的部分先写入Reassembler的internal storage。因此首先，我们需要知道红色区域的上下界。</p>
+<blockquote>
+<p>[!TIP]</p>
+<p>提示：红色区域的起始位置是Reassembler正在等待的next byte，想想这与ByteStream有什么联系？</p>
+</blockquote>
+<blockquote>
+<ol start="2">
+<li>应该用什么data structure来表示Reassembler's internal storage？</li>
+</ol>
+</blockquote>
+<p>Reassembler需要存储接收到的substring，以及substring在stream中的位置(index)，因此我选择用一个<strong>map</strong>来存储&lt;key = first_index, value = substring&gt;。每次Reassembler接收到一个substring，截取substring在红色区域的部分插入map中，然后用一个<code>merge_substrings</code>函数来合并相邻或重叠的substrings。每次插入map以及合并后，检查map中的第一个元素的key是否是Reassembler正在等待的next byte，如果是，就将对应的substring push到ByteStream中。</p>
+<h2 id="debugging-advice"><a class="markdownIt-Anchor" href="#debugging-advice"></a> Debugging Advice</h2>
+<ol>
+<li>To test your code:</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cmake --build build --target check1</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>You may sometimes need to use the <code>move()</code> function to pass an object that can’t be copied.</li>
+</ol>
+<p>If you get your builds stuck and aren’t sure how to fix them, you can erase your build directory and build again</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">rm -rf build</span><br><span class="line">cmake -S . -B build</span><br></pre></td></tr></table></figure>
+<h2 id="finish"><a class="markdownIt-Anchor" href="#finish"></a> Finish!</h2>
+<p>All tests in check1 pass!</p>
+<p><img src="../../../../../../AppData/Roaming/Typora/typora-user-images/image-20250131174356176.png" alt="image-20250131174356176" /></p>
+
+    
+
+    
+
+    
+
+  </div>
+  <div class="article-info article-info-index">
+    
+    
+    
+
+    
+    <p class="article-more-link">
+      <a class="article-more-a" href="/2025/02/20/cs144-lab1/">展开全文 >></a>
+    </p>
+    
+
+    
+    <div class="clearfix"></div>
+  </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-cs144-lab2" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+  
+  
+    <h1 itemprop="name">
+	
+	  <a class="article-title" href="/2025/02/20/cs144-lab2/" target="_blank">CS144 Lab 2</a>
+  
+    </h1>
+  
+
+
+  
+  
+<a href="/2025/02/20/cs144-lab2/" class="archive-article-date">
+        <time datetime="2025-02-19T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2025-02-20</time>
+</a>
+
+  
+  
+    
+
+  
+  </header>
+  
+  <div class="article-entry" itemprop="articleBody">
+    
+    <h1 id="lab-checkpoint-2-the-tcp-receiver"><a class="markdownIt-Anchor" href="#lab-checkpoint-2-the-tcp-receiver"></a> Lab Checkpoint 2: the TCP receiver</h1>
+<hr />
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://cs144.github.io/assignments/check2.pdf">https://cs144.github.io/assignments/check2.pdf</a></p>
+</blockquote>
+<h2 id="the-tcp-receiver"><a class="markdownIt-Anchor" href="#the-tcp-receiver"></a> The TCP Receiver</h2>
+<p>In this lab, we implement the TCP Receiver. The <code>TCPReceiver</code> receives messages from the peer’s sender (via the <code>receive()</code> method) and turns them into calls to a <code>Reassembler</code>, which eventually writes to the incoming <code>ByteStream</code>. Applications read from this <code>ByteStream</code>.</p>
+<p>Meanwhile, the <code>TCPReceiver</code> also generates messages that go back to the peer’s sender, via the send() method. These “receiver messages” tell the sender:</p>
+<ol>
+<li>the index of the “first unassembled” byte, which is called the “acknowledgment number” or “<strong><code>ackno</code></strong>.” This is the first byte that the receiver needs from the sender.</li>
+<li>the available capacity in the output <code>ByteStream</code>. This is called the “<strong>window size</strong>”.</li>
+</ol>
+<p>Together, the <strong><code>ackno</code></strong> and <strong>window size</strong> describe describes the receiver’s <strong>window</strong>: a <strong>range of indexes</strong> that the TCP sender is allowed to send.</p>
+<h3 id="translating-between-64-bit-indexes-and-32-bit-seqnos"><a class="markdownIt-Anchor" href="#translating-between-64-bit-indexes-and-32-bit-seqnos"></a> Translating between 64-bit indexes and 32-bit <code>seqnos</code></h3>
+<blockquote>
+<p>In the TCP headers, space is precious, so each byte’s index in the stream is represented not with a 64-bit index but with a 32-bit “sequence number,” or “<code>seqno</code>.”</p>
+</blockquote>
+<p>在这一部分，我们需要实现一个Wrap32类中的wrap和unwrap方法来实现64位的absolute sequence number和32位的sequence number之间的转换。</p>
+<p>其中，wrap方法负责将一个64位的absolute sequence number转换为一个32位的sequence number，比较简单，只需要一行代码。</p>
+<p>unwrap方法负责将一个32位的sequence number转换为64位的absolute sequence number。这里稍微麻烦一点的地方在于一个32位的sequence number理论上可以转换为无穷多个以<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mn>2</mn><mn>32</mn></msup></mrow><annotation encoding="application/x-tex">2^{32}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141079999999999em;vertical-align:0em;"></span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">3</span><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span></span></span>为间隔的absolute sequence number，需要通过给定的checkpoint来定位我们需要的absolute sequence number。</p>
+<p>因此，我们的问题是：</p>
+<blockquote>
+<p>如何找到最接近checkpoint的absolute sequence number?</p>
+</blockquote>
+<p>首先我们要获得这个32位的sequence number与ISN的offset，这个offset将会是最小可能的absolute sequence number，然后每增加<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mn>2</mn><mn>32</mn></msup></mrow><annotation encoding="application/x-tex">2^{32}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141079999999999em;vertical-align:0em;"></span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">3</span><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span></span></span>就又会得到一个可能的absolute sequence number。</p>
+<p>我第一个想到的方法是用一个while循环，每次循环增加<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mn>2</mn><mn>32</mn></msup></mrow><annotation encoding="application/x-tex">2^{32}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141079999999999em;vertical-align:0em;"></span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">3</span><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span></span></span>，直到找到那个刚好小于checkpoint和刚好大于checkpoint的两个相邻的absolute sequence number，比较并返回那个更接近checkpoint的值。但是这样的话如果checkpoint很大循环次数将会很多很浪费时间，实测这样实现的话test会超时，需要更换思路。</p>
+<p>其实解决方案很简单，思考如何根据checkpoint直接定位到相邻可能的absolute sequence number？</p>
+<p>最后要注意，测试前可能需要将<code>debug</code>行注释掉否则可能会超时（至少我的情况是这样）。</p>
+<h3 id="implementing-the-tcp-receiver"><a class="markdownIt-Anchor" href="#implementing-the-tcp-receiver"></a> Implementing the TCP receiver</h3>
+<p>在这一部分，我们需要实现<code>TCPReceiver</code>类，这个类需要一个receive方法来接收<code>TCPSenderMessages</code>,并将其中的payload交给<code>Reasssembler</code>;还需要一个send方法来acknowledge收到的message，发送<code>TCPReceiverMessages</code>。</p>
+<blockquote>
+<p>为什么在<code>Reassembler</code>前面需要一个<code>TCPReceiver</code>类，不能直接将接收到的segment交给<code>Reassembler</code>？</p>
+</blockquote>
+<p>由<code>TCPSenderMessage</code>类:</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> <span class="title class_">TCPSenderMessage</span></span><br><span class="line">&#123;</span><br><span class="line">  Wrap32 seqno &#123; <span class="number">0</span> &#125;;</span><br><span class="line"></span><br><span class="line">  <span class="type">bool</span> SYN &#123;&#125;;</span><br><span class="line">  std::string payload &#123;&#125;;</span><br><span class="line">  <span class="type">bool</span> FIN &#123;&#125;;</span><br><span class="line"></span><br><span class="line">  <span class="type">bool</span> RST &#123;&#125;;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// How many sequence numbers does this segment use?</span></span><br><span class="line">  <span class="function"><span class="type">size_t</span> <span class="title">sequence_length</span><span class="params">()</span> <span class="type">const</span> </span>&#123; <span class="keyword">return</span> SYN + payload.<span class="built_in">size</span>() + FIN; &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>可以看出TCP segment不仅仅包含data(payload)，还有<code>seqno</code>和SYN,FIN,RST flag。</p>
+<p><strong><code>TCPReceiver</code>的receive方法需要负责：</strong></p>
+<p>一句话概括：分析接收到的TCP segment(<code>TCPSenderMessage</code>)后，将payload交由<code>Reassembler</code>处理。</p>
+<p>具体来说：</p>
+<ol>
+<li>
+<p>根据RST flag判断是否有error。</p>
+</li>
+<li>
+<p>根据SYN和FIN flag判断是byte stream的起始segment还是终止segment：如果是起始segment，那么<code>TCPReceiver</code>需要记录下ISN(Initial Sequence Number)，并且通知<code>Reassembler</code>我们已经接收到byte stream的起始segment（这是为了让<code>Reassembler</code>从index 1开始接收substring，因为index 0需要保留给SYN flag）；如果是终止segment，<code>TCPReceiver</code>需要先在自己内部记录下来已经接收到了FIN flag，等到所有存储在<code>Reassembler</code>中的substrings全部push到byte stream之后（也就是当<code>ByteStream</code>的写入端关闭之后），再通知<code>Reassembler</code>我们已经接收到byte stream的终止segment（这是因为当接收到完整的byte stream之后，最后send方法发送的<code>ackno</code>需要包含最后的FIN flag）。</p>
+<blockquote>
+<p>[!IMPORTANT]</p>
+<p>需要注意，虽然SYN和FIN flag本身不属于payload，也不需要push入byte stream，但是他们各需要占据一个sequence number，也就是<code>Reassembler</code>的index 0和最后一个index。需要思考需要怎样修改我们之前在Checkpoint1中实现的<code>Reassembler</code>中的<code>next_byte_index</code>方法。</p>
+</blockquote>
+</li>
+<li>
+<p>根据记录下的ISN作为zero point和<code>Reassembler</code>在等待的next byte作为checkpoint，运用我们之前实现的Wrap32类将segment中32位的<code>seqno</code>转化为<code>Reassembler</code>中从0开始的64位的index(absolute sequence number)，并将转化后的index作为first_index，message的payload作为data，交给<code>Reassembler</code>处理。</p>
+</li>
+</ol>
+<p><strong><code>TCPReceiver</code>的send方法需要负责：</strong></p>
+<p>一句话概括：根据接收到的TCP segment，发送<code>TCPReceiverMessage</code>来告知TCP的发送端我们已经已接收到这个segment。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> <span class="title class_">TCPReceiverMessage</span></span><br><span class="line">&#123;</span><br><span class="line">  std::optional&lt;Wrap32&gt; ackno &#123;&#125;;</span><br><span class="line">  <span class="type">uint16_t</span> window_size &#123;&#125;;</span><br><span class="line">  <span class="type">bool</span> RST &#123;&#125;;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>具体来说：</p>
+<ol>
+<li>如果byte stream有error，设置RST flag为true。</li>
+<li>设置<code>ackno</code>为<code>Reassembler</code>正在等待的next byte对应的sequence number（用到Wrap32类将64位的next_byte_index(absolute sequence number)转化为32位的sequence number）。</li>
+<li>设置window_size为<code>Reassembler</code>和<code>ByteStream</code>的available capacity，用来通知TCP的发送端进行flow control。</li>
+</ol>
+<p><strong>补充：</strong></p>
+<p>以上的步骤都是笔者自己的实现思路，其中对SYN和FIN的处理有些messy，特别是考虑SYN和FIN的sequence number后我修改了<code>Reassembler</code>获取next_byte_index的方式。并且我用到了<code>Reassembler</code>中的一些private成员变量和函数，因此在<code>Reassembler</code>中将<code>TCPReceiver</code>声明为了友元，破坏了一定的封装性。但无伤大雅，最终能work，读者可梳理思路自行寻求更优的实现。</p>
+<p>根据cs1441官方的spec，<code>TCPReceiver</code>的代码量只在15行左右，但要完全考虑到tests中的所有case实现起来还是有些tricky，笔者实现过程中遇到问题的test包括<code>recv_connect, recv_close, recv_special</code>，供读者参考。</p>
+<h2 id="finish"><a class="markdownIt-Anchor" href="#finish"></a> Finish!</h2>
+<p>All tests in check2 pass!</p>
+<p><img src="https://gitee.com/OooAlex/study_note/raw/master/img/202502112148729.png" alt="image-20250211214756533" /></p>
+
+    
+
+    
+
+    
+
+  </div>
+  <div class="article-info article-info-index">
+    
+    
+    
+
+    
+    <p class="article-more-link">
+      <a class="article-more-a" href="/2025/02/20/cs144-lab2/">展开全文 >></a>
+    </p>
+    
+
+    
+    <div class="clearfix"></div>
+  </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-cs144-lab0" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+  
+  
+    <h1 itemprop="name">
+	
+	  <a class="article-title" href="/2025/02/20/cs144-lab0/" target="_blank">CS144 Lab 0</a>
+  
+    </h1>
+  
+
+
+  
+  
+<a href="/2025/02/20/cs144-lab0/" class="archive-article-date">
+        <time datetime="2025-02-19T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2025-02-20</time>
+</a>
+
+  
+  
+    
+
+  
+  </header>
+  
+  <div class="article-entry" itemprop="articleBody">
+    
+    <h1 id="lab-checkpoint-0-networking-warmup"><a class="markdownIt-Anchor" href="#lab-checkpoint-0-networking-warmup"></a> Lab Checkpoint 0: networking warmup</h1>
+<hr />
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://cs144.github.io/assignments/check0.pdf">https://cs144.github.io/assignments/check0.pdf</a></p>
+<p>Expected hours to complete: 2-6 hours</p>
+<p>Over the course of this 8-part lab assignment, you’ll be building up your own implementation of a significant portion of the Internet—<strong>a router, a network interface, and the TCP protocol</strong>.</p>
+<p>在Lab0中，我们需要实现一个使用TCP套接字获取网页的简易Web客户端和一个内存中的可靠字节流(ByteStream)。</p>
+</blockquote>
+<h2 id="faqs"><a class="markdownIt-Anchor" href="#faqs"></a> FAQs</h2>
+<blockquote>
+<ol>
+<li>What should the behavior of my program be if the caller tries to pop with a <code>len</code> greater than what is available?</li>
+</ol>
+</blockquote>
+<p>We don't have any preference on the behavior if the caller tries to pop more than is buffered in the stream, as long as you behave reasonably and don't crash in that situation. If you want to pop the maximum available, that is fine with us. If you want to throw an exception, that is also fine with us.</p>
+<blockquote>
+<ol start="2">
+<li>How fast should my code be?</li>
+</ol>
+</blockquote>
+<p>Here's a reasonable rule: if any of your tests are taking longer than 2 seconds, it's probably good to keep exploring other ways of representing the <code>ByteStream</code>. And if your benchmark results at the end of the test are worse than 0.1 Gbit/s (100 million bits per second), that's another sign the design may need to be rethought. This lab doesn't require any sophisticated data structures, but it might still take some trial-and-error to find a reasonable approach. Sometimes &quot;big-O&quot; analysis can be misleading about the performance of real programs—the constant factors can matter a lot!</p>
+<h2 id="set-up-gnulinux-on-your-computer"><a class="markdownIt-Anchor" href="#set-up-gnulinux-on-your-computer"></a> Set up GNU/Linux on your computer</h2>
+<p>Install the CS144 VirtualBox virtual-machine image (instructions at <a target="_blank" rel="noopener" href="https://stanford.edu/class/cs144/vm_howto/vm-howto-image.html">https://stanford.edu/class/cs144/vm_howto/vm-howto-image.html</a>).</p>
+<p>需要注意的是，VirtualBox需要直接在主机操作系统上运行，比如如果你是Windows主机，那么就需要在Windows系统中安装和运行VirtualBox（不能在WSL这样的虚拟环境中运行）</p>
+<h2 id="networking-by-hand"><a class="markdownIt-Anchor" href="#networking-by-hand"></a> Networking by hand</h2>
+<h3 id="fetch-a-web-page"><a class="markdownIt-Anchor" href="#fetch-a-web-page"></a> Fetch a Web Page</h3>
+<ol>
+<li>Fetch a web page <a target="_blank" rel="noopener" href="http://cs144.keithw.org/hello">http://cs144.keithw.org/hello</a></li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">telnet cs144.keithw.org http </span><br><span class="line"></span><br><span class="line">GET /hello HTTP/1.1</span><br><span class="line">Host: cs144.keithw.org</span><br><span class="line">Connection: close</span><br></pre></td></tr></table></figure>
+<img src="https://gitee.com/OooAlex/study_note/raw/master/img/202501171812928.png">
+<ol start="2">
+<li>Fetch a web page <a target="_blank" rel="noopener" href="http://cs144.keithw.org/lab0/sunetid">http://cs144.keithw.org/lab0/sunetid</a></li>
+</ol>
+<img src="https://gitee.com/OooAlex/study_note/raw/master/img/202501171816688.png">
+<h3 id="send-yourself-an-email"><a class="markdownIt-Anchor" href="#send-yourself-an-email"></a> Send yourself an email</h3>
+<p>这部分只有连接Stanford内部网络才能完成</p>
+<h3 id="listening-and-connecting"><a class="markdownIt-Anchor" href="#listening-and-connecting"></a> Listening and connecting</h3>
+<p>In this part, we play around with server and client.</p>
+<p><img src="https://gitee.com/OooAlex/study_note/raw/master/img/202501172049154.png" alt="image-20250117204908884" /></p>
+<h2 id="writing-a-network-program-using-an-os-stream-socket"><a class="markdownIt-Anchor" href="#writing-a-network-program-using-an-os-stream-socket"></a> Writing a network program using an OS stream socket</h2>
+<blockquote>
+<p>You’ll write a program called “webget” that creates a TCP stream socket, connects to a Web server, and fetches a page.</p>
+</blockquote>
+<h3 id="set-up"><a class="markdownIt-Anchor" href="#set-up"></a> Set up</h3>
+<p>注意在<code>git clone</code>之前可能需要先在虚拟机中配置Git代理(使用主机的VPN)：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">使用 10809 端口</span></span><br><span class="line">git config --global http.proxy http://10.0.2.2:10809</span><br><span class="line">git config --global https.proxy http://10.0.2.2:10809</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">查看当前代理设置</span></span><br><span class="line">git config --global --get http.proxy</span><br><span class="line">git config --global --get https.proxy</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">如果需要取消 Git 代理</span></span><br><span class="line">git config --global --unset http.proxy</span><br><span class="line">git config --global --unset https.proxy</span><br></pre></td></tr></table></figure>
+<h3 id="modern-c"><a class="markdownIt-Anchor" href="#modern-c"></a> Modern  C++</h3>
+<ul>
+<li>
+<p>Use the language documentation at <a target="_blank" rel="noopener" href="https://en.cppreference.com">https://en.cppreference.com</a> as a resource. (We’d recommend you avoid <a target="_blank" rel="noopener" href="http://cplusplus.com">cplusplus.com</a> which is more likely to be out-of-date.)</p>
+</li>
+<li>
+<p>Never use malloc() or free().</p>
+</li>
+<li>
+<p>Never use new or delete.</p>
+</li>
+<li>
+<p>Essentially <strong>never use raw pointers (*)</strong>, and use “smart” pointers (unique ptr or shared ptr) only when necessary. (You will not need to use these in CS144.)</p>
+</li>
+<li>
+<p>Avoid templates, threads, locks, and virtual functions. (You will not need to use these in CS144.)</p>
+</li>
+<li>
+<p>Avoid C-style <code>strings (char *str)</code> or string functions (<code>strlen()</code>, <code>strcpy()</code>). These are pretty error-prone. Use a <code>std::string</code> instead.</p>
+</li>
+<li>
+<p>Never use C-style casts (e.g., <code>(FILE *)x</code>). Use a C++ <code>static_cast</code> if you have to (you generally will not need this in CS144)</p>
+</li>
+<li>
+<p>Prefer passing function arguments by const reference (e.g.: <code>const Address &amp; address</code>)</p>
+</li>
+<li>
+<p>Make every variable const unless it needs to be mutated.</p>
+</li>
+<li>
+<p>Make every method const unless it needs to mutate the object.</p>
+</li>
+<li>
+<p>Avoid global variables, and give every variable the smallest scope possible.</p>
+</li>
+<li>
+<p>For suggestions on how to improve the code related to C++ programming practices:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cmake --build build --target tidy</span><br></pre></td></tr></table></figure>
+<p>To format the code:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cmake --build build --target format</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="writing-webget"><a class="markdownIt-Anchor" href="#writing-webget"></a> Writing webget</h3>
+<blockquote>
+<p>Before writing <code>webget</code>, read over the public interfaces (the part that comes after “public:” in the files <code>util/socket.hh</code> and <code>util/file descriptor.hh</code>).</p>
+</blockquote>
+<p>In this part, we need to implement a simple Web client that fetches Web pages using a TCP socket provided by the operating system.</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">get_URL</span><span class="params">( <span class="type">const</span> string&amp; host, <span class="type">const</span> string&amp; path )</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    TCPSocket clientSocket;</span><br><span class="line">    <span class="function">Address <span class="title">serverAddress</span><span class="params">( host, <span class="string">&quot;http&quot;</span> )</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Connect to the server.</span></span><br><span class="line">    clientSocket.<span class="built_in">connect</span>( serverAddress );</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Send the HTTP request.</span></span><br><span class="line">    string request = <span class="string">&quot;GET &quot;</span> + path + <span class="string">&quot; HTTP/1.1\r\nHost: &quot;</span> + host + <span class="string">&quot;\r\n&quot;</span> +           <span class="string">&quot;Connection: close\r\n\r\n&quot;</span>;</span><br><span class="line">    clientSocket.<span class="built_in">write</span>( (string_view)request );</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Read and print the response</span></span><br><span class="line">    <span class="keyword">while</span> ( !clientSocket.<span class="built_in">eof</span>() ) &#123;</span><br><span class="line">        string response;</span><br><span class="line">        clientSocket.<span class="built_in">read</span>( response );</span><br><span class="line">        cout &lt;&lt; response;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    clientSocket.<span class="built_in">close</span>();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="https://gitee.com/OooAlex/study_note/raw/master/img/202501191501409.png" alt="image-20250119150127169" /></p>
+<h2 id="an-in-memory-reliable-byte-stream"><a class="markdownIt-Anchor" href="#an-in-memory-reliable-byte-stream"></a> An in-memory reliable byte stream</h2>
+<p>In this part, we need to implement a <code>ByteStream</code> object that provides reliable byte stream in memory. The Writer writes data into the stream and the Reader reads data from the stream.</p>
+<blockquote>
+<p>What is the design of my <code>ByteStream</code> implementatino? What data structures and approach are taken?</p>
+</blockquote>
+<p>设计这个<code>ByteStream</code>的关键在于选择用什么data structure来表示内存中存储数据的stream。这个data structure需要方便从一端写入，从另一端读出，以及peek其中存储的数据。</p>
+<p>我第一个想到的是用queue，但是queue只能读取队列首尾的元素，不方便peek。</p>
+<p>因此可以用<code>vector&lt;char&gt;</code>或者string，我这里选择用最直观的string。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">std::string buffer_ &#123;&#125;;</span><br></pre></td></tr></table></figure>
+<p>这样的话Writer的push很简单，直接用string的append函数：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">Writer::push</span><span class="params">( string data )</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="comment">// Push data to the buffer, but only as much as available capacity allows.</span></span><br><span class="line">  <span class="type">uint64_t</span> to_write = <span class="built_in">min</span>( <span class="built_in">available_capacity</span>(), data.<span class="built_in">size</span>() );</span><br><span class="line">  buffer_.<span class="built_in">append</span>( data, <span class="number">0</span>, to_write );</span><br><span class="line">  bytes_pushed_ += to_write;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>那Reader的pop如何实现呢?</p>
+<p>最容易想到的是每次pop <code>len</code> bytes的时候都将<code>buffer_</code>的前<code>len</code>个字符截掉：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">buffer_ = buffer_.<span class="built_in">substr</span>( len );</span><br></pre></td></tr></table></figure>
+<p>但是这样的话每次pop <code>buffer_</code>的内存都会重新分配，不符合pop 操作是 O(1) 的时间复杂度要求。</p>
+<p>因此我想到用一个<code>read_index_</code>来追踪当前<code>buffer_</code>中读到的位置，这样每次pop只需要<code>read_index_ += len</code>，只在<code>buffer_</code>中已读过的bytes过多（超过<code>buffer_ </code>size的一半）时再重新整理：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">Reader::pop</span><span class="params">( <span class="type">uint64_t</span> len )</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// Pop as much data as possible from the buffer if len is greater than the         amount of data available.</span></span><br><span class="line">    <span class="type">uint64_t</span> to_read = <span class="built_in">min</span>( <span class="built_in">bytes_buffered</span>(), len );</span><br><span class="line">    read_index_ += to_read;</span><br><span class="line">    bytes_popped_ += to_read;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// When more than half of the buffer is read, shrink it to avoid unnecessary       memory usage.</span></span><br><span class="line">    <span class="keyword">if</span> ( read_index_ &gt;= buffer_.<span class="built_in">size</span>() / <span class="number">2</span> ) &#123;</span><br><span class="line">        buffer_ = buffer_.<span class="built_in">substr</span>( read_index_ );</span><br><span class="line">        read_index_ = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这样的话<code>buffer_</code>中<code>read_index</code>之前的bytes是已经读过out of date的bytes，<code>read_index</code>之后的bytes才是被push进stream中等待被读取的bytes。</p>
+<h2 id="finish"><a class="markdownIt-Anchor" href="#finish"></a> Finish!</h2>
+<p>All tests in check0 pass!</p>
+<p><img src="https://gitee.com/OooAlex/study_note/raw/master/img/202502192350617.png" alt="img" /></p>
+
+    
+
+    
+
+    
+
+  </div>
+  <div class="article-info article-info-index">
+    
+    
+    
+
+    
+    <p class="article-more-link">
+      <a class="article-more-a" href="/2025/02/20/cs144-lab0/">展开全文 >></a>
+    </p>
+    
+
+    
+    <div class="clearfix"></div>
+  </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-cs144-lab5" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+  
+  
+    <h1 itemprop="name">
+	
+	  <a class="article-title" href="/2025/02/20/cs144-lab5/" target="_blank">CS144 Lab 5</a>
+  
+    </h1>
+  
+
+
+  
+  
+<a href="/2025/02/20/cs144-lab5/" class="archive-article-date">
+        <time datetime="2025-02-19T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2025-02-20</time>
+</a>
+
+  
+  
+    
+
+  
+  </header>
+  
+  <div class="article-entry" itemprop="articleBody">
+    
+    <h1 id="lab-checkpoint-5-down-the-stack-the-network-interface"><a class="markdownIt-Anchor" href="#lab-checkpoint-5-down-the-stack-the-network-interface"></a> Lab Checkpoint 5: down the stack (the network interface)</h1>
+<hr />
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://cs144.github.io/assignments/check5.pdf">https://cs144.github.io/assignments/check5.pdf</a></p>
+</blockquote>
+<blockquote>
+<p>[!WARNING]</p>
+<p>注意，这篇笔记My implementation的后半部分全程代码剧透！</p>
+</blockquote>
+<h2 id="overview"><a class="markdownIt-Anchor" href="#overview"></a> Overview</h2>
+<p>In this lab, you'll go down the stack and implement the network interface:  the bridge between <strong>Internet datagrams</strong> that travel the world, and <strong>link-layer Ethernet frames</strong> that travel one hop.</p>
+<p>The figure below shows that the network interface we are going to implement is part of a host's TCP/IP protocol stack and also a part of an IP router.</p>
+<p><img src="https://gitee.com/OooAlex/study_note/raw/master/img/202502171212064.png" alt="image-20250217121222984" /></p>
+<blockquote>
+<p>What's the responsibility of the network interface?</p>
+</blockquote>
+<p>When an IP datagram is handed to the kernel, the kernel needs to construct an appropriate link-layer (Ethernet) frame with the IP datagram as its payload. This means the kernel needs to know its (IP address, Ethernet address) mapping. These functions are performed by the network interface.</p>
+<p>Most of the work you will do is to implement the <strong>Address Resolution Protocol(ARP)</strong>, which looks up (and cache) the Ethernet address for each next-hop IP address.</p>
+<p>In lab6, you will use this network interface as part of an IP router.</p>
+<h2 id="my-implementation"><a class="markdownIt-Anchor" href="#my-implementation"></a> My implementation</h2>
+<blockquote>
+<p>[!TIP]</p>
+<p>前言：coding前一定要认真读spec，将逻辑细节清楚后再写code。这个lab的代码量会相对较大，一定要多写helper functions！否则函数内部实现就会很臃肿。spec将函数逻辑讲解得很清晰，而且不像lab2和lab3那样有那么多corner case，所以难度适中。如果test没有通过，那一定是你在函数的逻辑细节问题上疏漏了。</p>
+</blockquote>
+<p>这个lab需要我们实现网络层(IP)和链路层(Ethernet)之间的网络接口(Network Interface)，负责：</p>
+<ol>
+<li>将从host/router上层(IP)收到的network datagram包装成Ethernet frame发送给上层IP协议指定的下一个host(next hop)。可能需要发送ARP request并将datagram暂放在waiting area中等待发送（详见ARP协议）</li>
+<li>接收外来的Ethernet frame，解析出payload，并根据其类型决定下一步操作：
+<ul>
+<li>如果是IPv4 datagram, 则将其存入buffer中供上层协议读取</li>
+<li>如果是ARP message，则记录下sender's IP-to-Ethernet mapping，如果是ARP request for自己的Ethernet地址，那就回复相应的ARP reply</li>
+</ul>
+</li>
+</ol>
+<p>如spec所说，这个Network Interface的关键在于实现<strong>ARP协议</strong>：</p>
+<p>这个Network Interface需要一个结构来缓存所有next hop的IP-to-Ethernet mapping。当需要发送一个network datagram的时候，如果next hop的Ethernet地址未知，就需要broadcast一个ARP request，并将这个datagram放入一个waiting area等待接收到ARP reply后再发送出去</p>
+<p>当Network Interface接收到一个ARP message的时候，需要将sender's IP-to-Ethernet mapping缓存下来。这时候需要检查waiting area中是否有正在等待这个mapping的datagram，如果有的话现在就可以发送这个datagram了。如果是一个ARP request，并且请求的还是自己的Ethernet地址，那么还需要将相应的ARP reply发送给sender</p>
+<blockquote>
+<p>[!CAUTION]</p>
+<p>需要注意的点：</p>
+<p>next hop的IP-to-Ethernet mapping是会随着设备的接入和离开随时变化的，因此每个缓存的IP-to-Ethernet mapping每隔一段时间（lab规定为30秒）会过期，需要清除。</p>
+<p>在发送一个ARP request之后，5秒内（lab规定的）不应再发送针对相同IP地址的ARP request，但是仍需要将datagram放入waiting area中。</p>
+<p>datagram不会永远等待在waiting area中，如果被放入waiting area后的5秒内（lab规定的）还没接收到等待的Ethernet地址，那么我们的Network Interface就会drop掉这个datagram。</p>
+</blockquote>
+<p>接下来进入我的实现细节（后面将是全程代码剧透！）：</p>
+<p>首先要确定用什么数据结构来表示：</p>
+<ol>
+<li>所有缓存的IP-to-Ethernet mappings</li>
+<li>所有在waiting area中的datagrams</li>
+</ol>
+<p>考虑到清除IP-to-Ethernet mappings操作是清除那些早于当前时间30秒的所有mappings，因此我决定使用可以根据mapping插入的时间顺序（时间戳）来排序所有mappings的数据结构，以提高清除操作的速度。我选择使用一个multimap，将mapping插入的时间（时间戳）作为key，IP-to-Ethernet mapping pair作为value。用multimap而不是map是因为不同mapping pair的时间戳可能相同。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Define the value type as a pair of EthernetAddress and IP address.</span></span><br><span class="line">using MappingPair = <span class="built_in">std</span>::<span class="built_in">pair</span>&lt;EthernetAddress, <span class="type">uint32_t</span>&gt;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Define the map type with timestamp as key and (Ethernet, IP) pair as value.</span></span><br><span class="line"><span class="comment">// This is the data structure that will be used to store all the IP-to-Ethernet mappings.</span></span><br><span class="line">using NetworkMappings = <span class="built_in">std</span>::<span class="built_in">multimap</span>&lt;<span class="type">uint64_t</span>, MappingPair&gt;;</span><br><span class="line"></span><br><span class="line">NetworkMappings mappings &#123;&#125;;</span><br></pre></td></tr></table></figure>
+<p>同样的道理，在waiting area中等待过期的datagrams也需要定期清除（每次调用<code>tick</code>时），因此我也用一个multimap存储queued datagram。注意queued datagram需要包含datagram本身，以及其需要去往的next hop的ip地址。</p>
+<blockquote>
+<p>[!NOTE]</p>
+<p>注意不要将<code>datagram_queued_</code>与<code>datagram_received_</code>搞混淆了，前者是需要等待ARP request收到回应后才能发送出去的pending(queued) datagrams，而datagram_received_是Network Interface从外部接收并解析出的IPv4 datagrams，暂存在Network Interface中供上层协议读取的。</p>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">QueuedDatagram</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">    <span class="type">uint32_t</span> next_hop_ip &#123;&#125;;</span><br><span class="line">    InternetDatagram dgram &#123;&#125;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Datagrams that queued to learn the Ethernet address of the next hop</span></span><br><span class="line"><span class="built_in">std</span>::<span class="built_in">multimap</span>&lt;<span class="type">uint64_t</span>, QueuedDatagram&gt; datagrams_queued_ &#123;&#125;;</span><br></pre></td></tr></table></figure>
+<p><code>send_datagram</code> method还需要一个结构来存储针对每一个ip地址发送的ARF request的上一次发送时间，以此来检查是否可以发送当前的ARP request，这里我选择使用<code>unordered_map</code>，ip地址作为key，时间戳作为value。因为访问该结构的时候是通过ip地址寻找的，无法进行顺序查找，因此不需要排序，用hash table存储访问效率较高。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">std</span>::<span class="built_in">unordered_map</span>&lt;<span class="type">uint32_t</span>, <span class="type">uint64_t</span>&gt; last_arp_request_time_ &#123;&#125;;</span><br></pre></td></tr></table></figure>
+<p>确定好所有的数据结构后，就可以开始尝试实现Network Interface提供的3个methods，<strong>实现的过程中尽量将具体的逻辑细节封装在helper functions中</strong>：</p>
+<ul>
+<li><code>tick</code></li>
+</ul>
+<p><code>tick</code>是最容易实现的，首先更新当前时间，然后就是根据更新后的时间将过期的IP-to-Ethernet mappings和queued datagram清除。这里可以分别写两个helper function来实现：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Remove expired mappings (older than 30 seconds)</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">remove_expired_mappings</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span> ( time_elapsed_ &lt; MAPPING_TIMEOUT ) &#123;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Calculate the expiration threshold</span></span><br><span class="line">    <span class="type">uint64_t</span> expiration_threshold = time_elapsed_ - MAPPING_TIMEOUT;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Find the first element that is not expired</span></span><br><span class="line">    <span class="comment">// Since map is ordered by timestamp, we can remove all elements</span></span><br><span class="line">    <span class="comment">// from beginning until we find a non-expired entry</span></span><br><span class="line">    <span class="keyword">auto</span> it = mappings.lower_bound( expiration_threshold );</span><br><span class="line">    mappings.erase( mappings.begin(), it );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Drop any expired datagrams</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">drop_expired_datagrams</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// Calculate the expiration threshold</span></span><br><span class="line">    <span class="type">uint64_t</span> expiration_threshold = time_elapsed_ - ARP_REQUEST_TIMEOUT;</span><br><span class="line">    <span class="keyword">if</span> ( time_elapsed_ &lt; ARP_REQUEST_TIMEOUT ) &#123;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Drop all expired datagrams</span></span><br><span class="line">    <span class="keyword">auto</span> it = datagrams_queued_.begin();</span><br><span class="line">    <span class="keyword">while</span> ( it != datagrams_queued_.end() &amp;&amp; it-&gt;first &lt;= expiration_threshold ) &#123;</span><br><span class="line">        it = datagrams_queued_.erase( it );</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这两个helper function虽然是处理不同的数据结构，但是逻辑很相似，都是从multimap的开头开始顺序清除，直到遇到第一个没有过期的元素后停止。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//! \param[in] ms_since_last_tick the number of milliseconds since the last call to this method</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">NetworkInterface::tick</span><span class="params">( <span class="type">const</span> <span class="type">size_t</span> ms_since_last_tick )</span></span><br><span class="line">&#123;</span><br><span class="line">  time_elapsed_ += ms_since_last_tick;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Remove any expired IP-to-Ethernet mappings</span></span><br><span class="line">  remove_expired_mappings();</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Drop any expired datagrams</span></span><br><span class="line">  drop_expired_datagrams();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>send_datagram</code></li>
+</ul>
+<p>分两种情况：</p>
+<ol>
+<li>已知next hop的Ethernet address（缓存在Network Interface中了）</li>
+</ol>
+<p>从IP-to-Ethernet中获取需要的mapping，创建并设置Ethernet frame，frame header中的dst field设为获取的mapping中的Ethernet address。将frame的payload设为serialized后的datagram。设置完成后传输该Ethernet frame</p>
+<p>根据next hop的ip地址获取mapping缓存，并将获知的Ethernet地址写入frame header的过程可以写一个helper function：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Get mapping by IP address</span></span><br><span class="line"><span class="type">bool</span> <span class="title function_">getMapping</span><span class="params">( <span class="type">uint32_t</span> target_ip, EthernetAddress&amp; eth )</span> <span class="type">const</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">for</span> ( <span class="type">const</span> <span class="keyword">auto</span>&amp; [ts, mapping] : mappings ) &#123;</span><br><span class="line">        <span class="keyword">if</span> ( mapping.second == target_ip ) &#123;</span><br><span class="line">            eth = mapping.first;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在<code>send_datagram</code>中：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">EthernetFrame eframe;</span><br><span class="line"></span><br><span class="line"><span class="comment">// If the destination Ethernet address is already known, create a Ethernet frame and send it right away</span></span><br><span class="line"><span class="keyword">if</span> ( getMapping( next_hop.ipv4_numeric(), eframe.header.dst ) ) &#123;</span><br><span class="line">    <span class="comment">// Set up the Ethernet frame header</span></span><br><span class="line">    eframe.header.type = EthernetHeader::TYPE_IPv4;</span><br><span class="line">    eframe.header.src = ethernet_address_;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Set up the Ethernet frame payload to be the serialized datagram</span></span><br><span class="line">    Serializer serializer;</span><br><span class="line">    dgram.serialize( serializer );</span><br><span class="line">    eframe.payload = serializer.finish();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Send the Ethernet frame</span></span><br><span class="line">    transmit( eframe );</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>未知next hop的Ethernet address（不在缓存中）</li>
+</ol>
+<p>需要发送一个请求next hop的ip地址的ARP request（如果5秒内没发送过请求该ip地址的ARP request），并将datagram放入waiting area中。</p>
+<p>我用一个helper function来创建ARP message：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">EthernetFrame <span class="title function_">create_arp_message</span><span class="params">( <span class="type">uint16_t</span> opcode,</span></span><br><span class="line"><span class="params">                                 <span class="type">const</span> EthernetAddress&amp; sender_eth,</span></span><br><span class="line"><span class="params">                                 <span class="type">uint32_t</span> sender_ip,</span></span><br><span class="line"><span class="params">                                 <span class="type">const</span> EthernetAddress&amp; target_eth,</span></span><br><span class="line"><span class="params">                                 <span class="type">uint32_t</span> target_ip )</span></span><br><span class="line">&#123;</span><br><span class="line">    EthernetFrame frame;</span><br><span class="line">    <span class="keyword">if</span> ( opcode == ARPMessage::OPCODE_REQUEST ) &#123;</span><br><span class="line">        frame.header.dst = ETHERNET_BROADCAST;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        frame.header.dst = target_eth;</span><br><span class="line">    &#125;</span><br><span class="line">    frame.header.src = sender_eth;</span><br><span class="line">    frame.header.type = EthernetHeader::TYPE_ARP;</span><br><span class="line"></span><br><span class="line">    ARPMessage arp;</span><br><span class="line">    arp.opcode = opcode;</span><br><span class="line">    arp.sender_ethernet_address = sender_eth;</span><br><span class="line">    arp.sender_ip_address = sender_ip;</span><br><span class="line">    arp.target_ethernet_address = target_eth;</span><br><span class="line">    arp.target_ip_address = target_ip;</span><br><span class="line"></span><br><span class="line">    Serializer serializer;</span><br><span class="line">    arp.serialize( serializer );</span><br><span class="line">    frame.payload = serializer.finish();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> frame;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>[!NOTE]</p>
+<p>注意，<code>send_datagram</code>（可能）需要的ARP request message和<code>recv_frame</code>（可能）需要的ARP reply message都是用上面这个函数创建。创建request和reply message使用的参数模板都是一样的，不同的是：</p>
+<ol>
+<li>
+<p><code>opcode</code>不同</p>
+</li>
+<li>
+<p>request message的<code>target_ethernet_address</code>是<code>&#123; 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 &#125;</code>，而reply message的是要回复对象的Ethernet地址</p>
+</li>
+<li>
+<p>request message的<code>target_ip_address</code>是请求的ip地址，reply message的是要回复对象的ip地址</p>
+</li>
+<li>
+<p>request message的frame header中的<code>dst</code>是Ethernet Broadcast地址，而reply message的就是要回复对象的Ethernet地址</p>
+</li>
+</ol>
+</blockquote>
+<p>接下来，我用一个helper function来检查是否可以发送ARP request，再用一个来更新ARP request发送时间：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">bool</span> <span class="title function_">can_send_arp_request</span><span class="params">( <span class="type">uint32_t</span> target_ip )</span> <span class="type">const</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">auto</span> it = last_arp_request_time_.find( target_ip );</span><br><span class="line">    <span class="keyword">if</span> ( it == last_arp_request_time_.end() ) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> time_elapsed_ - it-&gt;second &gt;= ARP_REQUEST_TIMEOUT;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">update_arp_request_time</span><span class="params">( <span class="type">uint32_t</span> target_ip )</span> &#123; last_arp_request_time_[target_ip] = time_elapsed_; &#125;</span><br></pre></td></tr></table></figure>
+<p>在<code>send_datagram</code>中：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// The destination Ethernet address is unknown,</span></span><br><span class="line"><span class="comment">// broadcast an ARP request and queue the datagram</span></span><br><span class="line">EthernetFrame arp_request = create_arp_message( ARPMessage::OPCODE_REQUEST,</span><br><span class="line">                                               ethernet_address_,</span><br><span class="line">                                               ip_address_.ipv4_numeric(),</span><br><span class="line">                                               &#123; <span class="number">0x00</span>, <span class="number">0x00</span>, <span class="number">0x00</span>, <span class="number">0x00</span>, <span class="number">0x00</span>, <span class="number">0x00</span> &#125;,</span><br><span class="line">                                               next_hop.ipv4_numeric() );</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> ( can_send_arp_request( next_hop.ipv4_numeric() ) ) &#123;</span><br><span class="line">    transmit( arp_request );</span><br><span class="line">    update_arp_request_time( next_hop.ipv4_numeric() );</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">QueuedDatagram qdgram;</span><br><span class="line">qdgram.next_hop_ip = next_hop.ipv4_numeric();</span><br><span class="line">qdgram.dgram = dgram;</span><br><span class="line">datagrams_queued_.insert( <span class="built_in">make_pair</span>( time_elapsed_, qdgram ) );</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>recv_datagram</code></li>
+</ul>
+<p>首先判断接收到的Ethernet frame是不是发送给自己的，如果不是的话直接ignore：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Ignore any frames not destined for the network interface</span></span><br><span class="line"><span class="keyword">if</span> ( frame.header.dst != ethernet_address_ &amp;&amp; frame.header.dst != ETHERNET_BROADCAST ) &#123;</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>后续处理该frame也分两种情况：</p>
+<ol>
+<li>如果接收到的是IPv4类型的frame，将payload解析为network datagram，如果解析成功就将其放入<code>datagram_received_</code> buffer中供上层协议读取</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// If inbound frame is IPv4, parse the payload as an InternetDatagram</span></span><br><span class="line"><span class="comment">// and if successful, push the resulting datagram to the datagrams_received_ queue</span></span><br><span class="line"><span class="keyword">if</span> ( frame.header.type == EthernetHeader::TYPE_IPv4 ) &#123;</span><br><span class="line">    Parser <span class="title function_">parser</span><span class="params">( frame.payload )</span>;</span><br><span class="line"></span><br><span class="line">    InternetDatagram dgram;</span><br><span class="line">    dgram.parse( parser );</span><br><span class="line">    <span class="keyword">if</span> ( parser.has_error() )</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    datagrams_received_.push( dgram );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>
+<p>如果接收到的是ARP类型的frame，将payload解析为ARP message，如果解析成功就将sender的IP-to-Ethernet mapping写入缓存中。并且，如果是ARP request，那么还需要回复相应的ARP reply。</p>
+<p>最后，我们需要遍历<code>datagram_queued_</code>检查刚接收到的IP-to-Ethernet mapping是否可以让我们发送等待在waiting area中的pending(queued) datagrams。</p>
+</li>
+</ol>
+<p>写入IP-to-Ethernet mapping缓存的过程可以用一个helper function：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Add a new IP-to-Ethernet mapping</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">addMapping</span><span class="params">( <span class="type">uint64_t</span> timestamp, <span class="type">const</span> EthernetAddress&amp; eth, <span class="type">uint32_t</span> ip )</span></span><br><span class="line">&#123;</span><br><span class="line">    mappings.insert( <span class="built_in">make_pair</span>( timestamp, MappingPair( eth, ip ) ) );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>创建并设置ARP reply使用之前写的<code>create_arp_message</code> function。</p>
+<p>在<code>recv_datagram</code>中：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// If the inbound frame is ARP, parse the payload as an ARPMessage</span></span><br><span class="line"><span class="comment">// an if successful, add the IP-to-Ethernet mapping to the mappings.</span></span><br><span class="line"><span class="comment">// In addition, if it&#x27;s an ARP request asking for our IP address,</span></span><br><span class="line"><span class="comment">// send an appropriate ARP reply.</span></span><br><span class="line"><span class="keyword">if</span> ( frame.header.type == EthernetHeader::TYPE_ARP ) &#123;</span><br><span class="line">    Parser <span class="title function_">parser</span><span class="params">( frame.payload )</span>;</span><br><span class="line"></span><br><span class="line">    ARPMessage arp_message;</span><br><span class="line">    arp_message.parse( parser );</span><br><span class="line">    <span class="keyword">if</span> ( parser.has_error() )</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    addMapping( time_elapsed_, arp_message.sender_ethernet_address, arp_message.sender_ip_address );</span><br><span class="line">    <span class="keyword">if</span> ( arp_message.opcode == ARPMessage::OPCODE_REQUEST</span><br><span class="line">        &amp;&amp; arp_message.target_ip_address == ip_address_.ipv4_numeric() ) &#123;</span><br><span class="line">        EthernetFrame arp_reply = create_arp_message( ARPMessage::OPCODE_REPLY,</span><br><span class="line">                                                     ethernet_address_,</span><br><span class="line">                                                     ip_address_.ipv4_numeric(),</span><br><span class="line">                                                     arp_message.sender_ethernet_address,</span><br><span class="line">                                                     arp_message.sender_ip_address );</span><br><span class="line">        transmit( arp_reply );</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Since we have received an ARP message, we can probably send any queued datagrams</span></span><br><span class="line">    <span class="keyword">auto</span> it = datagrams_queued_.begin();</span><br><span class="line">    <span class="keyword">while</span> ( it != datagrams_queued_.end() ) &#123;</span><br><span class="line">        <span class="keyword">if</span> ( it-&gt;second.next_hop_ip == arp_message.sender_ip_address ) &#123;</span><br><span class="line">            send_datagram( it-&gt;second.dgram, Address::from_ipv4_numeric( it-&gt;second.next_hop_ip ) );</span><br><span class="line">            it = datagrams_queued_.erase( it );</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            ++it;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="finish"><a class="markdownIt-Anchor" href="#finish"></a> Finish!</h2>
+<p>All tests in check3 pass!</p>
+<p><img src="https://gitee.com/OooAlex/study_note/raw/master/img/202502190143600.png" alt="image-20250219014355179" /></p>
+
+    
+
+    
+
+    
+
+  </div>
+  <div class="article-info article-info-index">
+    
+    
+    
+
+    
+    <p class="article-more-link">
+      <a class="article-more-a" href="/2025/02/20/cs144-lab5/">展开全文 >></a>
+    </p>
+    
+
+    
+    <div class="clearfix"></div>
+  </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-cs144-lab3" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+  
+  
+    <h1 itemprop="name">
+	
+	  <a class="article-title" href="/2025/02/20/cs144-lab3/" target="_blank">CS144 Lab 3</a>
+  
+    </h1>
+  
+
+
+  
+  
+<a href="/2025/02/20/cs144-lab3/" class="archive-article-date">
+        <time datetime="2025-02-19T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2025-02-20</time>
+</a>
+
+  
+  
+    
+
+  
+  </header>
+  
+  <div class="article-entry" itemprop="articleBody">
+    
+    <h1 id="lab-checkpoint-3-the-tcp-sender"><a class="markdownIt-Anchor" href="#lab-checkpoint-3-the-tcp-sender"></a> Lab Checkpoint 3: the TCP sender</h1>
+<hr />
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://cs144.github.io/assignments/check3.pdf">https://cs144.github.io/assignments/check3.pdf</a></p>
+</blockquote>
+<blockquote>
+<p>In Checkpoint0, we implemented a flow-controlled byte stream(<code>ByteStream</code>).</p>
+<p>In Checkpoint1 and 2, we implement a <code>Reassembler</code> and <code>TCPReceiver</code> to translate from segments carried in unreliable datagrams to an incoming byte stream.</p>
+<p>In Checkpoint3, we'll implement the <strong>sender side</strong> of the TCP connection. The TCPSender translates from an outbound byte stream to segments that will become the payloads of unreliable datagrams.</p>
+</blockquote>
+<h2 id="the-tcp-sender"><a class="markdownIt-Anchor" href="#the-tcp-sender"></a> The TCP Sender</h2>
+<blockquote>
+<p>In this lab, you will implement the &quot;<strong>sender</strong>&quot; part of TCP, responsible for reading from a <code>ByteStream</code>(created and written to by some sender-side application), and turning the stream into a sequence of outgoing TCP segments.</p>
+</blockquote>
+<p><strong><code>TCPSender</code></strong> is responsible for:</p>
+<ol>
+<li>Keep track of the receiver's window.</li>
+<li>Keep sending segments until either the window is full or the outbound <code>ByteStream</code> has nothing more to send.</li>
+<li>Keep track of which segments have been sent but not yet acknowledged(&quot;outstanding&quot; segments) by the receiver.</li>
+<li>Re-send outstanding segments if enough time passes since they were sent, and they haven't been acknowledged yet.</li>
+</ol>
+<blockquote>
+<p>How does the <code>TCPSender</code> know if a segment was lost?</p>
+</blockquote>
+<p>Periodically, the owner of the TCPSender will call the <code>tick</code> method. The <code>TCPSender</code> is responsible for looking through its collection of outstanding <code>TCPSenderMessages</code> and deciding if the oldest-sent segment has been outstanding for too long without acknowledgement.</p>
+<p>To be specific:</p>
+<ol>
+<li>
+<p>The <code>TCPSender</code> stores the initial value of RTO(retransmission timeout).</p>
+</li>
+<li>
+<p>You will implement the <strong>retransmission timer</strong>: an alarm that can be started at a certain time, and the alarm expires once the RTO has elapsed. Every time a segment containing data is sent, if the timer is not running, start it running. <strong>When all outstanding data has been acknowledged, stop the retransmission timer.</strong></p>
+</li>
+<li>
+<p>When <code>tick</code> is called and the retransmission timer has expired:</p>
+<ul>
+<li>
+<p>Retransmit the earliest(lowest sequence number) segment that hasn't been fully acknowledged by the TCP receiver. You should store the outstanding segments in some internal data structure.</p>
+</li>
+<li>
+<p>If the window size is nonzero:</p>
+<p>(a). Keep track of and update the number of consecutive retransmissions.</p>
+<p>(b). Double the value of RTO.</p>
+</li>
+<li>
+<p>Reset the retransmission timer and start it.</p>
+</li>
+</ul>
+</li>
+<li>
+<p>When the receiver gives the sender a new <code>ack</code> message:</p>
+<ul>
+<li>Set the RTO back to its initial value.</li>
+<li>If the sender has any outstanding data, restart the retransmission timer.</li>
+<li>Reset the consecutive retransmissions back to zero.</li>
+</ul>
+</li>
+</ol>
+<p>以上就是<code>TCPSender</code>的retransmission logic，详细见cs144官方spec。</p>
+<p>简单总结一下就是<code>TCPSender</code>会在内部存储outstanding segments。<code>TCPSender</code>的owner会周期性地调用<code>tick</code>函数查看retransmission timer是否expired，如果是则retransmit最早的outstanding segment，double RTO防止网络堵塞加剧retranmission的负担(exponential backoff)，并重启retransmission timer。当<code>TCPSender</code>接收到新的acknowledgement的时候，重设RTO为最初值并重启retransmission timer(如果还有outstanding segments)。</p>
+<h2 id="implement-the-tcp-sender"><a class="markdownIt-Anchor" href="#implement-the-tcp-sender"></a> Implement the TCP sender</h2>
+<p>You should implement the interface that your <code>TCPSender</code> provides:</p>
+<ul>
+<li><strong><code>void push( const TransmitFunction&amp; transmit );</code></strong></li>
+</ul>
+<p>Read from the outbound byte stream and <strong>send as many <code>TCPSenderMessages</code> as possible, as long as there are new bytes to be read and space available in the window</strong>.</p>
+<p>Make sure that every <code>TCPSenderMessage</code> you send fits fully inside the receiver’s window. Make each individual message as big as possible, but no bigger than the value given by <code>TCPConfig::MAX PAYLOAD SIZE</code>.</p>
+<blockquote>
+<p>What should my TCPSender assume as the receiver’s window size before the receive method informs it otherwise?</p>
+</blockquote>
+<p>One.</p>
+<blockquote>
+<p>What if the window size is zero?</p>
+</blockquote>
+<p>If the receiver has announced a window size of zero, the push method should pretend like the window size is one. The sender might end up sending a single byte that gets rejected by the receiver, but this can also provoke the receiver into sending a new acknowledgment segment where it reveals that more space has opened up in its window.</p>
+<p>This is the only special-case behavior your implementation should have for the case of a zero-size window. The TCPSender shouldn’t actually remember a false window size of 1. The special case is only within the push method. Also, N.B. that <strong>even if the window size is one (or 20, or 200), the window might still be full. A “full” window is not the same as a “zero-size” window.</strong></p>
+<ul>
+<li><strong><code>void receive( const TCPReceiverMessage&amp; msg );</code></strong></li>
+</ul>
+<p>A message is received from the receiver, conveying the new left (= <code>ackno</code>) and right (= <code>ackno + window size</code>) edges of the window. The TCPSender should look through its collection of outstanding segments and remove any that have now been fully acknowledged (<strong>the <code>ackno</code> is greater than all of the sequence numbers in the segment</strong>).</p>
+<ul>
+<li><strong><code>void tick( uint64 t ms since last tick, const TransmitFunction&amp; transmit );</code></strong></li>
+</ul>
+<p>The sender may need to retransmit an outstanding segment.</p>
+<ul>
+<li><strong><code>TCPSenderMessage make_empty_message() const;</code></strong></li>
+</ul>
+<p>The TCPSender should generate and send a zero-length message with the sequence number set correctly.</p>
+<p>Note: a segment like this one, which occupies no sequence numbers, doesn’t need to be kept track of as “outstanding” and won’t ever be retransmitted.</p>
+<h2 id="我的实现思路"><a class="markdownIt-Anchor" href="#我的实现思路"></a> 我的实现思路</h2>
+<blockquote>
+<p>前言：认真读spec！至少将spec的第二板块读3遍再开始coding：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">2 Checkpoint 3: The TCP Sender</span><br></pre></td></tr></table></figure>
+<p>这个lab的整体实现难度不难，很大一部分原因是因为spec讲解得非常清晰。就我自己实现起来比lab2还要轻松一些。主要难度在于细节点和corner case非常多，因此需要大量的时间面向test来debug。我自己debug花的时间比coding的时间还要长。</p>
+</blockquote>
+<p>接下来进入正题：</p>
+<p>TCP Sender的实现可以分成3大部分，难度我认为也是逐级递增的：</p>
+<ol>
+<li>Retransmission (retransmission timer + tick)</li>
+<li>Window (sender's window + receiver's window)</li>
+<li>Push + Receive</li>
+</ol>
+<ul>
+<li><strong>Retransmission</strong></li>
+</ul>
+<p>Retransmission的逻辑其实是TCP Sender的一大重难点，但这部分(retransmission timer + tick)在spec中讲解得非常详细。并且，在这个lab中要求我们实现的Retransmission逻辑其实是真实的TCP协议的Retransmission逻辑的简化版本，真实的TCP协议的Retransmission包含更多细节(如3次duplicate ACK的应对, congestion control…)。因此这部分实现起来比较轻松。</p>
+<blockquote>
+<p>这里再放一下我总结的Retransmission logic，如果spec读起来有点费解的话可以参考：</p>
+<p><code>TCPSender</code>会在内部存储outstanding segments。<code>TCPSender</code>的owner会周期性地调用<code>tick</code>函数查看retransmission timer是否expired，如果是则retransmit最早的outstanding segment，double RTO防止网络堵塞加剧retranmission的负担(exponential backoff)，并重启retransmission timer。当<code>TCPSender</code>接收到新的acknowledgement的时候，重设RTO为最初值并重启retransmission timer(如果还有outstanding segments)。</p>
+</blockquote>
+<blockquote>
+<p>[!TIP]</p>
+<p>我建议单独创建一个Retransmission timer类，与TCPSender类区分开来，结构更清晰。</p>
+</blockquote>
+<ul>
+<li><strong>Window</strong></li>
+</ul>
+<blockquote>
+<p>[!CAUTION]</p>
+<p>这部分在spec中讲解得比较模糊，需要自行理解与实现！</p>
+</blockquote>
+<p>在spec中反复提到的window，其实指的是<code>TCPSender</code>接收到的acknowledge message中包含的Receiver's window。回顾Checkpoint1，我们画过一张Receiver's window:</p>
+<p><img src="https://gitee.com/OooAlex/study_note/raw/master/img/202502132132652.jpeg" alt="" /></p>
+<p>但spec中没有提到，需要我们自己理解的是，<code>TCPSender</code>的window与<code>TCPReceiver</code>的window是不同的，为了区分这两端的window，我在<code>TCPSender</code>端维护了一个sender's window，用来与上面的receiver's window进行区分，如下图：</p>
+<p><img src="https://gitee.com/OooAlex/study_note/raw/master/img/202502132139485.jpg" alt="cb59ae62a3454aba49ae323f7a83226" /></p>
+<p>希望这张图能帮助你理解Sender's window和Receiver’s window的区别与联系。其中绿色区域代表的是Receiver已经acknowledge的bytes范围，红色区域代表的是outstanding segments，蓝色区域是<code>push</code>方法允许transmit的bytes范围，也就是Sender's window。</p>
+<p><code>TCPSender</code>需要一种数据结构来存储outstanding segments，以便在传输过程中丢失时可以retransmit。由Retransmission logic可知我们每次retransmit的是earliest outstanding segment，也就是seqno最小的segment，所以思考可以用什么数据结构来存储outstanding segments？</p>
+<p>联系Checkpoint1，最容易想到的就是用map，这样每次retransmit只要移除map的第一个元素就可以了。</p>
+<ul>
+<li><strong>Push + Receive</strong></li>
+</ul>
+<p>这也是这个lab最tricky的部分，尤其是<code>push</code>的实现，细节点很多。主要的实现逻辑在spec中已经说明得比较详细，我在此提示一些注意点：</p>
+<ol>
+<li>
+<blockquote>
+<p><code>void push( const TransmitFunction&amp; transmit );</code></p>
+<p>The TCPSender is asked to fill the window from the outbound byte stream: it reads from the stream and <strong>sends as many TCPSenderMessages as possible, as long as there are new bytes to be read and space available in the window.</strong></p>
+</blockquote>
+<p>好好理解上面加粗的这段话，什么叫做只要outbound stream中还有可读取的new bytes和window(Sender's window)还有空间就不停地send segments?</p>
+</li>
+<li>
+<p>当<code>receive</code>方法接收到一个message告知自己Receiver's window size = 0时，<code>push</code>需要将其作为special case处理，详细见spec。</p>
+</li>
+<li>
+<p>在debug时尤其注意<code>SYN</code>和<code>FIN</code> flag带来的各种corner case。这部分我们在Checkpoint2中已经有一定的应对经验，但在这个lab中处理起来会更麻烦一点。</p>
+</li>
+<li>
+<p>在<code>push</code>和<code>receive</code>中，需要时刻注意Sender's window的变化。</p>
+</li>
+</ol>
+<h2 id="tcp-sender-finish"><a class="markdownIt-Anchor" href="#tcp-sender-finish"></a> TCP Sender Finish!</h2>
+<p>All tests in check3 pass!</p>
+<p><img src="https://gitee.com/OooAlex/study_note/raw/master/img/202502131916226.png" alt="image-20250213191628781" /></p>
+<p>恭喜！到这里你已经实现了一个完整可运行的TCP协议了！</p>
+<h2 id="hands-on-activity"><a class="markdownIt-Anchor" href="#hands-on-activity"></a> Hands-on activity</h2>
+<p>恭喜！到这里你应该已经实现了一个完整可运行的TCP协议了！</p>
+<p>在这一部分，我们要实际验证这个TCP协议栈确实能work，我们要：</p>
+<ol>
+<li>尝试让你的TCP协议与Linux的TCP协议对话</li>
+<li>尝试在你的TCP协议与Linux的TCP协议之间传送文件</li>
+<li>与其他同学的TCP协议通话（要用到CS144内部网络，我们做不了）</li>
+<li>在你的TCP协议栈之上重新实现Web fetcher</li>
+</ol>
+<p>我这里就只展示最后一条：</p>
+<h3 id="webget-revisited"><a class="markdownIt-Anchor" href="#webget-revisited"></a> webget revisited</h3>
+<p>在lab0中，我们在Linux的TCP协议之上，实现了一个使用TCP Socket传输http协议信息，来获取网页的Web fetcher(<code>get_URL</code>)。</p>
+<p>如今，尝试换成在<strong>我们自己实现的完整TCP协议栈</strong>之上，改写这个Web fetcher（只需要将Linux的TCPSocket换成我们自己的CS144TCPSocket）。</p>
+<p><img src="https://gitee.com/OooAlex/study_note/raw/master/img/202502132342058.png" alt="image-20250213234243889" /></p>
+<p><img src="https://gitee.com/OooAlex/study_note/raw/master/img/202502132342239.png" alt="image-20250213234257070" /></p>
+<p>Our own TCP implementation works! 😊</p>
+
+    
+
+    
+
+    
+
+  </div>
+  <div class="article-info article-info-index">
+    
+    
+    
+
+    
+    <p class="article-more-link">
+      <a class="article-more-a" href="/2025/02/20/cs144-lab3/">展开全文 >></a>
+    </p>
+    
+
+    
+    <div class="clearfix"></div>
+  </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-fileio" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -336,7 +1246,7 @@
 </blockquote>
 <p>An example:</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">char</span> buffer[<span class="number">5</span>];</span><br><span class="line">io300_file* testFile = io300_open(<span class="string">&quot;testfiles/tiny.txt&quot;</span>, <span class="string">&quot;tiny!&quot;</span>); </span><br><span class="line"><span class="type">ssize_t</span> r = io300_read(testFile, buffer, <span class="number">5</span>);</span><br><span class="line"><span class="type">ssize_t</span> w = io300_write(testFile, <span class="string">&quot;aaa&quot;</span>, <span class="number">3</span>); </span><br><span class="line">r = io300_read(testFile, buffer, <span class="number">2</span>);</span><br><span class="line"><span class="type">ssize_t</span> s = io300_seek(testFile, <span class="number">12</span>);</span><br><span class="line">w = io300_write(testFile, <span class="string">&quot;aaa&quot;</span>, <span class="number">3</span>); </span><br><span class="line">r = io300_readc(testFile);</span><br><span class="line">io300_close(testFile);</span><br></pre></td></tr></table></figure>
-<p><img src="https://gitee.com/OooAlex/study_note/raw/master/img/202412281119591.png" alt="image-20241228111911483" /></p>
+<img src="https://gitee.com/OooAlex/study_note/raw/master/img/202412281119591.png">
 <details>     <summary>After Line 2</summary>     
 File Contents: "this is a test\n"<br>
 Cache Contents: "this is "<br>
