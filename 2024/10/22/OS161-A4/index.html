@@ -19,12 +19,12 @@
   <meta name="author" content="Alex Sun">
   <meta name="keywords" content="">
   
-    <meta name="description" content="Assignment4  Assignment 4   In this assignment you will implement a few system calls that allow user programs to use files. This assignment will further train you how to navigate and understand a lar">
+    <meta name="description" content="Implement kernel structures for open files and some file-related system calls">
 <meta property="og:type" content="article">
 <meta property="og:title" content="OS161 Assignment 4">
 <meta property="og:url" content="http://oooscar8.github.io/2024/10/22/OS161-A4/index.html">
-<meta property="og:site_name" content="Alex_Space">
-<meta property="og:description" content="Assignment4  Assignment 4   In this assignment you will implement a few system calls that allow user programs to use files. This assignment will further train you how to navigate and understand a lar">
+<meta property="og:site_name" content="Alex&#39;s Space">
+<meta property="og:description" content="Implement kernel structures for open files and some file-related system calls">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://oooscar8.github.io/2024/10/22/imgs/202410111635355.png">
 <meta property="og:image" content="http://oooscar8.github.io/2024/10/22/imgs/202410252054616.png">
@@ -34,15 +34,17 @@
 <meta property="og:image" content="http://oooscar8.github.io/2024/10/22/imgs/202410252151787.png">
 <meta property="og:image" content="http://oooscar8.github.io/2024/10/22/imgs/202410252152964-1740031159640-118.png">
 <meta property="article:published_time" content="2024-10-21T16:00:00.000Z">
-<meta property="article:modified_time" content="2025-02-20T08:44:39.479Z">
+<meta property="article:modified_time" content="2025-02-20T17:06:01.802Z">
 <meta property="article:author" content="Alex Sun">
+<meta property="article:tag" content="OS">
 <meta property="article:tag" content="OS161">
+<meta property="article:tag" content="操作系统">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="http://oooscar8.github.io/2024/10/22/imgs/202410111635355.png">
   
   
   
-  <title>OS161 Assignment 4 - Alex_Space</title>
+  <title>OS161 Assignment 4 - Alex&#39;s Space</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -106,7 +108,7 @@
   <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
     <a class="navbar-brand" href="/">
-      <strong>Fluid</strong>
+      <strong>Alex&#39;s Space</strong>
     </a>
 
     <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
@@ -675,11 +677,43 @@ The kernel uses the <code>struct vnode</code> data structure to represent an ope
             <div>
               <div class="post-metas my-3">
   
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/OS/" class="category-chain-item">OS</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/OS/OS161/" class="category-chain-item">OS161</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
   
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
+        <a href="/tags/OS/" class="print-no-link">#OS</a>
+      
         <a href="/tags/OS161/" class="print-no-link">#OS161</a>
+      
+        <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" class="print-no-link">#操作系统</a>
       
     </div>
   
