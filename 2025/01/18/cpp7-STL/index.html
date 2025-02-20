@@ -19,15 +19,15 @@
   <meta name="author" content="Alex Sun">
   <meta name="keywords" content="">
   
-    <meta name="description" content="C++ Standard Libraries and Standard Template Library (STL)  https:&#x2F;&#x2F;www3.ntu.edu.sg&#x2F;home&#x2F;ehchua&#x2F;programming&#x2F;cpp&#x2F;cp9_STL.html The cplusplus.com at http:&#x2F;&#x2F;www.cplusplus.com&#x2F;reference provides a compreh">
+    <meta name="description" content="C++ Standard Libraries and Standard Template Library (STL) https:&#x2F;&#x2F;www3.ntu.edu.sg&#x2F;home&#x2F;ehchua&#x2F;programming&#x2F;cpp&#x2F;cp9_STL.html The cplusplus.com at http:&#x2F;&#x2F;www.cplusplus.com&#x2F;reference provides a comprehen">
 <meta property="og:type" content="article">
 <meta property="og:title" content="cpp7_STL">
-<meta property="og:url" content="http://oooscar8.github.io/2025/02/20/cpp7-STL/index.html">
+<meta property="og:url" content="http://oooscar8.github.io/2025/01/18/cpp7-STL/index.html">
 <meta property="og:site_name" content="Alex_Space">
-<meta property="og:description" content="C++ Standard Libraries and Standard Template Library (STL)  https:&#x2F;&#x2F;www3.ntu.edu.sg&#x2F;home&#x2F;ehchua&#x2F;programming&#x2F;cpp&#x2F;cp9_STL.html The cplusplus.com at http:&#x2F;&#x2F;www.cplusplus.com&#x2F;reference provides a compreh">
+<meta property="og:description" content="C++ Standard Libraries and Standard Template Library (STL) https:&#x2F;&#x2F;www3.ntu.edu.sg&#x2F;home&#x2F;ehchua&#x2F;programming&#x2F;cpp&#x2F;cp9_STL.html The cplusplus.com at http:&#x2F;&#x2F;www.cplusplus.com&#x2F;reference provides a comprehen">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2025-02-20T08:00:14.000Z">
-<meta property="article:modified_time" content="2025-02-20T08:16:00.012Z">
+<meta property="article:published_time" content="2025-01-18T08:00:14.000Z">
+<meta property="article:modified_time" content="2025-02-20T08:35:25.979Z">
 <meta property="article:author" content="Alex Sun">
 <meta name="twitter:card" content="summary_large_image">
   
@@ -210,8 +210,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2025-02-20 16:00" pubdate>
-          2025年2月20日 下午
+        <time datetime="2025-01-18 16:00" pubdate>
+          2025年1月18日 下午
         </time>
       </span>
     
@@ -222,7 +222,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          750 字
+          752 字
         
       </span>
     
@@ -275,35 +275,29 @@
             
               <div class="markdown-body">
                 
-                <h1 id="c-standard-libraries-and-standard-template-library-stl"><a class="markdownIt-Anchor" href="#c-standard-libraries-and-standard-template-library-stl"></a> C++ Standard Libraries and Standard Template Library (STL)</h1>
-<blockquote>
+                <h1 id="C-Standard-Libraries-and-Standard-Template-Library-STL"><a href="#C-Standard-Libraries-and-Standard-Template-Library-STL" class="headerlink" title="C++ Standard Libraries and Standard Template Library (STL)"></a>C++ Standard Libraries and Standard Template Library (STL)</h1><blockquote>
 <p><a target="_blank" rel="noopener" href="https://www3.ntu.edu.sg/home/ehchua/programming/cpp/cp9_STL.html">https://www3.ntu.edu.sg/home/ehchua/programming/cpp/cp9_STL.html</a></p>
-<p>The <a target="_blank" rel="noopener" href="http://cplusplus.com">cplusplus.com</a> at <a target="_blank" rel="noopener" href="http://www.cplusplus.com/reference">http://www.cplusplus.com/reference</a> provides a comprehensive online references for the C++ libraries.</p>
+<p>The cplusplus.com at <a target="_blank" rel="noopener" href="http://www.cplusplus.com/reference">http://www.cplusplus.com/reference</a> provides a comprehensive online references for the C++ libraries.</p>
 </blockquote>
-<h2 id="stl"><a class="markdownIt-Anchor" href="#stl"></a> STL</h2>
-<h3 id="containers"><a class="markdownIt-Anchor" href="#containers"></a> Containers</h3>
-<ul>
+<h2 id="STL"><a href="#STL" class="headerlink" title="STL"></a>STL</h2><h3 id="Containers"><a href="#Containers" class="headerlink" title="Containers"></a>Containers</h3><ul>
 <li>Sequence Containers, Associative Containers and Adapters</li>
 </ul>
 <p>STL provides the following types of containers:</p>
 <ol>
-<li>Sequence Containers: linear data structures of elements
-<ul>
-<li><code>vector</code>: dynamically resizable array.</li>
-<li><code>deque</code>: double-ended queue.</li>
+<li>Sequence Containers: linear data structures of elements<ul>
+<li><code>vector</code>: dynamically resizable array. </li>
+<li><code>deque</code>: double-ended queue. </li>
 <li><code>list</code>: double-linked list.</li>
 </ul>
 </li>
-<li>Associative Containers: nonlinear data structures storing key-value pairs
-<ul>
+<li>Associative Containers: nonlinear data structures storing key-value pairs<ul>
 <li><code>set</code>: No duplicate element. Support fast lookup.</li>
 <li><code>multiset</code>: Duplicate element allowed. Support fast lookup.</li>
 <li><code>map</code>: One-to-one mapping (associative array) with no duplicate. Support fast key lookup.</li>
 <li><code>multimap</code>: One-to-many mapping, with duplicates allowed. Support fast key lookup.</li>
 </ul>
 </li>
-<li>Container Adapter Classes:
-<ul>
+<li>Container Adapter Classes:<ul>
 <li><code>Stack</code>: Last-in-first-out (LIFO) queue, adapted from <code>deque</code> (default), or <code>vector</code>, or <code>list</code>. Support operations <code>back</code>, <code>push_back</code>, <code>pop_back</code>.</li>
 <li><code>queue</code>: First-in-first-out (FIFO) queue, adapted from <code>deque</code> (default), or <code>list</code>. Support operations <code>front</code>, <code>back</code>, <code>push_back</code>, <code>pop_front</code>.</li>
 <li><code>priority_queue</code>: highest priority element at front of the queue. adapted from <code>vector</code> (default) or <code>deque</code>. Support operations <code>front</code>, <code>push_back</code>, <code>pop_front</code>.</li>
@@ -322,8 +316,7 @@
 <li>Near Containers: Do not support all the first-class container operations. For example, the built-in array (pointer-like), <code>bitsets</code> (for maintaining a set of flags), <code>valarray</code> (support array computation), <code>string</code> (stores only character type).</li>
 </ol>
 </blockquote>
-<h3 id="stl-pre-defined-iterators-in-header-iterator"><a class="markdownIt-Anchor" href="#stl-pre-defined-iterators-in-header-iterator"></a> STL Pre-defined Iterators (in Header <iterator>)</h3>
-<ul>
+<h3 id="STL-Pre-defined-Iterators-in-Header"><a href="#STL-Pre-defined-Iterators-in-Header" class="headerlink" title="STL Pre-defined Iterators (in Header )"></a>STL Pre-defined Iterators (in Header <iterator>)</h3><ul>
 <li>Example: <code>istream_iterator</code> and <code>ostream_iterator</code></li>
 </ul>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br>   <span class="hljs-comment">// Construct ostream_iterators to write int and string to cout</span><br>   <span class="hljs-function">ostream_iterator&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">iterOut</span><span class="hljs-params">(cout)</span></span>;<br>   <span class="hljs-function">ostream_iterator&lt;string&gt; <span class="hljs-title">iterOutStr</span><span class="hljs-params">(cout)</span></span>;<br> <br>   *iterOutStr = <span class="hljs-string">&quot;Enter two integers: &quot;</span>;<br> <br>   <span class="hljs-comment">// Construct an istream_iterator&lt;int&gt; to read int from cin</span><br>   <span class="hljs-function">istream_iterator&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">iterIn</span><span class="hljs-params">(cin)</span></span>;<br>   <span class="hljs-type">int</span> number1 = *iterIn;  <span class="hljs-comment">// dereference to get the value</span><br>   ++iterIn;               <span class="hljs-comment">// next int in cin</span><br>   <span class="hljs-type">int</span> number2 = *iterIn;<br> <br>   *iterOutStr = <span class="hljs-string">&quot;You have entered &quot;</span>;<br>   *iterOut = number1;<br>   *iterOutStr = <span class="hljs-string">&quot; and &quot;</span>;<br>   *iterOut = number2;<br>&#125;<br></code></pre></td></tr></table></figure>
@@ -336,8 +329,7 @@
 </ul>
 <p>A <code>front_insert_iterator</code> inserts from the front; a <code>back_insert_iterator</code> inserts at the end; an <code>insert_iterator</code> inserts before a given location.</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br>   <span class="hljs-type">int</span> a1[<span class="hljs-number">5</span>] = &#123;<span class="hljs-number">11</span>, <span class="hljs-number">55</span>, <span class="hljs-number">44</span>, <span class="hljs-number">33</span>, <span class="hljs-number">88</span>&#125;;<br>   <span class="hljs-function">vector&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">v</span><span class="hljs-params">(a1, a1+<span class="hljs-number">5</span>)</span></span>;<br>   <span class="hljs-function">ostream_iterator&lt;<span class="hljs-type">int</span>, <span class="hljs-type">char</span>&gt; <span class="hljs-title">out</span> <span class="hljs-params">(cout, <span class="hljs-string">&quot; &quot;</span>)</span></span>;  <span class="hljs-comment">// for printing</span><br>   <span class="hljs-built_in">copy</span>(v.<span class="hljs-built_in">begin</span>(), v.<span class="hljs-built_in">end</span>(), out);<br>   cout &lt;&lt; endl;<br>    <br>   <span class="hljs-comment">// Construct a back_insert_iterator to insert at the end</span><br>   back_insert_iterator&lt;vector&lt;<span class="hljs-type">int</span>&gt; &gt; <span class="hljs-built_in">back</span> (v);<br>   <span class="hljs-type">int</span> a2[<span class="hljs-number">3</span>] = &#123;<span class="hljs-number">91</span>, <span class="hljs-number">92</span>, <span class="hljs-number">93</span>&#125;;<br>   <span class="hljs-built_in">copy</span>(a2, a2+<span class="hljs-number">3</span>, back);<br>   <span class="hljs-built_in">copy</span>(v.<span class="hljs-built_in">begin</span>(), v.<span class="hljs-built_in">end</span>(), out);<br>   cout &lt;&lt; endl;<br> <br>   <span class="hljs-comment">// Use an anonymous insert_iterator to insert at the front</span><br>   <span class="hljs-type">int</span> a3[<span class="hljs-number">3</span>] = &#123;<span class="hljs-number">81</span>, <span class="hljs-number">82</span>, <span class="hljs-number">83</span>&#125;;<br>   <span class="hljs-built_in">copy</span>(a3, a3+<span class="hljs-number">3</span>, insert_iterator&lt;vector&lt;<span class="hljs-type">int</span>&gt; &gt;(v, v.<span class="hljs-built_in">begin</span>()));<br>   <span class="hljs-built_in">copy</span>(v.<span class="hljs-built_in">begin</span>(), v.<span class="hljs-built_in">end</span>(), out);<br>   cout &lt;&lt; endl;<br>   <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
-<h3 id="algorithm"><a class="markdownIt-Anchor" href="#algorithm"></a> Algorithm</h3>
-<ul>
+<h3 id="Algorithm"><a href="#Algorithm" class="headerlink" title="Algorithm"></a>Algorithm</h3><ul>
 <li>Example 1: sort(), reverse(), random_shuffle() and find() on Iterators [first,last)</li>
 </ul>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br>   <span class="hljs-type">const</span> <span class="hljs-type">int</span> SIZE = <span class="hljs-number">10</span>;<br>   <span class="hljs-type">int</span> array[SIZE] = &#123;<span class="hljs-number">11</span>, <span class="hljs-number">55</span>, <span class="hljs-number">44</span>, <span class="hljs-number">33</span>, <span class="hljs-number">88</span>, <span class="hljs-number">99</span>, <span class="hljs-number">11</span>, <span class="hljs-number">22</span>, <span class="hljs-number">66</span>, <span class="hljs-number">77</span>&#125;;<br>   <span class="hljs-function">vector&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">v</span><span class="hljs-params">(array, array + SIZE)</span></span>;<br>   <span class="hljs-built_in">print</span>(v);<br> <br>   <span class="hljs-comment">// Sort</span><br>   <span class="hljs-built_in">sort</span>(v.<span class="hljs-built_in">begin</span>(), v.<span class="hljs-built_in">end</span>());  <span class="hljs-comment">// entire container [begin(),end())</span><br>   <span class="hljs-built_in">print</span>(v);<br> <br>   <span class="hljs-comment">// Reverse</span><br>   <span class="hljs-built_in">reverse</span>(v.<span class="hljs-built_in">begin</span>(), v.<span class="hljs-built_in">begin</span>() + v.<span class="hljs-built_in">size</span>()/<span class="hljs-number">2</span>);  <span class="hljs-comment">// First half</span><br>   <span class="hljs-built_in">print</span>(v);<br> <br>   <span class="hljs-comment">// Random Shuffle</span><br>   <span class="hljs-built_in">random_shuffle</span>(v.<span class="hljs-built_in">begin</span>() + <span class="hljs-number">1</span>, v.<span class="hljs-built_in">end</span>() - <span class="hljs-number">1</span>);  <span class="hljs-comment">// exclude first and last elements</span><br>   <span class="hljs-built_in">print</span>(v);<br> <br>   <span class="hljs-comment">// Search</span><br>   <span class="hljs-type">int</span> searchFor = <span class="hljs-number">55</span>;<br>   vector&lt;<span class="hljs-type">int</span>&gt;::iterator found = <span class="hljs-built_in">find</span>(v.<span class="hljs-built_in">begin</span>(), v.<span class="hljs-built_in">end</span>(), searchFor);<br>   <span class="hljs-keyword">if</span> (found != v.<span class="hljs-built_in">end</span>()) &#123;<br>      cout &lt;&lt; <span class="hljs-string">&quot;Found&quot;</span> &lt;&lt; endl;<br>   &#125;<br>   <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
@@ -345,14 +337,13 @@
 <p>[!NOTE]</p>
 <p>Most of the algorithm functions takes at least two iterators: <code>first</code> and <code>last</code>, to specify the range <code>[first,last)</code> of operation.</p>
 <p>All STL containers provides members functions <code>begin()</code> and <code>end()</code>, which return the begin and pass-the-end elements of the container, respectively.</p>
-<p>To apply sort, the elements shall have overloaded the <code>'&lt;'</code> operator, which is used for comparing the order of the elements.</p>
+<p>To apply sort, the elements shall have overloaded the <code>&#39;&lt;&#39;</code> operator, which is used for comparing the order of the elements.</p>
 </blockquote>
 <ul>
 <li>Example 2: for_each()</li>
 </ul>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br>   vector&lt;<span class="hljs-type">int</span>&gt; v;<br>   v.<span class="hljs-built_in">push_back</span>(<span class="hljs-number">11</span>);<br>   v.<span class="hljs-built_in">push_back</span>(<span class="hljs-number">3</span>);<br>   v.<span class="hljs-built_in">push_back</span>(<span class="hljs-number">4</span>);<br>   v.<span class="hljs-built_in">push_back</span>(<span class="hljs-number">22</span>);<br> <br>   <span class="hljs-comment">// Invoke the given function (print, square)</span><br>   <span class="hljs-comment">// for each element in the range</span><br>   for_each(v.<span class="hljs-built_in">begin</span>(), v.end, print);<br>   for_each(v.<span class="hljs-built_in">begin</span>() + <span class="hljs-number">1</span>, v.<span class="hljs-built_in">begin</span>() + <span class="hljs-number">3</span>, square);<br>   for_each(v.<span class="hljs-built_in">begin</span>(), v.end, print);<br>   <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br> <br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">square</span><span class="hljs-params">(<span class="hljs-type">int</span> &amp; n)</span> </span>&#123; n *= n; &#125;<br> <br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">print</span><span class="hljs-params">(<span class="hljs-type">int</span> &amp; n)</span> </span>&#123; cout &lt;&lt; n &lt;&lt; <span class="hljs-string">&quot; &quot;</span>; &#125;<br></code></pre></td></tr></table></figure>
-<h3 id="function-object-functors"><a class="markdownIt-Anchor" href="#function-object-functors"></a> Function Object (Functors)</h3>
-<ul>
+<h3 id="Function-Object-Functors"><a href="#Function-Object-Functors" class="headerlink" title="Function Object (Functors)"></a>Function Object (Functors)</h3><ul>
 <li>transform() algorithm</li>
 </ul>
 <p><code>transform()</code> algorithm has two versions, supporting unary and binary operations, respectively.</p>
@@ -378,7 +369,7 @@
   <div class="license-box my-3">
     <div class="license-title">
       <div>cpp7_STL</div>
-      <div>http://oooscar8.github.io/2025/02/20/cpp7-STL/</div>
+      <div>http://oooscar8.github.io/2025/01/18/cpp7-STL/</div>
     </div>
     <div class="license-meta">
       
@@ -390,7 +381,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2025年2月20日</div>
+          <div>2025年1月18日</div>
         </div>
       
       
@@ -422,7 +413,7 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2025/02/20/cpp8-IO/" title="cpp8_IO">
+                      <a href="/2025/01/18/cpp8-IO/" title="cpp8_IO">
                         <i class="iconfont icon-arrowleft"></i>
                         <span class="hidden-mobile">cpp8_IO</span>
                         <span class="visible-mobile">上一篇</span>
@@ -432,7 +423,7 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2025/02/20/cpp6-Strings/" title="cpp6_Strings">
+                      <a href="/2025/01/18/cpp6-Strings/" title="cpp6_Strings">
                         <span class="hidden-mobile">cpp6_Strings</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>

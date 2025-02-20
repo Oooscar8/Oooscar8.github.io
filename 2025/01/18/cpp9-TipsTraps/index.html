@@ -19,20 +19,20 @@
   <meta name="author" content="Alex Sun">
   <meta name="keywords" content="">
   
-    <meta name="description" content="Miscellaneous, Tips and Traps   https:&#x2F;&#x2F;www3.ntu.edu.sg&#x2F;home&#x2F;ehchua&#x2F;programming&#x2F;cpp&#x2F;cp11_TipsTraps.html   Exception Handling  throw, try and catch Suppose that we have a class called PositiveInteger,">
+    <meta name="description" content="Miscellaneous, Tips and Traps  https:&#x2F;&#x2F;www3.ntu.edu.sg&#x2F;home&#x2F;ehchua&#x2F;programming&#x2F;cpp&#x2F;cp11_TipsTraps.html  Exception Handlingthrow, try and catchSuppose that we have a class called PositiveInteger, which">
 <meta property="og:type" content="article">
 <meta property="og:title" content="cpp9_TipsTraps">
-<meta property="og:url" content="http://oooscar8.github.io/2025/02/20/cpp9-TipsTraps/index.html">
+<meta property="og:url" content="http://oooscar8.github.io/2025/01/18/cpp9-TipsTraps/index.html">
 <meta property="og:site_name" content="Alex_Space">
-<meta property="og:description" content="Miscellaneous, Tips and Traps   https:&#x2F;&#x2F;www3.ntu.edu.sg&#x2F;home&#x2F;ehchua&#x2F;programming&#x2F;cpp&#x2F;cp11_TipsTraps.html   Exception Handling  throw, try and catch Suppose that we have a class called PositiveInteger,">
+<meta property="og:description" content="Miscellaneous, Tips and Traps  https:&#x2F;&#x2F;www3.ntu.edu.sg&#x2F;home&#x2F;ehchua&#x2F;programming&#x2F;cpp&#x2F;cp11_TipsTraps.html  Exception Handlingthrow, try and catchSuppose that we have a class called PositiveInteger, which">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://oooscar8.github.io/2025/02/20/imgs/202501091252319.png">
-<meta property="og:image" content="http://oooscar8.github.io/2025/02/20/imgs/202501091438580.png">
-<meta property="article:published_time" content="2025-02-20T08:00:38.000Z">
-<meta property="article:modified_time" content="2025-02-20T08:32:27.737Z">
+<meta property="og:image" content="http://oooscar8.github.io/2025/01/18/imgs/202501091252319.png">
+<meta property="og:image" content="http://oooscar8.github.io/2025/01/18/imgs/202501091438580.png">
+<meta property="article:published_time" content="2025-01-18T08:00:38.000Z">
+<meta property="article:modified_time" content="2025-02-20T08:35:38.068Z">
 <meta property="article:author" content="Alex Sun">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="http://oooscar8.github.io/2025/02/20/imgs/202501091252319.png">
+<meta name="twitter:image" content="http://oooscar8.github.io/2025/01/18/imgs/202501091252319.png">
   
   
   
@@ -213,8 +213,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2025-02-20 16:00" pubdate>
-          2025年2月20日 下午
+        <time datetime="2025-01-18 16:00" pubdate>
+          2025年1月18日 下午
         </time>
       </span>
     
@@ -225,7 +225,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          441 字
+          425 字
         
       </span>
     
@@ -278,22 +278,17 @@
             
               <div class="markdown-body">
                 
-                <h1 id="miscellaneous-tips-and-traps"><a class="markdownIt-Anchor" href="#miscellaneous-tips-and-traps"></a> Miscellaneous, Tips and Traps</h1>
-<hr />
+                <h1 id="Miscellaneous-Tips-and-Traps"><a href="#Miscellaneous-Tips-and-Traps" class="headerlink" title="Miscellaneous, Tips and Traps"></a>Miscellaneous, Tips and Traps</h1><hr>
 <blockquote>
 <p><a target="_blank" rel="noopener" href="https://www3.ntu.edu.sg/home/ehchua/programming/cpp/cp11_TipsTraps.html">https://www3.ntu.edu.sg/home/ehchua/programming/cpp/cp11_TipsTraps.html</a></p>
 </blockquote>
-<h2 id="exception-handling"><a class="markdownIt-Anchor" href="#exception-handling"></a> Exception Handling</h2>
-<h3 id="throw-try-and-catch"><a class="markdownIt-Anchor" href="#throw-try-and-catch"></a> throw, try and catch</h3>
-<p>Suppose that we have a class called <code>PositiveInteger</code>, which maintains a data member <code>value</code> containing a positive integer.</p>
+<h2 id="Exception-Handling"><a href="#Exception-Handling" class="headerlink" title="Exception Handling"></a>Exception Handling</h2><h3 id="throw-try-and-catch"><a href="#throw-try-and-catch" class="headerlink" title="throw, try and catch"></a>throw, try and catch</h3><p>Suppose that we have a class called <code>PositiveInteger</code>, which maintains a data member <code>value</code> containing a positive integer.</p>
 <p><code>PositiveInteger.cpp</code></p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-comment">// Setter with input validation</span><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">PositiveInteger::setValue</span><span class="hljs-params">(<span class="hljs-type">int</span> v)</span> </span>&#123;<br>   <span class="hljs-keyword">if</span> (v &gt; <span class="hljs-number">0</span>) &#123;<br>      value = v;<br>   &#125; <span class="hljs-keyword">else</span> &#123;<br>      <span class="hljs-keyword">throw</span> <span class="hljs-built_in">invalid_argument</span>(<span class="hljs-string">&quot;value shall be more than 0.&quot;</span>);<br>            <span class="hljs-comment">// need &lt;stdexcept&gt;</span><br>   &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
 <p><code>TestPositiveInteger.cpp</code>:</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-comment">// Graceful handling of exception with try-catch</span><br><span class="hljs-keyword">try</span> &#123;<br>    cout &lt;&lt; <span class="hljs-string">&quot;begin try 1...&quot;</span> &lt;&lt; endl;<br>    <span class="hljs-function">PositiveInteger <span class="hljs-title">i3</span><span class="hljs-params">(<span class="hljs-number">-8</span>)</span></span>;<br>    <span class="hljs-comment">// Exception thrown.</span><br>    <span class="hljs-comment">// Skip the remaining statements in try and jump to catch.</span><br>    cout &lt;&lt; i3.<span class="hljs-built_in">getValue</span>() &lt;&lt; endl;<br>    cout &lt;&lt; <span class="hljs-string">&quot;end try 1...&quot;</span> &lt;&lt; endl;<br>    <span class="hljs-comment">// Continue to the next statement after try-catch, if there is no exception</span><br>&#125; <span class="hljs-built_in">catch</span> (invalid_argument &amp; ex) &#123;  <span class="hljs-comment">// need &lt;stdexcept&gt;</span><br>    cout &lt;&lt; <span class="hljs-string">&quot;Exception: &quot;</span> &lt;&lt; ex.<span class="hljs-built_in">what</span>() &lt;&lt; endl;<br>    <span class="hljs-comment">// Continue to the next statement after try-catch</span><br>&#125;<br>cout &lt;&lt; <span class="hljs-string">&quot;after try-catch 1...&quot;</span> &lt;&lt; endl;<br></code></pre></td></tr></table></figure>
-<h3 id="class-exception-and-its-subclasses"><a class="markdownIt-Anchor" href="#class-exception-and-its-subclasses"></a> Class <code>exception</code> and its subclasses</h3>
-<p><img src="/imgs/202501091252319.png" srcset="/img/loading.gif" lazyload alt="Class exception and its subclasses" /></p>
-<h3 id="creating-your-own-exception-subclass"><a class="markdownIt-Anchor" href="#creating-your-own-exception-subclass"></a> Creating Your Own exception subclass</h3>
-<p>You can create your own exception by subclassing <code>exception</code> or its subclasses (such as <code>logic_error</code> or <code>runtime_error</code>). For example,</p>
+<h3 id="Class-exception-and-its-subclasses"><a href="#Class-exception-and-its-subclasses" class="headerlink" title="Class exception and its subclasses"></a>Class <code>exception</code> and its subclasses</h3><p><img src="/imgs/202501091252319.png" srcset="/img/loading.gif" lazyload alt="Class exception and its subclasses"></p>
+<h3 id="Creating-Your-Own-exception-subclass"><a href="#Creating-Your-Own-exception-subclass" class="headerlink" title="Creating Your Own exception subclass"></a>Creating Your Own exception subclass</h3><p>You can create your own exception by subclassing <code>exception</code> or its subclasses (such as <code>logic_error</code> or <code>runtime_error</code>). For example,</p>
 <p><code>MyException.h</code>:</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-comment">/* Header for the MyException class (MyException.h) */</span><br><span class="hljs-meta">#<span class="hljs-keyword">ifndef</span> MY_EXCEPTION_H</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> MY_EXCEPTION_H</span><br><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdexcept&gt;</span></span><br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">MyException</span> : <span class="hljs-keyword">public</span> std::logic_error &#123;<br><span class="hljs-keyword">public</span>:<br>   <span class="hljs-comment">// Constructor</span><br>   <span class="hljs-built_in">MyException</span>() : std::<span class="hljs-built_in">logic_error</span>(<span class="hljs-string">&quot;my custom error&quot;</span>) &#123; &#125;;<br>&#125;;<br> <br><span class="hljs-meta">#<span class="hljs-keyword">endif</span></span><br></code></pre></td></tr></table></figure>
 <blockquote>
@@ -302,15 +297,12 @@
 </blockquote>
 <p><code>TestMyException.cpp</code>:</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">fun</span><span class="hljs-params">()</span> </span>&#123;<br>   <span class="hljs-keyword">throw</span> <span class="hljs-built_in">MyException</span>();<br>&#125;<br> <br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br>   <span class="hljs-keyword">try</span> &#123;<br>      <span class="hljs-built_in">fun</span>();<br>   &#125; <span class="hljs-built_in">catch</span> (MyException &amp; ex) &#123;<br>      cout &lt;&lt; ex.<span class="hljs-built_in">what</span>() &lt;&lt; endl;<br>   &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
-<h2 id="storage-duration-scopes-and-linkages"><a class="markdownIt-Anchor" href="#storage-duration-scopes-and-linkages"></a> Storage Duration, Scopes and Linkages</h2>
-<p>The <em>duration</em> determines when the variable is created and destroyed;</p>
-<p>The <em>Scope</em> determines which part of the program can access the variable;</p>
+<h2 id="Storage-Duration-Scopes-and-Linkages"><a href="#Storage-Duration-Scopes-and-Linkages" class="headerlink" title="Storage Duration, Scopes and Linkages"></a>Storage Duration, Scopes and Linkages</h2><p>The <em>duration</em> determines when the variable is created and destroyed; </p>
+<p>The <em>Scope</em> determines which part of the program can access the variable; </p>
 <p>The <em>linkage</em> determines whether the variable is available in other source files.</p>
-<img src="/imgs/202501091438580.png" srcset="/img/loading.gif" lazyload alt="image-20250109143813479" style="zoom:150%;" />
-<h3 id="automatic-local-variables-auto-specifier"><a class="markdownIt-Anchor" href="#automatic-local-variables-auto-specifier"></a> Automatic Local Variables (&quot;auto&quot; Specifier)</h3>
-<p>Local variables have default type <code>auto</code>.</p>
-<h3 id="static-variables-static-specifier"><a class="markdownIt-Anchor" href="#static-variables-static-specifier"></a> Static Variables (&quot;static&quot; Specifier)</h3>
-<p>Static variables has three types of linkage:</p>
+<p><img src="/imgs/202501091438580.png" srcset="/img/loading.gif" lazyload alt="image-20250109143813479" style="zoom:150%;" /></p>
+<h3 id="Automatic-Local-Variables-“auto”-Specifier"><a href="#Automatic-Local-Variables-“auto”-Specifier" class="headerlink" title="Automatic Local Variables (“auto” Specifier)"></a>Automatic Local Variables (“auto” Specifier)</h3><p>Local variables have default type <code>auto</code>.</p>
+<h3 id="Static-Variables-“static”-Specifier"><a href="#Static-Variables-“static”-Specifier" class="headerlink" title="Static Variables (“static” Specifier)"></a>Static Variables (“static” Specifier)</h3><p>Static variables has three types of linkage:</p>
 <ol>
 <li>external: global static variables <strong>visible in other source files</strong> - defined outside all functions <strong>without keyword <code>static</code></strong>.</li>
 <li>internal: global static file-scope variables <strong>visible in the file</strong> that it is defined - defined outside all functions <strong>with keyword <code>static</code></strong>.</li>
@@ -329,26 +321,24 @@
 <p>A <code>static</code> global variable defined outside all functions has file-scope with internal linkage (i.e., visible only to the file in which it is defined, but not other source files). It has duration for the entire program, and retains its memory and value throughout the program execution. On the other hand, a global variable without the static keyword has file-scope with external linkage. It can be referenced by other file via the <code>extern</code> keyword.</p>
 <p>A <code>static</code> class member belongs to the class, instead of the instances. There is one copy shared by all the instances. It has class scope. To reference it outside the class, use the scope resolution operator <code>*classname*::*static_membername*</code>.</p>
 </blockquote>
-<h3 id="external-variables-extern-specifier"><a class="markdownIt-Anchor" href="#external-variables-extern-specifier"></a> External Variables (&quot;extern&quot; Specifier)</h3>
-<p>The <code>extern</code> specifies linkage to another source file. It tells the compiler that the identifier is defined in another (external) source file.</p>
+<h3 id="External-Variables-“extern”-Specifier"><a href="#External-Variables-“extern”-Specifier" class="headerlink" title="External Variables (“extern” Specifier)"></a>External Variables (“extern” Specifier)</h3><p>The <code>extern</code> specifies linkage to another source file. It tells the compiler that the identifier is defined in another (external) source file.</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-comment">// File1.cpp</span><br><span class="hljs-keyword">extern</span> <span class="hljs-type">int</span> globalVar;  <span class="hljs-comment">// Declare that this variable is defined in another file (external variable).</span><br>                       <span class="hljs-comment">// Cannot assign an value.</span><br>                       <span class="hljs-comment">// Need to link to the other file.</span><br></code></pre></td></tr></table></figure>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-comment">// File2.cpp</span><br><span class="hljs-type">int</span> globalVar = <span class="hljs-number">88</span>;         <span class="hljs-comment">// Definition here</span><br><span class="hljs-comment">// or</span><br><span class="hljs-keyword">extern</span> <span class="hljs-type">int</span> globalVar = <span class="hljs-number">88</span>;  <span class="hljs-comment">// The &quot;extern&quot; specifier is optional.</span><br>                            <span class="hljs-comment">// The initialization indicates definition</span><br></code></pre></td></tr></table></figure>
 <p>2.5 CV-Qualifiers (const and volatile) and mutable</p>
-<p>The &quot;<code>const</code>&quot; qualifier indicates that the content of the storage location shall not be changed after initialized.</p>
-<p>The &quot;volatile&quot; qualifier indicates that the content of the storage location could be altered outside your program, e.g., by an external hardware. This qualifier is needed to tell compiler not to optimize this particular location (e.g., not to store in register, not to re-order the statement, or collapse multiple statements).</p>
+<p>The “<code>const</code>“ qualifier indicates that the content of the storage location shall not be changed after initialized.</p>
+<p>The “volatile” qualifier indicates that the content of the storage location could be altered outside your program, e.g., by an external hardware. This qualifier is needed to tell compiler not to optimize this particular location (e.g., not to store in register, not to re-order the statement, or collapse multiple statements).</p>
 <p>The <code>mutable</code> specifier can be used in <code>struct</code> or <code>class</code> to indicate that a particular data member is <strong>modifiable even though the instance is declared <code>const</code></strong>.</p>
 <blockquote>
 <p>[!CAUTION]</p>
 <ul>
-<li>&quot;const&quot; Global Variables</li>
+<li>“const” Global Variables</li>
 </ul>
-<p>By default, a global variable (defined outside all functions) has external linkage. However, <code>const</code> global variable has internal linkage (as if <code>static</code> specifier is used). As the result, you can place all <code>const</code> global variables in a header file, and include the header in all the source files. To set a <code>const</code> global variable to external linkage, include &quot;<code>extern</code>&quot; specifier.</p>
+<p>By default, a global variable (defined outside all functions) has external linkage. However, <code>const</code> global variable has internal linkage (as if <code>static</code> specifier is used). As the result, you can place all <code>const</code> global variables in a header file, and include the header in all the source files. To set a <code>const</code> global variable to external linkage, include “<code>extern</code>“ specifier.</p>
 </blockquote>
-<h2 id="type-casting-operators"><a class="markdownIt-Anchor" href="#type-casting-operators"></a> Type Casting Operators</h2>
-<p>C++ introduces 4 new type casting operators: <code>const_cast&lt;new-type&gt;(value)</code>, <code>static_cast&lt;new-type&gt;(value)</code>, <code>dynamic_cast&lt;new-type&gt;(value)</code>, <code>reinterpret_cast&lt;new-type&gt;(value)</code> to regulate type casting.</p>
+<h2 id="Type-Casting-Operators"><a href="#Type-Casting-Operators" class="headerlink" title="Type Casting Operators"></a>Type Casting Operators</h2><p>C++ introduces 4 new type casting operators: <code>const_cast&lt;new-type&gt;(value)</code>, <code>static_cast&lt;new-type&gt;(value)</code>, <code>dynamic_cast&lt;new-type&gt;(value)</code>, <code>reinterpret_cast&lt;new-type&gt;(value)</code> to regulate type casting. </p>
 <blockquote>
 <p>[!TIP]</p>
-<p>C++ supports C's explicit type casting operations <code>(new-type)value</code> (C-style cast), or <code>new-type(value)</code> (Function-style cast), called <em>regular cast</em>.</p>
+<p>C++ supports C’s explicit type casting operations <code>(new-type)value</code> (C-style cast), or <code>new-type(value)</code> (Function-style cast), called <em>regular cast</em>. </p>
 <p>Although the old styles is still acceptable in C++, new styles are preferable.</p>
 </blockquote>
 <ul>
@@ -359,7 +349,7 @@
 <ul>
 <li><code>dynamic_cast</code></li>
 </ul>
-<p><code>dynamic_cast</code> can be used to verify the type of an object at runtime, before performing the type conversion. It is primarily used to perform &quot;safe downcasting&quot;.</p>
+<p><code>dynamic_cast</code> can be used to verify the type of an object at runtime, before performing the type conversion. It is primarily used to perform “safe downcasting”.</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-built_in">dynamic_cast</span>&lt;Type *&gt;(ptr)<br></code></pre></td></tr></table></figure>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c++">Base* basePtr = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Derived</span>();<br>Derived* derivedPtr = <span class="hljs-built_in">dynamic_cast</span>&lt;Derived*&gt;(basePtr);<br></code></pre></td></tr></table></figure>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Shape</span> &#123;<br>    <span class="hljs-function"><span class="hljs-keyword">virtual</span> <span class="hljs-type">void</span> <span class="hljs-title">draw</span><span class="hljs-params">()</span> </span>= <span class="hljs-number">0</span>;<br>&#125;;<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Circle</span> : <span class="hljs-keyword">public</span> Shape &#123;<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">draw</span><span class="hljs-params">()</span> <span class="hljs-keyword">override</span> </span>&#123;&#125;<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">radius</span><span class="hljs-params">()</span> </span>&#123;&#125;  <span class="hljs-comment">// Circle specific method</span><br>&#125;;<br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">processShape</span><span class="hljs-params">(Shape* shape)</span> </span>&#123;<br>    <span class="hljs-keyword">if</span> (Circle* circle = <span class="hljs-built_in">dynamic_cast</span>&lt;Circle*&gt;(shape)) &#123;<br>        circle-&gt;<span class="hljs-built_in">radius</span>();<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
@@ -391,7 +381,7 @@
   <div class="license-box my-3">
     <div class="license-title">
       <div>cpp9_TipsTraps</div>
-      <div>http://oooscar8.github.io/2025/02/20/cpp9-TipsTraps/</div>
+      <div>http://oooscar8.github.io/2025/01/18/cpp9-TipsTraps/</div>
     </div>
     <div class="license-meta">
       
@@ -403,7 +393,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2025年2月20日</div>
+          <div>2025年1月18日</div>
         </div>
       
       
@@ -435,7 +425,7 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2025/02/20/cpp10-DS/" title="cpp10_DS">
+                      <a href="/2025/01/18/cpp10-DS/" title="cpp10_DS">
                         <i class="iconfont icon-arrowleft"></i>
                         <span class="hidden-mobile">cpp10_DS</span>
                         <span class="visible-mobile">上一篇</span>
@@ -445,7 +435,7 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2025/02/20/cpp8-IO/" title="cpp8_IO">
+                      <a href="/2025/01/18/cpp8-IO/" title="cpp8_IO">
                         <span class="hidden-mobile">cpp8_IO</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
