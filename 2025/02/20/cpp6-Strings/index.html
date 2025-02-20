@@ -19,25 +19,21 @@
   <meta name="author" content="Alex Sun">
   <meta name="keywords" content="">
   
-    <meta name="description" content="Lab Checkpoint 1: stitching substrings into a byte stream  https:&#x2F;&#x2F;cs144.github.io&#x2F;assignments&#x2F;check1.pdf This checkpoint contains a “hands-on” component and an implementation component. hands-on部分是今年">
+    <meta name="description" content="Characters and Strings https:&#x2F;&#x2F;www3.ntu.edu.sg&#x2F;home&#x2F;ehchua&#x2F;programming&#x2F;cpp&#x2F;cp9_String.html  Strings: The C-String and the string class C-String Literals   [!WARNING] 123char * str1 &#x3D; &quot;hello&quot;">
 <meta property="og:type" content="article">
-<meta property="og:title" content="CS144 Lab 1">
-<meta property="og:url" content="http://oooscar8.github.io/2025/01/22/cs144-lab1/index.html">
+<meta property="og:title" content="cpp6_Strings">
+<meta property="og:url" content="http://oooscar8.github.io/2025/02/20/cpp6-Strings/index.html">
 <meta property="og:site_name" content="Alex_Space">
-<meta property="og:description" content="Lab Checkpoint 1: stitching substrings into a byte stream  https:&#x2F;&#x2F;cs144.github.io&#x2F;assignments&#x2F;check1.pdf This checkpoint contains a “hands-on” component and an implementation component. hands-on部分是今年">
+<meta property="og:description" content="Characters and Strings https:&#x2F;&#x2F;www3.ntu.edu.sg&#x2F;home&#x2F;ehchua&#x2F;programming&#x2F;cpp&#x2F;cp9_String.html  Strings: The C-String and the string class C-String Literals   [!WARNING] 123char * str1 &#x3D; &quot;hello&quot;">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://oooscar8.github.io/2025/01/22/imgs/202501211617490-1739988671757-94-1739988703810-96.png">
-<meta property="og:image" content="http://oooscar8.github.io/2025/01/22/imgs/202502132129349-1739988664319-92.jpg">
-<meta property="og:image" content="http://oooscar8.github.io/2025/01/22/imgs/image-20250131174356176-1739984391752-11-1739986335339-13-1739988590210-90.png">
-<meta property="article:published_time" content="2025-01-21T16:00:00.000Z">
-<meta property="article:modified_time" content="2025-02-20T05:49:24.505Z">
+<meta property="article:published_time" content="2025-02-20T07:59:59.000Z">
+<meta property="article:modified_time" content="2025-02-20T08:15:17.314Z">
 <meta property="article:author" content="Alex Sun">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="http://oooscar8.github.io/2025/01/22/imgs/202501211617490-1739988671757-94-1739988703810-96.png">
   
   
   
-  <title>CS144 Lab 1 - Alex_Space</title>
+  <title>cpp6_Strings - Alex_Space</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -203,7 +199,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="CS144 Lab 1"></span>
+            <span id="subtitle" data-typed-text="cpp6_Strings"></span>
           
         </div>
 
@@ -214,8 +210,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2025-01-22 00:00" pubdate>
-          2025年1月22日 凌晨
+        <time datetime="2025-02-20 15:59" pubdate>
+          2025年2月20日 下午
         </time>
       </span>
     
@@ -226,7 +222,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          438 字
+          270 字
         
       </span>
     
@@ -237,7 +233,7 @@
         
         
         
-          4 分钟
+          3 分钟
         
       </span>
     
@@ -274,53 +270,53 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">CS144 Lab 1</h1>
+            <h1 id="seo-header">cpp6_Strings</h1>
             
             
               <div class="markdown-body">
                 
-                <h1 id="Lab-Checkpoint-1-stitching-substrings-into-a-byte-stream"><a href="#Lab-Checkpoint-1-stitching-substrings-into-a-byte-stream" class="headerlink" title="Lab Checkpoint 1: stitching substrings into a byte stream"></a>Lab Checkpoint 1: stitching substrings into a byte stream</h1><hr>
-<blockquote>
-<p><a target="_blank" rel="noopener" href="https://cs144.github.io/assignments/check1.pdf">https://cs144.github.io/assignments/check1.pdf</a></p>
-<p>This checkpoint contains a “hands-on” component and an implementation component.</p>
-<p>hands-on部分是今年新加的，需要加入Stanford内部网络才能做，因此跳过</p>
-<p>在Lab1中，我们需要实现一个TCP接收端的重组器(Reassembler)，用来将TCP接收到的乱序的子字符串(substring)重组成原本的字节流，按照正确的顺序推送(push)到我们在Lab0实现的ByteStream中，供TCP的customer读出。</p>
+                <h1 id="Characters-and-Strings"><a href="#Characters-and-Strings" class="headerlink" title="Characters and Strings"></a>Characters and Strings</h1><blockquote>
+<p><a target="_blank" rel="noopener" href="https://www3.ntu.edu.sg/home/ehchua/programming/cpp/cp9_String.html">https://www3.ntu.edu.sg/home/ehchua/programming/cpp/cp9_String.html</a></p>
 </blockquote>
-<h2 id="Implementation-putting-substrings-in-sequence"><a href="#Implementation-putting-substrings-in-sequence" class="headerlink" title="Implementation: putting substrings in sequence"></a>Implementation: putting substrings in sequence</h2><blockquote>
-<p>Why we need to implement the TCP receiver’s reassembler? What does it do?</p>
-</blockquote>
-<p>The TCP receiver needs to handle duplication and reordering of segments, so it needs to have the ability to stitch arbitrary excerpts of the byte stream(unordered substrings) back into the original ordered stream. </p>
-<p>To achieve this, the TCP receiver needs a <strong>reassembler</strong> to reassemble out-of-order byte stream. </p>
-<p>The reassembler buffers unordered substrings that fit within the stream’s available capacity until earlier gaps get filled in, discards substrings that lie beyond the stream’s available capacity and push ordered substrings to the ByteStream. As the reader pops bytes from the ByteStream, the stream’s sliding window slides across the stream and the reassembler can accept further bytes.</p>
-<p><img src="/imgs/202501211617490-1739988671757-94-1739988703810-96.png" srcset="/img/loading.gif" lazyload alt="img"></p>
-<h3 id="My-Solution"><a href="#My-Solution" class="headerlink" title="My Solution"></a>My Solution</h3><p>这个lab的关键是理解上图的TCP Receiver’s sliding window。我建议自己理解后手动画一遍图再开始coding:</p>
-<p><img src="/imgs/202502132129349-1739988664319-92.jpg" srcset="/img/loading.gif" lazyload alt="afd089d7e0750b55eb9d32134828880"></p>
+<h4 id="Strings-The-C-String-and-the-string-class"><a href="#Strings-The-C-String-and-the-string-class" class="headerlink" title="Strings: The C-String and the string class"></a>Strings: The C-String and the string class</h4><ul>
+<li><strong>C-String Literals</strong></li>
+</ul>
 <blockquote>
-<ol>
-<li>当Reassembler接收到一个新的substring的时候，他要怎么做？</li>
-</ol>
-</blockquote>
-<p>根据上图，ByteStream的buffer空间（绿色区域）和Reassembler的internal storage空间（红色空间）合并起来是一个大小始终为capacity的sliding window。TCP的customer每从ByteStream中读出一个byte，sliding window就向右slide一个byte，Reassembler就可以接收更远一个byte。</p>
-<p>当Reassembler新收到一个substring，他需要将substring在红色区域(available capacity)的部分先写入Reassembler的internal storage。因此首先，我们需要知道红色区域的上下界。</p>
-<blockquote>
+<p>[!WARNING]</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-type">char</span> * str1 = <span class="hljs-string">&quot;hello&quot;</span>;<br>          <span class="hljs-comment">// warning: deprecated conversion from string constant to &#x27;char*&#x27;</span><br>   <span class="hljs-type">char</span> * str2 = <span class="hljs-built_in">const_cast</span>&lt;<span class="hljs-type">char</span> *&gt;(<span class="hljs-string">&quot;hello&quot;</span>);   <span class="hljs-comment">// remove the &quot;const&quot;</span><br></code></pre></td></tr></table></figure>
+<p>Those two statements are dangerous. String literal “hello” is stored in <strong>read-only memory</strong>. Now you assign a non-const pointer to point to this area. If you try to modify this string literal, it will crash your program. </p>
 <p>[!TIP]</p>
-<p>提示：红色区域的起始位置是Reassembler正在等待的next byte，想想这与ByteStream有什么联系？</p>
-<ol>
-<li>应该用什么data structure来表示Reassembler’s internal storage？</li>
-</ol>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-type">const</span> <span class="hljs-type">char</span> * str3 = <span class="hljs-string">&quot;hello&quot;</span>;<br><span class="hljs-comment">// *(str3 + 1) = &#x27;a&#x27;;  // error: assignment of read-only location &#x27;*(str3 + 1u)&#x27;</span><br><br><span class="hljs-comment">// Creates a modifiable copy</span><br><span class="hljs-type">char</span> str4[] = <span class="hljs-string">&quot;hello&quot;</span>;<br>str4[<span class="hljs-number">1</span>] = <span class="hljs-string">&#x27;a&#x27;</span>;<br><br><span class="hljs-type">const</span> <span class="hljs-type">char</span> str5[] = <span class="hljs-string">&quot;hello&quot;</span>;<br><span class="hljs-comment">//  str5[1] = &#x27;a&#x27;;   // error: assignment of read-only location &#x27;str5[1]&#x27;</span><br></code></pre></td></tr></table></figure>
+<p>Those are correct! </p>
 </blockquote>
-<p>Reassembler需要存储接收到的substring，以及substring在stream中的位置(index)，因此我选择用一个<strong>map</strong>来存储<key = first_index, value = substring>。每次Reassembler接收到一个substring，截取substring在红色区域的部分插入map中，然后用一个<code>merge_substrings</code>函数来合并相邻或重叠的substrings。每次插入map以及合并后，检查map中的第一个元素的key是否是Reassembler正在等待的next byte，如果是，就将对应的substring push到ByteStream中。</p>
-<h2 id="Debugging-Advice"><a href="#Debugging-Advice" class="headerlink" title="Debugging Advice"></a>Debugging Advice</h2><ol>
-<li>To test your code:</li>
-</ol>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">cmake --build build --target check1<br></code></pre></td></tr></table></figure>
-<ol>
-<li>You may sometimes need to use the <code>move()</code> function to pass an object that can’t be copied.</li>
-</ol>
-<p>If you get your builds stuck and aren’t sure how to fix them, you can erase your build directory and build again</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">rm -rf build<br>cmake -S . -B build<br></code></pre></td></tr></table></figure>
-<h2 id="Finish"><a href="#Finish" class="headerlink" title="Finish!"></a>Finish!</h2><p>All tests in check1 pass!</p>
-<p><img src="/imgs/image-20250131174356176-1739984391752-11-1739986335339-13-1739988590210-90.png" srcset="/img/loading.gif" lazyload alt="image-20250131174356176"></p>
+<ul>
+<li><strong>C++’s string class</strong></li>
+</ul>
+<p>See <a target="_blank" rel="noopener" href="https://www3.ntu.edu.sg/home/ehchua/programming/cpp/cp9_String.html">NTU Notes</a> for details.</p>
+<h4 id="The-C-String-Input-Methods"><a href="#The-C-String-Input-Methods" class="headerlink" title="The C-String Input Methods"></a>The C-String Input Methods</h4><p>C-string has three input methods: stream extraction operator (<code>&gt;&gt;</code>), <code>getline()</code> and <code>get()</code>.</p>
+<blockquote>
+<p>[!NOTE]</p>
+<blockquote>
+<p>What’s the difference between those three methods?</p>
+</blockquote>
+<ul>
+<li><code>istream&#39;s</code> Overloaded Stream Extraction Operator (&gt;&gt;)</li>
+</ul>
+<p>Stream extraction operator does not discard the trailing whitespace(blank, tab, newline), and leave it in the input buffer.</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-type">const</span> <span class="hljs-type">int</span> SIZE = <span class="hljs-number">5</span>;<br><span class="hljs-type">char</span> str[SIZE];    <span class="hljs-comment">// max strlen is SIZE - 1</span><br><br>cout &lt;&lt; <span class="hljs-string">&quot;Enter a word: &quot;</span>;<br><span class="hljs-comment">// Extract SIZE-1 characters at most</span><br>cin &gt;&gt; <span class="hljs-built_in">setw</span>(SIZE) &gt;&gt; str;   <span class="hljs-comment">// need &lt;iomanip&gt; header</span><br>cout &lt;&lt; str &lt;&lt; endl;<br></code></pre></td></tr></table></figure>
+<p>You may need to flush the input buffer:</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-comment">// Ignore to the end-of-file</span><br>cin.<span class="hljs-built_in">ignore</span>(numeric_limits&lt;streamsize&gt;::<span class="hljs-built_in">max</span>());  <span class="hljs-comment">// need header &lt;limits&gt;</span><br><br><span class="hljs-comment">// Ignore to the end-of-line</span><br>cin.<span class="hljs-built_in">ignore</span>(numeric_limits&lt;streamsize&gt;::<span class="hljs-built_in">max</span>(), <span class="hljs-string">&#x27;\n&#x27;</span>);<br></code></pre></td></tr></table></figure>
+<ul>
+<li><code>istream::getline()</code></li>
+</ul>
+<p>The delimiter, if found, is extracted and discarded from input stream.</p>
+<p>If <code>n-1</code> character is read and the next character is not delimit, then the <code>failbit</code> (of the <code>istream</code>) is set. You can check the <code>failbit</code> via <code>bool</code> function <code>cin.fail()</code>. You need to <strong>clear the error bits before issuing another <code>getline()</code> call</strong>.</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-type">const</span> <span class="hljs-type">int</span> SIZE = <span class="hljs-number">5</span>;<br><span class="hljs-type">char</span> str[SIZE];    <span class="hljs-comment">// max strlen is SIZE - 1</span><br> <br>cout &lt;&lt; <span class="hljs-string">&quot;Enter a line: &quot;</span>;<br>cin.<span class="hljs-built_in">getline</span>(str, SIZE);     <span class="hljs-comment">// Read a line (including whitespaces) until newline, discard newline</span><br>cout &lt;&lt; <span class="hljs-string">&quot;\&quot;&quot;</span> &lt;&lt; str &lt;&lt; <span class="hljs-string">&quot;\&quot; length=&quot;</span> &lt;&lt; <span class="hljs-built_in">strlen</span>(str) &lt;&lt; endl;<br>cout &lt;&lt; <span class="hljs-string">&quot;Number of characters extracted: &quot;</span> &lt;&lt; cin.<span class="hljs-built_in">gcount</span>() &lt;&lt; endl;<br> <br><span class="hljs-keyword">if</span> (cin.<span class="hljs-built_in">fail</span>()) &#123;<br>   cout &lt;&lt; <span class="hljs-string">&quot;failbit is set!&quot;</span> &lt;&lt; endl;<br>   cin.<span class="hljs-built_in">clear</span>();   <span class="hljs-comment">// Clear all error bits. Otherwise, subsequent getline() fails</span><br>&#125;<br></code></pre></td></tr></table></figure>
+<ul>
+<li><code>istream::get()</code></li>
+</ul>
+<p><code>get(str, n, delim)</code> is similar to <code>getline(str, n, delim)</code>, except that the <code>delim</code> character is not extracted and remains in the input stream.</p>
+</blockquote>
 
                 
               </div>
@@ -338,8 +334,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>CS144 Lab 1</div>
-      <div>http://oooscar8.github.io/2025/01/22/cs144-lab1/</div>
+      <div>cpp6_Strings</div>
+      <div>http://oooscar8.github.io/2025/02/20/cpp6-Strings/</div>
     </div>
     <div class="license-meta">
       
@@ -351,7 +347,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2025年1月22日</div>
+          <div>2025年2月20日</div>
         </div>
       
       
@@ -383,9 +379,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2025/02/11/cs144-lab2/" title="CS144 Lab 2">
+                      <a href="/2025/02/20/cpp7-STL/" title="cpp7_STL">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">CS144 Lab 2</span>
+                        <span class="hidden-mobile">cpp7_STL</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -393,8 +389,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2025/01/19/cs144-lab0/" title="CS144 Lab 0">
-                        <span class="hidden-mobile">CS144 Lab 0</span>
+                      <a href="/2025/02/20/cpp5-Template/" title="cpp5_Template">
+                        <span class="hidden-mobile">cpp5_Template</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
