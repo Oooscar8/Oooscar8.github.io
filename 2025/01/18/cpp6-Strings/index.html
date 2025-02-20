@@ -19,12 +19,12 @@
   <meta name="author" content="Alex Sun">
   <meta name="keywords" content="">
   
-    <meta name="description" content="Characters and Strings https:&#x2F;&#x2F;www3.ntu.edu.sg&#x2F;home&#x2F;ehchua&#x2F;programming&#x2F;cpp&#x2F;cp9_String.html  Strings: The C-String and the string class C-String Literals   [!WARNING] 123char * str1 &#x3D; &quot;hello&quot;">
+    <meta name="description" content="Characters and Strings  https:&#x2F;&#x2F;www3.ntu.edu.sg&#x2F;home&#x2F;ehchua&#x2F;programming&#x2F;cpp&#x2F;cp9_String.html   Strings: The C-String and the string class  C-String Literals   [!WARNING] 123char * str1 &#x3D; &quot;hello&amp;q">
 <meta property="og:type" content="article">
 <meta property="og:title" content="cpp6_Strings">
 <meta property="og:url" content="http://oooscar8.github.io/2025/01/18/cpp6-Strings/index.html">
 <meta property="og:site_name" content="Alex_Space">
-<meta property="og:description" content="Characters and Strings https:&#x2F;&#x2F;www3.ntu.edu.sg&#x2F;home&#x2F;ehchua&#x2F;programming&#x2F;cpp&#x2F;cp9_String.html  Strings: The C-String and the string class C-String Literals   [!WARNING] 123char * str1 &#x3D; &quot;hello&quot;">
+<meta property="og:description" content="Characters and Strings  https:&#x2F;&#x2F;www3.ntu.edu.sg&#x2F;home&#x2F;ehchua&#x2F;programming&#x2F;cpp&#x2F;cp9_String.html   Strings: The C-String and the string class  C-String Literals   [!WARNING] 123char * str1 &#x3D; &quot;hello&amp;q">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2025-01-18T07:59:59.000Z">
 <meta property="article:modified_time" content="2025-02-20T08:35:20.461Z">
@@ -222,7 +222,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          270 字
+          271 字
         
       </span>
     
@@ -275,32 +275,37 @@
             
               <div class="markdown-body">
                 
-                <h1 id="Characters-and-Strings"><a href="#Characters-and-Strings" class="headerlink" title="Characters and Strings"></a>Characters and Strings</h1><blockquote>
+                <h1 id="characters-and-strings"><a class="markdownIt-Anchor" href="#characters-and-strings"></a> Characters and Strings</h1>
+<blockquote>
 <p><a target="_blank" rel="noopener" href="https://www3.ntu.edu.sg/home/ehchua/programming/cpp/cp9_String.html">https://www3.ntu.edu.sg/home/ehchua/programming/cpp/cp9_String.html</a></p>
 </blockquote>
-<h4 id="Strings-The-C-String-and-the-string-class"><a href="#Strings-The-C-String-and-the-string-class" class="headerlink" title="Strings: The C-String and the string class"></a>Strings: The C-String and the string class</h4><ul>
+<h4 id="strings-the-c-string-and-the-string-class"><a class="markdownIt-Anchor" href="#strings-the-c-string-and-the-string-class"></a> Strings: The C-String and the string class</h4>
+<ul>
 <li><strong>C-String Literals</strong></li>
 </ul>
 <blockquote>
 <p>[!WARNING]</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-type">char</span> * str1 = <span class="hljs-string">&quot;hello&quot;</span>;<br>          <span class="hljs-comment">// warning: deprecated conversion from string constant to &#x27;char*&#x27;</span><br>   <span class="hljs-type">char</span> * str2 = <span class="hljs-built_in">const_cast</span>&lt;<span class="hljs-type">char</span> *&gt;(<span class="hljs-string">&quot;hello&quot;</span>);   <span class="hljs-comment">// remove the &quot;const&quot;</span><br></code></pre></td></tr></table></figure>
-<p>Those two statements are dangerous. String literal “hello” is stored in <strong>read-only memory</strong>. Now you assign a non-const pointer to point to this area. If you try to modify this string literal, it will crash your program. </p>
+<p>Those two statements are dangerous. String literal &quot;hello&quot; is stored in <strong>read-only memory</strong>. Now you assign a non-const pointer to point to this area. If you try to modify this string literal, it will crash your program.</p>
+</blockquote>
+<blockquote>
 <p>[!TIP]</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-type">const</span> <span class="hljs-type">char</span> * str3 = <span class="hljs-string">&quot;hello&quot;</span>;<br><span class="hljs-comment">// *(str3 + 1) = &#x27;a&#x27;;  // error: assignment of read-only location &#x27;*(str3 + 1u)&#x27;</span><br><br><span class="hljs-comment">// Creates a modifiable copy</span><br><span class="hljs-type">char</span> str4[] = <span class="hljs-string">&quot;hello&quot;</span>;<br>str4[<span class="hljs-number">1</span>] = <span class="hljs-string">&#x27;a&#x27;</span>;<br><br><span class="hljs-type">const</span> <span class="hljs-type">char</span> str5[] = <span class="hljs-string">&quot;hello&quot;</span>;<br><span class="hljs-comment">//  str5[1] = &#x27;a&#x27;;   // error: assignment of read-only location &#x27;str5[1]&#x27;</span><br></code></pre></td></tr></table></figure>
-<p>Those are correct! </p>
+<p>Those are correct!</p>
 </blockquote>
 <ul>
-<li><strong>C++’s string class</strong></li>
+<li><strong>C++'s string class</strong></li>
 </ul>
 <p>See <a target="_blank" rel="noopener" href="https://www3.ntu.edu.sg/home/ehchua/programming/cpp/cp9_String.html">NTU Notes</a> for details.</p>
-<h4 id="The-C-String-Input-Methods"><a href="#The-C-String-Input-Methods" class="headerlink" title="The C-String Input Methods"></a>The C-String Input Methods</h4><p>C-string has three input methods: stream extraction operator (<code>&gt;&gt;</code>), <code>getline()</code> and <code>get()</code>.</p>
+<h4 id="the-c-string-input-methods"><a class="markdownIt-Anchor" href="#the-c-string-input-methods"></a> The C-String Input Methods</h4>
+<p>C-string has three input methods: stream extraction operator (<code>&gt;&gt;</code>), <code>getline()</code> and <code>get()</code>.</p>
 <blockquote>
 <p>[!NOTE]</p>
 <blockquote>
-<p>What’s the difference between those three methods?</p>
+<p>What's the difference between those three methods?</p>
 </blockquote>
 <ul>
-<li><code>istream&#39;s</code> Overloaded Stream Extraction Operator (&gt;&gt;)</li>
+<li><code>istream's</code> Overloaded Stream Extraction Operator (&gt;&gt;)</li>
 </ul>
 <p>Stream extraction operator does not discard the trailing whitespace(blank, tab, newline), and leave it in the input buffer.</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-type">const</span> <span class="hljs-type">int</span> SIZE = <span class="hljs-number">5</span>;<br><span class="hljs-type">char</span> str[SIZE];    <span class="hljs-comment">// max strlen is SIZE - 1</span><br><br>cout &lt;&lt; <span class="hljs-string">&quot;Enter a word: &quot;</span>;<br><span class="hljs-comment">// Extract SIZE-1 characters at most</span><br>cin &gt;&gt; <span class="hljs-built_in">setw</span>(SIZE) &gt;&gt; str;   <span class="hljs-comment">// need &lt;iomanip&gt; header</span><br>cout &lt;&lt; str &lt;&lt; endl;<br></code></pre></td></tr></table></figure>
