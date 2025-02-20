@@ -19,22 +19,21 @@
   <meta name="author" content="Alex Sun">
   <meta name="keywords" content="">
   
-    <meta name="description" content="如何更改hexo解析文章中图片路径的方式">
+    <meta name="description" content="title: cpp6 Strings date: 2025-01-18 15:59:59 tags: C++ categories:  C++ NTU Note keywords: excerpt: Characters and Strings    Characters and Strings  https:&#x2F;&#x2F;www3.ntu.edu.sg&#x2F;home&#x2F;ehchua&#x2F;programming&#x2F;">
 <meta property="og:type" content="article">
-<meta property="og:title" content="hexo解析图片路径">
-<meta property="og:url" content="http://oooscar8.github.io/2025/02/20/hexo-blog/index.html">
+<meta property="og:title" content="Cpp6 Strings">
+<meta property="og:url" content="http://oooscar8.github.io/2025/02/20/cpp6-Strings/index.html">
 <meta property="og:site_name" content="Alex&#39;s Space">
-<meta property="og:description" content="如何更改hexo解析文章中图片路径的方式">
+<meta property="og:description" content="title: cpp6 Strings date: 2025-01-18 15:59:59 tags: C++ categories:  C++ NTU Note keywords: excerpt: Characters and Strings    Characters and Strings  https:&#x2F;&#x2F;www3.ntu.edu.sg&#x2F;home&#x2F;ehchua&#x2F;programming&#x2F;">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2025-02-19T20:06:11.000Z">
-<meta property="article:modified_time" content="2025-02-20T18:31:30.746Z">
+<meta property="article:published_time" content="2025-02-19T18:31:30.000Z">
+<meta property="article:modified_time" content="2025-02-20T18:31:30.677Z">
 <meta property="article:author" content="Alex Sun">
-<meta property="article:tag" content="hexo">
 <meta name="twitter:card" content="summary_large_image">
   
   
   
-  <title>hexo解析图片路径 - Alex&#39;s Space</title>
+  <title>Cpp6 Strings - Alex&#39;s Space</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -200,7 +199,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="hexo解析图片路径"></span>
+            <span id="subtitle" data-typed-text="Cpp6 Strings"></span>
           
         </div>
 
@@ -211,7 +210,7 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2025-02-20 04:06" pubdate>
+        <time datetime="2025-02-20 02:31" pubdate>
           2025年2月20日 凌晨
         </time>
       </span>
@@ -223,7 +222,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          228 字
+          279 字
         
       </span>
     
@@ -234,7 +233,7 @@
         
         
         
-          2 分钟
+          3 分钟
         
       </span>
     
@@ -271,21 +270,46 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">hexo解析图片路径</h1>
+            <h1 id="seo-header">Cpp6 Strings</h1>
             
             
               <div class="markdown-body">
                 
-                <h1 id="hexo解析图片路径"><a class="markdownIt-Anchor" href="#hexo解析图片路径"></a> hexo解析图片路径</h1>
-<figure class="highlight gcode"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs gcode">hexo-code/<br>├── source/<br>│   ├── _posts/<br>│   │   ├── example.md<br>│   │   ├── imgs/  <span class="hljs-comment">(软链接)</span><br>│   ├── imgs/  <span class="hljs-comment">(实际存放图片的目录)</span><br></code></pre></td></tr></table></figure>
-<p>以上是我的hexo源文件结构，文章放在source/_posts/目录下，文章的图片放在source/imgs/目录下，因此文章中的图片通过相对路径../imgs访问图片。</p>
-<p>hexo需要用绝对路径解析图片，因此我需要在<code>hexo g</code>的时候将文章中图片的相对路径<code>../imgs</code>解析为绝对路径<code>/imgs</code>：</p>
-<p>在主题的<code>post.ejs</code>文件中，替换</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ejs">&lt;%- page.content %&gt;<br></code></pre></td></tr></table></figure>
-<p>为：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ejs">&lt;%- page.content.replace(/\.\.\/imgs\//g, &#x27;/imgs/&#x27;) %&gt;<br></code></pre></td></tr></table></figure>
-<p>也就是：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs ejs">...<br>&lt;% if (page.encrypt === true) &#123; %&gt;<br>&lt;%- inject_point(&#x27;postMarkdownBegin&#x27;) %&gt;<br>&lt;%- page.content.replace(/\.\.\/imgs\//g, &#x27;/imgs/&#x27;) %&gt;<br>&lt;%- partial(&#x27;_partials/plugins/encrypt&#x27;) %&gt;<br>&lt;%- inject_point(&#x27;postMarkdownEnd&#x27;) %&gt;<br>&lt;% &#125; else &#123; %&gt;<br>&lt;div class=&quot;markdown-body&quot;&gt;<br>    &lt;%- inject_point(&#x27;postMarkdownBegin&#x27;) %&gt;<br>    &lt;%- page.content.replace(/\.\.\/imgs\//g, &#x27;/imgs/&#x27;) %&gt;<br>    &lt;%- inject_point(&#x27;postMarkdownEnd&#x27;) %&gt;<br>&lt;/div&gt;<br>&lt;% &#125; %&gt;<br>...<br></code></pre></td></tr></table></figure>
+                <hr />
+<p>title: cpp6 Strings
+date: 2025-01-18 15:59:59
+tags: C++
+categories:</p>
+<ul>
+<li>C++</li>
+<li>NTU Note
+keywords:
+excerpt: Characters and Strings</li>
+</ul>
+<hr />
+<h1 id="characters-and-strings"><a class="markdownIt-Anchor" href="#characters-and-strings"></a> Characters and Strings</h1>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://www3.ntu.edu.sg/home/ehchua/programming/cpp/cp9_String.html">https://www3.ntu.edu.sg/home/ehchua/programming/cpp/cp9_String.html</a></p>
+</blockquote>
+<h4 id="strings-the-c-string-and-the-string-class"><a class="markdownIt-Anchor" href="#strings-the-c-string-and-the-string-class"></a> Strings: The C-String and the string class</h4>
+<ul>
+<li><strong>C-String Literals</strong></li>
+</ul>
+<div class="note note-warning">
+            <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-type">char</span> * str1 = <span class="hljs-string">&quot;hello&quot;</span>;<br>          <span class="hljs-comment">// warning: deprecated conversion from string constant to &#x27;char*&#x27;</span><br>   <span class="hljs-type">char</span> * str2 = <span class="hljs-built_in">const_cast</span>&lt;<span class="hljs-type">char</span> *&gt;(<span class="hljs-string">&quot;hello&quot;</span>);   <span class="hljs-comment">// remove the &quot;const&quot;</span><br></code></pre></td></tr></table></figure><p>Those two statements are dangerous. String literal &quot;hello&quot; is stored in <strong>read-only memory</strong>. Now you assign a non-const pointer to point to this area. If you try to modify this string literal, it will crash your program.</p>
+          </div>
+<div class="note note-success">
+            <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-type">const</span> <span class="hljs-type">char</span> * str3 = <span class="hljs-string">&quot;hello&quot;</span>;<br><span class="hljs-comment">// *(str3 + 1) = &#x27;a&#x27;;  // error: assignment of read-only location &#x27;*(str3 + 1u)&#x27;</span><br><br><span class="hljs-comment">// Creates a modifiable copy</span><br><span class="hljs-type">char</span> str4[] = <span class="hljs-string">&quot;hello&quot;</span>;<br>str4[<span class="hljs-number">1</span>] = <span class="hljs-string">&#x27;a&#x27;</span>;<br><br><span class="hljs-type">const</span> <span class="hljs-type">char</span> str5[] = <span class="hljs-string">&quot;hello&quot;</span>;<br><span class="hljs-comment">//  str5[1] = &#x27;a&#x27;;   // error: assignment of read-only location &#x27;str5[1]&#x27;</span><br></code></pre></td></tr></table></figure><p>Those are correct!</p>
+          </div>
+<ul>
+<li><strong>C++'s string class</strong></li>
+</ul>
+<p>See <a target="_blank" rel="noopener" href="https://www3.ntu.edu.sg/home/ehchua/programming/cpp/cp9_String.html">NTU Notes</a> for details.</p>
+<h4 id="the-c-string-input-methods"><a class="markdownIt-Anchor" href="#the-c-string-input-methods"></a> The C-String Input Methods</h4>
+<p>C-string has three input methods: stream extraction operator (<code>&gt;&gt;</code>), <code>getline()</code> and <code>get()</code>.</p>
+<div class="note note-info">
+            <blockquote><p>What's the difference between those three methods?</p></blockquote><ul><li><code>istream's</code> Overloaded Stream Extraction Operator (&gt;&gt;)</li></ul><p>Stream extraction operator does not discard the trailing whitespace(blank, tab, newline), and leave it in the input buffer.</p><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-type">const</span> <span class="hljs-type">int</span> SIZE = <span class="hljs-number">5</span>;<br><span class="hljs-type">char</span> str[SIZE];    <span class="hljs-comment">// max strlen is SIZE - 1</span><br><br>cout &lt;&lt; <span class="hljs-string">&quot;Enter a word: &quot;</span>;<br><span class="hljs-comment">// Extract SIZE-1 characters at most</span><br>cin &gt;&gt; <span class="hljs-built_in">setw</span>(SIZE) &gt;&gt; str;   <span class="hljs-comment">// need &lt;iomanip&gt; header</span><br>cout &lt;&lt; str &lt;&lt; endl;<br></code></pre></td></tr></table></figure><p>You may need to flush the input buffer:</p><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-comment">// Ignore to the end-of-file</span><br>cin.<span class="hljs-built_in">ignore</span>(numeric_limits&lt;streamsize&gt;::<span class="hljs-built_in">max</span>());  <span class="hljs-comment">// need header &lt;limits&gt;</span><br><br><span class="hljs-comment">// Ignore to the end-of-line</span><br>cin.<span class="hljs-built_in">ignore</span>(numeric_limits&lt;streamsize&gt;::<span class="hljs-built_in">max</span>(), <span class="hljs-string">&#x27;\n&#x27;</span>);<br></code></pre></td></tr></table></figure><ul><li><code>istream::getline()</code></li></ul><p>The delimiter, if found, is extracted and discarded from input stream.</p><p>If <code>n-1</code> character is read and the next character is not delimit, then the <code>failbit</code> (of the <code>istream</code>) is set. You can check the <code>failbit</code> via <code>bool</code> function <code>cin.fail()</code>. You need to <strong>clear the error bits before issuing another <code>getline()</code> call</strong>.</p><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-type">const</span> <span class="hljs-type">int</span> SIZE = <span class="hljs-number">5</span>;<br><span class="hljs-type">char</span> str[SIZE];    <span class="hljs-comment">// max strlen is SIZE - 1</span><br> <br>cout &lt;&lt; <span class="hljs-string">&quot;Enter a line: &quot;</span>;<br>cin.<span class="hljs-built_in">getline</span>(str, SIZE);     <span class="hljs-comment">// Read a line (including whitespaces) until newline, discard newline</span><br>cout &lt;&lt; <span class="hljs-string">&quot;\&quot;&quot;</span> &lt;&lt; str &lt;&lt; <span class="hljs-string">&quot;\&quot; length=&quot;</span> &lt;&lt; <span class="hljs-built_in">strlen</span>(str) &lt;&lt; endl;<br>cout &lt;&lt; <span class="hljs-string">&quot;Number of characters extracted: &quot;</span> &lt;&lt; cin.<span class="hljs-built_in">gcount</span>() &lt;&lt; endl;<br> <br><span class="hljs-keyword">if</span> (cin.<span class="hljs-built_in">fail</span>()) &#123;<br>   cout &lt;&lt; <span class="hljs-string">&quot;failbit is set!&quot;</span> &lt;&lt; endl;<br>   cin.<span class="hljs-built_in">clear</span>();   <span class="hljs-comment">// Clear all error bits. Otherwise, subsequent getline() fails</span><br>&#125;<br></code></pre></td></tr></table></figure><ul><li><code>istream::get()</code></li></ul><p><code>get(str, n, delim)</code> is similar to <code>getline(str, n, delim)</code>, except that the <code>delim</code> character is not extracted and remains in the input stream.</p>
+          </div>
 
                 
               </div>
@@ -294,34 +318,6 @@
             <div>
               <div class="post-metas my-3">
   
-    <div class="post-meta mr-3 d-flex align-items-center">
-      <i class="iconfont icon-category"></i>
-      
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/hexo/" class="category-chain-item">hexo</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-    </div>
-  
-  
-    <div class="post-meta">
-      <i class="iconfont icon-tags"></i>
-      
-        <a href="/tags/hexo/" class="print-no-link">#hexo</a>
-      
-    </div>
   
 </div>
 
@@ -331,8 +327,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>hexo解析图片路径</div>
-      <div>http://oooscar8.github.io/2025/02/20/hexo-blog/</div>
+      <div>Cpp6 Strings</div>
+      <div>http://oooscar8.github.io/2025/02/20/cpp6-Strings/</div>
     </div>
     <div class="license-meta">
       
@@ -376,12 +372,18 @@
                   <article class="post-prev col-6">
                     
                     
+                      <a href="/2025/02/20/cpp5-Template/" title="Cpp5 Template">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Cpp5 Template</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2025/02/20/cpp10-DS/" title="Cpp10 DS">
-                        <span class="hidden-mobile">Cpp10 DS</span>
+                      <a href="/2025/02/20/cpp7-STL/" title="Cpp7 STL">
+                        <span class="hidden-mobile">Cpp7 STL</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
@@ -401,8 +403,8 @@
     
       <script type="text/javascript">
         var disqus_config = function() {
-          this.page.url = 'http://oooscar8.github.io/2025/02/20/hexo-blog/';
-          this.page.identifier = '/2025/02/20/hexo-blog/';
+          this.page.url = 'http://oooscar8.github.io/2025/02/20/cpp6-Strings/';
+          this.page.identifier = '/2025/02/20/cpp6-Strings/';
         };
         Fluid.utils.loadComments('#disqus_thread', function() {
           var d = document, s = d.createElement('script');

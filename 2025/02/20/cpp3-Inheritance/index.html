@@ -19,22 +19,21 @@
   <meta name="author" content="Alex Sun">
   <meta name="keywords" content="">
   
-    <meta name="description" content="如何更改hexo解析文章中图片路径的方式">
+    <meta name="description" content="title: cpp3 Inheritance date: 2025-01-18 15:59:22 tags: C++ categories:  C++ NTU Note keywords: excerpt: Inheritance and Polymophism    Inheritance and Polymophism  https:&#x2F;&#x2F;www3.ntu.edu.sg&#x2F;home&#x2F;ehchu">
 <meta property="og:type" content="article">
-<meta property="og:title" content="hexo解析图片路径">
-<meta property="og:url" content="http://oooscar8.github.io/2025/02/20/hexo-blog/index.html">
+<meta property="og:title" content="Cpp3 Inheritance">
+<meta property="og:url" content="http://oooscar8.github.io/2025/02/20/cpp3-Inheritance/index.html">
 <meta property="og:site_name" content="Alex&#39;s Space">
-<meta property="og:description" content="如何更改hexo解析文章中图片路径的方式">
+<meta property="og:description" content="title: cpp3 Inheritance date: 2025-01-18 15:59:22 tags: C++ categories:  C++ NTU Note keywords: excerpt: Inheritance and Polymophism    Inheritance and Polymophism  https:&#x2F;&#x2F;www3.ntu.edu.sg&#x2F;home&#x2F;ehchu">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2025-02-19T20:06:11.000Z">
-<meta property="article:modified_time" content="2025-02-20T18:31:30.746Z">
+<meta property="article:published_time" content="2025-02-19T18:31:30.000Z">
+<meta property="article:modified_time" content="2025-02-20T18:31:30.663Z">
 <meta property="article:author" content="Alex Sun">
-<meta property="article:tag" content="hexo">
 <meta name="twitter:card" content="summary_large_image">
   
   
   
-  <title>hexo解析图片路径 - Alex&#39;s Space</title>
+  <title>Cpp3 Inheritance - Alex&#39;s Space</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -200,7 +199,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="hexo解析图片路径"></span>
+            <span id="subtitle" data-typed-text="Cpp3 Inheritance"></span>
           
         </div>
 
@@ -211,7 +210,7 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2025-02-20 04:06" pubdate>
+        <time datetime="2025-02-20 02:31" pubdate>
           2025年2月20日 凌晨
         </time>
       </span>
@@ -223,7 +222,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          228 字
+          189 字
         
       </span>
     
@@ -271,21 +270,71 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">hexo解析图片路径</h1>
+            <h1 id="seo-header">Cpp3 Inheritance</h1>
             
             
               <div class="markdown-body">
                 
-                <h1 id="hexo解析图片路径"><a class="markdownIt-Anchor" href="#hexo解析图片路径"></a> hexo解析图片路径</h1>
-<figure class="highlight gcode"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs gcode">hexo-code/<br>├── source/<br>│   ├── _posts/<br>│   │   ├── example.md<br>│   │   ├── imgs/  <span class="hljs-comment">(软链接)</span><br>│   ├── imgs/  <span class="hljs-comment">(实际存放图片的目录)</span><br></code></pre></td></tr></table></figure>
-<p>以上是我的hexo源文件结构，文章放在source/_posts/目录下，文章的图片放在source/imgs/目录下，因此文章中的图片通过相对路径../imgs访问图片。</p>
-<p>hexo需要用绝对路径解析图片，因此我需要在<code>hexo g</code>的时候将文章中图片的相对路径<code>../imgs</code>解析为绝对路径<code>/imgs</code>：</p>
-<p>在主题的<code>post.ejs</code>文件中，替换</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ejs">&lt;%- page.content %&gt;<br></code></pre></td></tr></table></figure>
-<p>为：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ejs">&lt;%- page.content.replace(/\.\.\/imgs\//g, &#x27;/imgs/&#x27;) %&gt;<br></code></pre></td></tr></table></figure>
-<p>也就是：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs ejs">...<br>&lt;% if (page.encrypt === true) &#123; %&gt;<br>&lt;%- inject_point(&#x27;postMarkdownBegin&#x27;) %&gt;<br>&lt;%- page.content.replace(/\.\.\/imgs\//g, &#x27;/imgs/&#x27;) %&gt;<br>&lt;%- partial(&#x27;_partials/plugins/encrypt&#x27;) %&gt;<br>&lt;%- inject_point(&#x27;postMarkdownEnd&#x27;) %&gt;<br>&lt;% &#125; else &#123; %&gt;<br>&lt;div class=&quot;markdown-body&quot;&gt;<br>    &lt;%- inject_point(&#x27;postMarkdownBegin&#x27;) %&gt;<br>    &lt;%- page.content.replace(/\.\.\/imgs\//g, &#x27;/imgs/&#x27;) %&gt;<br>    &lt;%- inject_point(&#x27;postMarkdownEnd&#x27;) %&gt;<br>&lt;/div&gt;<br>&lt;% &#125; %&gt;<br>...<br></code></pre></td></tr></table></figure>
+                <hr />
+<p>title: cpp3 Inheritance
+date: 2025-01-18 15:59:22
+tags: C++
+categories:</p>
+<ul>
+<li>C++</li>
+<li>NTU Note
+keywords:
+excerpt: Inheritance and Polymophism</li>
+</ul>
+<hr />
+<h1 id="inheritance-and-polymophism"><a class="markdownIt-Anchor" href="#inheritance-and-polymophism"></a> Inheritance and Polymophism</h1>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://www3.ntu.edu.sg/home/ehchua/programming/cpp/cp6_Inheritance.html">https://www3.ntu.edu.sg/home/ehchua/programming/cpp/cp6_Inheritance.html</a></p>
+</blockquote>
+<h4 id="inheritance"><a class="markdownIt-Anchor" href="#inheritance"></a> Inheritance</h4>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">SubclassName</span> : inheritance-access-specifier SuperclassName &#123;<br>   ......<br>&#125;;<br></code></pre></td></tr></table></figure>
+<ul>
+<li><strong>Access Specifier:</strong></li>
+</ul>
+<p>A <code>private</code> member is accessible within the <strong>class</strong> by member functions and by <strong><em>friends</em> of that class</strong>.</p>
+<p>A <code>public</code> member is accessible by all.</p>
+<p>A <code>protected</code> member can be accessed by <strong>itself and its friend</strong>, as well as its <strong>subclasses and their friends</strong>.</p>
+<ul>
+<li><strong>Inheritance Access Specifier:</strong></li>
+</ul>
+<p><code>public</code>-inheritance(most common): <code>public</code> members in the superclass becomes <code>public</code> members in the derived class; <code>protected</code> members in the base class become <code>protected</code> member in the derived class.</p>
+<p><code>protected</code>-inheritance: <code>public</code> and <code>protected</code> members in the base class become <code>protected</code> members in the derived class.</p>
+<p><code>private</code>-inheritance: <code>public</code> and <code>protected</code> members in the base class become <code>private</code> member in the derived class.</p>
+<div class="note note-info">
+            <p>When the subclass construct its instance, it must first construct a superclass object, which it inherited.</p>
+          </div>
+<h4 id="polymorphism"><a class="markdownIt-Anchor" href="#polymorphism"></a> Polymorphism</h4>
+<blockquote>
+<p>One interface, multiple implementations. Use virtual functions.</p>
+</blockquote>
+<div class="note note-info">
+            <p>Polymorphism works on <strong>object pointers</strong> and <strong>references</strong> using so-called <strong>dynamic binding at run-time</strong>.</p><p>Does not work on regular objects, which uses <strong>static binding</strong> during the compile-time:</p><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-comment">// Using object with explicit constructor</span><br>   Point p3 = <span class="hljs-built_in">MovablePoint</span>(<span class="hljs-number">31</span>, <span class="hljs-number">32</span>, <span class="hljs-number">33</span>, <span class="hljs-number">34</span>);  <span class="hljs-comment">// upcast</span><br>   p3.<span class="hljs-built_in">print</span>();     <span class="hljs-comment">// Point @ (31,32) - Run superclass version!!</span><br>   cout &lt;&lt; endl;<br></code></pre></td></tr></table></figure><p><strong>Virtual Functions:</strong> To implement polymorphism, we need to use the keyword <code>virtual</code> for functions that are meant to be polymorphic.</p><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-comment">// Point.h</span><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Point</span> &#123;<br>   ......<br>   <span class="hljs-function"><span class="hljs-keyword">virtual</span> <span class="hljs-type">void</span> <span class="hljs-title">print</span><span class="hljs-params">()</span> <span class="hljs-type">const</span></span>;<br>&#125;<br></code></pre></td></tr></table></figure><p>It is recommended that functions to be <strong>overridden</strong> in the subclass be declared <code>virtual</code> in the superclass.</p><p>Constructor can't be <code>virtual</code>, because it is not inherited. Subclass defines its own constructor, which <strong>invokes the superclass constructor</strong> to initialize the inherited data members.</p><p>Destructor should be declared virtual, if a class is to be used as a superclass, so that the appropriate object destructor is invoked to free the dynamically allocated memory in the subclass, if any.</p><p>If you override function in the subclass, the overridden function shall have the <strong>same parameter list</strong> as the superclass' version.</p>
+          </div>
+<ul>
+<li><strong>Pure Virtual Function</strong></li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-keyword">virtual</span> <span class="hljs-type">double</span> <span class="hljs-title">getArea</span><span class="hljs-params">()</span> </span>= <span class="hljs-number">0</span>;  <span class="hljs-comment">// Pure virtual function, to be implemented by subclass</span><br></code></pre></td></tr></table></figure>
+<p>The <code>=0</code> simply make the class <em>abstract</em>. As the result, you cannot create instances.</p>
+<div class="note note-danger">
+            <p>const object cannot invoke non-const member function</p><p>const data member can only be initialized by the constructor using <em>member initializer list</em></p>
+          </div>
+<h4 id="friend-function-and-friend-class"><a class="markdownIt-Anchor" href="#friend-function-and-friend-class"></a> <code>friend</code> function and <code>friend</code> class</h4>
+<ul>
+<li><strong>friend function</strong></li>
+</ul>
+<p>Friend functions are declared inside the class and are implemented outside the class.</p>
+<p>Friend functions are not the members of the class, but their arguments of the class can access all class members.</p>
+<p>Friend functions will not be inherited by the subclass. Friends can't be virtual, as friends are not class member.</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Point</span> &#123;<br>   <span class="hljs-comment">// A friend function defined outside this class, but its argument of</span><br>   <span class="hljs-comment">// this class can access all class members (including private members).</span><br>   <span class="hljs-function"><span class="hljs-keyword">friend</span> <span class="hljs-type">void</span> <span class="hljs-title">set</span><span class="hljs-params">(Point &amp; point, <span class="hljs-type">int</span> x, <span class="hljs-type">int</span> y)</span></span>;  <span class="hljs-comment">// prototype</span><br><span class="hljs-keyword">private</span>:<br>   <span class="hljs-type">int</span> x, y;<br><span class="hljs-keyword">public</span>:<br>   <span class="hljs-built_in">Point</span>(<span class="hljs-type">int</span> x = <span class="hljs-number">0</span>, <span class="hljs-type">int</span> y = <span class="hljs-number">0</span>) : <span class="hljs-built_in">x</span>(x), <span class="hljs-built_in">y</span>(y) &#123; &#125;<br>   <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">print</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>&#123; cout &lt;&lt; <span class="hljs-string">&quot;(&quot;</span> &lt;&lt; x &lt;&lt; <span class="hljs-string">&quot;,&quot;</span> &lt;&lt; y &lt;&lt; <span class="hljs-string">&quot;)&quot;</span> &lt;&lt; endl; &#125;<br>&#125;;<br> <br><span class="hljs-comment">// Friend function is defined outside the class</span><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">set</span><span class="hljs-params">(Point &amp; point, <span class="hljs-type">int</span> x, <span class="hljs-type">int</span> y)</span> </span>&#123;<br>  point.x = x;  <span class="hljs-comment">// can access private data x and y</span><br>  point.y = y;<br>&#125;<br></code></pre></td></tr></table></figure>
+<ul>
+<li><strong>friend class</strong></li>
+</ul>
+<p>To declare all member functions of a class (says <code>Class1</code>) friend functions of another class (says <code>Class2</code>), declared &quot;<code>friend class Class1;</code>&quot; in <code>Class2</code>.</p>
 
                 
               </div>
@@ -294,34 +343,6 @@
             <div>
               <div class="post-metas my-3">
   
-    <div class="post-meta mr-3 d-flex align-items-center">
-      <i class="iconfont icon-category"></i>
-      
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/hexo/" class="category-chain-item">hexo</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-    </div>
-  
-  
-    <div class="post-meta">
-      <i class="iconfont icon-tags"></i>
-      
-        <a href="/tags/hexo/" class="print-no-link">#hexo</a>
-      
-    </div>
   
 </div>
 
@@ -331,8 +352,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>hexo解析图片路径</div>
-      <div>http://oooscar8.github.io/2025/02/20/hexo-blog/</div>
+      <div>Cpp3 Inheritance</div>
+      <div>http://oooscar8.github.io/2025/02/20/cpp3-Inheritance/</div>
     </div>
     <div class="license-meta">
       
@@ -376,12 +397,18 @@
                   <article class="post-prev col-6">
                     
                     
+                      <a href="/2025/02/20/cpp10-DS/" title="Cpp10 DS">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Cpp10 DS</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2025/02/20/cpp10-DS/" title="Cpp10 DS">
-                        <span class="hidden-mobile">Cpp10 DS</span>
+                      <a href="/2025/02/20/cpp4-Operator-Overload/" title="Cpp4 Operator Overload">
+                        <span class="hidden-mobile">Cpp4 Operator Overload</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
@@ -401,8 +428,8 @@
     
       <script type="text/javascript">
         var disqus_config = function() {
-          this.page.url = 'http://oooscar8.github.io/2025/02/20/hexo-blog/';
-          this.page.identifier = '/2025/02/20/hexo-blog/';
+          this.page.url = 'http://oooscar8.github.io/2025/02/20/cpp3-Inheritance/';
+          this.page.identifier = '/2025/02/20/cpp3-Inheritance/';
         };
         Fluid.utils.loadComments('#disqus_thread', function() {
           var d = document, s = d.createElement('script');

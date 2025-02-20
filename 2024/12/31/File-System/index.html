@@ -50,7 +50,7 @@
 <meta property="og:image" content="http://oooscar8.github.io/2024/12/31/imgs/202501051545857-1740072306166-22.png">
 <meta property="og:image" content="http://oooscar8.github.io/2024/12/31/imgs/image-20250105155149962-1740072306166-23.png">
 <meta property="article:published_time" content="2024-12-30T16:00:00.000Z">
-<meta property="article:modified_time" content="2025-02-20T17:31:02.482Z">
+<meta property="article:modified_time" content="2025-02-20T18:31:30.746Z">
 <meta property="article:author" content="Alex Sun">
 <meta property="article:tag" content="OS">
 <meta property="article:tag" content="File System">
@@ -249,7 +249,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          577 字
+          564 字
         
       </span>
     
@@ -396,13 +396,9 @@
 <p>How to translate logical block(issued by the client) into physical page(on the actual SSD device)?</p>
 </blockquote>
 <p>FTL maintains a in-memory mapping table.</p>
-<blockquote>
-<p>[!IMPORTANT]</p>
-<blockquote>
-<p>What happens when the client(file system) writes a page to the SSD?</p>
-</blockquote>
-<p>When the client writes to the SSD, The SSD picks the <strong>next free page</strong> and programs the page with the block's contents, and records the <strong>logical-to-physical mapping</strong> in its mapping table.</p>
-</blockquote>
+<div class="note note-primary">
+            <blockquote><p>What happens when the client(file system) writes a page to the SSD?</p></blockquote><p>When the client writes to the SSD, The SSD picks the <strong>next free page</strong> and programs the page with the block's contents, and records the <strong>logical-to-physical mapping</strong> in its mapping table.</p>
+          </div>
 <h3 id="three-major-problems-with-log-structured-ftl"><a class="markdownIt-Anchor" href="#three-major-problems-with-log-structured-ftl"></a> Three major problems with log-structured FTL</h3>
 <ul>
 <li><strong>Cost of Garbage Collection</strong></li>
@@ -497,49 +493,37 @@
 <p>The system may crash or lose power at any time during disk operations, and thus the on-disk state may only partially get updated. How do we ensure the file system <strong>keeps the on-disk image in a reasonable state</strong>?</p>
 </blockquote>
 <h3 id="solution-1-the-file-system-checker"><a class="markdownIt-Anchor" href="#solution-1-the-file-system-checker"></a> Solution #1: The File System Checker</h3>
-<blockquote>
-<p>[!TIP]</p>
-<p>Let inconsistencies happen and then fix them later (when rebooting).</p>
-<p>By consistency, we mean that the file system <strong>metadata is internally consistent</strong>.</p>
-</blockquote>
+<div class="note note-success">
+            <p>Let inconsistencies happen and then fix them later (when rebooting).</p><p>By consistency, we mean that the file system <strong>metadata is internally consistent</strong>.</p>
+          </div>
 <p><code>fsck</code> is a UNIX tool for finding such inconsistencies and repairing them:</p>
 <ul>
 <li>
 <p><strong>Superblock</strong>: Check if the superblock looks suspicious and use an alternate copy of the superblock if it finds a suspect superblock.</p>
-<blockquote>
-<p>[!NOTE]</p>
-<p>Recall that each block group has a copy of the superblock.</p>
-</blockquote>
+<div class="note note-info">
+            <p>Recall that each block group has a copy of the superblock.</p>
+          </div>
 </li>
 <li>
 <p><strong>Free blocks</strong>: Produce a <strong>correct version of the allocation bitmaps</strong> by scanning the <code>inodes</code>, indirect blocks, double indirect blocks, …, to resolve any inconsistency between bitmaps and <code>inodes</code>.</p>
-<blockquote>
-<p>[!NOTE]</p>
-<p>For now, we trust the information with the <code>inodes</code>.</p>
-</blockquote>
+<div class="note note-info">
+            <p>For now, we trust the information with the <code>inodes</code>.</p>
+          </div>
 </li>
 <li>
 <p><strong><code>Inode</code> state</strong>: Check each <code>inode</code>, clear the suspected <code>inode</code> and update the <code>inode</code> bitmap correspondingly.</p>
-<blockquote>
-<p>[!NOTE]</p>
-<p>The information within the <code>inodes</code> can be corrupted.</p>
-</blockquote>
+<div class="note note-info">
+            <p>The information within the <code>inodes</code> can be corrupted.</p>
+          </div>
 </li>
 <li>
 <p><strong><code>Inode</code> links</strong>: Verify the link count of each allocated <code>inode</code>.</p>
-<blockquote>
-<p>[!NOTE]</p>
-<p>Recall that the link count indicates the number of different directories that contain a reference (i.e., a link) to this particular file.</p>
-</blockquote>
-<blockquote>
-<p>[!IMPORTANT]</p>
-<blockquote>
-<p>Aside: What's the difference between hard link and symbolic link?</p>
-</blockquote>
-<p>Symbolic Link: A symbolic link is a special type of file(like regular files and directories), which stores the path name(string) of the target file. It has its own <code>inode</code>: <code>symlink's inode</code>.</p>
-<p>Hard Link: Different directory's entries point to the same <code>inode</code> and are calculated by link count. Deleting the file will decrease the link count by 1.</p>
-<figure class="highlight xl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs xl">Symbolic Link:<br><span class="hljs-function"><span class="hljs-title">dir</span> entry -&gt;</span> <span class="hljs-function"><span class="hljs-title">symlink</span>&#x27;s inode -&gt;</span> (存储路径字符串: <span class="hljs-string">&quot;/path/to/target&quot;</span>)<br><br>Hard Link:<br>dir entry <span class="hljs-number">1</span> ──┐<br><span class="hljs-function"><span class="hljs-title">dir</span> entry 2 ──┴─&gt; target&#x27;s inode -&gt;</span> (实际数据)<br></code></pre></td></tr></table></figure>
-</blockquote>
+<div class="note note-info">
+            <p>Recall that the link count indicates the number of different directories that contain a reference (i.e., a link) to this particular file.</p>
+          </div>
+<div class="note note-primary">
+            <blockquote><p>Aside: What's the difference between hard link and symbolic link?</p></blockquote><p>Symbolic Link: A symbolic link is a special type of file(like regular files and directories), which stores the path name(string) of the target file. It has its own <code>inode</code>: <code>symlink's inode</code>.</p><p>Hard Link: Different directory's entries point to the same <code>inode</code> and are calculated by link count. Deleting the file will decrease the link count by 1.</p><figure class="highlight xl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs xl">Symbolic Link:<br><span class="hljs-function"><span class="hljs-title">dir</span> entry -&gt;</span> <span class="hljs-function"><span class="hljs-title">symlink</span>&#x27;s inode -&gt;</span> (存储路径字符串: <span class="hljs-string">&quot;/path/to/target&quot;</span>)<br><br>Hard Link:<br>dir entry <span class="hljs-number">1</span> ──┐<br><span class="hljs-function"><span class="hljs-title">dir</span> entry 2 ──┴─&gt; target&#x27;s inode -&gt;</span> (实际数据)<br></code></pre></td></tr></table></figure>
+          </div>
 </li>
 <li>
 <p><strong>Duplicates</strong>: Check for duplicated pointers, i.e., cases where two different <code>inodes</code> refer to the same block.</p>
@@ -618,10 +602,9 @@
 </li>
 <li>
 <p><strong>Journal metadata write</strong>: Write the begin block and metadata to the log; wait for writes to complete.</p>
-<blockquote>
-<p>[!CAUTION]</p>
-<p><strong>Step 3 should wait for step 1&amp;2 to complete!</strong> Step 1 and Step 2 and run concurrently.</p>
-</blockquote>
+<div class="note note-danger">
+            <p><strong>Step 3 should wait for step 1&amp;2 to complete!</strong> Step 1 and Step 2 and run concurrently.</p>
+          </div>
 </li>
 <li>
 <p><strong>Journal commit</strong>: Write the transaction commit block (containing <code>TxE</code>) to the log; wait for the write to complete.</p>
@@ -634,10 +617,9 @@
 <p><strong>Free</strong>: Later, mark the transaction free in journal superblock.</p>
 </li>
 </ol>
-<blockquote>
-<p>[!TIP]</p>
-<p>The rule is: Write the pointed-to object before the object that points to it!</p>
-</blockquote>
+<div class="note note-success">
+            <p>The rule is: Write the pointed-to object before the object that points to it!</p>
+          </div>
 <p>Linux ext3 gives you the option of choosing either <strong>data, ordered, or unordered modes</strong> (in unordered mode, data can be written at any time).</p>
 <h2 id="log-structured-file-systems"><a class="markdownIt-Anchor" href="#log-structured-file-systems"></a> Log-structured File Systems</h2>
 <h3 id="write-to-disk-sequentially"><a class="markdownIt-Anchor" href="#write-to-disk-sequentially"></a> Write to disk sequentially</h3>
@@ -652,16 +634,14 @@
 <blockquote>
 <p>How to find <code>inodes</code> in LFS?</p>
 </blockquote>
-<blockquote>
-<p>[!NOTE]</p>
-<p>Recall in FFS we split up the <code>inode</code> table into chunks and places a group of <code>inodes</code> within each cylinder group. So we need to know the address and size of each <code>inode</code> chunk before calculating the address of an <code>inode</code>.</p>
-</blockquote>
+<div class="note note-info">
+            <p>Recall in FFS we split up the <code>inode</code> table into chunks and places a group of <code>inodes</code> within each cylinder group. So we need to know the address and size of each <code>inode</code> chunk before calculating the address of an <code>inode</code>.</p>
+          </div>
 <p>Finding <code>inodes</code> in old Unix file system or FFS is simple because all <code>inodes</code> are placed in a fixed area on disk. You can simply calculate an <code>inode</code>'s location given its <code>inode</code> number. However, in LFS, <code>inodes</code> are all across the disk and we never overwrite any <code>inode</code> so the latest version of an <code>inode</code> keeps moving.</p>
 <p>LFS introduces the <strong><code>inode</code> map (<code>imap</code>)</strong>. The <code>imap</code> is a structure that takes an <code>inode</code> number as input and produces the disk address of the most recent version of the <code>inode</code>.</p>
-<blockquote>
-<p>[!NOTE]</p>
-<p>Note that the <code>inode</code> map in LFS is a virtualization of <code>inode</code> numbers.</p>
-</blockquote>
+<div class="note note-info">
+            <p>Note that the <code>inode</code> map in LFS is a virtualization of <code>inode</code> numbers.</p>
+          </div>
 <p>LFS places chunks of the <code>inode</code> map right next to where it is writing all of the other new information to avoid frequent disk seeks:</p>
 <img src="/imgs/202501051545857-1740072306166-22.png" srcset="/img/loading.gif" lazyload alt="image-20250105154514665" style="zoom:80%;" />
 <blockquote>
@@ -671,10 +651,9 @@
 <p>LFS has a fixed place on disk, known as the <strong>checkpoint region (CR)</strong>, containing pointers to the latest pieces of the <code>inode</code> map.</p>
 <img src="/imgs/image-20250105155149962-1740072306166-23.png" srcset="/img/loading.gif" lazyload alt="image-20250105155149962" style="zoom:80%;" />
 <p>The entire <code>imap</code> is usually cached in memory, so the extra work LFS does during a read is to look up the <code>inode</code>’s address in the <code>imap</code>.</p>
-<blockquote>
-<p>[!NOTE]</p>
-<p>The <code>imap</code> also solves the <strong>recursive update problem</strong>. While an <code>inode</code> keeps moving across the disk, its <code>inode</code> number remains unchanged. Only the <code>imap</code> structure is updated while the directory holds the same <code>name-to-inode-number</code> mapping.</p>
-</blockquote>
+<div class="note note-info">
+            <p>The <code>imap</code> also solves the <strong>recursive update problem</strong>. While an <code>inode</code> keeps moving across the disk, its <code>inode</code> number remains unchanged. Only the <code>imap</code> structure is updated while the directory holds the same <code>name-to-inode-number</code> mapping.</p>
+          </div>
 <h3 id="garbage-collection"><a class="markdownIt-Anchor" href="#garbage-collection"></a> Garbage Collection</h3>
 <blockquote>
 <p>How to collect garbage in LFS?</p>
@@ -786,9 +765,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2025/01/18/cpp2-OOP-Basics/" title="cpp2 OOP Basics">
+                      <a href="/2025/01/18/cpp0-C-Basics/" title="cpp0 C Basics">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">cpp2 OOP Basics</span>
+                        <span class="hidden-mobile">cpp0 C Basics</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -796,8 +775,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2024/12/27/Chapter1/" title="Chapter1">
-                        <span class="hidden-mobile">Chapter1</span>
+                      <a href="/2024/10/22/OS161-A4/" title="OS161 Assignment 4">
+                        <span class="hidden-mobile">OS161 Assignment 4</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
@@ -808,6 +787,34 @@
             </div>
 
             
+  
+  
+    <article id="comments" lazyload>
+      
+  <div class="disqus" style="width:100%">
+    <div id="disqus_thread"></div>
+    
+      <script type="text/javascript">
+        var disqus_config = function() {
+          this.page.url = 'http://oooscar8.github.io/2024/12/31/File-System/';
+          this.page.identifier = '/2024/12/31/File-System/';
+        };
+        Fluid.utils.loadComments('#disqus_thread', function() {
+          var d = document, s = d.createElement('script');
+          s.src = '//' + 'fluid' + '.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', new Date());
+          (d.head || d.body).appendChild(s);
+        });
+      </script>
+    
+    <noscript>Please enable JavaScript to view the comments</noscript>
+  </div>
+
+
+    </article>
+  
+
+
           </article>
         </div>
       </div>

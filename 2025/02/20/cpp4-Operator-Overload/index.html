@@ -1,0 +1,710 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Alex Sun">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="title: cpp4 Operator Overloading date: 2025-01-18 15:59:38 tags: C++ categories:  C++ NTU Note keywords: excerpt: Operator Overloading    Operator Overloading  https:&#x2F;&#x2F;www3.ntu.edu.sg&#x2F;home&#x2F;ehchua&#x2F;pro">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Cpp4 Operator Overload">
+<meta property="og:url" content="http://oooscar8.github.io/2025/02/20/cpp4-Operator-Overload/index.html">
+<meta property="og:site_name" content="Alex&#39;s Space">
+<meta property="og:description" content="title: cpp4 Operator Overloading date: 2025-01-18 15:59:38 tags: C++ categories:  C++ NTU Note keywords: excerpt: Operator Overloading    Operator Overloading  https:&#x2F;&#x2F;www3.ntu.edu.sg&#x2F;home&#x2F;ehchua&#x2F;pro">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-02-19T18:31:30.000Z">
+<meta property="article:modified_time" content="2025-02-20T18:31:30.663Z">
+<meta property="article:author" content="Alex Sun">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>Cpp4 Operator Overload - Alex&#39;s Space</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"oooscar8.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.1.1"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Alex&#39;s Space</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/imgs/chuyin.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Cpp4 Operator Overload"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-02-20 02:31" pubdate>
+          2025年2月20日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          689 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          6 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Cpp4 Operator Overload</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <hr />
+<p>title: cpp4 Operator Overloading
+date: 2025-01-18 15:59:38
+tags: C++
+categories:</p>
+<ul>
+<li>C++</li>
+<li>NTU Note
+keywords:
+excerpt: Operator Overloading</li>
+</ul>
+<hr />
+<h1 id="operator-overloading"><a class="markdownIt-Anchor" href="#operator-overloading"></a> Operator Overloading</h1>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://www3.ntu.edu.sg/home/ehchua/programming/cpp/cp7_OperatorOverloading.html">https://www3.ntu.edu.sg/home/ehchua/programming/cpp/cp7_OperatorOverloading.html</a></p>
+</blockquote>
+<h4 id="user-defined-operator-overloading"><a class="markdownIt-Anchor" href="#user-defined-operator-overloading"></a> User-defined Operator Overloading</h4>
+<p>operator function:</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">return</span>-type <span class="hljs-keyword">operator</span>Δ(parameter-list)<br></code></pre></td></tr></table></figure>
+<p>Example:</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-comment">// Member function overloading &#x27;+&#x27; operator</span><br><span class="hljs-type">const</span> Point Point::<span class="hljs-keyword">operator</span>+(<span class="hljs-type">const</span> Point &amp; rhs) <span class="hljs-type">const</span> &#123;<br>   <span class="hljs-keyword">return</span> <span class="hljs-built_in">Point</span>(x + rhs.x, y + rhs.y);<br>   <span class="hljs-comment">// Return by value as local variable cannot be returned by reference</span><br>&#125;<br></code></pre></td></tr></table></figure>
+<p>Usage:</p>
+<p><code>p1 + p2 = p1.operator+(p2)</code></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-comment">// Invoke via usual dot syntax, same as p1+p2</span><br>Point p4 = p1.<span class="hljs-keyword">operator</span>+(p2);<br>p4.<span class="hljs-built_in">print</span>();  <span class="hljs-comment">// (5,7)</span><br><br><span class="hljs-comment">// Chaining</span><br>Point p5 = p1 + p2 + p3 + p4;<br>p5.<span class="hljs-built_in">print</span>();  <span class="hljs-comment">// (15,21)</span><br></code></pre></td></tr></table></figure>
+<h4 id="overloading-operator-via-friend-non-member-function"><a class="markdownIt-Anchor" href="#overloading-operator-via-friend-non-member-function"></a> Overloading Operator via &quot;friend&quot; non-member function</h4>
+<blockquote>
+<p>Why can't we always use Member Function for Operator Overloading?</p>
+</blockquote>
+<p>You cannot use member function to overload an operator if the <strong>left operand is not an object</strong> of that particular class.</p>
+<p>Use non-member <code>friend</code> function!</p>
+<p>Example:</p>
+<div class="note note-info">
+            <p>Return type of the operator &lt;&lt;(&gt;&gt;) function is the reference of the stream object.</p>
+          </div>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-comment">// Class Declaration</span><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Point</span> &#123;<br><span class="hljs-keyword">private</span>:<br>   <span class="hljs-type">int</span> x, y;<br> <br><span class="hljs-keyword">public</span>:<br>   <span class="hljs-built_in">Point</span>(<span class="hljs-type">int</span> x = <span class="hljs-number">0</span>, <span class="hljs-type">int</span> y = <span class="hljs-number">0</span>);<br>   <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">getX</span><span class="hljs-params">()</span> <span class="hljs-type">const</span></span>; <span class="hljs-comment">// Getters</span><br>   <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">getY</span><span class="hljs-params">()</span> <span class="hljs-type">const</span></span>;<br>   <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">setX</span><span class="hljs-params">(<span class="hljs-type">int</span> x)</span></span>; <span class="hljs-comment">// Setters</span><br>   <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">setY</span><span class="hljs-params">(<span class="hljs-type">int</span> y)</span></span>;<br> <br>   <span class="hljs-keyword">friend</span> std::ostream &amp; <span class="hljs-keyword">operator</span>&lt;&lt;(std::ostream &amp; out, <span class="hljs-type">const</span> Point &amp; point);<br>   <span class="hljs-keyword">friend</span> std::istream &amp; <span class="hljs-keyword">operator</span>&gt;&gt;(std::istream &amp; in, Point &amp; point);<br>&#125;;<br><br>ostream &amp; <span class="hljs-keyword">operator</span>&lt;&lt;(ostream &amp; out, <span class="hljs-type">const</span> Point &amp; point) &#123;<br>   out &lt;&lt; <span class="hljs-string">&quot;(&quot;</span> &lt;&lt; point.x &lt;&lt; <span class="hljs-string">&quot;,&quot;</span> &lt;&lt; point.y &lt;&lt; <span class="hljs-string">&quot;)&quot;</span>;  <span class="hljs-comment">// access private data</span><br>   <span class="hljs-keyword">return</span> out;<br>&#125;<br> <br>istream &amp; <span class="hljs-keyword">operator</span>&gt;&gt;(istream &amp; in, Point &amp; point) &#123;<br>   cout &lt;&lt; <span class="hljs-string">&quot;Enter x and y coord: &quot;</span>;<br>   in &gt;&gt; point.x &gt;&gt; point.y;  <span class="hljs-comment">// access private data</span><br>   <span class="hljs-keyword">return</span> in;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>Usage:</p>
+<p><code>cout &lt;&lt; p1</code> = <code>operator&lt;&lt;(cout, p1)</code></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br>   <span class="hljs-function">Point <span class="hljs-title">p1</span><span class="hljs-params">(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>)</span>, p2</span>;<br> <br>   <span class="hljs-comment">// Using overloaded operator &lt;&lt;</span><br>   cout &lt;&lt; p1 &lt;&lt; endl;    <span class="hljs-comment">// support cascading</span><br>   <span class="hljs-keyword">operator</span>&lt;&lt;(cout, p1);  <span class="hljs-comment">// same as cout &lt;&lt; p1</span><br>   cout &lt;&lt; endl;<br> <br>   <span class="hljs-comment">// Using overloaded operator &gt;&gt;</span><br>   cin &gt;&gt; p1;<br>   cout &lt;&lt; p1 &lt;&lt; endl;<br>   <span class="hljs-keyword">operator</span>&gt;&gt;(cin, p1);  <span class="hljs-comment">// same as cin &gt;&gt; p1</span><br>   cout &lt;&lt; p1 &lt;&lt; endl;<br>   cin &gt;&gt; p1 &gt;&gt; p2;      <span class="hljs-comment">// support cascading</span><br>   cout &lt;&lt; p1 &lt;&lt; endl;<br>   cout &lt;&lt; p2 &lt;&lt; endl;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>The overloaded &gt;&gt; and &lt;&lt; can also be used for file input/output, as the file IO stream <code>ifstream</code>/<code>ofstream</code> (in <code>fstream</code> header) is a subclass of <code>istream</code>/<code>ostream</code>.</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;fstream&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;Point.h&quot;</span></span><br><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;<br> <br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br>   <span class="hljs-function">Point <span class="hljs-title">p1</span><span class="hljs-params">(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>)</span></span>;<br> <br>   <span class="hljs-function">ofstream <span class="hljs-title">fout</span><span class="hljs-params">(<span class="hljs-string">&quot;out.txt&quot;</span>)</span></span>;<br>   fout &lt;&lt; p1 &lt;&lt; endl;<br> <br>   <span class="hljs-function">ifstream <span class="hljs-title">fin</span><span class="hljs-params">(<span class="hljs-string">&quot;in.txt&quot;</span>)</span></span>; <span class="hljs-comment">// contains &quot;3 4&quot;</span><br>   fin &gt;&gt; p1;<br>   cout &lt;&lt; p1 &lt;&lt; endl;<br>&#125;<br></code></pre></td></tr></table></figure>
+<blockquote>
+<p>How to overload unary postfix operator?</p>
+</blockquote>
+<p>Introduce a &quot;dummy&quot; argument!</p>
+<p>Example:</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Counter</span> &#123;<br><span class="hljs-keyword">private</span>:<br>   <span class="hljs-type">int</span> count;<br><span class="hljs-keyword">public</span>:<br>   <span class="hljs-built_in">Counter</span>(<span class="hljs-type">int</span> count = <span class="hljs-number">0</span>);   <span class="hljs-comment">// Constructor</span><br>   <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">getCount</span><span class="hljs-params">()</span> <span class="hljs-type">const</span></span>;     <span class="hljs-comment">// Getters</span><br>   <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">setCount</span><span class="hljs-params">(<span class="hljs-type">int</span> count)</span></span>; <span class="hljs-comment">// Setters</span><br>   Counter &amp; <span class="hljs-keyword">operator</span>++();              <span class="hljs-comment">// ++prefix</span><br>   <span class="hljs-type">const</span> Counter <span class="hljs-keyword">operator</span>++(<span class="hljs-type">int</span> dummy); <span class="hljs-comment">// postfix++</span><br> <br>   <span class="hljs-keyword">friend</span> std::ostream &amp; <span class="hljs-keyword">operator</span>&lt;&lt;(std::ostream &amp; out, <span class="hljs-type">const</span> Counter &amp; counter);<br>&#125;;<br><br><span class="hljs-comment">// ++prefix, return reference of this</span><br>Counter &amp; Counter::<span class="hljs-keyword">operator</span>++() &#123;<br>   ++count;<br>   <span class="hljs-keyword">return</span> *<span class="hljs-keyword">this</span>;<br>&#125;<br> <br><span class="hljs-comment">// postfix++, return old value by value</span><br><span class="hljs-type">const</span> Counter Counter::<span class="hljs-keyword">operator</span>++(<span class="hljs-type">int</span> dummy) &#123;<br>   <span class="hljs-function">Counter <span class="hljs-title">old</span><span class="hljs-params">(*<span class="hljs-keyword">this</span>)</span></span>;<br>   ++count;<br>   <span class="hljs-keyword">return</span> old;<br>&#125;<br> <br><span class="hljs-comment">// Overload stream insertion &lt;&lt; operator</span><br>ostream &amp; <span class="hljs-keyword">operator</span>&lt;&lt;(ostream &amp; out, <span class="hljs-type">const</span> Counter &amp; counter) &#123;<br>   out &lt;&lt; counter.count;<br>   <span class="hljs-keyword">return</span> out;<br>&#125;<br></code></pre></td></tr></table></figure>
+<div class="note note-info">
+            <p>The prefix function returns a reference to this instance, to support chaining (or cascading), e.g., <code>++++c</code> as <code>++(++c)</code>.</p><p>The postfix function returns a <code>const</code> object(a temporary object) by value.</p>
+          </div>
+<h4 id="implicit-conversion-via-single-argument-constructor-keyword-explicit"><a class="markdownIt-Anchor" href="#implicit-conversion-via-single-argument-constructor-keyword-explicit"></a> Implicit Conversion via Single-argument Constructor &amp; Keyword &quot;explicit&quot;</h4>
+<p>A <strong><em>single-argument</em> constructor</strong> can be used to implicitly convert a value to an object.</p>
+<p>Example:</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Counter</span> &#123;<br><span class="hljs-keyword">private</span>:<br>   <span class="hljs-type">int</span> count;<br><span class="hljs-keyword">public</span>:<br>   <span class="hljs-built_in">Counter</span>(<span class="hljs-type">int</span> c = <span class="hljs-number">0</span>) : <span class="hljs-built_in">count</span>(c) &#123; &#125;<br>         <span class="hljs-comment">// A single-argument Constructor which takes an int</span><br>         <span class="hljs-comment">// It can be used to implicitly convert an int to a Counter object</span><br>   <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">getCount</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>&#123; <span class="hljs-keyword">return</span> count; &#125;    <span class="hljs-comment">// Getter</span><br>   <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">setCount</span><span class="hljs-params">(<span class="hljs-type">int</span> c)</span> </span>&#123; count = c; &#125; <span class="hljs-comment">// Setter</span><br>&#125;;<br> <br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br>   Counter c1; <span class="hljs-comment">// Declare an instance and invoke default constructor</span><br>   cout &lt;&lt; c1.<span class="hljs-built_in">getCount</span>() &lt;&lt; endl;  <span class="hljs-comment">// 0</span><br> <br>   c1 = <span class="hljs-number">9</span>;<br>     <span class="hljs-comment">// Implicit conversion</span><br>     <span class="hljs-comment">// Invoke single-argument constructor Counter(9) to construct a temporary object.</span><br>     <span class="hljs-comment">// Then copy into c1 via memberwise assignment.</span><br>   cout &lt;&lt; c1.<span class="hljs-built_in">getCount</span>() &lt;&lt; endl;  <span class="hljs-comment">// 9</span><br>&#125;<br></code></pre></td></tr></table></figure>
+<p>To disable implicit conversion, use keyword &quot;<code>explicit</code>&quot;. Nonetheless, you can still perform <strong>explicit conversion via type cast operator</strong>.</p>
+<div class="note note-info">
+            <p>Although implicit conversion is disabled using keyword &quot;explicit&quot;, we can still use explicit conversion via type casting.</p><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++">c1 = (Counter)<span class="hljs-number">9</span>;  <span class="hljs-comment">// Explicit conversion via type casting</span><br></code></pre></td></tr></table></figure>
+          </div>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Counter</span> &#123;<br><span class="hljs-keyword">private</span>:<br>   <span class="hljs-type">int</span> count;<br><span class="hljs-keyword">public</span>:<br>   <span class="hljs-function"><span class="hljs-keyword">explicit</span> <span class="hljs-title">Counter</span><span class="hljs-params">(<span class="hljs-type">int</span> c = <span class="hljs-number">0</span>)</span> : count(c) &#123;</span> &#125;<br>      <span class="hljs-comment">// Single-argument Constructor</span><br>      <span class="hljs-comment">// Use keyword &quot;explicit&quot; to disable implicit automatic conversion in assignment</span><br>   <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">getCount</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>&#123; <span class="hljs-keyword">return</span> count; &#125;    <span class="hljs-comment">// Getter</span><br>   <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">setCount</span><span class="hljs-params">(<span class="hljs-type">int</span> c)</span> </span>&#123; count = c; &#125; <span class="hljs-comment">// Setter</span><br>&#125;;<br> <br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br>   Counter c1; <span class="hljs-comment">// Declare an instance and invoke default constructor</span><br>   cout &lt;&lt; c1.<span class="hljs-built_in">getCount</span>() &lt;&lt; endl;  <span class="hljs-comment">// 0</span><br> <br><span class="hljs-comment">// Counter c2 = 9;</span><br>     <span class="hljs-comment">// error: conversion from &#x27;int&#x27; to non-scalar type &#x27;Counter&#x27; requested</span><br> <br>   c1 = (Counter)<span class="hljs-number">9</span>;  <span class="hljs-comment">// Explicit conversion via type casting operator</span><br>   cout &lt;&lt; c1.<span class="hljs-built_in">getCount</span>() &lt;&lt; endl;  <span class="hljs-comment">// 9</span><br>&#125;<br></code></pre></td></tr></table></figure>
+<h4 id="dynamic-memory-allocation-in-object"><a class="markdownIt-Anchor" href="#dynamic-memory-allocation-in-object"></a> Dynamic Memory Allocation in Object</h4>
+<div class="note note-danger">
+            <p>If you dynamically allocate memory in the constructor, you need to provide your own <strong>destructor, copy constructor and assignment operator</strong> to manage the dynamically allocated memory. The defaults provided by the C++ compiler do not work for dynamic memory.</p>
+          </div>
+<p>Example:</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">MyDynamicArray</span> &#123;<br><span class="hljs-keyword">private</span>:<br>   <span class="hljs-type">int</span> size_;   <span class="hljs-comment">// size of array</span><br>   <span class="hljs-type">double</span> * ptr;  <span class="hljs-comment">// pointer to the elements</span><br> <br><span class="hljs-keyword">public</span>:<br>   <span class="hljs-function"><span class="hljs-keyword">explicit</span> <span class="hljs-title">MyDynamicArray</span> <span class="hljs-params">(<span class="hljs-type">int</span> n = <span class="hljs-number">8</span>)</span></span>;         <span class="hljs-comment">// Default constructor</span><br>   <span class="hljs-function"><span class="hljs-keyword">explicit</span> <span class="hljs-title">MyDynamicArray</span> <span class="hljs-params">(<span class="hljs-type">const</span> MyDynamicArray &amp; a)</span></span>; <span class="hljs-comment">// Copy constructor</span><br>   <span class="hljs-built_in">MyDynamicArray</span> (<span class="hljs-type">const</span> <span class="hljs-type">double</span> a[], <span class="hljs-type">int</span> n);    <span class="hljs-comment">// Construct from double[]</span><br>   ~<span class="hljs-built_in">MyDynamicArray</span>();                           <span class="hljs-comment">// Destructor</span><br> <br>   <span class="hljs-type">const</span> MyDynamicArray &amp; <span class="hljs-keyword">operator</span>= (<span class="hljs-type">const</span> MyDynamicArray &amp; rhs); <span class="hljs-comment">// Assignment a1 = a2</span><br>   <span class="hljs-type">bool</span> <span class="hljs-keyword">operator</span>== (<span class="hljs-type">const</span> MyDynamicArray &amp; rhs) <span class="hljs-type">const</span>;     <span class="hljs-comment">// a1 == a2</span><br>   <span class="hljs-type">bool</span> <span class="hljs-keyword">operator</span>!= (<span class="hljs-type">const</span> MyDynamicArray &amp; rhs) <span class="hljs-type">const</span>;     <span class="hljs-comment">// a1 != a2</span><br> <br>   <span class="hljs-type">double</span> <span class="hljs-keyword">operator</span>[] (<span class="hljs-type">int</span> index) <span class="hljs-type">const</span>;  <span class="hljs-comment">// a[i]</span><br>   <span class="hljs-type">double</span> &amp; <span class="hljs-keyword">operator</span>[] (<span class="hljs-type">int</span> index);      <span class="hljs-comment">// a[i] = x</span><br> <br>   <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">size</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>&#123; <span class="hljs-keyword">return</span> size_; &#125;    <span class="hljs-comment">// return size of array</span><br> <br>   <span class="hljs-comment">// friends</span><br>   <span class="hljs-keyword">friend</span> std::ostream &amp; <span class="hljs-keyword">operator</span>&lt;&lt; (std::ostream &amp; out, <span class="hljs-type">const</span> MyDynamicArray &amp; a); <span class="hljs-comment">// out &lt;&lt; a</span><br>   <span class="hljs-keyword">friend</span> std::istream &amp; <span class="hljs-keyword">operator</span>&gt;&gt; (std::istream &amp; in, MyDynamicArray &amp; a);        <span class="hljs-comment">// in &gt;&gt; a</span><br>&#125;;<br></code></pre></td></tr></table></figure>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Cpp4 Operator Overload</div>
+      <div>http://oooscar8.github.io/2025/02/20/cpp4-Operator-Overload/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Alex Sun</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年2月20日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2025/02/20/cpp3-Inheritance/" title="Cpp3 Inheritance">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Cpp3 Inheritance</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2025/02/20/cpp2-OOP-Basics/" title="Cpp2 OOP Basics">
+                        <span class="hidden-mobile">Cpp2 OOP Basics</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div class="disqus" style="width:100%">
+    <div id="disqus_thread"></div>
+    
+      <script type="text/javascript">
+        var disqus_config = function() {
+          this.page.url = 'http://oooscar8.github.io/2025/02/20/cpp4-Operator-Overload/';
+          this.page.identifier = '/2025/02/20/cpp4-Operator-Overload/';
+        };
+        Fluid.utils.loadComments('#disqus_thread', function() {
+          var d = document, s = d.createElement('script');
+          s.src = '//' + 'fluid' + '.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', new Date());
+          (d.head || d.body).appendChild(s);
+        });
+      </script>
+    
+    <noscript>Please enable JavaScript to view the comments</noscript>
+  </div>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
