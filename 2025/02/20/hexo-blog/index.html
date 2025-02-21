@@ -9,7 +9,7 @@
   <meta charset="UTF-8">
 
   <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
-  <link rel="icon" href="/img/fluid.png">
+  <link rel="icon" href="/imgs/wallhaven-p9qeze.jpg">
   
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
@@ -276,7 +276,8 @@
             
               <div class="markdown-body">
                 
-                <h1 id="hexo解析图片路径"><a href="#hexo解析图片路径" class="headerlink" title="hexo解析图片路径"></a>hexo解析图片路径</h1><figure class="highlight gcode"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs gcode">hexo-code/<br>├── source/<br>│   ├── _posts/<br>│   │   ├── example.md<br>│   │   ├── imgs/  <span class="hljs-comment">(软链接)</span><br>│   ├── imgs/  <span class="hljs-comment">(实际存放图片的目录)</span><br></code></pre></td></tr></table></figure>
+                <h1 id="hexo解析图片路径"><a class="markdownIt-Anchor" href="#hexo解析图片路径"></a> hexo解析图片路径</h1>
+<figure class="highlight gcode"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs gcode">hexo-code/<br>├── source/<br>│   ├── _posts/<br>│   │   ├── example.md<br>│   │   ├── imgs/  <span class="hljs-comment">(软链接)</span><br>│   ├── imgs/  <span class="hljs-comment">(实际存放图片的目录)</span><br></code></pre></td></tr></table></figure>
 <p>以上是我的hexo源文件结构，文章放在source/_posts/目录下，文章的图片放在source/imgs/目录下，因此文章中的图片通过相对路径../imgs访问图片。</p>
 <p>hexo需要用绝对路径解析图片，因此我需要在<code>hexo g</code>的时候将文章中图片的相对路径<code>../imgs</code>解析为绝对路径<code>/imgs</code>：</p>
 <p>在主题的<code>post.ejs</code>文件中，替换</p>
@@ -374,6 +375,12 @@
                 <div class="post-prevnext my-3">
                   <article class="post-prev col-6">
                     
+                    
+                      <a href="/2025/02/21/hexo-convert-note/" title="将Typora警告框转化成fluid便签">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">将Typora警告框转化成fluid便签</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
                     
                   </article>
                   <article class="post-next col-6">

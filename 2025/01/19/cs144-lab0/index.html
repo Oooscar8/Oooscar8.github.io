@@ -9,7 +9,7 @@
   <meta charset="UTF-8">
 
   <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
-  <link rel="icon" href="/img/fluid.png">
+  <link rel="icon" href="/imgs/wallhaven-p9qeze.jpg">
   
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
@@ -31,10 +31,10 @@
 <meta property="og:image" content="http://oooscar8.github.io/2025/01/19/imgs/202501191501409-1739986305650-9-1739988551547-86.png">
 <meta property="og:image" content="http://oooscar8.github.io/2025/01/19/imgs/202502192350617-1739986312677-11-1739988551547-85.png">
 <meta property="article:published_time" content="2025-01-18T16:00:00.000Z">
-<meta property="article:modified_time" content="2025-02-20T18:39:04.684Z">
+<meta property="article:modified_time" content="2025-02-21T13:41:20.721Z">
 <meta property="article:author" content="Alex Sun">
-<meta property="article:tag" content="计算机网络">
 <meta property="article:tag" content="CS144">
+<meta property="article:tag" content="计算机网络">
 <meta property="article:tag" content="Protocol Stack">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="http://oooscar8.github.io/2025/01/19/imgs/202501171812928-1739988551547-84.png">
@@ -230,7 +230,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          743 字
+          745 字
         
       </span>
     
@@ -283,79 +283,102 @@
             
               <div class="markdown-body">
                 
-                <h1 id="Lab-Checkpoint-0-networking-warmup"><a href="#Lab-Checkpoint-0-networking-warmup" class="headerlink" title="Lab Checkpoint 0: networking warmup"></a>Lab Checkpoint 0: networking warmup</h1><hr>
+                <h1 id="lab-checkpoint-0-networking-warmup"><a class="markdownIt-Anchor" href="#lab-checkpoint-0-networking-warmup"></a> Lab Checkpoint 0: networking warmup</h1>
 <blockquote>
 <p><a target="_blank" rel="noopener" href="https://cs144.github.io/assignments/check0.pdf">https://cs144.github.io/assignments/check0.pdf</a></p>
 <p>Expected hours to complete: 2-6 hours</p>
 <p>Over the course of this 8-part lab assignment, you’ll be building up your own implementation of a significant portion of the Internet—<strong>a router, a network interface, and the TCP protocol</strong>.</p>
 <p>在Lab0中，我们需要实现一个使用TCP套接字获取网页的简易Web客户端和一个内存中的可靠字节流(ByteStream)。</p>
 </blockquote>
-<h2 id="FAQs"><a href="#FAQs" class="headerlink" title="FAQs"></a>FAQs</h2><blockquote>
+<h2 id="faqs"><a class="markdownIt-Anchor" href="#faqs"></a> FAQs</h2>
+<blockquote>
 <ol>
 <li>What should the behavior of my program be if the caller tries to pop with a <code>len</code> greater than what is available?</li>
 </ol>
 </blockquote>
-<p>We don’t have any preference on the behavior if the caller tries to pop more than is buffered in the stream, as long as you behave reasonably and don’t crash in that situation. If you want to pop the maximum available, that is fine with us. If you want to throw an exception, that is also fine with us.</p>
+<p>We don't have any preference on the behavior if the caller tries to pop more than is buffered in the stream, as long as you behave reasonably and don't crash in that situation. If you want to pop the maximum available, that is fine with us. If you want to throw an exception, that is also fine with us.</p>
 <blockquote>
-<ol>
+<ol start="2">
 <li>How fast should my code be?</li>
 </ol>
 </blockquote>
-<p>Here’s a reasonable rule: if any of your tests are taking longer than 2 seconds, it’s probably good to keep exploring other ways of representing the <code>ByteStream</code>. And if your benchmark results at the end of the test are worse than 0.1 Gbit/s (100 million bits per second), that’s another sign the design may need to be rethought. This lab doesn’t require any sophisticated data structures, but it might still take some trial-and-error to find a reasonable approach. Sometimes “big-O” analysis can be misleading about the performance of real programs—the constant factors can matter a lot!</p>
-<h2 id="Set-up-GNU-Linux-on-your-computer"><a href="#Set-up-GNU-Linux-on-your-computer" class="headerlink" title="Set up GNU/Linux on your computer"></a>Set up GNU/Linux on your computer</h2><p>Install the CS144 VirtualBox virtual-machine image (instructions at <a target="_blank" rel="noopener" href="https://stanford.edu/class/cs144/vm_howto/vm-howto-image.html">https://stanford.edu/class/cs144/vm_howto/vm-howto-image.html</a>).</p>
+<p>Here's a reasonable rule: if any of your tests are taking longer than 2 seconds, it's probably good to keep exploring other ways of representing the <code>ByteStream</code>. And if your benchmark results at the end of the test are worse than 0.1 Gbit/s (100 million bits per second), that's another sign the design may need to be rethought. This lab doesn't require any sophisticated data structures, but it might still take some trial-and-error to find a reasonable approach. Sometimes &quot;big-O&quot; analysis can be misleading about the performance of real programs—the constant factors can matter a lot!</p>
+<h2 id="set-up-gnulinux-on-your-computer"><a class="markdownIt-Anchor" href="#set-up-gnulinux-on-your-computer"></a> Set up GNU/Linux on your computer</h2>
+<p>Install the CS144 VirtualBox virtual-machine image (instructions at <a target="_blank" rel="noopener" href="https://stanford.edu/class/cs144/vm_howto/vm-howto-image.html">https://stanford.edu/class/cs144/vm_howto/vm-howto-image.html</a>).</p>
 <p>需要注意的是，VirtualBox需要直接在主机操作系统上运行，比如如果你是Windows主机，那么就需要在Windows系统中安装和运行VirtualBox（不能在WSL这样的虚拟环境中运行）</p>
-<h2 id="Networking-by-hand"><a href="#Networking-by-hand" class="headerlink" title="Networking by hand"></a>Networking by hand</h2><h3 id="Fetch-a-Web-Page"><a href="#Fetch-a-Web-Page" class="headerlink" title="Fetch a Web Page"></a>Fetch a Web Page</h3><ol>
+<h2 id="networking-by-hand"><a class="markdownIt-Anchor" href="#networking-by-hand"></a> Networking by hand</h2>
+<h3 id="fetch-a-web-page"><a class="markdownIt-Anchor" href="#fetch-a-web-page"></a> Fetch a Web Page</h3>
+<ol>
 <li>Fetch a web page <a target="_blank" rel="noopener" href="http://cs144.keithw.org/hello">http://cs144.keithw.org/hello</a></li>
 </ol>
 <figure class="highlight avrasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs avrasm">telnet cs144.keithw<span class="hljs-meta">.org</span> http <br><br>GET /hello HTTP/<span class="hljs-number">1.1</span><br><span class="hljs-symbol">Host:</span> cs144.keithw<span class="hljs-meta">.org</span><br><span class="hljs-symbol">Connection:</span> close<br></code></pre></td></tr></table></figure>
-<p><img src="/imgs/202501171812928-1739988551547-84.png" srcset="/img/loading.gif" lazyload></p>
-<ol>
+<img src="/imgs/202501171812928-1739988551547-84.png" srcset="/img/loading.gif" lazyload>
+<ol start="2">
 <li>Fetch a web page <a target="_blank" rel="noopener" href="http://cs144.keithw.org/lab0/sunetid">http://cs144.keithw.org/lab0/sunetid</a></li>
 </ol>
-<p><img src="/imgs/202501171816688.png" srcset="/img/loading.gif" lazyload alt="Fetch a web page"></p>
-<h3 id="Send-yourself-an-email"><a href="#Send-yourself-an-email" class="headerlink" title="Send yourself an email"></a>Send yourself an email</h3><p>这部分只有连接Stanford内部网络才能完成</p>
-<h3 id="Listening-and-connecting"><a href="#Listening-and-connecting" class="headerlink" title="Listening and connecting"></a>Listening and connecting</h3><p>In this part, we play around with server and client.</p>
-<h2 id="Writing-a-network-program-using-an-OS-stream-socket"><a href="#Writing-a-network-program-using-an-OS-stream-socket" class="headerlink" title="Writing a network program using an OS stream socket"></a>Writing a network program using an OS stream socket</h2><blockquote>
+<p><img src="/imgs/202501171816688.png" srcset="/img/loading.gif" lazyload alt="Fetch a web page" /></p>
+<h3 id="send-yourself-an-email"><a class="markdownIt-Anchor" href="#send-yourself-an-email"></a> Send yourself an email</h3>
+<p>这部分只有连接Stanford内部网络才能完成</p>
+<h3 id="listening-and-connecting"><a class="markdownIt-Anchor" href="#listening-and-connecting"></a> Listening and connecting</h3>
+<p>In this part, we play around with server and client.</p>
+<h2 id="writing-a-network-program-using-an-os-stream-socket"><a class="markdownIt-Anchor" href="#writing-a-network-program-using-an-os-stream-socket"></a> Writing a network program using an OS stream socket</h2>
+<blockquote>
 <p>You’ll write a program called “webget” that creates a TCP stream socket, connects to a Web server, and fetches a page.</p>
 </blockquote>
-<h3 id="Set-up"><a href="#Set-up" class="headerlink" title="Set up"></a>Set up</h3><p>注意在<code>git clone</code>之前可能需要先在虚拟机中配置Git代理(使用主机的VPN)：</p>
+<h3 id="set-up"><a class="markdownIt-Anchor" href="#set-up"></a> Set up</h3>
+<p>注意在<code>git clone</code>之前可能需要先在虚拟机中配置Git代理(使用主机的VPN)：</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">使用 10809 端口</span><br>git config --global http.proxy http://10.0.2.2:10809<br>git config --global https.proxy http://10.0.2.2:10809<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">查看当前代理设置</span><br>git config --global --get http.proxy<br>git config --global --get https.proxy<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">如果需要取消 Git 代理</span><br>git config --global --unset http.proxy<br>git config --global --unset https.proxy<br></code></pre></td></tr></table></figure>
-<h3 id="Modern-C"><a href="#Modern-C" class="headerlink" title="Modern  C++"></a>Modern  C++</h3><ul>
-<li><p>Use the language documentation at <a target="_blank" rel="noopener" href="https://en.cppreference.com">https://en.cppreference.com</a> as a resource. (We’d recommend you avoid cplusplus.com which is more likely to be out-of-date.)</p>
+<h3 id="modern-c"><a class="markdownIt-Anchor" href="#modern-c"></a> Modern  C++</h3>
+<ul>
+<li>
+<p>Use the language documentation at <a target="_blank" rel="noopener" href="https://en.cppreference.com">https://en.cppreference.com</a> as a resource. (We’d recommend you avoid <a target="_blank" rel="noopener" href="http://cplusplus.com">cplusplus.com</a> which is more likely to be out-of-date.)</p>
 </li>
-<li><p>Never use malloc() or free(). </p>
+<li>
+<p>Never use malloc() or free().</p>
 </li>
-<li><p>Never use new or delete.</p>
+<li>
+<p>Never use new or delete.</p>
 </li>
-<li><p>Essentially <strong>never use raw pointers (*)</strong>, and use “smart” pointers (unique ptr or shared ptr) only when necessary. (You will not need to use these in CS144.)</p>
+<li>
+<p>Essentially <strong>never use raw pointers (*)</strong>, and use “smart” pointers (unique ptr or shared ptr) only when necessary. (You will not need to use these in CS144.)</p>
 </li>
-<li><p>Avoid templates, threads, locks, and virtual functions. (You will not need to use these in CS144.)</p>
+<li>
+<p>Avoid templates, threads, locks, and virtual functions. (You will not need to use these in CS144.)</p>
 </li>
-<li><p>Avoid C-style <code>strings (char *str)</code> or string functions (<code>strlen()</code>, <code>strcpy()</code>). These are pretty error-prone. Use a <code>std::string</code> instead.</p>
+<li>
+<p>Avoid C-style <code>strings (char *str)</code> or string functions (<code>strlen()</code>, <code>strcpy()</code>). These are pretty error-prone. Use a <code>std::string</code> instead.</p>
 </li>
-<li><p>Never use C-style casts (e.g., <code>(FILE *)x</code>). Use a C++ <code>static_cast</code> if you have to (you generally will not need this in CS144)</p>
+<li>
+<p>Never use C-style casts (e.g., <code>(FILE *)x</code>). Use a C++ <code>static_cast</code> if you have to (you generally will not need this in CS144)</p>
 </li>
-<li><p>Prefer passing function arguments by const reference (e.g.: <code>const Address &amp; address</code>)</p>
+<li>
+<p>Prefer passing function arguments by const reference (e.g.: <code>const Address &amp; address</code>)</p>
 </li>
-<li><p>Make every variable const unless it needs to be mutated.</p>
+<li>
+<p>Make every variable const unless it needs to be mutated.</p>
 </li>
-<li><p>Make every method const unless it needs to mutate the object.</p>
+<li>
+<p>Make every method const unless it needs to mutate the object.</p>
 </li>
-<li><p>Avoid global variables, and give every variable the smallest scope possible.</p>
+<li>
+<p>Avoid global variables, and give every variable the smallest scope possible.</p>
 </li>
-<li><p>For suggestions on how to improve the code related to C++ programming practices:</p>
+<li>
+<p>For suggestions on how to improve the code related to C++ programming practices:</p>
 <figure class="highlight brainfuck"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs brainfuck"><span class="hljs-comment">cmake</span> <span class="hljs-literal">--</span><span class="hljs-comment">build build</span> <span class="hljs-literal">--</span><span class="hljs-comment">target tidy</span><br></code></pre></td></tr></table></figure>
 <p>To format the code:</p>
 <figure class="highlight brainfuck"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs brainfuck"><span class="hljs-comment">cmake</span> <span class="hljs-literal">--</span><span class="hljs-comment">build build</span> <span class="hljs-literal">--</span><span class="hljs-comment">target format</span><br></code></pre></td></tr></table></figure>
 </li>
 </ul>
-<h3 id="Writing-webget"><a href="#Writing-webget" class="headerlink" title="Writing webget"></a>Writing webget</h3><blockquote>
+<h3 id="writing-webget"><a class="markdownIt-Anchor" href="#writing-webget"></a> Writing webget</h3>
+<blockquote>
 <p>Before writing <code>webget</code>, read over the public interfaces (the part that comes after “public:” in the files <code>util/socket.hh</code> and <code>util/file descriptor.hh</code>).</p>
 </blockquote>
 <p>In this part, we need to implement a simple Web client that fetches Web pages using a TCP socket provided by the operating system.</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">get_URL</span><span class="hljs-params">( <span class="hljs-type">const</span> string&amp; host, <span class="hljs-type">const</span> string&amp; path )</span></span><br><span class="hljs-function"></span>&#123;<br>    TCPSocket clientSocket;<br>    <span class="hljs-function">Address <span class="hljs-title">serverAddress</span><span class="hljs-params">( host, <span class="hljs-string">&quot;http&quot;</span> )</span></span>;<br><br>    <span class="hljs-comment">// Connect to the server.</span><br>    clientSocket.<span class="hljs-built_in">connect</span>( serverAddress );<br><br>    <span class="hljs-comment">// Send the HTTP request.</span><br>    string request = <span class="hljs-string">&quot;GET &quot;</span> + path + <span class="hljs-string">&quot; HTTP/1.1\r\nHost: &quot;</span> + host + <span class="hljs-string">&quot;\r\n&quot;</span> +           <span class="hljs-string">&quot;Connection: close\r\n\r\n&quot;</span>;<br>    clientSocket.<span class="hljs-built_in">write</span>( (string_view)request );<br><br>    <span class="hljs-comment">// Read and print the response</span><br>    <span class="hljs-keyword">while</span> ( !clientSocket.<span class="hljs-built_in">eof</span>() ) &#123;<br>        string response;<br>        clientSocket.<span class="hljs-built_in">read</span>( response );<br>        cout &lt;&lt; response;<br>    &#125;<br><br>    clientSocket.<span class="hljs-built_in">close</span>();<br>&#125;<br></code></pre></td></tr></table></figure>
-<p><img src="/imgs/202501191501409-1739986305650-9-1739988551547-86.png" srcset="/img/loading.gif" lazyload alt="Test webget"></p>
-<h2 id="An-in-memory-reliable-byte-stream"><a href="#An-in-memory-reliable-byte-stream" class="headerlink" title="An in-memory reliable byte stream"></a>An in-memory reliable byte stream</h2><p>In this part, we need to implement a <code>ByteStream</code> object that provides reliable byte stream in memory. The Writer writes data into the stream and the Reader reads data from the stream.</p>
+<p><img src="/imgs/202501191501409-1739986305650-9-1739988551547-86.png" srcset="/img/loading.gif" lazyload alt="Test webget" /></p>
+<h2 id="an-in-memory-reliable-byte-stream"><a class="markdownIt-Anchor" href="#an-in-memory-reliable-byte-stream"></a> An in-memory reliable byte stream</h2>
+<p>In this part, we need to implement a <code>ByteStream</code> object that provides reliable byte stream in memory. The Writer writes data into the stream and the Reader reads data from the stream.</p>
 <blockquote>
 <p>What is the design of my <code>ByteStream</code> implementatino? What data structures and approach are taken?</p>
 </blockquote>
@@ -369,11 +392,12 @@
 <p>最容易想到的是每次pop <code>len</code> bytes的时候都将<code>buffer_</code>的前<code>len</code>个字符截掉：</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++">buffer_ = buffer_.<span class="hljs-built_in">substr</span>( len );<br></code></pre></td></tr></table></figure>
 <p>但是这样的话每次pop <code>buffer_</code>的内存都会重新分配，不符合pop 操作是 O(1) 的时间复杂度要求。</p>
-<p>因此我想到用一个<code>read_index_</code>来追踪当前<code>buffer_</code>中读到的位置，这样每次pop只需要<code>read_index_ += len</code>，只在<code>buffer_</code>中已读过的bytes过多（超过<code>buffer_</code>size的一半）时再重新整理：</p>
+<p>因此我想到用一个<code>read_index_</code>来追踪当前<code>buffer_</code>中读到的位置，这样每次pop只需要<code>read_index_ += len</code>，只在<code>buffer_</code>中已读过的bytes过多（超过<code>buffer_ </code>size的一半）时再重新整理：</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">Reader::pop</span><span class="hljs-params">( <span class="hljs-type">uint64_t</span> len )</span></span><br><span class="hljs-function"></span>&#123;<br>    <span class="hljs-comment">// Pop as much data as possible from the buffer if len is greater than the         amount of data available.</span><br>    <span class="hljs-type">uint64_t</span> to_read = <span class="hljs-built_in">min</span>( <span class="hljs-built_in">bytes_buffered</span>(), len );<br>    read_index_ += to_read;<br>    bytes_popped_ += to_read;<br><br>    <span class="hljs-comment">// When more than half of the buffer is read, shrink it to avoid unnecessary       memory usage.</span><br>    <span class="hljs-keyword">if</span> ( read_index_ &gt;= buffer_.<span class="hljs-built_in">size</span>() / <span class="hljs-number">2</span> ) &#123;<br>        buffer_ = buffer_.<span class="hljs-built_in">substr</span>( read_index_ );<br>        read_index_ = <span class="hljs-number">0</span>;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
 <p>这样的话<code>buffer_</code>中<code>read_index</code>之前的bytes是已经读过out of date的bytes，<code>read_index</code>之后的bytes才是被push进stream中等待被读取的bytes。</p>
-<h2 id="Finish"><a href="#Finish" class="headerlink" title="Finish!"></a>Finish!</h2><p>All tests in check0 pass!</p>
-<p><img src="/imgs/202502192350617-1739986312677-11-1739988551547-85.png" srcset="/img/loading.gif" lazyload alt="Test check0"></p>
+<h2 id="finish"><a class="markdownIt-Anchor" href="#finish"></a> Finish!</h2>
+<p>All tests in check0 pass!</p>
+<p><img src="/imgs/202502192350617-1739986312677-11-1739988551547-85.png" srcset="/img/loading.gif" lazyload alt="Test check0" /></p>
 
                 
               </div>
@@ -392,12 +416,12 @@
     
       <span class="category-chain">
         
-  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" class="category-chain-item">计算机网络</a>
+  <a href="/categories/Computer-Networking/" class="category-chain-item">Computer Networking</a>
   
   
     <span>></span>
     
-  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/CS144/" class="category-chain-item">CS144</a>
+  <a href="/categories/Computer-Networking/CS144/" class="category-chain-item">CS144</a>
   
   
 
@@ -414,9 +438,9 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" class="print-no-link">#计算机网络</a>
-      
         <a href="/tags/CS144/" class="print-no-link">#CS144</a>
+      
+        <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" class="print-no-link">#计算机网络</a>
       
         <a href="/tags/Protocol-Stack/" class="print-no-link">#Protocol Stack</a>
       
@@ -485,8 +509,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2025/01/18/cpp10-DS/" title="cpp10 Data Structure">
-                        <span class="hidden-mobile">cpp10 Data Structure</span>
+                      <a href="/2025/01/18/NTU-C++/" title="NTU C++ Note">
+                        <span class="hidden-mobile">NTU C++ Note</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
