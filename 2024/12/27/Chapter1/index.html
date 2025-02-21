@@ -1,0 +1,858 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Alex Sun">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="自顶向下第一章：What is the Internet?">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Chapter1">
+<meta property="og:url" content="http://oooscar8.github.io/2024/12/27/Chapter1/index.html">
+<meta property="og:site_name" content="Alex&#39;s Space">
+<meta property="og:description" content="自顶向下第一章：What is the Internet?">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://oooscar8.github.io/2024/12/27/imgs/202412271816523.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/12/27/imgs/202412271820546.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/12/27/imgs/202409041120064.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/12/27/imgs/202409041318239.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/12/27/imgs/202409041509538.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/12/27/imgs/202409041510599.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/12/27/imgs/202409041339786.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/12/27/imgs/202409041558726.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/12/27/imgs/202409121311655.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/12/27/imgs/202409121419327.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/12/27/imgs/202409121426382.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/12/27/imgs/202409121445872.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/12/27/imgs/202409221640398.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/12/27/imgs/202409221614053.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/12/27/imgs/image-20250220011638924.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/12/27/imgs/202409221937913.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/12/27/imgs/202409222317594.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/12/27/imgs/202409222320192.png">
+<meta property="article:published_time" content="2024-12-26T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-02-20T18:43:02.714Z">
+<meta property="article:author" content="Alex Sun">
+<meta property="article:tag" content="ELEC331">
+<meta property="article:tag" content="计算机网络">
+<meta property="article:tag" content="自顶向下">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://oooscar8.github.io/2024/12/27/imgs/202412271816523.png">
+  
+  
+  
+  <title>Chapter1 - Alex&#39;s Space</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"oooscar8.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.1.1"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Alex&#39;s Space</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/imgs/chuyin.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Chapter1"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-12-27 00:00" pubdate>
+          2024年12月27日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          132 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          2 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Chapter1</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="What-is-the-Internet"><a href="#What-is-the-Internet" class="headerlink" title="What is the Internet?"></a>What is the Internet?</h2><h3 id="A-Nuts-and-Bolts-Description"><a href="#A-Nuts-and-Bolts-Description" class="headerlink" title="A Nuts-and-Bolts Description"></a>A Nuts-and-Bolts Description</h3><h4 id="basic-concepts"><a href="#basic-concepts" class="headerlink" title="basic concepts"></a>basic concepts</h4><p>Devices connected to the Internet: <strong>hosts</strong> or <strong>end system</strong></p>
+<p>End systems are connected together by a network of <strong>communication links</strong> and <strong>packet switches</strong>. </p>
+<hr>
+<h4 id="communication-links"><a href="#communication-links" class="headerlink" title="communication links"></a>communication links</h4><p>Made up of different types of physical media</p>
+<p>Different links have different <strong>transmission rate</strong>, measured in bits/seconds</p>
+<p>When one end system has data to send to another end system, the sending end system segments(分段) the data and adds header bytes to each segment(段). The resulting packages of information, known as <strong>packets</strong>(分组), are then sent through the network to the destination end system, where they are reassembled into the original data</p>
+<hr>
+<h4 id="packet-switch"><a href="#packet-switch" class="headerlink" title="packet switch"></a>packet switch</h4><p>Takes a packet arriving on one of its incoming communication links and forwards that packet on one of its outgoing communication links</p>
+<ul>
+<li><strong>routers</strong>(路由器) </li>
+</ul>
+<blockquote>
+<p>used in the network core</p>
+</blockquote>
+<ul>
+<li><strong>link-layer switches</strong>(链路层交换机)</li>
+</ul>
+<blockquote>
+<p>used in access networks</p>
+</blockquote>
+<p>The sequence of communication links and packet switches traversed by a packet from the sending end system to the receiving end system is known as a <strong>route</strong> or <strong>path</strong> through the network. </p>
+<hr>
+<h4 id="Protocols"><a href="#Protocols" class="headerlink" title="Protocols"></a>Protocols</h4><p>End systems, packet switches, and other pieces of the Internet run protocols that  control the sending and receiving of information within the Internet.</p>
+<ul>
+<li><p>TCP(Transmission Control Protocol)</p>
+</li>
+<li><p>Internet Protocol (IP)</p>
+</li>
+</ul>
+<blockquote>
+<p>specifies the format of packets</p>
+</blockquote>
+<ul>
+<li>TCP/IP</li>
+</ul>
+<h3 id="A-services-Description"><a href="#A-services-Description" class="headerlink" title="A services Description"></a>A services Description</h3><h4 id="Definition"><a href="#Definition" class="headerlink" title="Definition"></a>Definition</h4><p>The Internet is an infrastructure that provides services to <strong>distributed applications</strong>.</p>
+<hr>
+<h4 id="socket-interface"><a href="#socket-interface" class="headerlink" title="socket interface"></a>socket interface</h4><p>Socket interface is a set of rules that the sending program must follow so that the data can be delivered to destination program.</p>
+<h3 id="What-is-a-Protocol"><a href="#What-is-a-Protocol" class="headerlink" title="What is a Protocol?"></a>What is a Protocol?</h3><h4 id="A-Human-Analogy"><a href="#A-Human-Analogy" class="headerlink" title="A Human Analogy"></a>A Human Analogy</h4><p><img src="/imgs/202412271816523.png" srcset="/img/loading.gif" lazyload alt="image-20240903214826833" style="zoom: 33%;" /></p>
+<hr>
+<h4 id="Network-Protocols"><a href="#Network-Protocols" class="headerlink" title="Network Protocols"></a>Network Protocols</h4><p>A protocol defines the <strong>format</strong> and the <strong>order</strong> of messages exchanged between two or more communicating entities, as well as the <strong>actions</strong> taken on the transmission and/or receipt of a message or other event.</p>
+<h2 id="The-Network-Edge"><a href="#The-Network-Edge" class="headerlink" title="The Network Edge"></a>The Network Edge</h2><p><img src="/imgs/202412271820546.png" srcset="/img/loading.gif" lazyload alt="image-20240904110050027" style="zoom:50%;" /></p>
+<p>hosts: </p>
+<ul>
+<li>clients </li>
+</ul>
+<p>desktops, laptops, smartphones…</p>
+<ul>
+<li>servers</li>
+</ul>
+<p>powerful machines that store and distribute Web pages, stream video, relay e-mail…</p>
+<p><strong>in large data centers</strong></p>
+<h3 id="Access-Networks"><a href="#Access-Networks" class="headerlink" title="Access Networks"></a>Access Networks</h3><h4 id="Home-Access"><a href="#Home-Access" class="headerlink" title="Home Access"></a>Home Access</h4><h5 id="DSL-Internet-access"><a href="#DSL-Internet-access" class="headerlink" title="DSL Internet access"></a>DSL Internet access</h5><p><img src="/imgs/202409041120064.png" srcset="/img/loading.gif" lazyload alt="image-20240904112018897" style="zoom:50%;" /></p>
+<ul>
+<li>DSL modem</li>
+</ul>
+<p>Translate between digital data and high-frequency tones.</p>
+<p>Data and telephone signals are encoded at different frequencies.</p>
+<ul>
+<li>DSLAM</li>
+</ul>
+<p>On the telco side, DSLAM separates the data and phone signals and sends the data into the Internet.</p>
+<ul>
+<li>Splitter</li>
+</ul>
+<p>On the customer side, a splitter separates the data and telephone signals arriving to the home and forwards the data signal to the DSL modem.</p>
+<p>Asymmetric: downstream transmission rate is larger than upstream transmission rate</p>
+<hr>
+<h5 id="cable-Internet-access"><a href="#cable-Internet-access" class="headerlink" title="cable Internet access"></a>cable Internet access</h5><p><img src="/imgs/202409041318239.png" srcset="/img/loading.gif" lazyload style="zoom:50%;" /></p>
+<p><img src="/imgs/202409041509538.png" srcset="/img/loading.gif" lazyload alt="image-20240904150914348" style="zoom:50%;" /></p>
+<p><img src="/imgs/202409041510599.png" srcset="/img/loading.gif" lazyload alt="image-20240904151059445" style="zoom:50%;" /></p>
+<p>Frequency division multiplexing(FDM): different channels transmitted in different frequency bands</p>
+<p>Asymmetric: downstream transmission rate is larger than upstream transmission rate</p>
+<p>CMTS‘s function is similar to DSLAM</p>
+<hr>
+<h5 id="fiber-to-the-home-FTTH"><a href="#fiber-to-the-home-FTTH" class="headerlink" title="fiber to the home (FTTH)"></a>fiber to the home (FTTH)</h5><p>even faster!</p>
+<p>provide an optical fiber path from the CO directly to the home</p>
+<p>FTTH using the PON distribution architecture (passive optical networks):</p>
+<p><img src="/imgs/202409041339786.png" srcset="/img/loading.gif" lazyload alt="image-20240904133946720" style="zoom:50%;" /></p>
+<p>packets sent from OLT are replicated at the splitter (similar to a cable head end)</p>
+<hr>
+<h5 id="5G-fixed-wireless"><a href="#5G-fixed-wireless" class="headerlink" title="5G fixed wireless"></a>5G fixed wireless</h5><p>without installing costly and failure-prone cabling</p>
+<h4 id="Access-in-the-Enterprise-and-the-Home-Ethernet-and-WiFi"><a href="#Access-in-the-Enterprise-and-the-Home-Ethernet-and-WiFi" class="headerlink" title="Access in the Enterprise (and the Home): Ethernet and WiFi"></a>Access in the Enterprise (and the Home): Ethernet and WiFi</h4><hr>
+<ul>
+<li><p>Home Network</p>
+<p><img src="/imgs/202409041558726.png" srcset="/img/loading.gif" lazyload style="zoom:50%;" /></p>
+</li>
+</ul>
+<h4 id="Wide-Area-Wireless-Access-3G-and-LTE-4G-and-5G"><a href="#Wide-Area-Wireless-Access-3G-and-LTE-4G-and-5G" class="headerlink" title="Wide-Area Wireless Access: 3G and LTE 4G and 5G"></a>Wide-Area Wireless Access: 3G and LTE 4G and 5G</h4><p>Employ the same wireless infrastructure used for cellular telephony to send/receive packets through a base station that is operated by the cellular network provider.</p>
+<h3 id="Physical-Media"><a href="#Physical-Media" class="headerlink" title="Physical Media"></a>Physical Media</h3><p>guided media / unguided media.</p>
+<ul>
+<li>Twisted-Pair Copper Wire</li>
+</ul>
+<p>Twisted pair is the dominant solution for high-speed LAN networking</p>
+<ul>
+<li>Coaxial Cable</li>
+</ul>
+<p>Coaxial cable can be used as a guided shared medium</p>
+<ul>
+<li><p>Fiber Optics</p>
+</li>
+<li><p>Terrestrial Radio Channels</p>
+</li>
+</ul>
+<p>Require no physical wire to be installed, can penetrate walls, provide connectivity to a mobile user, and can potentially carry a signal for long distances.</p>
+<ul>
+<li>Satellite Radio Channels</li>
+</ul>
+<h2 id="The-Network-Core"><a href="#The-Network-Core" class="headerlink" title="The Network Core"></a>The Network Core</h2><h3 id="Packet-Switching"><a href="#Packet-Switching" class="headerlink" title="Packet Switching"></a>Packet Switching</h3><p>R: transmission rate (bps)</p>
+<p>L: length of a packet</p>
+<p><strong>transmission delay</strong>:</p>
+<p><img src="/imgs/202409121311655.png" srcset="/img/loading.gif" lazyload alt="image-20240912131136591" style="zoom:50%;" /></p>
+<h4 id="Store-and-Forward-Transmission"><a href="#Store-and-Forward-Transmission" class="headerlink" title="Store-and Forward Transmission"></a>Store-and Forward Transmission</h4><p>it takes 2L/R(time) for a packet to be sent from Source to Destination</p>
+<p>it takes 4L/R(time) for all three packets to be sent from Source to Destination</p>
+<p><img src="/imgs/202409121419327.png" srcset="/img/loading.gif" lazyload alt="image-20240912141943199" style="zoom: 67%;" /></p>
+<p>More general form: N links each of rate R</p>
+<p><strong>end-to-end delay</strong>:</p>
+<p><img src="/imgs/202409121426382.png" srcset="/img/loading.gif" lazyload alt="end-to-end delay"></p>
+<h4 id="Queuing-Delays-and-Packet-Loss"><a href="#Queuing-Delays-and-Packet-Loss" class="headerlink" title="Queuing Delays and Packet Loss"></a>Queuing Delays and Packet Loss</h4><p><strong>output buffer</strong> (<strong>output queue</strong>): the arriving packet <strong>wait</strong> here</p>
+<p>result in output buffer <strong>queuing delays</strong></p>
+<p>if the output buffer is full, <strong>packet loss</strong> occurs</p>
+<p><img src="/imgs/202409121445872.png" srcset="/img/loading.gif" lazyload alt="image-20240912144530808" style="zoom:67%;" /></p>
+<h4 id="Forwarding-Tables-and-Routing-Protocols"><a href="#Forwarding-Tables-and-Routing-Protocols" class="headerlink" title="Forwarding Tables and Routing Protocols"></a>Forwarding Tables and Routing Protocols</h4><blockquote>
+<p>How do forwarding tables get set?</p>
+</blockquote>
+<p>The Internet has a number of special <strong>routing protocols</strong> that are used to <strong>automatically</strong> set the forwarding tables</p>
+<h3 id="Circuit-Switching"><a href="#Circuit-Switching" class="headerlink" title="Circuit Switching"></a>Circuit Switching</h3><p>When two hosts want to communicate, the network establishes <strong>a dedicated end-to-end connection.</strong></p>
+<blockquote>
+<p>Why is circuit switching less efficient than packet switching?</p>
+</blockquote>
+<p>Circuit switching pre-allocates use of the transmission link  regardless of demand, with allocated but unneeded link time going unused</p>
+<p>Packet switching allocates link use on demand</p>
+<p><img src="/imgs/202409221640398.png" srcset="/img/loading.gif" lazyload alt="image-20240922164045198" style="zoom:50%;" /></p>
+<h3 id="Internet-is-a-“network-of-networks”"><a href="#Internet-is-a-“network-of-networks”" class="headerlink" title="Internet is a “network of networks”!"></a>Internet is a “network of networks”!</h3><p>Interconnection of ISPs:</p>
+<p><img src="/imgs/202409221614053.png" srcset="/img/loading.gif" lazyload alt="image-20240922161449805" style="zoom: 25%;" /></p>
+<h2 id="Delay-Loss-and-Throughput-in-Packet-Switched-Networks"><a href="#Delay-Loss-and-Throughput-in-Packet-Switched-Networks" class="headerlink" title="Delay, Loss, and Throughput in Packet-Switched Networks"></a>Delay, Loss, and Throughput in Packet-Switched Networks</h2><p><strong>Four delays:</strong></p>
+<ul>
+<li>transmission delay: time to <strong>push</strong> the entire packet onto the link</li>
+<li>processing delay</li>
+<li>propagation delay</li>
+<li>queueing delay -&gt; congestion and packet loss</li>
+</ul>
+<p><img src="/imgs/image-20250220011638924.png" srcset="/img/loading.gif" lazyload alt="Four network delays"></p>
+<p><strong>Throughput:</strong></p>
+<p>analogy to pipes</p>
+<p>rate(bits/time unit) at which bits are being sent from sender to receiver</p>
+<p><img src="/imgs/202409221937913.png" srcset="/img/loading.gif" lazyload alt="image-20240922193702630" style="zoom:25%;" /></p>
+<h2 id="Layering-encapsulation-service-models"><a href="#Layering-encapsulation-service-models" class="headerlink" title="Layering, encapsulation, service models"></a>Layering, encapsulation, service models</h2><p>Layering and encapsulation:</p>
+<p><img src="/imgs/202409222317594.png" srcset="/img/loading.gif" lazyload alt="image-20240922231747247" style="zoom: 33%;" /></p>
+<p>The switches and routers only implement the lower layer of the protocol stack:</p>
+<p><img src="/imgs/202409222320192.png" srcset="/img/loading.gif" lazyload alt="image-20240922232032878" style="zoom: 33%;" /></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" class="category-chain-item">计算机网络</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B/" class="category-chain-item">自顶向下</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/ELEC331/" class="print-no-link">#ELEC331</a>
+      
+        <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" class="print-no-link">#计算机网络</a>
+      
+        <a href="/tags/%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B/" class="print-no-link">#自顶向下</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Chapter1</div>
+      <div>http://oooscar8.github.io/2024/12/27/Chapter1/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Alex Sun</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年12月27日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/12/31/File-System/" title="File Systems">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">File Systems</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/10/22/OS161-A4/" title="OS161 Assignment 4">
+                        <span class="hidden-mobile">OS161 Assignment 4</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div class="disqus" style="width:100%">
+    <div id="disqus_thread"></div>
+    
+      <script type="text/javascript">
+        var disqus_config = function() {
+          this.page.url = 'http://oooscar8.github.io/2024/12/27/Chapter1/';
+          this.page.identifier = '/2024/12/27/Chapter1/';
+        };
+        Fluid.utils.loadComments('#disqus_thread', function() {
+          var d = document, s = d.createElement('script');
+          s.src = '//' + 'fluid' + '.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', new Date());
+          (d.head || d.body).appendChild(s);
+        });
+      </script>
+    
+    <noscript>Please enable JavaScript to view the comments</noscript>
+  </div>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

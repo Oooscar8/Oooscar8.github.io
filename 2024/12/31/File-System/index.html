@@ -50,7 +50,7 @@
 <meta property="og:image" content="http://oooscar8.github.io/2024/12/31/imgs/202501051545857-1740072306166-22.png">
 <meta property="og:image" content="http://oooscar8.github.io/2024/12/31/imgs/image-20250105155149962-1740072306166-23.png">
 <meta property="article:published_time" content="2024-12-30T16:00:00.000Z">
-<meta property="article:modified_time" content="2025-02-20T18:31:30.746Z">
+<meta property="article:modified_time" content="2025-02-20T18:43:10.220Z">
 <meta property="article:author" content="Alex Sun">
 <meta property="article:tag" content="OS">
 <meta property="article:tag" content="File System">
@@ -249,7 +249,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          564 字
+          538 字
         
       </span>
     
@@ -302,61 +302,45 @@
             
               <div class="markdown-body">
                 
-                <h1 id="file-systems"><a class="markdownIt-Anchor" href="#file-systems"></a> File Systems</h1>
-<blockquote>
+                <h1 id="File-Systems"><a href="#File-Systems" class="headerlink" title="File Systems"></a>File Systems</h1><blockquote>
 <p><strong>Learning Materials</strong></p>
 <p>Videos:</p>
-<p><a target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/download/cs161-video-materials/www.eecs.harvard.edu/~margo/cs161/videos/disks.mp4">Disks</a>
-<a target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/download/cs161-video-materials/www.eecs.harvard.edu/~margo/cs161/videos/fs-intro-audio.mp4">Introduction to file systems</a>
-<a target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/download/cs161-video-materials/www.eecs.harvard.edu/~margo/cs161/videos/fs-naming.mp4">File system naming</a></p>
-<p><a target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/download/cs161-video-materials/www.eecs.harvard.edu/~margo/cs161/videos/ffs-audio.mp4">FFS</a>
-<a target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/download/cs161-video-materials/www.eecs.harvard.edu/~margo/cs161/videos/ffs-recovery-audio.mp4">File system recovery</a>
-<a target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/download/cs161-video-materials/www.eecs.harvard.edu/~margo/cs161/videos/ffs-journaling-audio.mp4">Journaling file systems</a>
-<a target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/download/cs161-video-materials/www.eecs.harvard.edu/~margo/cs161/videos/lfs-audio.mp4">LFS</a></p>
+<p><a target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/download/cs161-video-materials/www.eecs.harvard.edu/~margo/cs161/videos/disks.mp4">Disks</a><br><a target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/download/cs161-video-materials/www.eecs.harvard.edu/~margo/cs161/videos/fs-intro-audio.mp4">Introduction to file systems</a><br><a target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/download/cs161-video-materials/www.eecs.harvard.edu/~margo/cs161/videos/fs-naming.mp4">File system naming</a></p>
+<p><a target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/download/cs161-video-materials/www.eecs.harvard.edu/~margo/cs161/videos/ffs-audio.mp4">FFS</a><br><a target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/download/cs161-video-materials/www.eecs.harvard.edu/~margo/cs161/videos/ffs-recovery-audio.mp4">File system recovery</a><br><a target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/download/cs161-video-materials/www.eecs.harvard.edu/~margo/cs161/videos/ffs-journaling-audio.mp4">Journaling file systems</a><br><a target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/download/cs161-video-materials/www.eecs.harvard.edu/~margo/cs161/videos/lfs-audio.mp4">LFS</a></p>
 <p>Lecture Slides:</p>
 <p><a target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/LECTURE-SLIDES/file-systems-new.pptx">File systems</a></p>
 <p>Readings:</p>
-<p>[<a target="_blank" rel="noopener" href="http://pages.cs.wisc.edu/~remzi/OSTEP/file-disks.pdf">OSTEP] Hard disk drives</a>
-[<a target="_blank" rel="noopener" href="http://pages.cs.wisc.edu/~remzi/OSTEP/file-ssd.pdf">OSTEP] Flash-based SSDs</a>
-[<a target="_blank" rel="noopener" href="http://pages.cs.wisc.edu/~remzi/OSTEP/file-implementation.pdf">OSTEP] File system implementation</a></p>
-<p>[<a target="_blank" rel="noopener" href="http://pages.cs.wisc.edu/~remzi/OSTEP/file-ffs.pdf">OSTEP] Locality and the FFS</a>
-[<a target="_blank" rel="noopener" href="http://pages.cs.wisc.edu/~remzi/OSTEP/file-journaling.pdf">OSTEP] Crash consistency: fsck and journaling</a>
-[<a target="_blank" rel="noopener" href="http://pages.cs.wisc.edu/~remzi/OSTEP/file-lfs.pdf">OSTEP]: Log-structured File Systems</a></p>
-<p><a target="_blank" rel="noopener" href="https://www.usenix.org/conference/fast22/presentation/li">ctFS paper at FAST'22 conference</a></p>
+<p><a target="_blank" rel="noopener" href="http://pages.cs.wisc.edu/~remzi/OSTEP/file-disks.pdf">[OSTEP] Hard disk drives</a><br><a target="_blank" rel="noopener" href="http://pages.cs.wisc.edu/~remzi/OSTEP/file-ssd.pdf">[OSTEP] Flash-based SSDs</a><br><a target="_blank" rel="noopener" href="http://pages.cs.wisc.edu/~remzi/OSTEP/file-implementation.pdf">[OSTEP] File system implementation</a></p>
+<p><a target="_blank" rel="noopener" href="http://pages.cs.wisc.edu/~remzi/OSTEP/file-ffs.pdf">[OSTEP] Locality and the FFS</a><br><a target="_blank" rel="noopener" href="http://pages.cs.wisc.edu/~remzi/OSTEP/file-journaling.pdf">[OSTEP] Crash consistency: fsck and journaling</a><br><a target="_blank" rel="noopener" href="http://pages.cs.wisc.edu/~remzi/OSTEP/file-lfs.pdf">[OSTEP]: Log-structured File Systems</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.usenix.org/conference/fast22/presentation/li">ctFS paper at FAST’22 conference</a></p>
 </blockquote>
-<h2 id="hard-disk-drives"><a class="markdownIt-Anchor" href="#hard-disk-drives"></a> Hard Disk Drives</h2>
-<h3 id="disk-basics"><a class="markdownIt-Anchor" href="#disk-basics"></a> Disk Basics</h3>
-<p>A complete I/O:</p>
+<h2 id="Hard-Disk-Drives"><a href="#Hard-Disk-Drives" class="headerlink" title="Hard Disk Drives"></a>Hard Disk Drives</h2><h3 id="Disk-Basics"><a href="#Disk-Basics" class="headerlink" title="Disk Basics"></a>Disk Basics</h3><p>A complete I/O:</p>
 <p>First a <strong>seek</strong>, then waiting for the <strong>rotational delay</strong>, and finally the <strong>transfer</strong>(read/write).</p>
-<p><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>T</mi><mrow><mi>I</mi><mi mathvariant="normal">/</mi><mi>O</mi></mrow></msub><mo>=</mo><msub><mi>T</mi><mrow><mi>s</mi><mi>e</mi><mi>e</mi><mi>k</mi></mrow></msub><mo>+</mo><msub><mi>T</mi><mrow><mi>r</mi><mi>o</mi><mi>t</mi><mi>a</mi><mi>t</mi><mi>i</mi><mi>o</mi><mi>n</mi></mrow></msub><mo>+</mo><msub><mi>T</mi><mrow><mi>t</mi><mi>r</mi><mi>a</mi><mi>n</mi><mi>s</mi><mi>f</mi><mi>e</mi><mi>r</mi></mrow></msub></mrow><annotation encoding="application/x-tex">T_{I/O} = T_{seek} + T_{rotation} + T_{transfer}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.03853em;vertical-align:-0.3551999999999999em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.34480000000000005em;"><span style="top:-2.5198em;margin-left:-0.13889em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.07847em;">I</span><span class="mord mtight">/</span><span class="mord mathnormal mtight" style="margin-right:0.02778em;">O</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.3551999999999999em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.33610799999999996em;"><span style="top:-2.5500000000000003em;margin-left:-0.13889em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">s</span><span class="mord mathnormal mtight">e</span><span class="mord mathnormal mtight">e</span><span class="mord mathnormal mtight" style="margin-right:0.03148em;">k</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.13889em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.02778em;">r</span><span class="mord mathnormal mtight">o</span><span class="mord mathnormal mtight">t</span><span class="mord mathnormal mtight">a</span><span class="mord mathnormal mtight">t</span><span class="mord mathnormal mtight">i</span><span class="mord mathnormal mtight">o</span><span class="mord mathnormal mtight">n</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.969438em;vertical-align:-0.286108em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361079999999999em;"><span style="top:-2.5500000000000003em;margin-left:-0.13889em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">t</span><span class="mord mathnormal mtight" style="margin-right:0.02778em;">r</span><span class="mord mathnormal mtight">a</span><span class="mord mathnormal mtight">n</span><span class="mord mathnormal mtight">s</span><span class="mord mathnormal mtight" style="margin-right:0.10764em;">f</span><span class="mord mathnormal mtight">e</span><span class="mord mathnormal mtight" style="margin-right:0.02778em;">r</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.286108em;"><span></span></span></span></span></span></span></span></span></span></p>
-<p><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>t</mi><mi>h</mi><mi>e</mi><mtext> </mtext><mi>r</mi><mi>a</mi><mi>t</mi><mi>e</mi><mtext> </mtext><mi>o</mi><mi>f</mi><mtext> </mtext><mi>I</mi><mi mathvariant="normal">/</mi><mi>O</mi><mo stretchy="false">(</mo><msub><mi>R</mi><mrow><mi>I</mi><mi mathvariant="normal">/</mi><mi>O</mi></mrow></msub><mo stretchy="false">)</mo><mo>:</mo><msub><mi>R</mi><mrow><mi>I</mi><mi mathvariant="normal">/</mi><mi>O</mi></mrow></msub><mo>=</mo><mfrac><mrow><mi>S</mi><mi>i</mi><mi>z</mi><msub><mi>e</mi><mrow><mi>T</mi><mi>r</mi><mi>a</mi><mi>n</mi><mi>s</mi><mi>f</mi><mi>e</mi><mi>r</mi></mrow></msub></mrow><msub><mi>T</mi><mrow><mi>I</mi><mi mathvariant="normal">/</mi><mi>O</mi></mrow></msub></mfrac></mrow><annotation encoding="application/x-tex">the\ rate\ of\ I/O (R_{I/O}): R_{I/O} = \frac{Size_{Transfer}}{T_{I/O}}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.1052em;vertical-align:-0.3551999999999999em;"></span><span class="mord mathnormal">t</span><span class="mord mathnormal">h</span><span class="mord mathnormal">e</span><span class="mspace"> </span><span class="mord mathnormal" style="margin-right:0.02778em;">r</span><span class="mord mathnormal">a</span><span class="mord mathnormal">t</span><span class="mord mathnormal">e</span><span class="mspace"> </span><span class="mord mathnormal">o</span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="mspace"> </span><span class="mord mathnormal" style="margin-right:0.07847em;">I</span><span class="mord">/</span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.34480000000000005em;"><span style="top:-2.5198em;margin-left:-0.00773em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.07847em;">I</span><span class="mord mtight">/</span><span class="mord mathnormal mtight" style="margin-right:0.02778em;">O</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.3551999999999999em;"><span></span></span></span></span></span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">:</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1.03853em;vertical-align:-0.3551999999999999em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.34480000000000005em;"><span style="top:-2.5198em;margin-left:-0.00773em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.07847em;">I</span><span class="mord mtight">/</span><span class="mord mathnormal mtight" style="margin-right:0.02778em;">O</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.3551999999999999em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1.5950509999999998em;vertical-align:-0.60364em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.9914109999999998em;"><span style="top:-2.6550000000000002em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.13889em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3448em;"><span style="top:-2.3447999999999998em;margin-left:-0.13889em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5357142857142856em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.07847em;">I</span><span class="mord mtight">/</span><span class="mord mathnormal mtight" style="margin-right:0.02778em;">O</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.3694857142857143em;"><span></span></span></span></span></span></span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.51308em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.05764em;">S</span><span class="mord mathnormal mtight">i</span><span class="mord mathnormal mtight" style="margin-right:0.04398em;">z</span><span class="mord mtight"><span class="mord mathnormal mtight">e</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3448em;"><span style="top:-2.3487714285714287em;margin-left:0em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.13889em;">T</span><span class="mord mathnormal mtight" style="margin-right:0.02778em;">r</span><span class="mord mathnormal mtight">a</span><span class="mord mathnormal mtight">n</span><span class="mord mathnormal mtight">s</span><span class="mord mathnormal mtight" style="margin-right:0.10764em;">f</span><span class="mord mathnormal mtight">e</span><span class="mord mathnormal mtight" style="margin-right:0.02778em;">r</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.29011428571428566em;"><span></span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.60364em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></p>
-<img src="/imgs/202412301442334-1740072306166-1.png" srcset="/img/loading.gif" lazyload alt="img" style="zoom:80%;" />
-<h3 id="disk-scheduling"><a class="markdownIt-Anchor" href="#disk-scheduling"></a> Disk Scheduling</h3>
-<ol>
+<p>$T<em>{I/O} = T</em>{seek} + T<em>{rotation} + T</em>{transfer}$</p>
+<p>$the\ rate\ of\ I/O (R<em>{I/O}): R</em>{I/O} = \frac{Size<em>{Transfer}}{T</em>{I/O}}$</p>
+<p><img src="/imgs/202412301442334-1740072306166-1.png" srcset="/img/loading.gif" lazyload alt="img" style="zoom:80%;" /></p>
+<h3 id="Disk-Scheduling"><a href="#Disk-Scheduling" class="headerlink" title="Disk Scheduling"></a>Disk Scheduling</h3><ol>
 <li>SSTF: Shortest Seek Time First</li>
 </ol>
 <blockquote>
 <p>How can we implement SSTF-like scheduling but avoid starvation?</p>
 </blockquote>
-<ol start="2">
+<ol>
 <li>Elevator (a.k.a. SCAN or C-SCAN)</li>
 </ol>
 <blockquote>
 <p>How can we implement an algorithm that more closely approximates SJF by taking both seek and rotation into account?</p>
 </blockquote>
-<ol start="3">
+<ol>
 <li>SPTF: Shortest Positioning Time First</li>
 </ol>
-<h3 id="linux-io-schedulers"><a class="markdownIt-Anchor" href="#linux-io-schedulers"></a> Linux I/O Schedulers(*)</h3>
-<h4 id="goals-of-io-schedulers"><a class="markdownIt-Anchor" href="#goals-of-io-schedulers"></a> Goals of I/O schedulers</h4>
-<ul>
+<h3 id="Linux-I-O-Schedulers"><a href="#Linux-I-O-Schedulers" class="headerlink" title="Linux I/O Schedulers(*)"></a>Linux I/O Schedulers(*)</h3><h4 id="Goals-of-I-O-schedulers"><a href="#Goals-of-I-O-schedulers" class="headerlink" title="Goals of I/O schedulers"></a>Goals of I/O schedulers</h4><ul>
 <li>Minimize disk seeks</li>
 <li>Ensure optimum disk performance</li>
 <li>Provide fairness among I/O requests</li>
 </ul>
 <p>Balancing these goals or trading them against one another is the essence of the art of creating an I/O scheduler.</p>
-<h4 id="four-schedulers-in-linux"><a class="markdownIt-Anchor" href="#four-schedulers-in-linux"></a> Four schedulers in Linux</h4>
-<ul>
+<h4 id="Four-schedulers-in-Linux"><a href="#Four-schedulers-in-Linux" class="headerlink" title="Four schedulers in Linux"></a>Four schedulers in Linux</h4><ul>
 <li>NOOP</li>
 </ul>
 <p><strong>All incoming I/O requests</strong> for all processes running on the system, regardless of the I/O request (e.g., read, write, lseek, etc.), go into a simple <strong>first in, first out (FIFO) queue</strong>. The scheduler also does <strong>request merging</strong> to reduce seek time and improve throughput.</p>
@@ -379,28 +363,23 @@
 </ul>
 <p>Default Linux kernel scheduler</p>
 <p>CFQ synchronously puts requests from processes into a number of <strong>per-process queues</strong> then allocates <strong>time slices</strong> for each of the queues to access the disk.</p>
-<h2 id="flash-based-ssds"><a class="markdownIt-Anchor" href="#flash-based-ssds"></a> Flash-based SSDs</h2>
-<h3 id="flash-basics"><a class="markdownIt-Anchor" href="#flash-basics"></a> Flash Basics</h3>
-<img src="/imgs/202412241704745-1740072306166-2.png" srcset="/img/loading.gif" lazyload alt="image-20241224170438550"  />
+<h2 id="Flash-based-SSDs"><a href="#Flash-based-SSDs" class="headerlink" title="Flash-based SSDs"></a>Flash-based SSDs</h2><h3 id="Flash-Basics"><a href="#Flash-Basics" class="headerlink" title="Flash Basics"></a>Flash Basics</h3><p><img src="/imgs/202412241704745-1740072306166-2.png" srcset="/img/loading.gif" lazyload alt="image-20241224170438550"  /></p>
 <p>Whenever we want to write to a page, we need to <strong>erase</strong> the whole block first.</p>
 <p>Primary concern of flash chips: <strong>wear out</strong>!</p>
 <blockquote>
 <p>What is <strong>wear out</strong>?</p>
 </blockquote>
 <p>When a flash block is erased and programmed, it slowly accrues a little bit of extra charge. Over time, as that extra charge builds up, it becomes increasingly difficult to differentiate between a 0 and a 1. At the point where it becomes impossible, the block becomes unusable.</p>
-<h3 id="from-raw-flash-to-flash-based-ssds"><a class="markdownIt-Anchor" href="#from-raw-flash-to-flash-based-ssds"></a> From Raw Flash to Flash-Based SSDs</h3>
-<img src="/imgs/202412271130946-1740072306166-4.png" srcset="/img/loading.gif" lazyload alt="image-20241227113011776" style="zoom:80%;" />
-<p><strong>FTL</strong>(flash translation layer): FTL turns clients' read and write requests into internal flash operations(low-level read, erase, and program).</p>
-<h3 id="ftl-organization-a-log-structured-ftl"><a class="markdownIt-Anchor" href="#ftl-organization-a-log-structured-ftl"></a> FTL Organization: A Log-Structured FTL</h3>
-<blockquote>
+<h3 id="From-Raw-Flash-to-Flash-Based-SSDs"><a href="#From-Raw-Flash-to-Flash-Based-SSDs" class="headerlink" title="From Raw Flash to Flash-Based SSDs"></a>From Raw Flash to Flash-Based SSDs</h3><p><img src="/imgs/202412271130946-1740072306166-4.png" srcset="/img/loading.gif" lazyload alt="image-20241227113011776" style="zoom:80%;" /></p>
+<p><strong>FTL</strong>(flash translation layer): FTL turns clients’ read and write requests into internal flash operations(low-level read, erase, and program).</p>
+<h3 id="FTL-Organization-A-Log-Structured-FTL"><a href="#FTL-Organization-A-Log-Structured-FTL" class="headerlink" title="FTL Organization: A Log-Structured FTL"></a>FTL Organization: A Log-Structured FTL</h3><blockquote>
 <p>How to translate logical block(issued by the client) into physical page(on the actual SSD device)?</p>
 </blockquote>
 <p>FTL maintains a in-memory mapping table.</p>
 <div class="note note-primary">
-            <blockquote><p>What happens when the client(file system) writes a page to the SSD?</p></blockquote><p>When the client writes to the SSD, The SSD picks the <strong>next free page</strong> and programs the page with the block's contents, and records the <strong>logical-to-physical mapping</strong> in its mapping table.</p>
+            <blockquote><p>What happens when the client(file system) writes a page to the SSD?</p></blockquote><p>When the client writes to the SSD, The SSD picks the <strong>next free page</strong> and programs the page with the block’s contents, and records the <strong>logical-to-physical mapping</strong> in its mapping table.</p>
           </div>
-<h3 id="three-major-problems-with-log-structured-ftl"><a class="markdownIt-Anchor" href="#three-major-problems-with-log-structured-ftl"></a> Three major problems with log-structured FTL</h3>
-<ul>
+<h3 id="Three-major-problems-with-log-structured-FTL"><a href="#Three-major-problems-with-log-structured-FTL" class="headerlink" title="Three major problems with log-structured FTL"></a>Three major problems with log-structured FTL</h3><ul>
 <li><strong>Cost of Garbage Collection</strong></li>
 </ul>
 <blockquote>
@@ -415,11 +394,9 @@
 <p>What if we have a very large mapping table?</p>
 </blockquote>
 <ol>
-<li>
-<p><strong>Hybrid Mapping</strong>(log-based + block-based mapping): Maintain a <strong>log table</strong>(a pointer per page) and a <strong>data table</strong>(a pointer per block)</p>
+<li><p><strong>Hybrid Mapping</strong>(log-based + block-based mapping): Maintain a <strong>log table</strong>(a pointer per page) and a <strong>data table</strong>(a pointer per block)</p>
 </li>
-<li>
-<p>Page Mapping Plus <strong>Caching</strong>: Caching hot pieces of the FTL</p>
+<li><p>Page Mapping Plus <strong>Caching</strong>: Caching hot pieces of the FTL</p>
 </li>
 </ol>
 <ul>
@@ -429,49 +406,44 @@
 <p>How to balance the erase/program loads among physical blocks of the flash chip so that all blocks wear out roughly at the same time?</p>
 </blockquote>
 <p>The FTL occasionally migrate data from blocks that are mostly read(seldom overwritten) in order to ensure said blocks receive their share of the erase/program load.</p>
-<h2 id="file-system-implementation"><a class="markdownIt-Anchor" href="#file-system-implementation"></a> File System Implementation</h2>
-<h3 id="introduction-to-file-systems"><a class="markdownIt-Anchor" href="#introduction-to-file-systems"></a> Introduction to file systems</h3>
-<p><code>vnode</code> is the internal structure that describes the file.</p>
+<h2 id="File-System-Implementation"><a href="#File-System-Implementation" class="headerlink" title="File System Implementation"></a>File System Implementation</h2><h3 id="Introduction-to-file-systems"><a href="#Introduction-to-file-systems" class="headerlink" title="Introduction to file systems"></a>Introduction to file systems</h3><p><code>vnode</code> is the internal structure that describes the file.</p>
 <p>The key part of defining a file system is to design the data structure that <strong>maps from an abstract notion of a file to a collection of disk blocks</strong>.</p>
-<img src="/imgs/202412221745667-1740072306166-3.png" srcset="/img/loading.gif" lazyload style="zoom: 67%;" />
+<p><img src="/imgs/202412221745667-1740072306166-3.png" srcset="/img/loading.gif" lazyload style="zoom: 67%;" /></p>
 <p>File structure:</p>
-<img src="/imgs/202412222134213-1740072306166-7.png" srcset="/img/loading.gif" lazyload alt="img" style="zoom: 50%;" />
-<h3 id="inode-structure"><a class="markdownIt-Anchor" href="#inode-structure"></a> <code>Inode</code> Structure</h3>
-<img src="/imgs/202501012352680-1740072306166-5.png" srcset="/img/loading.gif" lazyload alt="image-20250101235247419" style="zoom:67%;" />
+<p><img src="/imgs/202412222134213-1740072306166-7.png" srcset="/img/loading.gif" lazyload alt="img" style="zoom: 50%;" /></p>
+<h3 id="Inode-Structure"><a href="#Inode-Structure" class="headerlink" title="Inode Structure"></a><code>Inode</code> Structure</h3><p><img src="/imgs/202501012352680-1740072306166-5.png" srcset="/img/loading.gif" lazyload alt="image-20250101235247419" style="zoom:67%;" /></p>
 <center>The Inode Table</center>
+
 <p><strong>The Multi-Level Index File System</strong>:</p>
 <p>The <code>inode</code> contains some <strong>direct pointers</strong> pointing to data blocks, and also contains some <strong>indirect pointers</strong> pointing to <strong>indirect blocks</strong>, in which the pointers point to data blocks.</p>
-<h3 id="directory"><a class="markdownIt-Anchor" href="#directory"></a> Directory</h3>
-<img src="/imgs/202412241037406-1740072306166-6.png" srcset="/img/loading.gif" lazyload alt="image-20241224103734860" style="zoom:80%;" />
+<h3 id="Directory"><a href="#Directory" class="headerlink" title="Directory"></a>Directory</h3><p><img src="/imgs/202412241037406-1740072306166-6.png" srcset="/img/loading.gif" lazyload alt="image-20241224103734860" style="zoom:80%;" /></p>
 <p>Directory is just a special type of file that stores <code>name→inode-number</code> mappings. Thus, a directory has an <code>inode</code>, somewhere in the <code>inode</code> table.</p>
 <p>Root directory has a designated <code>inode</code> number(2).</p>
-<h2 id="locality-and-the-fast-file-system"><a class="markdownIt-Anchor" href="#locality-and-the-fast-file-system"></a> Locality and The Fast File System</h2>
-<p>Data structures of the old file system(really simple!):</p>
-<img src="/imgs/202412301450351-1740072306166-8.png" srcset="/img/loading.gif" lazyload alt="image-20241230145032226" style="zoom:67%;" />
+<h2 id="Locality-and-The-Fast-File-System"><a href="#Locality-and-The-Fast-File-System" class="headerlink" title="Locality and The Fast File System"></a>Locality and The Fast File System</h2><p>Data structures of the old file system(really simple!):</p>
+<p><img src="/imgs/202412301450351-1740072306166-8.png" srcset="/img/loading.gif" lazyload alt="image-20241230145032226" style="zoom:67%;" /></p>
 <p>However, the old file system has pretty bad performance, so the crux of our problem:</p>
 <blockquote>
 <p>How can we organize on-disk data to improve performance?</p>
 </blockquote>
-<h3 id="ffs-disk-awareness"><a class="markdownIt-Anchor" href="#ffs-disk-awareness"></a> FFS: Disk Awareness</h3>
-<p>FFS divides the disk into a number of <strong>cylinder groups</strong>.</p>
-<img src="/imgs/202412301505303-1740072306166-12.png" srcset="/img/loading.gif" lazyload alt="image-20241230150542123" style="zoom:80%;" />
+<h3 id="FFS-Disk-Awareness"><a href="#FFS-Disk-Awareness" class="headerlink" title="FFS: Disk Awareness"></a>FFS: Disk Awareness</h3><p>FFS divides the disk into a number of <strong>cylinder groups</strong>. </p>
+<p><img src="/imgs/202412301505303-1740072306166-12.png" srcset="/img/loading.gif" lazyload alt="image-20241230150542123" style="zoom:80%;" /></p>
 <p>However, modern drives do not export their geometry information to the file system. Disks only export a <strong>logical address space of blocks</strong>. Therefore, modern file systems instead organize the drive into <strong>block groups</strong>.</p>
-<img src="/imgs/202412301539892-1740072306166-9.png" srcset="/img/loading.gif" lazyload alt="image-20241230153906807" style="zoom:80%;" />
-<p>Accessing files within the same group won't result in long seeks across the disk.</p>
+<p><img src="/imgs/202412301539892-1740072306166-9.png" srcset="/img/loading.gif" lazyload alt="image-20241230153906807" style="zoom:80%;" /></p>
+<p>Accessing files within the same group won’t result in long seeks across the disk.</p>
 <p>FFS includes <strong>all the structures</strong> you might expect a file system to have <strong>within each group</strong>.</p>
-<img src="/imgs/202412301542707-1740072306166-10.png" srcset="/img/loading.gif" lazyload alt="image-20241230154202583" style="zoom:80%;" />
+<p><img src="/imgs/202412301542707-1740072306166-10.png" srcset="/img/loading.gif" lazyload alt="image-20241230154202583" style="zoom:80%;" /></p>
 <center>A single cylinder group</center>
-<h3 id="ffs-policies"><a class="markdownIt-Anchor" href="#ffs-policies"></a> FFS Policies</h3>
-<blockquote>
+
+<h3 id="FFS-Policies"><a href="#FFS-Policies" class="headerlink" title="FFS Policies"></a>FFS Policies</h3><blockquote>
 <p>Assumptions we make?</p>
 </blockquote>
 <p><strong>File Locality</strong>: We assume that files within the same directory accessed together more often.</p>
 <blockquote>
 <p>How to place directories?</p>
 </blockquote>
-<p>Find the cylinder group with</p>
+<p>Find the cylinder group with </p>
 <ol>
-<li>a <strong>low number of allocated directories</strong> (to balance directories across groups)</li>
+<li>a <strong>low number of allocated directories</strong> (to balance directories across groups) </li>
 <li>a <strong>high number of free <code>inodes</code></strong>(to subsequently be able to allocate a bunch of files)</li>
 </ol>
 <blockquote>
@@ -486,69 +458,57 @@
 </blockquote>
 <p>A large file would entirely fill the block group, which prevents subsequent “related” files from being placed within this block group, hurting file-access locality.</p>
 <p>So our policy is: After some number of blocks are allocated into the first block group(the number of direct pointers available within an <code>inode</code>), FFS places the next “large” chunk of the file(those pointed to by the first indirect block) in another block group, and so on…</p>
-<p><img src="/imgs/202412301622139-1740072306166-11.png" srcset="/img/loading.gif" lazyload alt="File spread across groups" /></p>
-<h2 id="crash-consistency-fsck-and-journaling"><a class="markdownIt-Anchor" href="#crash-consistency-fsck-and-journaling"></a> Crash Consistency: FSCK and Journaling</h2>
-<p>The crux of our problem:</p>
+<p><img src="/imgs/202412301622139-1740072306166-11.png" srcset="/img/loading.gif" lazyload alt="File spread across groups"></p>
+<h2 id="Crash-Consistency-FSCK-and-Journaling"><a href="#Crash-Consistency-FSCK-and-Journaling" class="headerlink" title="Crash Consistency: FSCK and Journaling"></a>Crash Consistency: FSCK and Journaling</h2><p>The crux of our problem:</p>
 <blockquote>
 <p>The system may crash or lose power at any time during disk operations, and thus the on-disk state may only partially get updated. How do we ensure the file system <strong>keeps the on-disk image in a reasonable state</strong>?</p>
 </blockquote>
-<h3 id="solution-1-the-file-system-checker"><a class="markdownIt-Anchor" href="#solution-1-the-file-system-checker"></a> Solution #1: The File System Checker</h3>
-<div class="note note-success">
+<h3 id="Solution-1-The-File-System-Checker"><a href="#Solution-1-The-File-System-Checker" class="headerlink" title="Solution #1: The File System Checker"></a>Solution #1: The File System Checker</h3><div class="note note-success">
             <p>Let inconsistencies happen and then fix them later (when rebooting).</p><p>By consistency, we mean that the file system <strong>metadata is internally consistent</strong>.</p>
           </div>
 <p><code>fsck</code> is a UNIX tool for finding such inconsistencies and repairing them:</p>
 <ul>
-<li>
-<p><strong>Superblock</strong>: Check if the superblock looks suspicious and use an alternate copy of the superblock if it finds a suspect superblock.</p>
+<li><p><strong>Superblock</strong>: Check if the superblock looks suspicious and use an alternate copy of the superblock if it finds a suspect superblock.</p>
 <div class="note note-info">
             <p>Recall that each block group has a copy of the superblock.</p>
           </div>
 </li>
-<li>
-<p><strong>Free blocks</strong>: Produce a <strong>correct version of the allocation bitmaps</strong> by scanning the <code>inodes</code>, indirect blocks, double indirect blocks, …, to resolve any inconsistency between bitmaps and <code>inodes</code>.</p>
+<li><p><strong>Free blocks</strong>: Produce a <strong>correct version of the allocation bitmaps</strong> by scanning the <code>inodes</code>, indirect blocks, double indirect blocks, …, to resolve any inconsistency between bitmaps and <code>inodes</code>.</p>
 <div class="note note-info">
             <p>For now, we trust the information with the <code>inodes</code>.</p>
           </div>
 </li>
-<li>
-<p><strong><code>Inode</code> state</strong>: Check each <code>inode</code>, clear the suspected <code>inode</code> and update the <code>inode</code> bitmap correspondingly.</p>
+<li><p><strong><code>Inode</code> state</strong>: Check each <code>inode</code>, clear the suspected <code>inode</code> and update the <code>inode</code> bitmap correspondingly.</p>
 <div class="note note-info">
             <p>The information within the <code>inodes</code> can be corrupted.</p>
           </div>
 </li>
-<li>
-<p><strong><code>Inode</code> links</strong>: Verify the link count of each allocated <code>inode</code>.</p>
+<li><p><strong><code>Inode</code> links</strong>: Verify the link count of each allocated <code>inode</code>.</p>
 <div class="note note-info">
             <p>Recall that the link count indicates the number of different directories that contain a reference (i.e., a link) to this particular file.</p>
           </div>
 <div class="note note-primary">
-            <blockquote><p>Aside: What's the difference between hard link and symbolic link?</p></blockquote><p>Symbolic Link: A symbolic link is a special type of file(like regular files and directories), which stores the path name(string) of the target file. It has its own <code>inode</code>: <code>symlink's inode</code>.</p><p>Hard Link: Different directory's entries point to the same <code>inode</code> and are calculated by link count. Deleting the file will decrease the link count by 1.</p><figure class="highlight xl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs xl">Symbolic Link:<br><span class="hljs-function"><span class="hljs-title">dir</span> entry -&gt;</span> <span class="hljs-function"><span class="hljs-title">symlink</span>&#x27;s inode -&gt;</span> (存储路径字符串: <span class="hljs-string">&quot;/path/to/target&quot;</span>)<br><br>Hard Link:<br>dir entry <span class="hljs-number">1</span> ──┐<br><span class="hljs-function"><span class="hljs-title">dir</span> entry 2 ──┴─&gt; target&#x27;s inode -&gt;</span> (实际数据)<br></code></pre></td></tr></table></figure>
+            <blockquote><p>Aside: What’s the difference between hard link and symbolic link?</p></blockquote><p>Symbolic Link: A symbolic link is a special type of file(like regular files and directories), which stores the path name(string) of the target file. It has its own <code>inode</code>: <code>symlink&#39;s inode</code>.</p><p>Hard Link: Different directory’s entries point to the same <code>inode</code> and are calculated by link count. Deleting the file will decrease the link count by 1.</p><figure class="highlight xl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs xl">Symbolic Link:<br><span class="hljs-function"><span class="hljs-title">dir</span> entry -&gt;</span> <span class="hljs-function"><span class="hljs-title">symlink</span>&#x27;s inode -&gt;</span> (存储路径字符串: <span class="hljs-string">&quot;/path/to/target&quot;</span>)<br><br>Hard Link:<br>dir entry <span class="hljs-number">1</span> ──┐<br><span class="hljs-function"><span class="hljs-title">dir</span> entry 2 ──┴─&gt; target&#x27;s inode -&gt;</span> (实际数据)<br></code></pre></td></tr></table></figure>
           </div>
 </li>
-<li>
-<p><strong>Duplicates</strong>: Check for duplicated pointers, i.e., cases where two different <code>inodes</code> refer to the same block.</p>
+<li><p><strong>Duplicates</strong>: Check for duplicated pointers, i.e., cases where two different <code>inodes</code> refer to the same block.</p>
 </li>
-<li>
-<p><strong>Bad blocks</strong>: Check for bad block pointers and remove the pointers from the <code>inode</code> or indirect block.</p>
+<li><p><strong>Bad blocks</strong>: Check for bad block pointers and remove the pointers from the <code>inode</code> or indirect block.</p>
 </li>
-<li>
-<p><strong>Directory checks</strong>: Check on the contents of each directory.</p>
+<li><p><strong>Directory checks</strong>: Check on the contents of each directory.</p>
 </li>
 </ul>
 <p><code>fsck</code> requires <strong>scanning the entire disk</strong>, so the problem of <code>fsck</code> is obvious:</p>
 <p>As disks grew bigger, the performance became prohibitive.</p>
-<h3 id="solution-2-journaling-or-write-ahead-logging"><a class="markdownIt-Anchor" href="#solution-2-journaling-or-write-ahead-logging"></a> Solution #2: Journaling (or Write-Ahead Logging)</h3>
-<p>Basic idea: When updating the disk, before overwriting the structures in place, first write down a <strong>little note</strong> to a structure(somewhere else on the disk, in a well-known location) that we organize as a &quot;log&quot;, describing what you are about to do.</p>
-<h4 id="linux-ext3-a-popular-journaling-file-system"><a class="markdownIt-Anchor" href="#linux-ext3-a-popular-journaling-file-system"></a> Linux ext3: a popular journaling file system</h4>
-<p>An ext2 file system (without journaling):</p>
-<img src="/imgs/202501012027229-1740072306166-13.png" srcset="/img/loading.gif" lazyload alt="image-20250101202739795" style="zoom:80%;" />
+<h3 id="Solution-2-Journaling-or-Write-Ahead-Logging"><a href="#Solution-2-Journaling-or-Write-Ahead-Logging" class="headerlink" title="Solution #2: Journaling (or Write-Ahead Logging)"></a>Solution #2: Journaling (or Write-Ahead Logging)</h3><p>Basic idea: When updating the disk, before overwriting the structures in place, first write down a <strong>little note</strong> to a structure(somewhere else on the disk, in a well-known location) that we organize as a “log”, describing what you are about to do.</p>
+<h4 id="Linux-ext3-a-popular-journaling-file-system"><a href="#Linux-ext3-a-popular-journaling-file-system" class="headerlink" title="Linux ext3: a popular journaling file system"></a>Linux ext3: a popular journaling file system</h4><p>An ext2 file system (without journaling):</p>
+<p><img src="/imgs/202501012027229-1740072306166-13.png" srcset="/img/loading.gif" lazyload alt="image-20250101202739795" style="zoom:80%;" /></p>
 <p>An ext3 file system adds a new key structure: <strong>journal</strong></p>
-<img src="/imgs/202501012028597-1740072306166-14.png" srcset="/img/loading.gif" lazyload alt="image-20250101202815442" style="zoom:80%;" />
-<h4 id="data-journaling"><a class="markdownIt-Anchor" href="#data-journaling"></a> Data journaling</h4>
-<img src="/imgs/202501012238287-1740072306166-15.png" srcset="/img/loading.gif" lazyload alt="image-20250101223840078" style="zoom:80%;" />
+<p><img src="/imgs/202501012028597-1740072306166-14.png" srcset="/img/loading.gif" lazyload alt="image-20250101202815442" style="zoom:80%;" /></p>
+<h4 id="Data-journaling"><a href="#Data-journaling" class="headerlink" title="Data journaling"></a>Data journaling</h4><p><img src="/imgs/202501012238287-1740072306166-15.png" srcset="/img/loading.gif" lazyload alt="image-20250101223840078" style="zoom:80%;" /></p>
 <blockquote>
 <p>What if <code>TxE</code> is successfully written to the log while Db(user data) is not?</p>
-<img src="/imgs/202501012240287-1740072306166-16.png" srcset="/img/loading.gif" lazyload alt="image-20250101224016144" style="zoom:80%;" />
+<p><img src="/imgs/202501012240287-1740072306166-16.png" srcset="/img/loading.gif" lazyload alt="image-20250101224016144" style="zoom:80%;" /></p>
 </blockquote>
 <p>If we write theses five blocks all at once, if the system crash before Db is completely written to disk while <code>TxE</code> has been successfully written to disk. The system will assume that journal write is successful, despite it is not, causing problems.</p>
 <blockquote>
@@ -556,13 +516,11 @@
 </blockquote>
 <p>The file system issues the transactional write in two steps:</p>
 <ol>
-<li>
-<p>Write all blocks except the <code>TxE</code> block at once to the journal.</p>
-<img src="/imgs/202501012245746-1740072306166-17.png" srcset="/img/loading.gif" lazyload alt="image-20250101224521181" style="zoom:80%;" />
+<li><p>Write all blocks except the <code>TxE</code> block at once to the journal.</p>
+<p><img src="/imgs/202501012245746-1740072306166-17.png" srcset="/img/loading.gif" lazyload alt="image-20250101224521181" style="zoom:80%;" /></p>
 </li>
-<li>
-<p>When those writes complete, the file system issues the write of the <code>TxE</code> block, thus leaving the journal in this final, safe state:</p>
-<img src="/imgs/202501012246518-1740072306166-21.png" srcset="/img/loading.gif" lazyload alt="image-20250101224633461" style="zoom: 80%;" />
+<li><p>When those writes complete, the file system issues the write of the <code>TxE</code> block, thus leaving the journal in this final, safe state:</p>
+<p><img src="/imgs/202501012246518-1740072306166-21.png" srcset="/img/loading.gif" lazyload alt="image-20250101224633461" style="zoom: 80%;" /></p>
 </li>
 </ol>
 <p><code>TxE</code> should be a single 512-byte block to make the write of <code>TxE</code> atomic(the disk guarantees that any 512-byte write will either happen completely or not at all).</p>
@@ -572,90 +530,76 @@
 </blockquote>
 <p>We make the log a <strong>circular log</strong> by freeing the space occupied by checkpointed transactions.</p>
 <p>Mark the oldest and newest non-checkpointed transactions in the log in a <strong>journal superblock</strong>:</p>
-<img src="/imgs/202501012306476-1740072306166-18.png" srcset="/img/loading.gif" lazyload alt="image-20250101230652302" style="zoom:80%;" />
+<p><img src="/imgs/202501012306476-1740072306166-18.png" srcset="/img/loading.gif" lazyload alt="image-20250101230652302" style="zoom:80%;" /></p>
 <p>Our final <strong>data journaling</strong> protocol:</p>
 <ol>
-<li>
-<p><strong>Journal write</strong>: Write the contents of the transaction (including <code>TxB</code>, metadata, and data) to the log; wait for these writes to complete.</p>
+<li><p><strong>Journal write</strong>: Write the contents of the transaction (including <code>TxB</code>, metadata, and data) to the log; wait for these writes to complete. </p>
 </li>
-<li>
-<p><strong>Journal commit</strong>: Write the <strong>transaction commit block</strong> (containing <code>TxE</code>) to the log; wait for write to complete.</p>
+<li><p><strong>Journal commit</strong>: Write the <strong>transaction commit block</strong> (containing <code>TxE</code>) to the log; wait for write to complete.</p>
 <p>The transaction is now <strong>committed</strong>.</p>
 </li>
-<li>
-<p><strong>Checkpoint</strong>: Write the contents of the update (metadata and data) to their final on-disk locations.</p>
+<li><p><strong>Checkpoint</strong>: Write the contents of the update (metadata and data) to their final on-disk locations.</p>
 </li>
-<li>
-<p><strong>Free</strong>: Some time later, mark the transaction free in the journal by updating the journal superblock.</p>
+<li><p><strong>Free</strong>: Some time later, mark the transaction free in the journal by updating the journal superblock.</p>
 </li>
 </ol>
 <blockquote>
 <p>However, we are writing each data block to the disk twice, which is a heavy cost to pay considering system crash is rare. How to improve our protocol?</p>
 </blockquote>
-<h4 id="metadata-journaling"><a class="markdownIt-Anchor" href="#metadata-journaling"></a> Metadata Journaling</h4>
-<p>User data is not written to the log. Instead, they are written to disk first.</p>
-<img src="/imgs/202501012319474-1740072306166-19.png" srcset="/img/loading.gif" lazyload alt="image-20250101231918309" style="zoom:80%;" />
+<h4 id="Metadata-Journaling"><a href="#Metadata-Journaling" class="headerlink" title="Metadata Journaling"></a>Metadata Journaling</h4><p>User data is not written to the log. Instead, they are written to disk first.</p>
+<p><img src="/imgs/202501012319474-1740072306166-19.png" srcset="/img/loading.gif" lazyload alt="image-20250101231918309" style="zoom:80%;" /></p>
 <p>Our protocol:</p>
 <ol>
-<li>
-<p><strong>Data write</strong>: Write data to final location; wait for completion (the wait is optional).</p>
+<li><p><strong>Data write</strong>: Write data to final location; wait for completion (the wait is optional). </p>
 </li>
-<li>
-<p><strong>Journal metadata write</strong>: Write the begin block and metadata to the log; wait for writes to complete.</p>
+<li><p><strong>Journal metadata write</strong>: Write the begin block and metadata to the log; wait for writes to complete. </p>
 <div class="note note-danger">
             <p><strong>Step 3 should wait for step 1&amp;2 to complete!</strong> Step 1 and Step 2 and run concurrently.</p>
           </div>
 </li>
-<li>
-<p><strong>Journal commit</strong>: Write the transaction commit block (containing <code>TxE</code>) to the log; wait for the write to complete.</p>
-<p>The transaction (including data) is now committed.</p>
+<li><p><strong>Journal commit</strong>: Write the transaction commit block (containing <code>TxE</code>) to the log; wait for the write to complete.</p>
+<p>The transaction (including data) is now committed. </p>
 </li>
-<li>
-<p><strong>Checkpoint metadata</strong>: Write the contents of the metadata update to their final locations within the file system.</p>
+<li><p><strong>Checkpoint metadata</strong>: Write the contents of the metadata update to their final locations within the file system. </p>
 </li>
-<li>
-<p><strong>Free</strong>: Later, mark the transaction free in journal superblock.</p>
+<li><p><strong>Free</strong>: Later, mark the transaction free in journal superblock.</p>
 </li>
 </ol>
 <div class="note note-success">
             <p>The rule is: Write the pointed-to object before the object that points to it!</p>
           </div>
 <p>Linux ext3 gives you the option of choosing either <strong>data, ordered, or unordered modes</strong> (in unordered mode, data can be written at any time).</p>
-<h2 id="log-structured-file-systems"><a class="markdownIt-Anchor" href="#log-structured-file-systems"></a> Log-structured File Systems</h2>
-<h3 id="write-to-disk-sequentially"><a class="markdownIt-Anchor" href="#write-to-disk-sequentially"></a> Write to disk sequentially</h3>
-<blockquote>
+<h2 id="Log-structured-File-Systems"><a href="#Log-structured-File-Systems" class="headerlink" title="Log-structured File Systems"></a>Log-structured File Systems</h2><h3 id="Write-to-disk-sequentially"><a href="#Write-to-disk-sequentially" class="headerlink" title="Write to disk sequentially"></a>Write to disk sequentially</h3><blockquote>
 <p>The crux of the problem:</p>
 <p>How to write to disk sequentially?</p>
 </blockquote>
 <p>Before writing to the disk, LFS keeps track of updates in memory.; when it has received a sufficient number of updates, it writes them to disk all at once.</p>
 <p>An example in which LFS buffers two sets of updates into a small segment:</p>
-<img src="/imgs/202501042359351-1740072306166-20.png" srcset="/img/loading.gif" lazyload alt="image-20250104235900107" style="zoom:80%;" />
-<h3 id="find-inodes"><a class="markdownIt-Anchor" href="#find-inodes"></a> Find <code>Inodes</code></h3>
-<blockquote>
+<p><img src="/imgs/202501042359351-1740072306166-20.png" srcset="/img/loading.gif" lazyload alt="image-20250104235900107" style="zoom:80%;" /></p>
+<h3 id="Find-Inodes"><a href="#Find-Inodes" class="headerlink" title="Find Inodes"></a>Find <code>Inodes</code></h3><blockquote>
 <p>How to find <code>inodes</code> in LFS?</p>
 </blockquote>
 <div class="note note-info">
             <p>Recall in FFS we split up the <code>inode</code> table into chunks and places a group of <code>inodes</code> within each cylinder group. So we need to know the address and size of each <code>inode</code> chunk before calculating the address of an <code>inode</code>.</p>
           </div>
-<p>Finding <code>inodes</code> in old Unix file system or FFS is simple because all <code>inodes</code> are placed in a fixed area on disk. You can simply calculate an <code>inode</code>'s location given its <code>inode</code> number. However, in LFS, <code>inodes</code> are all across the disk and we never overwrite any <code>inode</code> so the latest version of an <code>inode</code> keeps moving.</p>
+<p>Finding <code>inodes</code> in old Unix file system or FFS is simple because all <code>inodes</code> are placed in a fixed area on disk. You can simply calculate an <code>inode</code>‘s location given its <code>inode</code> number. However, in LFS, <code>inodes</code> are all across the disk and we never overwrite any <code>inode</code> so the latest version of an <code>inode</code> keeps moving.</p>
 <p>LFS introduces the <strong><code>inode</code> map (<code>imap</code>)</strong>. The <code>imap</code> is a structure that takes an <code>inode</code> number as input and produces the disk address of the most recent version of the <code>inode</code>.</p>
 <div class="note note-info">
             <p>Note that the <code>inode</code> map in LFS is a virtualization of <code>inode</code> numbers.</p>
           </div>
 <p>LFS places chunks of the <code>inode</code> map right next to where it is writing all of the other new information to avoid frequent disk seeks:</p>
-<img src="/imgs/202501051545857-1740072306166-22.png" srcset="/img/loading.gif" lazyload alt="image-20250105154514665" style="zoom:80%;" />
+<p><img src="/imgs/202501051545857-1740072306166-22.png" srcset="/img/loading.gif" lazyload alt="image-20250105154514665" style="zoom:80%;" /></p>
 <blockquote>
 <p>Now the question is:</p>
 <p>How do we find the <code>inode</code> map, considering now that pieces of it are also now spread across the disk?</p>
 </blockquote>
 <p>LFS has a fixed place on disk, known as the <strong>checkpoint region (CR)</strong>, containing pointers to the latest pieces of the <code>inode</code> map.</p>
-<img src="/imgs/image-20250105155149962-1740072306166-23.png" srcset="/img/loading.gif" lazyload alt="image-20250105155149962" style="zoom:80%;" />
-<p>The entire <code>imap</code> is usually cached in memory, so the extra work LFS does during a read is to look up the <code>inode</code>’s address in the <code>imap</code>.</p>
+<p><img src="/imgs/image-20250105155149962-1740072306166-23.png" srcset="/img/loading.gif" lazyload alt="image-20250105155149962" style="zoom:80%;" /></p>
+<p>The entire <code>imap</code> is usually cached in memory, so the extra work LFS does during a read is to look up the <code>inode</code>’s address in the <code>imap</code>. </p>
 <div class="note note-info">
             <p>The <code>imap</code> also solves the <strong>recursive update problem</strong>. While an <code>inode</code> keeps moving across the disk, its <code>inode</code> number remains unchanged. Only the <code>imap</code> structure is updated while the directory holds the same <code>name-to-inode-number</code> mapping.</p>
           </div>
-<h3 id="garbage-collection"><a class="markdownIt-Anchor" href="#garbage-collection"></a> Garbage Collection</h3>
-<blockquote>
+<h3 id="Garbage-Collection"><a href="#Garbage-Collection" class="headerlink" title="Garbage Collection"></a>Garbage Collection</h3><blockquote>
 <p>How to collect garbage in LFS?</p>
 </blockquote>
 <p>Note that LFS always writes the latest version of a file to new locations on disk, leaving old versions of file structures(<strong>garbage</strong>) scattered throughout the disk.</p>
@@ -775,8 +719,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2024/10/22/OS161-A4/" title="OS161 Assignment 4">
-                        <span class="hidden-mobile">OS161 Assignment 4</span>
+                      <a href="/2024/12/27/Chapter1/" title="Chapter1">
+                        <span class="hidden-mobile">Chapter1</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
