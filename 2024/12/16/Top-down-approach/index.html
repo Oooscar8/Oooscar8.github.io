@@ -110,7 +110,7 @@
 <meta property="og:image" content="http://oooscar8.github.io/2024/12/16/imgs/image-20241216195033045-1740143775464-181.png">
 <meta property="og:image" content="http://oooscar8.github.io/2024/12/16/imgs/image-20241216200639093-1740143790085-183.png">
 <meta property="article:published_time" content="2024-12-15T16:00:00.000Z">
-<meta property="article:modified_time" content="2025-02-21T13:55:51.597Z">
+<meta property="article:modified_time" content="2025-02-22T09:42:21.260Z">
 <meta property="article:author" content="Alex Sun">
 <meta property="article:tag" content="ELEC331">
 <meta property="article:tag" content="Computer Networking">
@@ -309,7 +309,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          782 字
+          784 字
         
       </span>
     
@@ -362,15 +362,33 @@
             
               <div class="markdown-body">
                 
-                <p>A Top-Down Approach is a classic textbook in the field of computer networking. Hope this studying note can help you get the key points when you read the textbook!</p>
-<h2 id="Chapter-1-What-is-the-Internet"><a href="#Chapter-1-What-is-the-Internet" class="headerlink" title="Chapter 1 - What is the Internet?"></a>Chapter 1 - What is the Internet?</h2><h3 id="A-Nuts-and-Bolts-Description"><a href="#A-Nuts-and-Bolts-Description" class="headerlink" title="A Nuts-and-Bolts Description"></a>A Nuts-and-Bolts Description</h3><h4 id="basic-concepts"><a href="#basic-concepts" class="headerlink" title="basic concepts"></a>basic concepts</h4><p>Devices connected to the Internet: <strong>hosts</strong> or <strong>end system</strong></p>
-<p>End systems are connected together by a network of <strong>communication links</strong> and <strong>packet switches</strong>. </p>
-<hr>
-<h4 id="communication-links"><a href="#communication-links" class="headerlink" title="communication links"></a>communication links</h4><p>Made up of different types of physical media</p>
-<p>Different links have different <strong>transmission rate</strong>, measured in bits/seconds</p>
-<p>When one end system has data to send to another end system, the sending end system segments the data and adds header bytes to each segment. The resulting packages of information, known as <strong>packets</strong>, are then sent through the network to the destination end system, where they are reassembled into the original data</p>
-<hr>
-<h4 id="packet-switch"><a href="#packet-switch" class="headerlink" title="packet switch"></a>packet switch</h4><p>Takes a packet arriving on one of its incoming communication links and forwards that packet on one of its outgoing communication links</p>
+                <p>A Top-Down Approach is a classic textbook in the field of computer
+networking. Hope this studying note can help you get the key points when
+you read the textbook!</p>
+<h2 id="chapter-1---what-is-the-internet">Chapter 1 - What is the
+Internet?</h2>
+<h3 id="a-nuts-and-bolts-description">A Nuts-and-Bolts Description</h3>
+<h4 id="basic-concepts">basic concepts</h4>
+<p>Devices connected to the Internet: <strong>hosts</strong> or
+<strong>end system</strong></p>
+<p>End systems are connected together by a network of
+<strong>communication links</strong> and <strong>packet
+switches</strong>.</p>
+<hr />
+<h4 id="communication-links">communication links</h4>
+<p>Made up of different types of physical media</p>
+<p>Different links have different <strong>transmission rate</strong>,
+measured in bits/seconds</p>
+<p>When one end system has data to send to another end system, the
+sending end system segments the data and adds header bytes to each
+segment. The resulting packages of information, known as
+<strong>packets</strong>, are then sent through the network to the
+destination end system, where they are reassembled into the original
+data</p>
+<hr />
+<h4 id="packet-switch">packet switch</h4>
+<p>Takes a packet arriving on one of its incoming communication links
+and forwards that packet on one of its outgoing communication links</p>
 <ul>
 <li><strong>routers</strong></li>
 </ul>
@@ -383,14 +401,18 @@
 <blockquote>
 <p>used in access networks</p>
 </blockquote>
-<p>The sequence of communication links and packet switches traversed by a packet from the sending end system to the receiving end system is known as a <strong>route</strong> or <strong>path</strong> through the network. </p>
-<hr>
-<h4 id="Protocols"><a href="#Protocols" class="headerlink" title="Protocols"></a>Protocols</h4><p>End systems, packet switches, and other pieces of the Internet run protocols that control the sending and receiving of information within the Internet.</p>
+<p>The sequence of communication links and packet switches traversed by
+a packet from the sending end system to the receiving end system is
+known as a <strong>route</strong> or <strong>path</strong> through the
+network.</p>
+<hr />
+<h4 id="protocols">Protocols</h4>
+<p>End systems, packet switches, and other pieces of the Internet run
+protocols that control the sending and receiving of information within
+the Internet.</p>
 <ul>
-<li><p>TCP(Transmission Control Protocol)</p>
-</li>
-<li><p>Internet Protocol (IP)</p>
-</li>
+<li><p>TCP(Transmission Control Protocol)</p></li>
+<li><p>Internet Protocol (IP)</p></li>
 </ul>
 <blockquote>
 <p>specifies the format of packets</p>
@@ -398,24 +420,40 @@
 <ul>
 <li>TCP/IP</li>
 </ul>
-<h3 id="A-services-Description"><a href="#A-services-Description" class="headerlink" title="A services Description"></a>A services Description</h3><h4 id="Definition"><a href="#Definition" class="headerlink" title="Definition"></a>Definition</h4><p>The Internet is an infrastructure that provides services to <strong>distributed applications</strong>.</p>
-<hr>
-<h4 id="socket-interface"><a href="#socket-interface" class="headerlink" title="socket interface"></a>socket interface</h4><p>Socket interface is a set of rules that the sending program must follow so that the data can be delivered to destination program.</p>
-<h3 id="What-is-a-Protocol"><a href="#What-is-a-Protocol" class="headerlink" title="What is a Protocol?"></a>What is a Protocol?</h3><h4 id="A-Human-Analogy"><a href="#A-Human-Analogy" class="headerlink" title="A Human Analogy"></a>A Human Analogy</h4><p><img src="/imgs/202412271816523.png" srcset="/img/loading.gif" lazyload alt="image-20240903214826833" style="zoom: 33%;" /></p>
-<hr>
-<h4 id="Network-Protocols"><a href="#Network-Protocols" class="headerlink" title="Network Protocols"></a>Network Protocols</h4><p>A protocol defines the <strong>format</strong> and the <strong>order</strong> of messages exchanged between two or more communicating entities, as well as the <strong>actions</strong> taken on the transmission and/or receipt of a message or other event.</p>
-<h2 id="The-Network-Edge"><a href="#The-Network-Edge" class="headerlink" title="The Network Edge"></a>The Network Edge</h2><p><img src="/imgs/202412271820546.png" srcset="/img/loading.gif" lazyload alt="image-20240904110050027" style="zoom:50%;" /></p>
-<p>hosts: </p>
+<h3 id="a-services-description">A services Description</h3>
+<h4 id="definition">Definition</h4>
+<p>The Internet is an infrastructure that provides services to
+<strong>distributed applications</strong>.</p>
+<hr />
+<h4 id="socket-interface">socket interface</h4>
+<p>Socket interface is a set of rules that the sending program must
+follow so that the data can be delivered to destination program.</p>
+<h3 id="what-is-a-protocol">What is a Protocol?</h3>
+<h4 id="a-human-analogy">A Human Analogy</h4>
+<p><img src="/imgs/202412271816523.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 33%;" /></p>
+<hr />
+<h4 id="network-protocols">Network Protocols</h4>
+<p>A protocol defines the <strong>format</strong> and the
+<strong>order</strong> of messages exchanged between two or more
+communicating entities, as well as the <strong>actions</strong> taken on
+the transmission and/or receipt of a message or other event.</p>
+<h2 id="the-network-edge">The Network Edge</h2>
+<p><img src="/imgs/202412271820546.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:50%;" /></p>
+<p>hosts:</p>
 <ul>
-<li>clients </li>
+<li>clients</li>
 </ul>
 <p>desktops, laptops, smartphones…</p>
 <ul>
 <li>servers</li>
 </ul>
-<p>powerful machines that store and distribute Web pages, stream video, relay e-mail…</p>
+<p>powerful machines that store and distribute Web pages, stream video,
+relay e-mail…</p>
 <p><strong>in large data centers</strong></p>
-<h3 id="Access-Networks"><a href="#Access-Networks" class="headerlink" title="Access Networks"></a>Access Networks</h3><h4 id="Home-Access"><a href="#Home-Access" class="headerlink" title="Home Access"></a>Home Access</h4><h5 id="DSL-Internet-access"><a href="#DSL-Internet-access" class="headerlink" title="DSL Internet access"></a>DSL Internet access</h5><p><img src="/imgs/202409041120064.png" srcset="/img/loading.gif" lazyload alt="image-20240904112018897" style="zoom:50%;" /></p>
+<h3 id="access-networks">Access Networks</h3>
+<h4 id="home-access">Home Access</h4>
+<h5 id="dsl-internet-access">DSL Internet access</h5>
+<p><img src="/imgs/202409041120064.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:50%;" /></p>
 <ul>
 <li>DSL modem</li>
 </ul>
@@ -424,154 +462,250 @@
 <ul>
 <li>DSLAM</li>
 </ul>
-<p>On the telco side, DSLAM separates the data and phone signals and sends the data into the Internet.</p>
+<p>On the telco side, DSLAM separates the data and phone signals and
+sends the data into the Internet.</p>
 <ul>
 <li>Splitter</li>
 </ul>
-<p>On the customer side, a splitter separates the data and telephone signals arriving to the home and forwards the data signal to the DSL modem.</p>
-<p>Asymmetric: downstream transmission rate is larger than upstream transmission rate</p>
-<hr>
-<h5 id="cable-Internet-access"><a href="#cable-Internet-access" class="headerlink" title="cable Internet access"></a>cable Internet access</h5><p><img src="/imgs/202409041318239.png" srcset="/img/loading.gif" lazyload style="zoom:50%;" /></p>
-<p><img src="/imgs/202409041509538.png" srcset="/img/loading.gif" lazyload alt="image-20240904150914348" style="zoom:50%;" /></p>
-<p><img src="/imgs/202409041510599.png" srcset="/img/loading.gif" lazyload alt="image-20240904151059445" style="zoom:50%;" /></p>
-<p>Frequency division multiplexing(FDM): different channels transmitted in different frequency bands</p>
-<p>Asymmetric: downstream transmission rate is larger than upstream transmission rate</p>
+<p>On the customer side, a splitter separates the data and telephone
+signals arriving to the home and forwards the data signal to the DSL
+modem.</p>
+<p>Asymmetric: downstream transmission rate is larger than upstream
+transmission rate</p>
+<hr />
+<h5 id="cable-internet-access">cable Internet access</h5>
+<p><img src="/imgs/202409041318239.png" srcset="/img/loading.gif" lazyload style="zoom:50%;" /></p>
+<p><img src="/imgs/202409041509538.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:50%;" /></p>
+<p><img src="/imgs/202409041510599.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:50%;" /></p>
+<p>Frequency division multiplexing(FDM): different channels transmitted
+in different frequency bands</p>
+<p>Asymmetric: downstream transmission rate is larger than upstream
+transmission rate</p>
 <p>CMTS‘s function is similar to DSLAM</p>
-<hr>
-<h5 id="fiber-to-the-home-FTTH"><a href="#fiber-to-the-home-FTTH" class="headerlink" title="fiber to the home (FTTH)"></a>fiber to the home (FTTH)</h5><p>even faster!</p>
+<hr />
+<h5 id="fiber-to-the-home-ftth">fiber to the home (FTTH)</h5>
+<p>even faster!</p>
 <p>provide an optical fiber path from the CO directly to the home</p>
-<p>FTTH using the PON distribution architecture (passive optical networks):</p>
-<p><img src="/imgs/202409041339786.png" srcset="/img/loading.gif" lazyload alt="image-20240904133946720" style="zoom:50%;" /></p>
-<p>packets sent from OLT are replicated at the splitter (similar to a cable head end)</p>
-<hr>
-<h5 id="5G-fixed-wireless"><a href="#5G-fixed-wireless" class="headerlink" title="5G fixed wireless"></a>5G fixed wireless</h5><p>without installing costly and failure-prone cabling</p>
-<h4 id="Access-in-the-Enterprise-and-the-Home-Ethernet-and-WiFi"><a href="#Access-in-the-Enterprise-and-the-Home-Ethernet-and-WiFi" class="headerlink" title="Access in the Enterprise (and the Home): Ethernet and WiFi"></a>Access in the Enterprise (and the Home): Ethernet and WiFi</h4><hr>
+<p>FTTH using the PON distribution architecture (passive optical
+networks):</p>
+<p><img src="/imgs/202409041339786.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:50%;" /></p>
+<p>packets sent from OLT are replicated at the splitter (similar to a
+cable head end)</p>
+<hr />
+<h5 id="g-fixed-wireless">5G fixed wireless</h5>
+<p>without installing costly and failure-prone cabling</p>
+<h4 id="access-in-the-enterprise-and-the-home-ethernet-and-wifi">Access
+in the Enterprise (and the Home): Ethernet and WiFi</h4>
+<hr />
 <ul>
 <li><p>Home Network</p>
-<p><img src="/imgs/202409041558726.png" srcset="/img/loading.gif" lazyload style="zoom:50%;" /></p>
-</li>
+<p><img src="/imgs/202409041558726.png" srcset="/img/loading.gif" lazyload style="zoom:50%;" /></p></li>
 </ul>
-<h4 id="Wide-Area-Wireless-Access-3G-and-LTE-4G-and-5G"><a href="#Wide-Area-Wireless-Access-3G-and-LTE-4G-and-5G" class="headerlink" title="Wide-Area Wireless Access: 3G and LTE 4G and 5G"></a>Wide-Area Wireless Access: 3G and LTE 4G and 5G</h4><p>Employ the same wireless infrastructure used for cellular telephony to send/receive packets through a base station that is operated by the cellular network provider.</p>
-<h3 id="Physical-Media"><a href="#Physical-Media" class="headerlink" title="Physical Media"></a>Physical Media</h3><p>guided media / unguided media.</p>
+<h4 id="wide-area-wireless-access-3g-and-lte-4g-and-5g">Wide-Area
+Wireless Access: 3G and LTE 4G and 5G</h4>
+<p>Employ the same wireless infrastructure used for cellular telephony
+to send/receive packets through a base station that is operated by the
+cellular network provider.</p>
+<h3 id="physical-media">Physical Media</h3>
+<p>guided media / unguided media.</p>
 <ul>
 <li>Twisted-Pair Copper Wire</li>
 </ul>
-<p>Twisted pair is the dominant solution for high-speed LAN networking</p>
+<p>Twisted pair is the dominant solution for high-speed LAN
+networking</p>
 <ul>
 <li>Coaxial Cable</li>
 </ul>
 <p>Coaxial cable can be used as a guided shared medium</p>
 <ul>
-<li><p>Fiber Optics</p>
-</li>
-<li><p>Terrestrial Radio Channels</p>
-</li>
+<li><p>Fiber Optics</p></li>
+<li><p>Terrestrial Radio Channels</p></li>
 </ul>
-<p>Require no physical wire to be installed, can penetrate walls, provide connectivity to a mobile user, and can potentially carry a signal for long distances.</p>
+<p>Require no physical wire to be installed, can penetrate walls,
+provide connectivity to a mobile user, and can potentially carry a
+signal for long distances.</p>
 <ul>
 <li>Satellite Radio Channels</li>
 </ul>
-<h2 id="The-Network-Core"><a href="#The-Network-Core" class="headerlink" title="The Network Core"></a>The Network Core</h2><h3 id="Packet-Switching"><a href="#Packet-Switching" class="headerlink" title="Packet Switching"></a>Packet Switching</h3><p>R: transmission rate (bps)</p>
+<h2 id="the-network-core">The Network Core</h2>
+<h3 id="packet-switching">Packet Switching</h3>
+<p>R: transmission rate (bps)</p>
 <p>L: length of a packet</p>
 <p><strong>transmission delay</strong>:</p>
-<p><img src="/imgs/202409121311655.png" srcset="/img/loading.gif" lazyload alt="image-20240912131136591" style="zoom:50%;" /></p>
-<h4 id="Store-and-Forward-Transmission"><a href="#Store-and-Forward-Transmission" class="headerlink" title="Store-and Forward Transmission"></a>Store-and Forward Transmission</h4><p>it takes 2L/R(time) for a packet to be sent from Source to Destination</p>
-<p>it takes 4L/R(time) for all three packets to be sent from Source to Destination</p>
-<p><img src="/imgs/202409121419327.png" srcset="/img/loading.gif" lazyload alt="image-20240912141943199" style="zoom: 67%;" /></p>
+<p><img src="/imgs/202409121311655.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:50%;" /></p>
+<h4 id="store-and-forward-transmission">Store-and Forward
+Transmission</h4>
+<p>it takes 2L/R(time) for a packet to be sent from Source to
+Destination</p>
+<p>it takes 4L/R(time) for all three packets to be sent from Source to
+Destination</p>
+<p><img src="/imgs/202409121419327.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 67%;" /></p>
 <p>More general form: N links each of rate R</p>
 <p><strong>end-to-end delay</strong>:</p>
-<p><img src="/imgs/202409121426382.png" srcset="/img/loading.gif" lazyload alt="end-to-end delay"></p>
-<h4 id="Queuing-Delays-and-Packet-Loss"><a href="#Queuing-Delays-and-Packet-Loss" class="headerlink" title="Queuing Delays and Packet Loss"></a>Queuing Delays and Packet Loss</h4><p><strong>output buffer</strong> (<strong>output queue</strong>): the arriving packet <strong>wait</strong> here</p>
+<figure>
+<img src="/imgs/202409121426382.png" srcset="/img/loading.gif" lazyload alt="end-to-end delay" />
+<figcaption aria-hidden="true">end-to-end delay</figcaption>
+</figure>
+<h4 id="queuing-delays-and-packet-loss">Queuing Delays and Packet
+Loss</h4>
+<p><strong>output buffer</strong> (<strong>output queue</strong>): the
+arriving packet <strong>wait</strong> here</p>
 <p>result in output buffer <strong>queuing delays</strong></p>
 <p>if the output buffer is full, <strong>packet loss</strong> occurs</p>
-<p><img src="/imgs/202409121445872.png" srcset="/img/loading.gif" lazyload alt="image-20240912144530808" style="zoom:67%;" /></p>
-<h4 id="Forwarding-Tables-and-Routing-Protocols"><a href="#Forwarding-Tables-and-Routing-Protocols" class="headerlink" title="Forwarding Tables and Routing Protocols"></a>Forwarding Tables and Routing Protocols</h4><blockquote>
+<p><img src="/imgs/202409121445872.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:67%;" /></p>
+<h4 id="forwarding-tables-and-routing-protocols">Forwarding Tables and
+Routing Protocols</h4>
+<blockquote>
 <p>How do forwarding tables get set?</p>
 </blockquote>
-<p>The Internet has a number of special <strong>routing protocols</strong> that are used to <strong>automatically</strong> set the forwarding tables</p>
-<h3 id="Circuit-Switching"><a href="#Circuit-Switching" class="headerlink" title="Circuit Switching"></a>Circuit Switching</h3><p>When two hosts want to communicate, the network establishes <strong>a dedicated end-to-end connection.</strong></p>
+<p>The Internet has a number of special <strong>routing
+protocols</strong> that are used to <strong>automatically</strong> set
+the forwarding tables</p>
+<h3 id="circuit-switching">Circuit Switching</h3>
+<p>When two hosts want to communicate, the network establishes <strong>a
+dedicated end-to-end connection.</strong></p>
 <blockquote>
 <p>Why is circuit switching less efficient than packet switching?</p>
 </blockquote>
-<p>Circuit switching pre-allocates use of the transmission link  regardless of demand, with allocated but unneeded link time going unused</p>
+<p>Circuit switching pre-allocates use of the transmission link
+regardless of demand, with allocated but unneeded link time going
+unused</p>
 <p>Packet switching allocates link use on demand</p>
-<p><img src="/imgs/202409221640398.png" srcset="/img/loading.gif" lazyload alt="image-20240922164045198" style="zoom:50%;" /></p>
-<h3 id="Internet-is-a-“network-of-networks”"><a href="#Internet-is-a-“network-of-networks”" class="headerlink" title="Internet is a “network of networks”!"></a>Internet is a “network of networks”!</h3><p>Interconnection of ISPs:</p>
-<p><img src="/imgs/202409221614053.png" srcset="/img/loading.gif" lazyload alt="image-20240922161449805" style="zoom: 25%;" /></p>
-<h2 id="Delay-Loss-and-Throughput-in-Packet-Switched-Networks"><a href="#Delay-Loss-and-Throughput-in-Packet-Switched-Networks" class="headerlink" title="Delay, Loss, and Throughput in Packet-Switched Networks"></a>Delay, Loss, and Throughput in Packet-Switched Networks</h2><p><strong>Four delays:</strong></p>
+<p><img src="/imgs/202409221640398.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:50%;" /></p>
+<h3 id="internet-is-a-network-of-networks">Internet is a "network of
+networks"!</h3>
+<p>Interconnection of ISPs:</p>
+<p><img src="/imgs/202409221614053.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 25%;" /></p>
+<h2 id="delay-loss-and-throughput-in-packet-switched-networks">Delay,
+Loss, and Throughput in Packet-Switched Networks</h2>
+<p><strong>Four delays:</strong></p>
 <ul>
-<li>transmission delay: time to <strong>push</strong> the entire packet onto the link</li>
+<li>transmission delay: time to <strong>push</strong> the entire packet
+onto the link</li>
 <li>processing delay</li>
 <li>propagation delay</li>
 <li>queueing delay -&gt; congestion and packet loss</li>
 </ul>
-<p><img src="/imgs/image-20250220011638924.png" srcset="/img/loading.gif" lazyload alt="Four network delays"></p>
+<figure>
+<img src="/imgs/image-20250220011638924.png" srcset="/img/loading.gif" lazyload
+alt="Four network delays" />
+<figcaption aria-hidden="true">Four network delays</figcaption>
+</figure>
 <p><strong>Throughput:</strong></p>
 <p>analogy to pipes</p>
-<p>rate(bits/time unit) at which bits are being sent from sender to receiver</p>
-<p><img src="/imgs/202409221937913.png" srcset="/img/loading.gif" lazyload alt="image-20240922193702630" style="zoom:25%;" /></p>
-<h2 id="Layering-encapsulation-service-models"><a href="#Layering-encapsulation-service-models" class="headerlink" title="Layering, encapsulation, service models"></a>Layering, encapsulation, service models</h2><p>Layering and encapsulation:</p>
-<p><img src="/imgs/202409222317594.png" srcset="/img/loading.gif" lazyload alt="image-20240922231747247" style="zoom: 33%;" /></p>
-<p>The switches and routers only implement the lower layer of the protocol stack:</p>
-<p><img src="/imgs/202409222320192.png" srcset="/img/loading.gif" lazyload alt="image-20240922232032878" style="zoom: 33%;" /></p>
-<h1 id="Chapter-2-Application-Layer"><a href="#Chapter-2-Application-Layer" class="headerlink" title="Chapter 2 - Application Layer"></a>Chapter 2 - Application Layer</h1><h2 id="2-1-Principles-of-Network-Applications"><a href="#2-1-Principles-of-Network-Applications" class="headerlink" title="2.1 Principles of Network Applications"></a>2.1 Principles of Network Applications</h2><h3 id="Network-Application-Architectures"><a href="#Network-Application-Architectures" class="headerlink" title="Network Application Architectures"></a>Network Application Architectures</h3><ul>
+<p>rate(bits/time unit) at which bits are being sent from sender to
+receiver</p>
+<p><img src="/imgs/202409221937913.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:25%;" /></p>
+<h2 id="layering-encapsulation-service-models">Layering, encapsulation,
+service models</h2>
+<p>Layering and encapsulation:</p>
+<p><img src="/imgs/202409222317594.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 33%;" /></p>
+<p>The switches and routers only implement the lower layer of the
+protocol stack:</p>
+<p><img src="/imgs/202409222320192.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 33%;" /></p>
+<h1 id="chapter-2---application-layer">Chapter 2 - Application
+Layer</h1>
+<h2 id="principles-of-network-applications">2.1 Principles of Network
+Applications</h2>
+<h3 id="network-application-architectures">Network Application
+Architectures</h3>
+<ul>
 <li>client-server architecture</li>
 <li>peer-to-peer (P2P) architecture</li>
 </ul>
-<hr>
-<h3 id="Processes-Communicating"><a href="#Processes-Communicating" class="headerlink" title="Processes Communicating"></a>Processes Communicating</h3><div class="note note-primary">
-            <p><strong>Processes</strong> on two different end systems communicate with each other by  <strong>exchanging messages</strong> across the computer network.</p>
+<hr />
+<h3 id="processes-communicating">Processes Communicating</h3>
+<div class="note note-primary">
+            <p><strong>Processes</strong> on two different end systems communicatewith each other by <strong>exchanging messages</strong> across thecomputer network.</p>
           </div>
-<h4 id="The-Interface-Between-the-Process-and-the-Computer-Network"><a href="#The-Interface-Between-the-Process-and-the-Computer-Network" class="headerlink" title="The Interface Between the Process and the Computer Network"></a>The <strong>Interface</strong> Between the Process and the Computer Network</h4><p>A process sends messages into, and receives messages from, the network through a <strong>software interface</strong> called a <strong>socket</strong>.</p>
-<p><img src="/imgs/202410081900220.png" srcset="/img/loading.gif" lazyload alt="img" style="zoom:80%;" /></p>
-<h4 id="Transport-Services-Available-to-Applications"><a href="#Transport-Services-Available-to-Applications" class="headerlink" title="Transport Services Available to Applications"></a>Transport Services Available to Applications</h4><p>reliable data transfer, throughput, timing, and security</p>
-<h4 id="Transport-Services-Provided-by-the-Internet-TCP-IP-networks"><a href="#Transport-Services-Provided-by-the-Internet-TCP-IP-networks" class="headerlink" title="Transport Services Provided by the Internet(TCP/IP networks)"></a>Transport Services Provided by the Internet(TCP/IP networks)</h4><ul>
+<h4 id="the-interface-between-the-process-and-the-computer-network">The
+<strong>Interface</strong> Between the Process and the Computer
+Network</h4>
+<p>A process sends messages into, and receives messages from, the
+network through a <strong>software interface</strong> called a
+<strong>socket</strong>.</p>
+<p><img src="/imgs/202410081900220.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:80%;" /></p>
+<h4 id="transport-services-available-to-applications">Transport Services
+Available to Applications</h4>
+<p>reliable data transfer, throughput, timing, and security</p>
+<h4
+id="transport-services-provided-by-the-internettcpip-networks">Transport
+Services Provided by the Internet(TCP/IP networks)</h4>
+<ul>
 <li><strong>TCP Services</strong></li>
 </ul>
 <p>Connection-oriented Service(handshaking)</p>
 <p>Reliable data transfer</p>
 <p>congestion-control mechanism</p>
 <blockquote>
-<p><em>TCP congestion control attempts to limit each TCP connection to its fair share of network bandwidth.</em></p>
+<p><em>TCP congestion control attempts to limit each TCP connection to
+its fair share of network bandwidth.</em></p>
 </blockquote>
 <ul>
 <li><strong>UDP Services</strong></li>
 </ul>
-<hr>
-<h3 id="Application-Layer-Protocols"><a href="#Application-Layer-Protocols" class="headerlink" title="Application-Layer Protocols"></a>Application-Layer Protocols</h3><div class="note note-primary">
-            <p>An <strong>application-layer protocol</strong> defines <strong>how an application’s processes</strong>, running on different end systems,  <strong>pass messages to each other</strong>.</p>
+<hr />
+<h3 id="application-layer-protocols">Application-Layer Protocols</h3>
+<div class="note note-primary">
+            <p>An <strong>application-layer protocol</strong> defines <strong>how anapplication’s processes</strong>, running on different end systems,<strong>pass messages to each other</strong>.</p>
           </div>
-<p>The Web’s application-layer protocol, <strong>HTTP</strong>, defines the <strong>format and sequence of messages</strong> exchanged between browser and Web server.</p>
-<h2 id="2-2-The-Web-and-HTTP"><a href="#2-2-The-Web-and-HTTP" class="headerlink" title="2.2 The Web and HTTP"></a>2.2 The Web and HTTP</h2><h3 id="HTTP-Message-Format"><a href="#HTTP-Message-Format" class="headerlink" title="HTTP Message Format"></a>HTTP Message Format</h3><h4 id="HTTP-Request-Message"><a href="#HTTP-Request-Message" class="headerlink" title="HTTP Request Message"></a>HTTP Request Message</h4><figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs http"><span class="hljs-keyword">GET</span> <span class="hljs-string">/somedir/page.html</span> <span class="hljs-meta">HTTP/1.1</span><br><span class="hljs-attribute">Host</span><span class="hljs-punctuation">: </span>www.someschool.edu<br><span class="hljs-attribute">Connection</span><span class="hljs-punctuation">: </span>close<br><span class="hljs-attribute">User-agent</span><span class="hljs-punctuation">: </span>Mozilla/5.0<br><span class="hljs-attribute">Accept-language</span><span class="hljs-punctuation">: </span>fr<br></code></pre></td></tr></table></figure>
-<p>The first line of an HTTP request message is called the <strong>request line</strong>; the  subsequent lines are called the <strong>header lines</strong>.</p>
+<p>The Web’s application-layer protocol, <strong>HTTP</strong>, defines
+the <strong>format and sequence of messages</strong> exchanged between
+browser and Web server.</p>
+<h2 id="the-web-and-http">2.2 The Web and HTTP</h2>
+<h3 id="http-message-format">HTTP Message Format</h3>
+<h4 id="http-request-message">HTTP Request Message</h4>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs http"><span class="hljs-keyword">GET</span> <span class="hljs-string">/somedir/page.html</span> <span class="hljs-meta">HTTP/1.1</span><br><span class="hljs-attribute">Host</span><span class="hljs-punctuation">: </span>www.someschool.edu<br><span class="hljs-attribute">Connection</span><span class="hljs-punctuation">: </span>close<br><span class="hljs-attribute">User-agent</span><span class="hljs-punctuation">: </span>Mozilla/5.0<br><span class="hljs-attribute">Accept-language</span><span class="hljs-punctuation">: </span>fr<br></code></pre></td></tr></table></figure>
+<p>The first line of an HTTP request message is called the
+<strong>request line</strong>; the subsequent lines are called the
+<strong>header lines</strong>.</p>
 <p><strong>General format:</strong></p>
-<p><img src="/imgs/202410101654780.png" srcset="/img/loading.gif" lazyload alt="image-20241010165440670" style="zoom: 67%;" /></p>
-<p>If the value of the method field is POST, then the <strong>entity body</strong> contains what the user entered into the form fields.(e.g. when a  user provides search words to a search engine)</p>
-<h4 id="HTTP-Response-Message"><a href="#HTTP-Response-Message" class="headerlink" title="HTTP Response Message"></a>HTTP Response Message</h4><figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs http"><span class="hljs-meta">HTTP/1.1</span> <span class="hljs-number">200</span> OK<br><span class="hljs-attribute">Connection</span><span class="hljs-punctuation">: </span>close<br><span class="hljs-attribute">Date</span><span class="hljs-punctuation">: </span>Tue, 18 Aug 2015 15:44:04 GMT<br><span class="hljs-attribute">Server</span><span class="hljs-punctuation">: </span>Apache/2.2.3 (CentOS)<br><span class="hljs-attribute">Last-Modified</span><span class="hljs-punctuation">: </span>Tue, 18 Aug 2015 15:11:03 GMT<br><span class="hljs-attribute">Content-Length</span><span class="hljs-punctuation">: </span>6821<br><span class="hljs-attribute">Content-Type</span><span class="hljs-punctuation">: </span>text/html<br>(data data data data data ...)<br></code></pre></td></tr></table></figure>
+<p><img src="/imgs/202410101654780.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 67%;" /></p>
+<p>If the value of the method field is POST, then the <strong>entity
+body</strong> contains what the user entered into the form fields.(e.g.
+when a user provides search words to a search engine)</p>
+<h4 id="http-response-message">HTTP Response Message</h4>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs http"><span class="hljs-meta">HTTP/1.1</span> <span class="hljs-number">200</span> OK<br><span class="hljs-attribute">Connection</span><span class="hljs-punctuation">: </span>close<br><span class="hljs-attribute">Date</span><span class="hljs-punctuation">: </span>Tue, 18 Aug 2015 15:44:04 GMT<br><span class="hljs-attribute">Server</span><span class="hljs-punctuation">: </span>Apache/2.2.3 (CentOS)<br><span class="hljs-attribute">Last-Modified</span><span class="hljs-punctuation">: </span>Tue, 18 Aug 2015 15:11:03 GMT<br><span class="hljs-attribute">Content-Length</span><span class="hljs-punctuation">: </span>6821<br><span class="hljs-attribute">Content-Type</span><span class="hljs-punctuation">: </span>text/html<br>(data data data data data ...)<br></code></pre></td></tr></table></figure>
 <p><strong>General Format:</strong></p>
-<p><img src="/imgs/202410101710955.png" srcset="/img/loading.gif" lazyload alt="image-20241010171038904" /></p>
-<hr>
-<h3 id="Cookies"><a href="#Cookies" class="headerlink" title="Cookies"></a>Cookies</h3><p>Cookies allow sites to keep track of users.</p>
-<p><img src="/imgs/202410101743505.png" srcset="/img/loading.gif" lazyload alt="image-20241010174352430" style="zoom:80%;" /></p>
-<hr>
-<h3 id="Web-Caching"><a href="#Web-Caching" class="headerlink" title="Web Caching"></a>Web Caching</h3><h4 id="Web-caching"><a href="#Web-caching" class="headerlink" title="Web caching"></a>Web caching</h4><p><img src="/imgs/202410151249513.png" srcset="/img/loading.gif" lazyload alt="img" style="zoom:80%;" /></p>
-<h4 id="Conditional-GET"><a href="#Conditional-GET" class="headerlink" title="Conditional GET"></a>Conditional GET</h4><p><img src="/imgs/202410151358041.png" srcset="/img/loading.gif" lazyload alt="img" style="zoom:80%;" /></p>
-<hr>
-<h3 id="HTTP-2"><a href="#HTTP-2" class="headerlink" title="HTTP/2"></a>HTTP/2</h3><ul>
+<p><img src="/imgs/202410101710955.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+<hr />
+<h3 id="cookies">Cookies</h3>
+<p>Cookies allow sites to keep track of users.</p>
+<p><img src="/imgs/202410101743505.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:80%;" /></p>
+<hr />
+<h3 id="web-caching">Web Caching</h3>
+<h4 id="web-caching-1">Web caching</h4>
+<p><img src="/imgs/202410151249513.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:80%;" /></p>
+<h4 id="conditional-get">Conditional GET</h4>
+<p><img src="/imgs/202410151358041.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:80%;" /></p>
+<hr />
+<h3 id="http2">HTTP/2</h3>
+<ul>
 <li>Framing</li>
 </ul>
-<p>The ability to <strong>break down an HTTP message into independent frames</strong>, <strong>interleave</strong> them, and then <strong>reassemble</strong> them on the other end is the single most important  enhancement of HTTP/2.</p>
+<p>The ability to <strong>break down an HTTP message into independent
+frames</strong>, <strong>interleave</strong> them, and then
+<strong>reassemble</strong> them on the other end is the single most
+important enhancement of HTTP/2.</p>
 <ul>
-<li>Message Prioritization </li>
+<li>Message Prioritization</li>
 <li>Server Pushing</li>
 </ul>
-<h2 id="2-3-Email"><a href="#2-3-Email" class="headerlink" title="2.3 Email"></a>2.3 Email</h2><p><img src="/imgs/202410151542590.png" srcset="/img/loading.gif" lazyload alt="img" style="zoom:80%;" /></p>
-<h2 id="2-4-The-Domain-Name-System-DNS"><a href="#2-4-The-Domain-Name-System-DNS" class="headerlink" title="2.4 The Domain Name System: DNS"></a>2.4 The Domain Name System: DNS</h2><p><strong>DNS is a distributed, hierarchical database.</strong></p>
-<p><img src="/imgs/202410151558437.png" srcset="/img/loading.gif" lazyload alt="image-20241015155811336" style="zoom: 80%;" /></p>
-<h2 id="2-5-Peer-to-Peer-File-Distribution"><a href="#2-5-Peer-to-Peer-File-Distribution" class="headerlink" title="2.5 Peer-to-Peer File Distribution"></a>2.5 Peer-to-Peer File Distribution</h2><p><img src="/imgs/202410241418563.png" srcset="/img/loading.gif" lazyload alt="img" style="zoom: 67%;" /></p>
-<h2 id="2-6-Video-Streaming-and-Content-Distribution-Networks"><a href="#2-6-Video-Streaming-and-Content-Distribution-Networks" class="headerlink" title="2.6 Video Streaming and Content Distribution Networks"></a>2.6 Video Streaming and Content Distribution Networks</h2><p>DNS redirects a user’s request to a CDN server:</p>
-<p><img src="/imgs/202410241515469.png" srcset="/img/loading.gif" lazyload alt="image-20241024151531104" style="zoom:60%;" /></p>
-<h2 id="2-7-Socket-programming-with-UDP-and-TCP"><a href="#2-7-Socket-programming-with-UDP-and-TCP" class="headerlink" title="2.7 Socket programming with UDP and TCP"></a>2.7 Socket programming with UDP and TCP</h2><p>UDP client:</p>
+<h2 id="email">2.3 Email</h2>
+<p><img src="/imgs/202410151542590.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:80%;" /></p>
+<h2 id="the-domain-name-system-dns">2.4 The Domain Name System: DNS</h2>
+<p><strong>DNS is a distributed, hierarchical database.</strong></p>
+<p><img src="/imgs/202410151558437.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 80%;" /></p>
+<h2 id="peer-to-peer-file-distribution">2.5 Peer-to-Peer File
+Distribution</h2>
+<p><img src="/imgs/202410241418563.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 67%;" /></p>
+<h2 id="video-streaming-and-content-distribution-networks">2.6 Video
+Streaming and Content Distribution Networks</h2>
+<p>DNS redirects a user’s request to a CDN server:</p>
+<p><img src="/imgs/202410241515469.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:60%;" /></p>
+<h2 id="socket-programming-with-udp-and-tcp">2.7 Socket programming with
+UDP and TCP</h2>
+<p>UDP client:</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> socket <span class="hljs-keyword">import</span> *<br>serverName = <span class="hljs-string">&#x27;hostname&#x27;</span><br>serverPort = <span class="hljs-number">12000</span><br><span class="hljs-comment"># create UDP socket for server</span><br>clientSocket = socket(AF_INET, SOCK_DGRAM)<br>message = raw_input(<span class="hljs-string">&#x27;Input lowercase sentence:&#x27;</span>)<br>clientSocket.sendto(message.encode(), (serverName, serverPort))<br>modifiedMessage, serverAddress = clientSocket.recvfrom(<span class="hljs-number">2048</span>)<br><span class="hljs-built_in">print</span> modifiedMessage.decode()<br>clientSocket.close()<br></code></pre></td></tr></table></figure>
 <p>UDP server:</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> socket <span class="hljs-keyword">import</span> *<br>serverPort = <span class="hljs-number">12000</span><br>serverSocket = socket(AF_INET, SOCK_DGRAM)<br><span class="hljs-comment"># bind socket to local port number 12000</span><br>serverSocket.bind((<span class="hljs-string">&#x27;&#x27;</span>, serverPort))<br><span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;The server is ready to receive&quot;</span>)<br><span class="hljs-keyword">while</span> <span class="hljs-literal">True</span>:<br>    message, clientAddress = serverSocket.recvfrom(<span class="hljs-number">2048</span>)<br>    modifiedMessage = message.decode().upper()<br>    serverSocket.sendto(modifiedMessage.encode(), clientAddress)<br></code></pre></td></tr></table></figure>
@@ -579,259 +713,410 @@
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> socket <span class="hljs-keyword">import</span> *<br>serverName = <span class="hljs-string">&#x27;hostname&#x27;</span><br>serverPort = <span class="hljs-number">12000</span><br><span class="hljs-comment"># create TCP socket for server</span><br>clientSocket = socket(AF_INET, SOCK_STREAM)<br>clientSocket.connect((serverName, serverPort))<br>sentence = raw_input(<span class="hljs-string">&#x27;Input lowercase sentence:&#x27;</span>)<br>clientSocket.send(sentence.encode())<br>modifiedSentence = clientSocket.recv(<span class="hljs-number">1024</span>)<br><span class="hljs-built_in">print</span> modifiedSentence.decode()<br>clientSocket.close()<br></code></pre></td></tr></table></figure>
 <p>TCP server:</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> socket <span class="hljs-keyword">import</span> *<br>serverPort = <span class="hljs-number">12000</span><br>serverSocket = socket(AF_INET, SOCK_STREAM)<br><span class="hljs-comment"># bind socket to local port number 12000</span><br>serverSocket.bind((<span class="hljs-string">&#x27;&#x27;</span>, serverPort))<br>serverSocket.listen(<span class="hljs-number">1</span>);<br><span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;The server is ready to receive&quot;</span>)<br><span class="hljs-keyword">while</span> <span class="hljs-literal">True</span>:<br>    connectionSocket, addr = serverSocket.accept()<br><br>    sentence = connectionSocket.recv(<span class="hljs-number">1024</span>).decode()<br>    capitalizedSentence = sentence.upper()<br>    connectionSocket.send(capitalizedSentence.encode())<br><br>    connectionSocket.close()<br></code></pre></td></tr></table></figure>
-<h1 id="Chapter-3-–-Transport-Layer"><a href="#Chapter-3-–-Transport-Layer" class="headerlink" title="Chapter 3 – Transport Layer"></a>Chapter 3 – Transport Layer</h1><h2 id="3-1-Introduction-and-Transport-Layer-Services"><a href="#3-1-Introduction-and-Transport-Layer-Services" class="headerlink" title="3.1 Introduction and Transport-Layer Services"></a>3.1 Introduction and Transport-Layer Services</h2><p>UDP services:</p>
+<h1 id="chapter-3-transport-layer">Chapter 3 – Transport Layer</h1>
+<h2 id="introduction-and-transport-layer-services">3.1 Introduction and
+Transport-Layer Services</h2>
+<p>UDP services:</p>
 <ul>
-<li>process-to-process data delivery(multiplexing and demultiplexing)</li>
+<li>process-to-process data delivery(multiplexing and
+demultiplexing)</li>
 <li>error checking</li>
 </ul>
 <p>TCP additional services:</p>
 <ul>
-<li><p>reliable data transfer</p>
-</li>
-<li><p>congestion control</p>
-</li>
+<li><p>reliable data transfer</p></li>
+<li><p>congestion control</p></li>
 </ul>
-<h2 id="3-2-Multiplexing-and-Demultiplexing"><a href="#3-2-Multiplexing-and-Demultiplexing" class="headerlink" title="3.2 Multiplexing and Demultiplexing"></a>3.2 Multiplexing and Demultiplexing</h2><p>The transport layer in the receiving host delivers data to an intermediary socket.</p>
-<p>The job of delivering the data in a transport-layer segment to the correct socket is  called <strong>demultiplexing</strong>.</p>
-<p>The job of gathering data chunks at the source host from different sockets, encapsulating each data chunk with header information to create segments, and passing the segments to the network layer is called <strong>multiplexing</strong>.</p>
-<p><img src="/imgs/202411191030099.png" srcset="/img/loading.gif" lazyload alt="img" style="zoom:80%;" /></p>
-<h3 id="Connectionless-connection-Oriented-Multiplexing-and-Demultiplexing"><a href="#Connectionless-connection-Oriented-Multiplexing-and-Demultiplexing" class="headerlink" title="Connectionless/connection-Oriented Multiplexing and Demultiplexing"></a>Connectionless/connection-Oriented Multiplexing and Demultiplexing</h3><p>A UDP socket is fully identified by a two-tuple consisting of a destination IP address and a destination port number.</p>
-<p>A TCP socket is identified by a four-tuple:  (source IP address, source port number, destination IP address, destination port number)</p>
-<p><img src="/imgs/202411191113061.png" srcset="/img/loading.gif" lazyload alt="image-20241119111328976" style="zoom:80%;" /></p>
-<h2 id="3-3-Connectionless-Transport-UDP"><a href="#3-3-Connectionless-Transport-UDP" class="headerlink" title="3.3 Connectionless Transport: UDP"></a>3.3 Connectionless Transport: UDP</h2><blockquote>
+<h2 id="multiplexing-and-demultiplexing">3.2 Multiplexing and
+Demultiplexing</h2>
+<p>The transport layer in the receiving host delivers data to an
+intermediary socket.</p>
+<p>The job of delivering the data in a transport-layer segment to the
+correct socket is called <strong>demultiplexing</strong>.</p>
+<p>The job of gathering data chunks at the source host from different
+sockets, encapsulating each data chunk with header information to create
+segments, and passing the segments to the network layer is called
+<strong>multiplexing</strong>.</p>
+<p><img src="/imgs/202411191030099.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:80%;" /></p>
+<h3
+id="connectionlessconnection-oriented-multiplexing-and-demultiplexing">Connectionless/connection-Oriented
+Multiplexing and Demultiplexing</h3>
+<p>A UDP socket is fully identified by a two-tuple consisting of a
+destination IP address and a destination port number.</p>
+<p>A TCP socket is identified by a four-tuple: (source IP address,
+source port number, destination IP address, destination port number)</p>
+<p><img src="/imgs/202411191113061.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:80%;" /></p>
+<h2 id="connectionless-transport-udp">3.3 Connectionless Transport:
+UDP</h2>
+<blockquote>
 <p>Why UDP over TCP?</p>
 </blockquote>
 <ul>
-<li>Finer application-level control over what data is sent, and when.</li>
+<li>Finer application-level control over what data is sent, and
+when.</li>
 <li>No connection establishment.</li>
 <li>No connection state.</li>
 <li>Small packet header overhead.</li>
 </ul>
-<p>DNS: Use UDP to avoid TCP’s connection-establishment delays.</p>
+<p>DNS: Use UDP to avoid TCP's connection-establishment delays.</p>
 <p>Multimedia applications: tolerate packet loss</p>
-<p><img src="/imgs/202411191555431.png" srcset="/img/loading.gif" lazyload alt="image-20241119155520298"  /></p>
-<h2 id="3-4-Principles-of-Reliable-Data-Transfer"><a href="#3-4-Principles-of-Reliable-Data-Transfer" class="headerlink" title="3.4 Principles of Reliable Data Transfer"></a>3.4 Principles of Reliable Data Transfer</h2><h3 id="Reliable-Data-Transfer-over-a-Perfectly-Reliable-Channel-rdt1-0"><a href="#Reliable-Data-Transfer-over-a-Perfectly-Reliable-Channel-rdt1-0" class="headerlink" title="Reliable Data Transfer over a Perfectly Reliable Channel: rdt1.0"></a>Reliable Data Transfer over a Perfectly Reliable Channel: rdt1.0</h3><p><img src="/imgs/202411191623033.png" srcset="/img/loading.gif" lazyload alt="image-20241119162352955" style="zoom:80%;" /></p>
-<h3 id="Reliable-Data-Transfer-over-a-Channel-with-Bit-Errors-rdt2-0"><a href="#Reliable-Data-Transfer-over-a-Channel-with-Bit-Errors-rdt2-0" class="headerlink" title="Reliable Data Transfer over a Channel with Bit Errors: rdt2.0"></a>Reliable Data Transfer over a Channel with Bit Errors: rdt2.0</h3><p><strong>stop-and-wait</strong> protocols:</p>
-<p><img src="/imgs/202411191633671.png" srcset="/img/loading.gif" lazyload alt="image-20241119163325610" style="zoom:80%;" /></p>
+<p><img src="/imgs/202411191555431.png" srcset="/img/loading.gif" lazyload alt=""  /></p>
+<h2 id="principles-of-reliable-data-transfer">3.4 Principles of Reliable
+Data Transfer</h2>
+<h3
+id="reliable-data-transfer-over-a-perfectly-reliable-channel-rdt1.0">Reliable
+Data Transfer over a Perfectly Reliable Channel: rdt1.0</h3>
+<p><img src="/imgs/202411191623033.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:80%;" /></p>
+<h3
+id="reliable-data-transfer-over-a-channel-with-bit-errors-rdt2.0">Reliable
+Data Transfer over a Channel with Bit Errors: rdt2.0</h3>
+<p><strong>stop-and-wait</strong> protocols:</p>
+<p><img src="/imgs/202411191633671.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:80%;" /></p>
 <p>Introduce a <strong>sequence number</strong> field:</p>
-<p><img src="/imgs/202411191642109.png" srcset="/img/loading.gif" lazyload alt="image-20241119164256035" style="zoom:80%;" /></p>
-<p><img src="/imgs/202411191644823.png" srcset="/img/loading.gif" lazyload alt="image-20241119164452735" style="zoom:80%;" /></p>
-<h3 id="Reliable-Data-Transfer-over-a-Lossy-Channel-with-Bit-Errors-rdt3-0"><a href="#Reliable-Data-Transfer-over-a-Lossy-Channel-with-Bit-Errors-rdt3-0" class="headerlink" title="Reliable Data Transfer over a Lossy Channel with Bit Errors: rdt3.0"></a>Reliable Data Transfer over a Lossy Channel with Bit Errors: rdt3.0</h3><p>Deal with packet loss:</p>
-<p><img src="/imgs/202411191654536.png" srcset="/img/loading.gif" lazyload alt="image-20241119165422482" style="zoom:80%;" /></p>
-<h3 id="Go-Back-N-GBN-protocol"><a href="#Go-Back-N-GBN-protocol" class="headerlink" title="Go-Back-N (GBN) protocol"></a>Go-Back-N (GBN) protocol</h3><p><strong>sliding-window protocol</strong>:</p>
-<p><img src="/imgs/202411191708285.png" srcset="/img/loading.gif" lazyload alt="image-20241119170847209" style="zoom:80%;" /></p>
-<p><img src="/imgs/202411191836312.png" srcset="/img/loading.gif" lazyload alt="image-20241119183611186"  /></p>
-<p>If a timeout occurs, the sender resends <strong>all packets</strong>(<strong>base ~ nextseqnum - 1</strong>) that have been previously sent but that have not yet been acknowledged.</p>
-<p>The receiver discards out-of-order packets instead of buffering them.</p>
+<p><img src="/imgs/202411191642109.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:80%;" /></p>
+<p><img src="/imgs/202411191644823.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:80%;" /></p>
+<h3
+id="reliable-data-transfer-over-a-lossy-channel-with-bit-errors-rdt3.0">Reliable
+Data Transfer over a Lossy Channel with Bit Errors: rdt3.0</h3>
+<p>Deal with packet loss:</p>
+<p><img src="/imgs/202411191654536.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:80%;" /></p>
+<h3 id="go-back-n-gbn-protocol">Go-Back-N (GBN) protocol</h3>
+<p><strong>sliding-window protocol</strong>:</p>
+<p><img src="/imgs/202411191708285.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:80%;" /></p>
+<p><img src="/imgs/202411191836312.png" srcset="/img/loading.gif" lazyload alt=""  /></p>
+<p>If a timeout occurs, the sender resends <strong>all
+packets</strong>(<strong>base ~ nextseqnum - 1</strong>) that have been
+previously sent but that have not yet been acknowledged.</p>
+<p>The receiver discards out-of-order packets instead of buffering
+them.</p>
 <p>For the case of a window size of 4 packets:</p>
-<p><img src="/imgs/202411191846881.png" srcset="/img/loading.gif" lazyload alt="image-20241119184628827" style="zoom:80%;" /></p>
-<h3 id="Selective-Repeat-SR-protocol"><a href="#Selective-Repeat-SR-protocol" class="headerlink" title="Selective Repeat (SR) protocol"></a>Selective Repeat (SR) protocol</h3><blockquote>
+<p><img src="/imgs/202411191846881.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:80%;" /></p>
+<h3 id="selective-repeat-sr-protocol">Selective Repeat (SR)
+protocol</h3>
+<blockquote>
 <p>Problems of GBN protocol?</p>
 </blockquote>
-<p>When the window size is big and as the probability of channel errors increases, the pipeline can become filled with unnecessary retransmissions.</p>
-<h2 id="3-5-Connection-Oriented-Transport-TCP"><a href="#3-5-Connection-Oriented-Transport-TCP" class="headerlink" title="3.5 Connection-Oriented Transport: TCP"></a>3.5 Connection-Oriented Transport: TCP</h2><blockquote>
+<p>When the window size is big and as the probability of channel errors
+increases, the pipeline can become filled with unnecessary
+retransmissions.</p>
+<h2 id="connection-oriented-transport-tcp">3.5 Connection-Oriented
+Transport: TCP</h2>
+<blockquote>
 <p>What is MSS(Maximum Segment Size)?</p>
 </blockquote>
-<p>The maximum amount of application-layer  data in each segment, not the maximum size of the TCP segment including headers.</p>
-<p><img src="/imgs/202411211025980.png" srcset="/img/loading.gif" lazyload alt="image-20241121102530560" style="zoom: 60%;" /></p>
-<h3 id="TCP-segment-structure"><a href="#TCP-segment-structure" class="headerlink" title="TCP segment structure"></a>TCP segment structure</h3><p><img src="/imgs/202411211056470.png" srcset="/img/loading.gif" lazyload alt="image-20241121105657364" style="zoom: 80%;" /></p>
-<p>The acknowledgment number is the sequence number of the next byte of data that the host is waiting for.</p>
-<h3 id="TCP-flow-control"><a href="#TCP-flow-control" class="headerlink" title="TCP flow control"></a>TCP flow control</h3><p>The sender maintains: LastByteSent – LastByteAcked &lt;= rwnd(spare room in rcvbuffer)</p>
-<h3 id="TCP-three-way-handshake"><a href="#TCP-three-way-handshake" class="headerlink" title="TCP three-way handshake"></a>TCP three-way handshake</h3><p><img src="/imgs/202411211253742.png" srcset="/img/loading.gif" lazyload alt="image-20241121125352640" style="zoom:80%;" /></p>
+<p>The maximum amount of application-layer data in each segment, not the
+maximum size of the TCP segment including headers.</p>
+<p><img src="/imgs/202411211025980.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 60%;" /></p>
+<h3 id="tcp-segment-structure">TCP segment structure</h3>
+<p><img src="/imgs/202411211056470.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 80%;" /></p>
+<p>The acknowledgment number is the sequence number of the next byte of
+data that the host is waiting for.</p>
+<h3 id="tcp-flow-control">TCP flow control</h3>
+<p>The sender maintains: LastByteSent – LastByteAcked &lt;= rwnd(spare
+room in rcvbuffer)</p>
+<h3 id="tcp-three-way-handshake">TCP three-way handshake</h3>
+<p><img src="/imgs/202411211253742.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:80%;" /></p>
 <blockquote>
 <p>How to close a TCP connection?</p>
 </blockquote>
-<p><img src="/imgs/202411211256294.png" srcset="/img/loading.gif" lazyload alt="image-20241121125649227" style="zoom: 67%;" /></p>
-<h3 id="TCP-Congestion-Control"><a href="#TCP-Congestion-Control" class="headerlink" title="TCP Congestion Control"></a>TCP Congestion Control</h3><p>The sender maintain: LastByteSent – LastByteAcked &lt;= min{cwnd, rwnd}</p>
-<p>Because TCP uses acknowledgments to trigger (or clock) its increase in  congestion window size, TCP is said to be <strong>self-clocking</strong>.</p>
-<p><img src="/imgs/image-20250221174242095.png" srcset="/img/loading.gif" lazyload alt="image-20250221174242095" style="zoom:80%;" /></p>
+<p><img src="/imgs/202411211256294.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 67%;" /></p>
+<h3 id="tcp-congestion-control">TCP Congestion Control</h3>
+<p>The sender maintain: LastByteSent – LastByteAcked &lt;= min{cwnd,
+rwnd}</p>
+<p>Because TCP uses acknowledgments to trigger (or clock) its increase
+in congestion window size, TCP is said to be
+<strong>self-clocking</strong>.</p>
+<p><img src="/imgs/image-20250221174242095.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:80%;" /></p>
 <p>TCP Reno and TCP CUBIC:</p>
-<p><img src="/imgs/202411211430700.png" srcset="/img/loading.gif" lazyload alt="image-20241121143059646" style="zoom:80%;" /></p>
+<p><img src="/imgs/202411211430700.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:80%;" /></p>
 <p>Explicit Congestion Notification(ECN):</p>
-<p><img src="/imgs/202411211502816.png" srcset="/img/loading.gif" lazyload alt="image-20241121150208754" style="zoom: 67%;" /></p>
+<p><img src="/imgs/202411211502816.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 67%;" /></p>
 <blockquote>
-<p>Why is TCP’s AIMD algorithm fair?</p>
+<p>Why is TCP's AIMD algorithm fair?</p>
 </blockquote>
 <p>TCP results in an equal share of bandwidth among connections.</p>
-<p><img src="/imgs/202411211516954.png" srcset="/img/loading.gif" lazyload alt="image-20241121151631873" style="zoom: 80%;" /></p>
-<h1 id="Chapter-4-The-Network-Layer-Data-Plane"><a href="#Chapter-4-The-Network-Layer-Data-Plane" class="headerlink" title="Chapter 4 - The Network Layer: Data Plane"></a>Chapter 4 - The Network Layer: Data Plane</h1><h2 id="Forwarding-and-Routing"><a href="#Forwarding-and-Routing" class="headerlink" title="Forwarding and Routing"></a>Forwarding and Routing</h2><h3 id="Control-Plane"><a href="#Control-Plane" class="headerlink" title="Control Plane"></a>Control Plane</h3><ul>
+<p><img src="/imgs/202411211516954.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 80%;" /></p>
+<h1 id="chapter-4---the-network-layer-data-plane">Chapter 4 - The
+Network Layer: Data Plane</h1>
+<h2 id="forwarding-and-routing">Forwarding and Routing</h2>
+<h3 id="control-plane">Control Plane</h3>
+<ul>
 <li><strong>Traditional approach:</strong></li>
 </ul>
-<p>The routing algorithm determines the contents of the routers’ forwarding tables.</p>
-<p>The routing algorithm function in one router <strong>communicates</strong> with the routing algorithm function in other routers to compute the values for its forwarding table by <strong>exchanging routing messages</strong> containing routing information according to a <strong>routing protocol</strong>.</p>
-<p><img src="/imgs/202502211810664.png" srcset="/img/loading.gif" lazyload alt="img" style="zoom:67%;" /></p>
+<p>The routing algorithm determines the contents of the routers’
+forwarding tables.</p>
+<p>The routing algorithm function in one router
+<strong>communicates</strong> with the routing algorithm function in
+other routers to compute the values for its forwarding table by
+<strong>exchanging routing messages</strong> containing routing
+information according to a <strong>routing protocol</strong>.</p>
+<p><img src="/imgs/202502211810664.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:67%;" /></p>
 <ul>
 <li><strong>SDN approach:</strong></li>
 </ul>
-<p>A physically separate, remote controller computes and distributes the forwarding tables to be used by each and every router.</p>
-<p>Control-plane routing functionality is <strong>separated from the physical router</strong>.</p>
-<p><img src="/imgs/202502211810666.png" srcset="/img/loading.gif" lazyload alt="image-20241124154403296" style="zoom: 60%;" /></p>
-<h2 id="Inside-a-Router"><a href="#Inside-a-Router" class="headerlink" title="Inside a Router"></a>Inside a Router</h2><h3 id="Router-architecture"><a href="#Router-architecture" class="headerlink" title="Router architecture"></a>Router architecture</h3><p><img src="/imgs/202502211810667.png" srcset="/img/loading.gif" lazyload alt="image-20250221175841119" style="zoom:80%;" /></p>
-<h3 id="Input-Port-Processing"><a href="#Input-Port-Processing" class="headerlink" title="Input Port Processing"></a>Input Port Processing</h3><p><img src="/imgs/202502211810668.png" srcset="/img/loading.gif" lazyload alt="image-20250221175855352" style="zoom:80%;" /></p>
-<p>The forwarding table is either: </p>
-<ol>
-<li>computed and updated by the <strong>routing processor</strong> (using a routing protocol to interact with the routing processors in other network routers) </li>
+<p>A physically separate, remote controller computes and distributes the
+forwarding tables to be used by each and every router.</p>
+<p>Control-plane routing functionality is <strong>separated from the
+physical router</strong>.</p>
+<p><img src="/imgs/202502211810666.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 60%;" /></p>
+<h2 id="inside-a-router">Inside a Router</h2>
+<h3 id="router-architecture">Router architecture</h3>
+<p><img src="/imgs/202502211810667.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:80%;" /></p>
+<h3 id="input-port-processing">Input Port Processing</h3>
+<p><img src="/imgs/202502211810668.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:80%;" /></p>
+<p>The forwarding table is either:</p>
+<ol type="1">
+<li>computed and updated by the <strong>routing processor</strong>
+(using a routing protocol to interact with the routing processors in
+other network routers)</li>
 <li>or is received from a <strong>remote SDN controller</strong>.</li>
 </ol>
-<p>Input Queueing: </p>
-<ol>
-<li><p>switch fabric slower than input ports combined</p>
-</li>
-<li><p><strong>HOL blocking</strong></p>
-</li>
+<p>Input Queueing:</p>
+<ol type="1">
+<li><p>switch fabric slower than input ports combined</p></li>
+<li><p><strong>HOL blocking</strong></p></li>
 </ol>
-<p><img src="/imgs/202502211810669.png" srcset="/img/loading.gif" lazyload alt="image-20250221175918672" style="zoom:80%;" /></p>
-<h3 id="Switching"><a href="#Switching" class="headerlink" title="Switching"></a>Switching</h3><ul>
-<li><strong>switching rate</strong>: </li>
+<p><img src="/imgs/202502211810669.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:80%;" /></p>
+<h3 id="switching">Switching</h3>
+<ul>
+<li><strong>switching rate</strong>:</li>
 </ul>
 <p>rate at which packets can be transfer from inputs to outputs</p>
-<p>N inputs: <strong>switching rate N times line rate</strong> desirable</p>
+<p>N inputs: <strong>switching rate N times line rate</strong>
+desirable</p>
 <ul>
-<li><strong>Three switching techniques:</strong> </li>
+<li><strong>Three switching techniques:</strong></li>
 </ul>
-<p><img src="/imgs/202502211810670.png" srcset="/img/loading.gif" lazyload alt="image-20250221180019879" style="zoom:80%;" /></p>
+<p><img src="/imgs/202502211810670.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:80%;" /></p>
 <ul>
 <li><strong>Parallelism</strong>:</li>
 </ul>
-<ol>
+<ol type="1">
 <li>Multistage switch</li>
 </ol>
 <p>fragment datagram into fixed length cells at the input port</p>
-<p>switch cells through the fabric, reassemble datagram at the output port</p>
-<p><img src="/imgs/202502211810671.png" srcset="/img/loading.gif" lazyload alt="image-20250221180034446" style="zoom:80%;" /></p>
-<ol>
+<p>switch cells through the fabric, reassemble datagram at the output
+port</p>
+<p><img src="/imgs/202502211810671.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:80%;" /></p>
+<ol start="2" type="1">
 <li>multiple switching planes in parallel</li>
 </ol>
-<p><img src="/imgs/202502211810672.png" srcset="/img/loading.gif" lazyload alt="image-20250221180051823" style="zoom:80%;" /></p>
-<h3 id="Output-Port-Processing"><a href="#Output-Port-Processing" class="headerlink" title="Output Port Processing"></a>Output Port Processing</h3><p><img src="/imgs/202502211810673.png" srcset="/img/loading.gif" lazyload alt="image-20250221180106942" style="zoom:80%;" /></p>
+<p><img src="/imgs/202502211810672.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:80%;" /></p>
+<h3 id="output-port-processing">Output Port Processing</h3>
+<p><img src="/imgs/202502211810673.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:80%;" /></p>
 <ul>
 <li><strong>Output port queuing</strong>:</li>
 </ul>
-<p><img src="/imgs/202502211810674.png" srcset="/img/loading.gif" lazyload alt="img" style="zoom:80%;" /></p>
+<p><img src="/imgs/202502211810674.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:80%;" /></p>
 <ul>
 <li><strong>Packet Scheduling</strong>:</li>
 </ul>
-<ol>
+<ol type="1">
 <li>FIFO</li>
 <li>Priority Queuing</li>
 </ol>
-<p><img src="/imgs/202502211810675.png" srcset="/img/loading.gif" lazyload alt="img" style="zoom:80%;" /></p>
-<ol>
+<p><img src="/imgs/202502211810675.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:80%;" /></p>
+<ol start="3" type="1">
 <li>Round Robin and Weighted Fair Queuing (WFQ)</li>
 </ol>
-<p><img src="/imgs/202502211810676.png" srcset="/img/loading.gif" lazyload alt="img" style="zoom:80%;" /></p>
-<h2 id="IP-Protocol"><a href="#IP-Protocol" class="headerlink" title="IP Protocol"></a>IP Protocol</h2><h3 id="IPv4"><a href="#IPv4" class="headerlink" title="IPv4"></a>IPv4</h3><p>Network layer functions:</p>
-<p><img src="/imgs/202502211810677.png" srcset="/img/loading.gif" lazyload alt="img" style="zoom:80%;" /></p>
-<p><strong>IPv4 datagram format</strong>: </p>
-<p><img src="/imgs/202502211810678.png" srcset="/img/loading.gif" lazyload alt="image-20241125181850171"  /></p>
-<h3 id="IP-Addressing"><a href="#IP-Addressing" class="headerlink" title="IP Addressing"></a>IP Addressing</h3><p>An IP address is technically associated with an <strong>interface</strong>,  rather than with the host or router containing that interface.</p>
+<p><img src="/imgs/202502211810676.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:80%;" /></p>
+<h2 id="ip-protocol">IP Protocol</h2>
+<h3 id="ipv4">IPv4</h3>
+<p>Network layer functions:</p>
+<p><img src="/imgs/202502211810677.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:80%;" /></p>
+<p><strong>IPv4 datagram format</strong>:</p>
+<p><img src="/imgs/202502211810678.png" srcset="/img/loading.gif" lazyload alt=""  /></p>
+<h3 id="ip-addressing">IP Addressing</h3>
+<p>An IP address is technically associated with an
+<strong>interface</strong>, rather than with the host or router
+containing that interface.</p>
 <blockquote>
 <p>What is a subnet?</p>
 </blockquote>
-<p>Device interfaces that can physically reach each other without passing through an intervening router.</p>
+<p>Device interfaces that can physically reach each other without
+passing through an intervening router.</p>
 <p><strong>Address Aggregation</strong>:</p>
-<p><img src="/imgs/202502211810679.png" srcset="/img/loading.gif" lazyload alt="image-20241125190049130"  /></p>
+<p><img src="/imgs/202502211810679.png" srcset="/img/loading.gif" lazyload alt=""  /></p>
 <blockquote>
 <p>How to obtain a block of IP addresses?</p>
 </blockquote>
-<ol>
+<ol type="1">
 <li>Contact its ISP</li>
 </ol>
-<p><img src="/imgs/202502211810680.png" srcset="/img/loading.gif" lazyload alt="image-20241125190628026" style="zoom: 67%;" /></p>
-<ol>
+<p><img src="/imgs/202502211810680.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 67%;" /></p>
+<ol start="2" type="1">
 <li>Contact global authority (ICANN)</li>
 </ol>
 <blockquote>
 <p>How to obtain a Host Address?</p>
 </blockquote>
-<p> Dynamic Host Configuration Protocol (DHCP): <strong>plug-and-play</strong> capability</p>
-<p> DHCP is a client-server protocol:</p>
-<p><img src="/imgs/202502211810681.png" srcset="/img/loading.gif" lazyload alt="image-20241125191804394" style="zoom: 60%;" /></p>
-<p> DHCP protocol is a four-step process:</p>
-<ol>
-<li>Broadcast <strong>DHCP discover message</strong> to all nodes attached to the subnet.(Discover the DHCP server)</li>
-<li>A DHCP server receiving a DHCP discover message broadcasts <strong>DHCP offer message</strong> to all nodes on the subnet.</li>
-<li>The newly arriving client choose from among one or more server offers and respond to its selected offer with a <strong>DHCP request message</strong>,  echoing back the configuration parameters.</li>
-<li>The server responds to the DHCP request message with a <strong>DHCP ACK message</strong>, confirming the requested parameters.</li>
+<p>Dynamic Host Configuration Protocol (DHCP):
+<strong>plug-and-play</strong> capability</p>
+<p>DHCP is a client-server protocol:</p>
+<p><img src="/imgs/202502211810681.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 60%;" /></p>
+<p>DHCP protocol is a four-step process:</p>
+<ol type="1">
+<li>Broadcast <strong>DHCP discover message</strong> to all nodes
+attached to the subnet.(Discover the DHCP server)</li>
+<li>A DHCP server receiving a DHCP discover message broadcasts
+<strong>DHCP offer message</strong> to all nodes on the subnet.</li>
+<li>The newly arriving client choose from among one or more server
+offers and respond to its selected offer with a <strong>DHCP request
+message</strong>, echoing back the configuration parameters.</li>
+<li>The server responds to the DHCP request message with a <strong>DHCP
+ACK message</strong>, confirming the requested parameters.</li>
 </ol>
-<p><img src="/imgs/202502211810682.png" srcset="/img/loading.gif" lazyload alt="img" style="zoom:80%;" /></p>
-<h3 id="Network-Address-Translation-NAT"><a href="#Network-Address-Translation-NAT" class="headerlink" title="Network Address Translation (NAT)"></a>Network Address Translation (NAT)</h3><p>In essence, the NAT-enabled router is <strong>hiding the details of the home network from the outside world</strong>. </p>
-<p>The router gets its address from the ISP’s DHCP server, and the router runs a DHCP server to provide addresses to computers within the <strong>NAT-DHCP-router-controlled</strong> home network’s address space.</p>
-<p><img src="/imgs/202502211810683.png" srcset="/img/loading.gif" lazyload alt="image-20241125195110090" style="zoom:80%;" /></p>
-<h2 id="Generalized-Forwarding-and-SDN"><a href="#Generalized-Forwarding-and-SDN" class="headerlink" title="Generalized Forwarding and SDN"></a>Generalized Forwarding and SDN</h2><p><img src="/imgs/202502211810684.png" srcset="/img/loading.gif" lazyload alt="img" style="zoom:80%;" /></p>
+<p><img src="/imgs/202502211810682.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:80%;" /></p>
+<h3 id="network-address-translation-nat">Network Address Translation
+(NAT)</h3>
+<p>In essence, the NAT-enabled router is <strong>hiding the details of
+the home network from the outside world</strong>.</p>
+<p>The router gets its address from the ISP’s DHCP server, and the
+router runs a DHCP server to provide addresses to computers within the
+<strong>NAT-DHCP-router-controlled</strong> home network’s address
+space.</p>
+<p><img src="/imgs/202502211810683.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:80%;" /></p>
+<h2 id="generalized-forwarding-and-sdn">Generalized Forwarding and
+SDN</h2>
+<p><img src="/imgs/202502211810684.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:80%;" /></p>
 <p>OpenFlow: flow table entries</p>
-<p><img src="/imgs/202502211810685.png" srcset="/img/loading.gif" lazyload alt="image-20241128161949276" style="zoom:80%;" /></p>
-<h2 id="Middleboxes"><a href="#Middleboxes" class="headerlink" title="Middleboxes"></a>Middleboxes</h2><blockquote>
-<p>Definition: Any intermediary box performing functions apart from normal, <strong>standard functions of an IP router</strong> on the data path between a source host and destination  host</p>
+<p><img src="/imgs/202502211810685.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:80%;" /></p>
+<h2 id="middleboxes">Middleboxes</h2>
+<blockquote>
+<p>Definition: Any intermediary box performing functions apart from
+normal, <strong>standard functions of an IP router</strong> on the data
+path between a source host and destination host</p>
 </blockquote>
 <ul>
 <li>THE IP HOURGLASS</li>
 </ul>
-<p>The IP protocol <strong>hides the detailed differences</strong> among the various underlying technologies and present a <strong>uniform service interface</strong> to the applications above.</p>
-<p><img src="/imgs/202411252058039.png" srcset="/img/loading.gif" lazyload alt="image-20241125205829993" style="zoom: 67%;" /></p>
-<h1 id="Chapter-5-The-Network-Layer-Control-Plane"><a href="#Chapter-5-The-Network-Layer-Control-Plane" class="headerlink" title="Chapter 5 - The Network  Layer: Control Plane"></a>Chapter 5 - The Network  Layer: Control Plane</h1><h2 id="Routing-Algorithm"><a href="#Routing-Algorithm" class="headerlink" title="Routing Algorithm"></a>Routing Algorithm</h2><p><img src="/imgs/202412051732443.png" srcset="/img/loading.gif" lazyload alt="image-20241205173202818" style="zoom: 80%;" /></p>
-<p><strong>Centralized Routing Algorithm (link-state (LS) algorithm)</strong>: the algorithm has complete information about connectivity and link costs.</p>
-<p><strong>Decentralized Routing Algorithm (distance-vector (DV) algorithm)</strong>: each node maintains a vector of estimates of the costs (distances) to all other nodes in the net work.</p>
-<hr>
-<h3 id="Link-State-LS-Algorithm"><a href="#Link-State-LS-Algorithm" class="headerlink" title="Link-State (LS) Algorithm"></a>Link-State (LS) Algorithm</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs pseudocode">/* Link-State (LS) Algorithm for Source Node u */<br>Initialization: <br> N’ = &#123;u&#125;<br> for all nodes v<br>   if v is a neighbor of u<br>     then D(v) = c(u,v)<br>   else D(v) = infinity<br><br>Loop<br> find w not in N’ such that D(w) is a minimum<br> add w to N’<br> update D(v) for each neighbor v of w and not in N’:<br>       D(v) = min(D(v), D(w)+ c(w,v) )<br>  /* new cost to v is either old cost to v or known<br>  least path cost to w plus cost from w to v */<br>until N’= N<br></code></pre></td></tr></table></figure>
-<p><img src="/imgs/202412051732443.png" srcset="/img/loading.gif" lazyload alt="image-20241205173202818" style="zoom: 80%;" /></p>
-<p><img src="/imgs/202412151922392.png" srcset="/img/loading.gif" lazyload alt="image-20241215192253066" style="zoom:80%;" /></p>
-<p><img src="/imgs/202412152148301.png" srcset="/img/loading.gif" lazyload alt="image-20241215214836981" style="zoom:80%;" /></p>
-<p>The implementation of this LS algorithm has worst-case complexity of order n squared: $O(n^2)$​</p>
+<p>The IP protocol <strong>hides the detailed differences</strong> among
+the various underlying technologies and present a <strong>uniform
+service interface</strong> to the applications above.</p>
+<p><img src="/imgs/202411252058039.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 67%;" /></p>
+<h1 id="chapter-5---the-network-layer-control-plane">Chapter 5 - The
+Network Layer: Control Plane</h1>
+<h2 id="routing-algorithm">Routing Algorithm</h2>
+<p><img src="/imgs/202412051732443.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 80%;" /></p>
+<p><strong>Centralized Routing Algorithm (link-state (LS)
+algorithm)</strong>: the algorithm has complete information about
+connectivity and link costs.</p>
+<p><strong>Decentralized Routing Algorithm (distance-vector (DV)
+algorithm)</strong>: each node maintains a vector of estimates of the
+costs (distances) to all other nodes in the net work.</p>
+<hr />
+<h3 id="link-state-ls-algorithm">Link-State (LS) Algorithm</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs pseudocode">/* Link-State (LS) Algorithm for Source Node u */<br>Initialization: <br> N’ = &#123;u&#125;<br> for all nodes v<br>   if v is a neighbor of u<br>     then D(v) = c(u,v)<br>   else D(v) = infinity<br><br>Loop<br> find w not in N’ such that D(w) is a minimum<br> add w to N’<br> update D(v) for each neighbor v of w and not in N’:<br>       D(v) = min(D(v), D(w)+ c(w,v) )<br>  /* new cost to v is either old cost to v or known<br>  least path cost to w plus cost from w to v */<br>until N’= N<br></code></pre></td></tr></table></figure>
+<p><img src="/imgs/202412051732443.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 80%;" /></p>
+<p><img src="/imgs/202412151922392.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:80%;" /></p>
+<p><img src="/imgs/202412152148301.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:80%;" /></p>
+<p>The implementation of this LS algorithm has worst-case complexity of
+order n squared: <span class="math inline">\(O(n^2)\)</span>​</p>
 <div class="note note-primary">
-            <blockquote><p>How to avoid <strong>oscillations</strong> with <strong>congestion-sensitive</strong> routing?</p></blockquote><p> Ensure that not all routers run the LS algorithm at the same time.</p><p><strong>Randomize</strong> the time each router sends out a link advertisement in order to avoid the self-synchronization of the algorithm execution instance.</p>
+            <blockquote><p>How to avoid <strong>oscillations</strong> with<strong>congestion-sensitive</strong> routing?</p></blockquote><p>Ensure that not all routers run the LS algorithm at the sametime.</p><p><strong>Randomize</strong> the time each router sends out a linkadvertisement in order to avoid the self-synchronization of thealgorithm execution instance.</p>
           </div>
-<hr>
-<h3 id="Distance-Vector-DV-Routing-Algorithm"><a href="#Distance-Vector-DV-Routing-Algorithm" class="headerlink" title="Distance-Vector (DV) Routing Algorithm"></a>Distance-Vector (DV) Routing Algorithm</h3><p><img src="/imgs/202412051732443.png" srcset="/img/loading.gif" lazyload alt="image-20241205173202818" style="zoom: 80%;" /></p>
+<hr />
+<h3 id="distance-vector-dv-routing-algorithm">Distance-Vector (DV)
+Routing Algorithm</h3>
+<p><img src="/imgs/202412051732443.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 80%;" /></p>
 <p>Bellman-Ford equation:</p>
-<p>$d_{x}(y) = min_v {c(x, v) + d_v(y)}$</p>
-<p>$Dx = [D_x(y): y\ in\ N]$ is node x’s distance vector</p>
-<p>From time to time, each node sends a copy of its <strong>distance vector</strong> to each of its neighbors. When a node x receives a new distance vector from any of its neighbors w, it saves w’s distance vector, and then uses the Bellman-Ford equation to update its own distance vector as follows: </p>
-<p>$D_{x}(y) = min_v {c(x, v) + D_v(y)}\ for\ each\ node\ y\ in\ N$</p>
-<p>If node x’s distance vector has changed as a result of this update step, node x will then  send its updated distance vector to each of its neighbors, which can in turn update  their own distance vectors.</p>
+<p><span class="math inline">\(d_{x}(y) = min_v \{c(x, v) +
+d_v(y)\}\)</span></p>
+<p><span class="math inline">\(Dx = [D_x(y): y\ in\ N]\)</span> is node
+x’s distance vector</p>
+<p>From time to time, each node sends a copy of its <strong>distance
+vector</strong> to each of its neighbors. When a node x receives a new
+distance vector from any of its neighbors w, it saves w’s distance
+vector, and then uses the Bellman-Ford equation to update its own
+distance vector as follows:</p>
+<p><span class="math inline">\(D_{x}(y) = min_v \{c(x, v) + D_v(y)\}\
+for\ each\ node\ y\ in\ N\)</span></p>
+<p>If node x’s distance vector has changed as a result of this update
+step, node x will then send its updated distance vector to each of its
+neighbors, which can in turn update their own distance vectors.</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs pseudocode">/* Distance-Vector (DV) Algorithm <br> * At each node, x:<br> */<br>Initialization:<br>   for all destinations y in N:<br>      Dx(y)= c(x,y)/* if y is not a neighbor then c(x,y)= infinity */<br>   for each neighbor w<br>      Dw(y) = ? for all destinations y in N<br>   for each neighbor w<br>      send distance vector  Dx = [Dx(y): y in N] to w<br><br>loop <br>    wait  (until I see a link cost change to some neighbor w              or until I receive a distance vector from some                neighbor w)<br>    <br>    for each y in N:<br>        Dx(y) = minv&#123;c(x,v) + Dv(y)&#125;<br>    /* for each destination y, node x also determines v*(y)          and updates its forwarding table for destination y. */<br><br>if Dx(y) changed for any destination y<br>        send distance vector Dx  = [Dx(y): y in N] to all             neighbors<br><br>forevers<br></code></pre></td></tr></table></figure>
 <blockquote>
 <p>How to avoid the <strong>count-to-infinity</strong> problem?</p>
 </blockquote>
-<p><img src="/imgs/202412160222283.png" srcset="/img/loading.gif" lazyload alt="image-20241216022251180" style="zoom:80%;" /></p>
-<p><strong>Poisoned reverse</strong>: If z routes through y to get to destination x,  then z will advertise to y that its distance to x is infinity, that is, z will advertise to y that $D_z(x) = infinity$</p>
-<h2 id="Intra-AS-Routing-in-the-Internet-OSPF"><a href="#Intra-AS-Routing-in-the-Internet-OSPF" class="headerlink" title="Intra-AS Routing in the Internet: OSPF"></a>Intra-AS Routing in the Internet: OSPF</h2><p>The routing algorithm running within an AS(<strong>autonomous system</strong>) is called an <strong>intra-autonomous system routing protocol</strong>.</p>
-<hr>
-<h3 id="Open-Shortest-Path-First-OSPF"><a href="#Open-Shortest-Path-First-OSPF" class="headerlink" title="Open Shortest Path First (OSPF)"></a>Open Shortest Path First (OSPF)</h3><p>OSPF is a <strong>link-state protocol</strong> that uses flooding of <strong>link-state information</strong> and a <strong>Dijkstra’s least-cost path algorithm</strong>.</p>
-<p>A router broadcasts <strong>link-state information</strong> whenever there is a change in a link’s state. It also broadcasts a link’s state periodically, even if the link’s state has not changed.</p>
+<p><img src="/imgs/202412160222283.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:80%;" /></p>
+<p><strong>Poisoned reverse</strong>: If z routes through y to get to
+destination x, then z will advertise to y that its distance to x is
+infinity, that is, z will advertise to y that <span
+class="math inline">\(D_z(x) = infinity\)</span></p>
+<h2 id="intra-as-routing-in-the-internet-ospf">Intra-AS Routing in the
+Internet: OSPF</h2>
+<p>The routing algorithm running within an AS(<strong>autonomous
+system</strong>) is called an <strong>intra-autonomous system routing
+protocol</strong>.</p>
+<hr />
+<h3 id="open-shortest-path-first-ospf">Open Shortest Path First
+(OSPF)</h3>
+<p>OSPF is a <strong>link-state protocol</strong> that uses flooding of
+<strong>link-state information</strong> and a <strong>Dijkstra’s
+least-cost path algorithm</strong>.</p>
+<p>A router broadcasts <strong>link-state information</strong> whenever
+there is a change in a link’s state. It also broadcasts a link’s state
+periodically, even if the link’s state has not changed.</p>
 <p>OSPF runs directly over IP.</p>
 <div class="note note-info">
-            <blockquote><p>OSPF supports <strong>hierarchy</strong> within a single AS</p></blockquote><p>An OSPF autonomous system can be configured hierarchically into <strong>areas</strong>.</p><p>Within each area, there are one or more <strong>area border routers</strong>.</p><p>Within an AS, there is exactly one <strong>backbone area</strong>.</p><p><strong>Inter-area routing</strong> within the AS requires that the packet be first routed to an <strong>area border router</strong> (intra-area routing), then routed through the backbone to the area border router that is in the destination area, and then routed to the final destination.</p>
+            <blockquote><p>OSPF supports <strong>hierarchy</strong> within a single AS</p></blockquote><p>An OSPF autonomous system can be configured hierarchically into<strong>areas</strong>.</p><p>Within each area, there are one or more <strong>area borderrouters</strong>.</p><p>Within an AS, there is exactly one <strong>backbonearea</strong>.</p><p><strong>Inter-area routing</strong> within the AS requires that thepacket be first routed to an <strong>area border router</strong>(intra-area routing), then routed through the backbone to the areaborder router that is in the destination area, and then routed to thefinal destination.</p>
           </div>
-<h2 id="Routing-Among-the-ISPs-BGP"><a href="#Routing-Among-the-ISPs-BGP" class="headerlink" title="Routing Among the ISPs: BGP"></a>Routing Among the ISPs: BGP</h2><p><img src="/imgs/202412161639345.png" srcset="/img/loading.gif" lazyload alt="image-20241216163859234" style="zoom: 67%;" /></p>
-<p><img src="/imgs/202412161640250.png" srcset="/img/loading.gif" lazyload alt="image-20241216164035195" style="zoom: 80%;" /></p>
-<p>Each BGP route is a list with three components: <strong>NEXT-HOP</strong>; <strong>AS-PATH</strong>; <strong>destination prefix</strong></p>
-<p><img src="/imgs/202412161700708.png" srcset="/img/loading.gif" lazyload alt="image-20241216170058542" style="zoom: 67%;" /></p>
-<hr>
-<h3 id="Route-Selection-Algorithm"><a href="#Route-Selection-Algorithm" class="headerlink" title="Route-Selection Algorithm"></a>Route-Selection Algorithm</h3><ol>
-<li>A route is assigned a <strong>local preference value</strong> as one of its attributes (in addition  to the AS-PATH and NEXT-HOP attributes). The routes with the highest local preference values are selected. </li>
-<li>From the remaining routes (all with the same highest local preference value),  the route with the <strong>shortest AS-PATH</strong> is selected.</li>
-<li>From the remaining routes, <strong>hot potato routing</strong> is used, that is, the route with the <strong>closest NEXT-HOP router</strong> is selected. </li>
-<li>If more than one route still remains, the router uses <strong>BGP identifiers</strong> to select the route</li>
+<h2 id="routing-among-the-isps-bgp">Routing Among the ISPs: BGP</h2>
+<p><img src="/imgs/202412161639345.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 67%;" /></p>
+<p><img src="/imgs/202412161640250.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 80%;" /></p>
+<p>Each BGP route is a list with three components:
+<strong>NEXT-HOP</strong>; <strong>AS-PATH</strong>; <strong>destination
+prefix</strong></p>
+<p><img src="/imgs/202412161700708.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 67%;" /></p>
+<hr />
+<h3 id="route-selection-algorithm">Route-Selection Algorithm</h3>
+<ol type="1">
+<li>A route is assigned a <strong>local preference value</strong> as one
+of its attributes (in addition to the AS-PATH and NEXT-HOP attributes).
+The routes with the highest local preference values are selected.</li>
+<li>From the remaining routes (all with the same highest local
+preference value), the route with the <strong>shortest AS-PATH</strong>
+is selected.</li>
+<li>From the remaining routes, <strong>hot potato routing</strong> is
+used, that is, the route with the <strong>closest NEXT-HOP
+router</strong> is selected.</li>
+<li>If more than one route still remains, the router uses <strong>BGP
+identifiers</strong> to select the route</li>
 </ol>
-<hr>
-<h3 id="IP-Anycast"><a href="#IP-Anycast" class="headerlink" title="IP-Anycast"></a>IP-Anycast</h3><p><img src="/imgs/202412161736416.png" srcset="/img/loading.gif" lazyload alt="image-20241216173645199" style="zoom: 67%;" /></p>
-<p>IP-anycast is extensively used by the DNS system to direct DNS queries to the <strong>closest root DNS server</strong>.</p>
-<h1 id="Chapter-6-The-Link-Layer-and-LANs"><a href="#Chapter-6-The-Link-Layer-and-LANs" class="headerlink" title="Chapter 6 - The Link Layer and LANs"></a>Chapter 6 - The Link Layer and LANs</h1><p>A typical host architecture:</p>
-<p><img src="/imgs/202412161905144.png" srcset="/img/loading.gif" lazyload alt="image-20241216190559081" style="zoom: 67%;" /></p>
-<h2 id="Switched-Local-Area-Networks"><a href="#Switched-Local-Area-Networks" class="headerlink" title="Switched Local Area Networks"></a>Switched Local Area Networks</h2><h3 id="Link-Layer-Addressing-and-ARP"><a href="#Link-Layer-Addressing-and-ARP" class="headerlink" title="Link-Layer Addressing and ARP"></a>Link-Layer Addressing and ARP</h3><p><img src="/imgs/202412161922853.png" srcset="/img/loading.gif" lazyload alt="image-20241216192255765" style="zoom: 80%;" /></p>
+<hr />
+<h3 id="ip-anycast">IP-Anycast</h3>
+<p><img src="/imgs/202412161736416.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 67%;" /></p>
+<p>IP-anycast is extensively used by the DNS system to direct DNS
+queries to the <strong>closest root DNS server</strong>.</p>
+<h1 id="chapter-6---the-link-layer-and-lans">Chapter 6 - The Link Layer
+and LANs</h1>
+<p>A typical host architecture:</p>
+<p><img src="/imgs/202412161905144.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 67%;" /></p>
+<h2 id="switched-local-area-networks">Switched Local Area Networks</h2>
+<h3 id="link-layer-addressing-and-arp">Link-Layer Addressing and
+ARP</h3>
+<p><img src="/imgs/202412161922853.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 80%;" /></p>
 <ul>
 <li>ARP</li>
 </ul>
-<p>ARP resolves IP addresses only for hosts and router interfaces on the <strong>same subnet</strong>.</p>
-<p><img src="/imgs/image-20241216195033045-1740143775464-181.png" srcset="/img/loading.gif" lazyload alt="image-20241216195033045" style="zoom:80%;" /></p>
-<hr>
-<h3 id="Ethernet"><a href="#Ethernet" class="headerlink" title="Ethernet"></a>Ethernet</h3><p><img src="/imgs/image-20241216200639093-1740143790085-183.png" srcset="/img/loading.gif" lazyload alt="image-20241216200639093" style="zoom:80%;" /></p>
-<h2 id="Link-Layer-Switches"><a href="#Link-Layer-Switches" class="headerlink" title="Link-Layer Switches"></a>Link-Layer Switches</h2><p>switches are <strong>self-learning</strong>:</p>
-<ol>
-<li>The switch table is initially empty. </li>
-<li>For each incoming frame received on an interface, the switch stores in its table  (1) the MAC address in the frame’s source address field, (2) the interface from  which the frame arrived, and (3) the current time. </li>
-<li>The switch deletes an address in the table if no frames are received with that  address as the source address after some period of time (<strong>the aging time</strong>). In  this manner, if a PC is replaced by another PC (with a different adapter),</li>
+<p>ARP resolves IP addresses only for hosts and router interfaces on the
+<strong>same subnet</strong>.</p>
+<p><img src="/imgs/image-20241216195033045-1740143775464-181.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:80%;" /></p>
+<hr />
+<h3 id="ethernet">Ethernet</h3>
+<p><img src="/imgs/image-20241216200639093-1740143790085-183.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:80%;" /></p>
+<h2 id="link-layer-switches">Link-Layer Switches</h2>
+<p>switches are <strong>self-learning</strong>:</p>
+<ol type="1">
+<li>The switch table is initially empty.</li>
+<li>For each incoming frame received on an interface, the switch stores
+in its table (1) the MAC address in the frame’s source address field,
+(2) the interface from which the frame arrived, and (3) the current
+time.</li>
+<li>The switch deletes an address in the table if no frames are received
+with that address as the source address after some period of time
+(<strong>the aging time</strong>). In this manner, if a PC is replaced
+by another PC (with a different adapter),</li>
 </ol>
 <p>Switches are <strong>plug-and-play</strong> devices.</p>
 
@@ -1026,6 +1311,12 @@
   
 
 
+  
+  
+
+
+
+
 
 
 
@@ -1216,6 +1507,49 @@
 
 
   <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
 
   <script  src="/js/local-search.js" ></script>
 
