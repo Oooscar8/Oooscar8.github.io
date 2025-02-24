@@ -27,7 +27,7 @@
 <meta property="og:description" content="Notes on Synchronization when studying OS">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://oooscar8.github.io/2024/09/26/imgs/202409261810347.png">
-<meta property="og:image" content="https://gitee.com/OooAlex/study_note/raw/master/img/202409162207497.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/09/26/imgs/202409162207497-1740397021871-1.png">
 <meta property="og:image" content="http://oooscar8.github.io/2024/09/26/imgs/202409182316777.png">
 <meta property="og:image" content="http://oooscar8.github.io/2024/09/26/imgs/202409261214362.png">
 <meta property="og:image" content="http://oooscar8.github.io/2024/09/26/imgs/202409241220158.png">
@@ -37,16 +37,16 @@
 <meta property="og:image" content="http://oooscar8.github.io/2024/09/26/imgs/202410011125421.png">
 <meta property="og:image" content="http://oooscar8.github.io/2024/09/26/imgs/202410011134578.png">
 <meta property="og:image" content="http://oooscar8.github.io/2024/09/26/imgs/202409281726294.png">
-<meta property="og:image" content="https://gitee.com/OooAlex/study_note/raw/master/img/202409191125150.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/09/26/imgs/202409191125150-1740397057572-4.png">
 <meta property="og:image" content="http://oooscar8.github.io/2024/09/26/imgs/202409241145650.png">
 <meta property="og:image" content="http://oooscar8.github.io/2024/09/26/imgs/202409241146785.png">
-<meta property="og:image" content="https://gitee.com/OooAlex/study_note/raw/master/img/202409241159164.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/09/26/imgs/202409241159164.png">
 <meta property="og:image" content="http://oooscar8.github.io/2024/09/26/imgs/202410011943446.png">
 <meta property="og:image" content="http://oooscar8.github.io/2024/09/26/imgs/202410011944559.png">
 <meta property="og:image" content="http://oooscar8.github.io/2024/09/26/imgs/202409241209739.png">
 <meta property="og:image" content="http://oooscar8.github.io/2024/09/26/imgs/l18-bounded-buffer-1740222672645-50.png">
 <meta property="article:published_time" content="2024-09-25T16:00:00.000Z">
-<meta property="article:modified_time" content="2025-02-22T16:01:24.342Z">
+<meta property="article:modified_time" content="2025-02-24T11:39:01.782Z">
 <meta property="article:author" content="Alex Sun">
 <meta property="article:tag" content="OS">
 <meta property="article:tag" content="Synchronization">
@@ -370,7 +370,7 @@ csci0300 LEC25)</a></p>
 address space</strong> and <strong>file descriptor table</strong>, but
 each thread has its <strong>own set of registers and stack</strong>.</p>
 <p><img src="/imgs/202409261810347.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:60%;" /></p>
-<p><img src="https://gitee.com/OooAlex/study_note/raw/master/img/202409162207497.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:80%;" /></p>
+<p><img src="/imgs/202409162207497-1740397021871-1.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:80%;" /></p>
 <ul>
 <li>Synchronization</li>
 </ul>
@@ -597,7 +597,7 @@ spinlock, we can re-enable interrupts.</p>
 <blockquote>
 <p>Can we further optimize spinning?</p>
 </blockquote>
-<p><img src="https://gitee.com/OooAlex/study_note/raw/master/img/202409191125150.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:60%;" /></p>
+<p><img src="/imgs/202409191125150-1740397057572-4.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:60%;" /></p>
 <p>Yes, since test-and-set is expensive, we can
 test-and-test-and-set!</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">void</span> <span class="hljs-title function_">acquire</span><span class="hljs-params">(lock)</span> <br>&#123; <br>    retry:<br>    <span class="hljs-keyword">while</span>(lock-&gt;held)    <span class="hljs-comment">//test first</span><br>        ; <span class="hljs-comment">//spin</span><br>    <span class="hljs-keyword">if</span>(test_and_set(&amp;lock-&gt;held))    <span class="hljs-comment">//test and set</span><br>        <span class="hljs-keyword">goto</span> retry; <span class="hljs-comment">//lock not acquired</span><br>&#125; <br></code></pre></td></tr></table></figure>
@@ -631,7 +631,7 @@ acquire the lock again</p>
 <p>Each thread spins on its own location.</p>
 <p>We only need to send invalidation message to the next thread.</p>
 <p>T: "Ture" means the lock is available.</p>
-<p><img src="https://gitee.com/OooAlex/study_note/raw/master/img/202409241159164.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:50%;" /></p>
+<p><img src="/imgs/202409241159164.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:50%;" /></p>
 <p>Array-Based queue lock</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">ALock</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">Lock</span> &#123;<br>    <span class="hljs-comment">// thread−local variable, each thread has its own mySlot</span><br>    ThreadLocal&lt;Integer&gt; mySlot = <span class="hljs-keyword">new</span> <span class="hljs-title class_">ThreadLocal</span>&lt;Integer&gt; ()&#123;<br>        <span class="hljs-keyword">protected</span> <span class="hljs-keyword">synchronized</span> Integer <span class="hljs-title function_">initialValue</span> <span class="hljs-params">()</span> &#123;<br>            <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>        &#125;<br>    &#125;;<br>    AtomicInteger tail;<br>    <span class="hljs-type">boolean</span>[] flag;<br>    <span class="hljs-type">int</span> size ;<br>    <span class="hljs-keyword">public</span> <span class="hljs-title function_">ALock</span><span class="hljs-params">(<span class="hljs-type">int</span> capacity)</span> &#123;<br>        size = capacity;<br>        tail = <span class="hljs-keyword">new</span> <span class="hljs-title class_">AtomicInteger</span>(<span class="hljs-number">0</span>);<br>        flag = <span class="hljs-keyword">new</span> <span class="hljs-title class_">boolean</span>[capacity];<br>        flag [<span class="hljs-number">0</span>] = <span class="hljs-literal">true</span>;<br>    &#125;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">lock</span> <span class="hljs-params">()</span> &#123;<br>        <span class="hljs-type">int</span> <span class="hljs-variable">slot</span> <span class="hljs-operator">=</span> tail.getAndIncrement() % size;<br>        mySlot.set(slot);<br>        <span class="hljs-comment">//Each thread spins on its own location</span><br>        <span class="hljs-keyword">while</span> (!flag[mySlot.get()]) &#123;&#125;; <span class="hljs-comment">// spin</span><br>    &#125;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">unlock</span><span class="hljs-params">()</span> &#123;<br>        flag [mySlot.get ()] = <span class="hljs-literal">false</span>;<br>        flag [(mySlot.get() + <span class="hljs-number">1</span>) % size] = <span class="hljs-literal">true</span>;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
 <div class="note note-primary">
