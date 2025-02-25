@@ -300,81 +300,112 @@
 <blockquote>
 <p>Why we are doing paging?</p>
 </blockquote>
-<p>This part is crucial for you to implementing OS/161 Assignment 6 correctly!</p>
-<h1 id="paging"><a class="markdownIt-Anchor" href="#paging"></a> Paging</h1>
+<p>This part is crucial for you to implementing OS/161 Assignment 6
+correctly!</p>
+<h1 id="paging">Paging</h1>
 <blockquote>
 <p><strong>Learning Materials</strong></p>
 <p>Video:</p>
-<p><a target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/download/cs161-video-materials/www.eecs.harvard.edu/~margo/cs161/videos/vm1-waudio.mp4">Intro to Virtual Memory</a></p>
-<p><a target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/download/cs161-video-materials/www.eecs.harvard.edu/~margo/cs161/videos/vm-tlb-waudio.mp4">Translation Lookaside Buffer (TLB)</a></p>
-<p><a target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/download/cs161-video-materials/www.eecs.harvard.edu/~margo/cs161/videos/vm-x86.mp4">Virtual memory on x86</a></p>
-<p><a target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/download/cs161-video-materials/www.eecs.harvard.edu/~margo/cs161/videos/vm-paging-waudio.mp4">Intro to paging</a></p>
-<p><a target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/download/cs161-video-materials/www.eecs.harvard.edu/~margo/cs161/videos/vm-paging2-waudio.mp4">Continuation of paging by Margo Seltzer</a></p>
+<p><a
+target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/download/cs161-video-materials/www.eecs.harvard.edu/~margo/cs161/videos/vm1-waudio.mp4">Intro
+to Virtual Memory</a></p>
+<p><a
+target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/download/cs161-video-materials/www.eecs.harvard.edu/~margo/cs161/videos/vm-tlb-waudio.mp4">Translation
+Lookaside Buffer (TLB)</a></p>
+<p><a
+target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/download/cs161-video-materials/www.eecs.harvard.edu/~margo/cs161/videos/vm-x86.mp4">Virtual
+memory on x86</a></p>
+<p><a
+target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/download/cs161-video-materials/www.eecs.harvard.edu/~margo/cs161/videos/vm-paging-waudio.mp4">Intro
+to paging</a></p>
+<p><a
+target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/download/cs161-video-materials/www.eecs.harvard.edu/~margo/cs161/videos/vm-paging2-waudio.mp4">Continuation
+of paging by Margo Seltzer</a></p>
 <p>Lecture Slides:</p>
-<p><a target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/LECTURE-SLIDES/VM-new.pptx"> Virtual memory (Intro)</a></p>
-<p><a target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/LECTURE-SLIDES/Paging-new.pptx">Paging</a></p>
-<p><a target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/LECTURE-SLIDES/Paging-disk.pptx">Paging to disk</a></p>
+<p><a
+target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/LECTURE-SLIDES/VM-new.pptx">Virtual
+memory (Intro)</a></p>
+<p><a
+target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/LECTURE-SLIDES/Paging-new.pptx">Paging</a></p>
+<p><a
+target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/LECTURE-SLIDES/Paging-disk.pptx">Paging
+to disk</a></p>
 <p>Readings:</p>
-<p>[<a target="_blank" rel="noopener" href="http://pages.cs.wisc.edu/~remzi/OSTEP/vm-api.pdf">OSTEP] Memory API</a></p>
-<p>[<a target="_blank" rel="noopener" href="http://pages.cs.wisc.edu/~remzi/OSTEP/vm-tlbs.pdf">OSTEP] Translation lookaside buffers</a></p>
-<p>[<a target="_blank" rel="noopener" href="http://pages.cs.wisc.edu/~remzi/OSTEP/vm-freespace.pdf">OSTEP] Free space management</a></p>
-<p><a target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/download/mips-TLB.pdf">MIPS MMU and TLB</a></p>
-<p>[<a target="_blank" rel="noopener" href="http://pages.cs.wisc.edu/~remzi/OSTEP/vm-paging.pdf">OSTEP] Introduction to Paging</a></p>
-<p>[<a target="_blank" rel="noopener" href="http://pages.cs.wisc.edu/~remzi/OSTEP/vm-smalltables.pdf">OSTEP] Advanced paging</a></p>
+<p>[<a target="_blank" rel="noopener" href="http://pages.cs.wisc.edu/~remzi/OSTEP/vm-api.pdf">OSTEP]
+Memory API</a></p>
+<p>[<a target="_blank" rel="noopener" href="http://pages.cs.wisc.edu/~remzi/OSTEP/vm-tlbs.pdf">OSTEP]
+Translation lookaside buffers</a></p>
+<p>[<a
+target="_blank" rel="noopener" href="http://pages.cs.wisc.edu/~remzi/OSTEP/vm-freespace.pdf">OSTEP]
+Free space management</a></p>
+<p><a target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/download/mips-TLB.pdf">MIPS
+MMU and TLB</a></p>
+<p>[<a target="_blank" rel="noopener" href="http://pages.cs.wisc.edu/~remzi/OSTEP/vm-paging.pdf">OSTEP]
+Introduction to Paging</a></p>
+<p>[<a
+target="_blank" rel="noopener" href="http://pages.cs.wisc.edu/~remzi/OSTEP/vm-smalltables.pdf">OSTEP]
+Advanced paging</a></p>
 </blockquote>
-<h2 id="paging-2"><a class="markdownIt-Anchor" href="#paging-2"></a> Paging</h2>
-<h3 id="definition-and-concept"><a class="markdownIt-Anchor" href="#definition-and-concept"></a> Definition and Concept</h3>
-<h4 id="define-paging"><a class="markdownIt-Anchor" href="#define-paging"></a> Define paging</h4>
-<img src="/imgs/202411191055926.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:67%;" />
-<h4 id="page-faults"><a class="markdownIt-Anchor" href="#page-faults"></a> Page Faults</h4>
+<h2 id="paging-1">Paging</h2>
+<h3 id="definition-and-concept">Definition and Concept</h3>
+<h4 id="define-paging">Define paging</h4>
+<p><img src="/imgs/202411191055926.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:67%;" /></p>
+<h4 id="page-faults">Page Faults</h4>
 <p>The translation does not exist in the page table.</p>
-<img src="/imgs/202410291208365.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:67%;" />
-<h4 id="multi-level-page-tables"><a class="markdownIt-Anchor" href="#multi-level-page-tables"></a> Multi-Level Page Tables</h4>
+<p><img src="/imgs/202410291208365.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:67%;" /></p>
+<h4 id="multi-level-page-tables">Multi-Level Page Tables</h4>
 <p>Two-level page table:</p>
 <p>Use a page directory which points to pages of the page table.</p>
-<img src="/imgs/202411221844280.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:67%;" />
-<img src="/imgs/202411231627475.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 67%;" />
-<h3 id="mips-virtual-memory-map"><a class="markdownIt-Anchor" href="#mips-virtual-memory-map"></a> MIPS Virtual Memory Map</h3>
-<p>KSEG0, KSEG1 addresses: directly map to physical RAM starting at 0</p>
+<p><img src="/imgs/202411221844280.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:67%;" /></p>
+<p><img src="/imgs/202411231627475.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 67%;" /></p>
+<h3 id="mips-virtual-memory-map">MIPS Virtual Memory Map</h3>
+<p>KSEG0, KSEG1 addresses: directly map to physical RAM starting at
+0</p>
 <p>KUSEG, KSEG2 addresses: translate with the help of the TLB</p>
-<img src="/imgs/202411232002776.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:67%;" />
-<h3 id="tlb"><a class="markdownIt-Anchor" href="#tlb"></a> TLB</h3>
-<h4 id="associative-tlb"><a class="markdownIt-Anchor" href="#associative-tlb"></a> Associative TLB</h4>
-<img src="/imgs/202411262252428.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 50%;" />
-<h4 id="address-translation-process"><a class="markdownIt-Anchor" href="#address-translation-process"></a> Address Translation Process</h4>
-<img src="/imgs/202411262252356.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 50%;" />
-<h4 id="mips-mmu-and-tlb"><a class="markdownIt-Anchor" href="#mips-mmu-and-tlb"></a> MIPS MMU and TLB</h4>
+<p><img src="/imgs/202411232002776.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:67%;" /></p>
+<h3 id="tlb">TLB</h3>
+<h4 id="associative-tlb">Associative TLB</h4>
+<p><img src="/imgs/202411262252428.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 50%;" /></p>
+<h4 id="address-translation-process">Address Translation Process</h4>
+<p><img src="/imgs/202411262252356.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 50%;" /></p>
+<h4 id="mips-mmu-and-tlb">MIPS MMU and TLB</h4>
 <p>No hardware support for page tables.</p>
-<p>MIPS makes the format and contents of the TLB entry public to the kernel.</p>
-<img src="/imgs/202411261139273.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:80%;" />
-<img src="/imgs/202411262254163.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:80%;" />
+<p>MIPS makes the format and contents of the TLB entry public to the
+kernel.</p>
+<p><img src="/imgs/202411261139273.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:80%;" /></p>
+<p><img src="/imgs/202411262254163.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:80%;" /></p>
 <p>MIPS R3000 TLB:</p>
-<img src="/imgs/202411232013748.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 67%;" />
+<p><img src="/imgs/202411232013748.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 67%;" /></p>
 <blockquote>
 <p>How to handle TLB miss in OS/161?</p>
 </blockquote>
 <p>Write <strong><code>vm_fault</code></strong> function:</p>
-<img src="/imgs/202411232038054.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 50%;" />
-<h3 id="mips-r3000-virtual-addresses"><a class="markdownIt-Anchor" href="#mips-r3000-virtual-addresses"></a> MIPS R3000 Virtual Addresses</h3>
-<img src="/imgs/202411232018049.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 50%;" />
+<p><img src="/imgs/202411232038054.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 50%;" /></p>
+<h3 id="mips-r3000-virtual-addresses">MIPS R3000 Virtual Addresses</h3>
+<p><img src="/imgs/202411232018049.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 50%;" /></p>
 <blockquote>
 <p>How to manage physical memory in OS/161?</p>
 </blockquote>
-<img src="/imgs/202411232038812.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 60%;" />
-<h3 id="roadmap-to-a6"><a class="markdownIt-Anchor" href="#roadmap-to-a6"></a> Roadmap to A6</h3>
-<img src="/imgs/202411232040973.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 50%;" />
-<h2 id="paging-to-disk"><a class="markdownIt-Anchor" href="#paging-to-disk"></a> Paging to disk</h2>
-<img src="/imgs/202411232048424.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:60%;" />
+<p><img src="/imgs/202411232038812.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 60%;" /></p>
+<h3 id="roadmap-to-a6">Roadmap to A6</h3>
+<p><img src="/imgs/202411232040973.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 50%;" /></p>
+<h2 id="paging-to-disk">Paging to disk</h2>
+<p><img src="/imgs/202411232048424.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:60%;" /></p>
 <blockquote>
-<p>How to choose pages to be evicted to disk? Which pages won't be needed soon? Which pages are easier to evict?(Do all pages need to be written to disk?)</p>
+<p>How to choose pages to be evicted to disk? Which pages won't be
+needed soon? Which pages are easier to evict?(Do all pages need to be
+written to disk?)</p>
 </blockquote>
 <p><strong>Page replacement algorithm.</strong></p>
-<p>Clean pages(Code pages) are easier to evict since they don't need to be written to disk.</p>
-<img src="/imgs/202411241636311.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 50%;" />
-<img src="/imgs/202411241748500.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:50%;" />
+<p>Clean pages(Code pages) are easier to evict since they don't need to
+be written to disk.</p>
+<p><img src="/imgs/202411241636311.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 50%;" /></p>
+<p><img src="/imgs/202411241748500.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:50%;" /></p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs pseudocode">/* Function call chain */<br>foo() -&gt; kmalloc -&gt; getppages -&gt; evict -&gt; write to swap<br></code></pre></td></tr></table></figure>
-<p>When a page get evicted, we need to <strong>invalidate the page in TLB</strong>.</p>
-<p>If the page you evict might be in another TLB, do a <strong>TLB shootdown</strong>.</p>
+<p>When a page get evicted, we need to <strong>invalidate the page in
+TLB</strong>.</p>
+<p>If the page you evict might be in another TLB, do a <strong>TLB
+shootdown</strong>.</p>
 
                 
               </div>
@@ -479,8 +510,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2024/10/24/Processes-and-Threads/" title="Processes and Threads">
-                        <span class="hidden-mobile">Processes and Threads</span>
+                      <a href="/2024/11/11/OS161-A5/" title="OS161 Assignment 5">
+                        <span class="hidden-mobile">OS161 Assignment 5</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
