@@ -1,0 +1,783 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/imgs/wallhaven-p9qeze.jpg">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Alex Sun">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="CodeTop高频面试题 刷题记录 Day0！">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CodeTop刷题 Day0">
+<meta property="og:url" content="http://oooscar8.github.io/2025/02/26/CodeTop-Day0/index.html">
+<meta property="og:site_name" content="Alex&#39;s Space">
+<meta property="og:description" content="CodeTop高频面试题 刷题记录 Day0！">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://oooscar8.github.io/2025/02/26/imgs/image-20250226002119210-1740507847618-1.png">
+<meta property="og:image" content="http://oooscar8.github.io/2025/02/26/imgs/image-20250226022026507-1740507847619-2.png">
+<meta property="article:published_time" content="2025-02-25T18:21:45.000Z">
+<meta property="article:modified_time" content="2025-02-25T18:26:17.640Z">
+<meta property="article:author" content="Alex Sun">
+<meta property="article:tag" content="CodeTop">
+<meta property="article:tag" content="Leetcode">
+<meta property="article:tag" content="刷题">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://oooscar8.github.io/2025/02/26/imgs/image-20250226002119210-1740507847618-1.png">
+  
+  
+  
+  <title>CodeTop刷题 Day0 - Alex&#39;s Space</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"oooscar8.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.1.1"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Alex&#39;s Space</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/imgs/chuyin.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="CodeTop刷题 Day0"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-02-26 02:21" pubdate>
+          2025年2月26日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.7k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          14 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">CodeTop刷题 Day0</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>从今天开始，我将每天坚持按CodeTop面试出现频度从高到低排序从第一题开始刷起，每天至少刷两题。今天是Day0！</p>
+<h1 id="CodeTop刷题-Day0"><a href="#CodeTop刷题-Day0" class="headerlink" title="CodeTop刷题 Day0"></a>CodeTop刷题 Day0</h1><h2 id="无重复字符的最长子串"><a href="#无重复字符的最长子串" class="headerlink" title="无重复字符的最长子串"></a><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/longest-substring-without-repeating-characters">无重复字符的最长子串</a></h2><blockquote>
+<p>给定一个字符串 <code>s</code> ，请你找出其中不含有重复字符的 <strong>最长 子串</strong> 的长度。</p>
+<p><strong>示例 1:</strong></p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs makefile"><span class="hljs-section">输入: s = &quot;abcabcbb&quot;</span><br><span class="hljs-section">输出: 3 </span><br><span class="hljs-section">解释: 因为无重复字符的最长子串是 &quot;abc&quot;，所以其长度为 3。</span><br></code></pre></td></tr></table></figure>
+<p><strong>示例 2:</strong></p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs makefile"><span class="hljs-section">输入: s = &quot;bbbbb&quot;</span><br><span class="hljs-section">输出: 1</span><br><span class="hljs-section">解释: 因为无重复字符的最长子串是 &quot;b&quot;，所以其长度为 1。</span><br></code></pre></td></tr></table></figure>
+<p><strong>示例 3:</strong></p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs makefile"><span class="hljs-section">输入: s = &quot;pwwkew&quot;</span><br><span class="hljs-section">输出: 3</span><br><span class="hljs-section">解释: 因为无重复字符的最长子串是 &quot;wke&quot;，所以其长度为 3。</span><br>  请注意，你的答案必须是 子串 的长度，<span class="hljs-string">&quot;pwke&quot;</span> 是一个子序列，不是子串。<br></code></pre></td></tr></table></figure>
+<p><strong>提示：</strong></p>
+<ul>
+<li><code>0 &lt;= s.length &lt;= 5 * 104</code></li>
+<li><code>s</code> 由英文字母、数字、符号和空格组成</li>
+</ul>
+</blockquote>
+<p>这道题我看了提示第一句：“Generate all possible substrings”被误导了（好吧是我理解的问题），我第一反应是从长到短遍历所有substrings，直到找到第一个不含重复字符的字符串，然后返回其长度：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br>    <span class="hljs-keyword">public</span>:<br>        <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">lengthOfLongestSubstring</span><span class="hljs-params">(string s)</span> </span>&#123;<br>            <span class="hljs-keyword">for</span> (<span class="hljs-type">size_t</span> len = s.<span class="hljs-built_in">length</span>(); len &gt; <span class="hljs-number">0</span>; len--) &#123;<br>                <span class="hljs-keyword">for</span> (<span class="hljs-type">size_t</span> i = <span class="hljs-number">0</span>; i &lt; s.<span class="hljs-built_in">length</span>() - len + <span class="hljs-number">1</span>; i++) &#123;<br>                    string substring = s.<span class="hljs-built_in">substr</span>(i, len);<br>                    <span class="hljs-keyword">if</span> (<span class="hljs-built_in">isUnique</span>(substring)) &#123;<br>                        <span class="hljs-keyword">return</span> substring.<span class="hljs-built_in">length</span>();<br>                    &#125;<br>                &#125;<br>            &#125;<br>            <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>        &#125;<br><br>    <span class="hljs-keyword">private</span>:<br>        <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">isUnique</span><span class="hljs-params">(string s)</span> </span>&#123;<br>            unordered_set&lt;<span class="hljs-type">char</span>&gt; set;<br>            <span class="hljs-keyword">for</span> (<span class="hljs-type">char</span> ch : s) &#123;<br>                <span class="hljs-keyword">if</span> (set.<span class="hljs-built_in">find</span>(ch) != set.<span class="hljs-built_in">end</span>()) &#123;<br>                    <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;<br>                &#125;<br>                set.<span class="hljs-built_in">insert</span>(ch);<br>            &#125;<br>            <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;<br>        &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
+<p>然而这个算法时间复杂度是糟糕的$O(n^3)$，连test都要超时，要更换思路。</p>
+<p>我想到可以从左到右扫描字符串，用<strong>哈希表</strong>存储扫描到的字符和字符的最后出现位置(index)，用一个<strong>Sliding Window</strong>表示当前扫描到的无重复字符的substring。当遇到重复的字符且该字符在Sliding Window里面，那就需要更新Sliding Window的起始位置；否则的话检查当前的substring的长度是否超过了之前记录的最大长度<code>maxlen</code>，如果是那就更新<code>maxlen</code>。同时每扫描一个字符，都在哈希表中重新更新当前字符的最后出现位置。</p>
+<p>这样的话只需要扫描一遍字符串，而在哈希表中通过key寻找值的时间复杂度是$O(1)$，因此总体的时间复杂度就是$O(n)$! 这就很快了！</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span><br>&#123;<br>    <span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">lengthOfLongestSubstring</span><span class="hljs-params">(string s)</span> </span>&#123;<br>        unordered_map&lt;<span class="hljs-type">char</span>, <span class="hljs-type">int</span>&gt; charLastIndex;<br>        <span class="hljs-type">size_t</span> start_pos = <span class="hljs-number">0</span>;   <span class="hljs-comment">// Sliding window的起始位置</span><br>        <span class="hljs-type">size_t</span> max_len = <span class="hljs-number">0</span>;<br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">size_t</span> i = <span class="hljs-number">0</span>; i &lt; s.<span class="hljs-built_in">size</span>(); i++) &#123;<br>            <span class="hljs-keyword">if</span> (charLastIndex.<span class="hljs-built_in">find</span>(s[i]) != charLastIndex.<span class="hljs-built_in">end</span>() &amp;&amp; charLastIndex[s[i]] &gt;= start_pos) &#123;<br>                <span class="hljs-comment">// 如果当前字符在窗口内出现过，更新窗口的起始位置</span><br>                start_pos = charLastIndex[s[i]] + <span class="hljs-number">1</span>;<br>            &#125; <span class="hljs-keyword">else</span> &#123;<br>                <span class="hljs-comment">// 如果当前字符在窗口内没有出现过，检查当前窗口的长度是否是最大的</span><br>                max_len = <span class="hljs-built_in">max</span>(max_len, i - start_pos + <span class="hljs-number">1</span>);<br>            &#125;<br>            <span class="hljs-comment">// 更新当前字符最后出现的位置</span><br>            charLastIndex[s[i]] = i;<br>        &#125;<br>        <span class="hljs-keyword">return</span> max_len;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
+<p><img src="/imgs/image-20250226002119210-1740507847618-1.png" srcset="/img/loading.gif" lazyload style="zoom:67%;" /></p>
+<h2 id="LRU缓存机制"><a href="#LRU缓存机制" class="headerlink" title="LRU缓存机制"></a><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/lru-cache">LRU缓存机制</a></h2><blockquote>
+<p>请你设计并实现一个满足 <a target="_blank" rel="noopener" href="https://baike.baidu.com/item/LRU">LRU (最近最少使用) 缓存</a> 约束的数据结构。</p>
+<p>实现 <code>LRUCache</code> 类：</p>
+<ul>
+<li><code>LRUCache(int capacity)</code> 以 <strong>正整数</strong> 作为容量 <code>capacity</code> 初始化 LRU 缓存</li>
+<li><code>int get(int key)</code> 如果关键字 <code>key</code> 存在于缓存中，则返回关键字的值，否则返回 <code>-1</code> </li>
+<li><code>void put(int key, int value)</code> 如果关键字 <code>key</code> 已经存在，则变更其数据值 <code>value</code> ；如果不存在，则向缓存中插入该组 <code>key-value</code> 。如果插入操作导致关键字数量超过 <code>capacity</code> ，则应该 <strong>逐出</strong> 最久未使用的关键字。</li>
+</ul>
+<p>函数 <code>get</code> 和 <code>put</code> 必须以 <code>O(1)</code> 的平均时间复杂度运行。</p>
+<p><strong>示例：</strong></p>
+<figure class="highlight haxe"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs haxe">输入<br>[<span class="hljs-string">&quot;LRUCache&quot;</span>, <span class="hljs-string">&quot;put&quot;</span>, <span class="hljs-string">&quot;put&quot;</span>, <span class="hljs-string">&quot;get&quot;</span>, <span class="hljs-string">&quot;put&quot;</span>, <span class="hljs-string">&quot;get&quot;</span>, <span class="hljs-string">&quot;put&quot;</span>, <span class="hljs-string">&quot;get&quot;</span>, <span class="hljs-string">&quot;get&quot;</span>, <span class="hljs-string">&quot;get&quot;</span>]<br>[[<span class="hljs-number">2</span>], [<span class="hljs-number">1</span>, <span class="hljs-number">1</span>], [<span class="hljs-number">2</span>, <span class="hljs-number">2</span>], [<span class="hljs-number">1</span>], [<span class="hljs-number">3</span>, <span class="hljs-number">3</span>], [<span class="hljs-number">2</span>], [<span class="hljs-number">4</span>, <span class="hljs-number">4</span>], [<span class="hljs-number">1</span>], [<span class="hljs-number">3</span>], [<span class="hljs-number">4</span>]]<br>输出<br>[<span class="hljs-literal">null</span>, <span class="hljs-literal">null</span>, <span class="hljs-literal">null</span>, <span class="hljs-number">1</span>, <span class="hljs-literal">null</span>, <span class="hljs-number">-1</span>, <span class="hljs-literal">null</span>, <span class="hljs-number">-1</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>]<br><br>解释<br>LRUCache lRUCache = <span class="hljs-keyword">new</span> <span class="hljs-type">LRUCache</span>(<span class="hljs-number">2</span>);<br>lRUCache.put(<span class="hljs-number">1</span>, <span class="hljs-number">1</span>); <span class="hljs-comment">// 缓存是 &#123;1=1&#125;</span><br>lRUCache.put(<span class="hljs-number">2</span>, <span class="hljs-number">2</span>); <span class="hljs-comment">// 缓存是 &#123;1=1, 2=2&#125;</span><br>lRUCache.<span class="hljs-keyword">get</span>(<span class="hljs-number">1</span>);    <span class="hljs-comment">// 返回 1</span><br>lRUCache.put(<span class="hljs-number">3</span>, <span class="hljs-number">3</span>); <span class="hljs-comment">// 该操作会使得关键字 2 作废，缓存是 &#123;1=1, 3=3&#125;</span><br>lRUCache.<span class="hljs-keyword">get</span>(<span class="hljs-number">2</span>);    <span class="hljs-comment">// 返回 -1 (未找到)</span><br>lRUCache.put(<span class="hljs-number">4</span>, <span class="hljs-number">4</span>); <span class="hljs-comment">// 该操作会使得关键字 1 作废，缓存是 &#123;4=4, 3=3&#125;</span><br>lRUCache.<span class="hljs-keyword">get</span>(<span class="hljs-number">1</span>);    <span class="hljs-comment">// 返回 -1 (未找到)</span><br>lRUCache.<span class="hljs-keyword">get</span>(<span class="hljs-number">3</span>);    <span class="hljs-comment">// 返回 3</span><br>lRUCache.<span class="hljs-keyword">get</span>(<span class="hljs-number">4</span>);    <span class="hljs-comment">// 返回 4</span><br></code></pre></td></tr></table></figure>
+<p><strong>提示：</strong></p>
+<ul>
+<li><code>1 &lt;= capacity &lt;= 3000</code></li>
+<li><code>0 &lt;= key &lt;= 10000</code></li>
+<li><code>0 &lt;= value &lt;= 105</code></li>
+<li>最多调用 <code>2 * 105</code> 次 <code>get</code> 和 <code>put</code></li>
+</ul>
+</blockquote>
+<p>这道题核心关键点在<strong>函数 <code>get</code> 和 <code>put</code> 必须以 <code>O(1)</code> 的平均时间复杂度运行</strong>。</p>
+<p><code>get</code>根据key要在常数项时间内得到value，唯一方法就是用哈希表<code>unordered_map</code>存储<code>key-value</code>，但是要evict的时候，单靠哈希表没办法获得LRU key。因此还需要一个数据结构能够在常数项时间内找到LRU key并删除他，同时也需要在访问key之后在常数项时间内重新排序key。要重新排序key，那就肯定要先删除这个key，再将其移动到别的位置。</p>
+<p>也就是说，这个数据结构需要能够在常数项时间内删除任意位置的元素，那基本就锁定了，就是链表<code>list</code>!</p>
+<p>但是<code>list</code>要在常数项时间内删除任意位置的元素，前提是你要给他指向这个元素的迭代器。 不然的话你通过key遍历链表找到要删除的元素那时间复杂度就是<code>O(N)</code>了。那有什么办法能够给定key，马上得到其在list中的迭代器呢？</p>
+<p>那就只能在将key插入链表后，将指向key的迭代器也放入哈希表中。这样你就能通过key在哈希表中得知这个key在list中的位置，然后就能以常数项时间在list中删除key，并将其插入头/尾部了。</p>
+<p>确定好数据结构后，实现起来就简单了。我的方法是将新访问/插入的元素key加到链表的末尾，而evict LRU就从链表的头部evict，你也可以将两者反过来，反正<code>list</code>是双端链表。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">LRUCache</span> &#123;<br>    <span class="hljs-keyword">public</span>:<br>    <span class="hljs-built_in">LRUCache</span>(<span class="hljs-type">int</span> capacity) &#123; capacity_ = capacity; &#125;<br><br>    <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">get</span><span class="hljs-params">(<span class="hljs-type">int</span> key)</span> </span>&#123;<br>        <span class="hljs-keyword">auto</span> it = lru_cache_.<span class="hljs-built_in">find</span>(key);<br>        <span class="hljs-keyword">if</span> (it == lru_cache_.<span class="hljs-built_in">end</span>()) &#123;<br>            <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;<br>        &#125;<br>        lru_list_.<span class="hljs-built_in">erase</span>(it-&gt;second.first);<br>        lru_list_.<span class="hljs-built_in">push_back</span>(key);<br>        it-&gt;second.first = --lru_list_.<span class="hljs-built_in">end</span>();<br>        <span class="hljs-keyword">return</span> it-&gt;second.second;<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">put</span><span class="hljs-params">(<span class="hljs-type">int</span> key, <span class="hljs-type">int</span> value)</span> </span>&#123;<br>        <span class="hljs-keyword">auto</span> it = lru_cache_.<span class="hljs-built_in">find</span>(key);<br>        <span class="hljs-keyword">if</span> (it != lru_cache_.<span class="hljs-built_in">end</span>()) &#123;<br>            lru_list_.<span class="hljs-built_in">erase</span>(it-&gt;second.first);<br>            lru_list_.<span class="hljs-built_in">push_back</span>(key);<br>            it-&gt;second.first = --lru_list_.<span class="hljs-built_in">end</span>();<br>            it-&gt;second.second = value;<br>        &#125; <span class="hljs-keyword">else</span> &#123;<br>            <span class="hljs-keyword">if</span> (<span class="hljs-built_in">cache_full</span>()) &#123;<br>                <span class="hljs-built_in">evict_lru</span>();<br>            &#125;<br>            lru_list_.<span class="hljs-built_in">push_back</span>(key);<br>            lru_cache_[key] = &#123;--lru_list_.<span class="hljs-built_in">end</span>(), value&#125;;<br>        &#125;<br>    &#125;<br><br>    <span class="hljs-keyword">private</span>:<br>    <span class="hljs-type">int</span> capacity_;<br>    std::unordered_map&lt;<span class="hljs-type">int</span>, std::pair&lt;std::list&lt;<span class="hljs-type">int</span>&gt;::iterator, <span class="hljs-type">int</span>&gt;&gt; lru_cache_;<br>    std::list&lt;<span class="hljs-type">int</span>&gt; lru_list_;<br><br>    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">cache_full</span><span class="hljs-params">()</span> </span>&#123; <span class="hljs-keyword">return</span> lru_cache_.<span class="hljs-built_in">size</span>() == capacity_; &#125;<br><br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">evict_lru</span><span class="hljs-params">()</span> </span>&#123;<br>        <span class="hljs-type">int</span> lru_key = lru_list_.<span class="hljs-built_in">front</span>();<br>        lru_list_.<span class="hljs-built_in">pop_front</span>();<br>        lru_cache_.<span class="hljs-built_in">erase</span>(lru_key);<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
+<p><img src="/imgs/image-20250226022026507-1740507847619-2.png" srcset="/img/loading.gif" lazyload style="zoom:67%;" /></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Leetcode/" class="category-chain-item">Leetcode</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/Leetcode/CodeTop/" class="category-chain-item">CodeTop</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/CodeTop/" class="print-no-link">#CodeTop</a>
+      
+        <a href="/tags/Leetcode/" class="print-no-link">#Leetcode</a>
+      
+        <a href="/tags/%E5%88%B7%E9%A2%98/" class="print-no-link">#刷题</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>CodeTop刷题 Day0</div>
+      <div>http://oooscar8.github.io/2025/02/26/CodeTop-Day0/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Alex Sun</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年2月26日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2025/02/24/Simulator/" title="Simulator Lab">
+                        <span class="hidden-mobile">Simulator Lab</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div class="disqus" style="width:100%">
+    <div id="disqus_thread"></div>
+    
+      <script type="text/javascript">
+        var disqus_config = function() {
+          this.page.url = 'http://oooscar8.github.io/2025/02/26/CodeTop-Day0/';
+          this.page.identifier = '/2025/02/26/CodeTop-Day0/';
+        };
+        Fluid.utils.loadComments('#disqus_thread', function() {
+          var d = document, s = d.createElement('script');
+          s.src = '//' + 'fluid' + '.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', new Date());
+          (d.head || d.body).appendChild(s);
+        });
+      </script>
+    
+    <noscript>Please enable JavaScript to view the comments</noscript>
+  </div>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
