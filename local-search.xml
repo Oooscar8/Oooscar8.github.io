@@ -4,7 +4,7 @@
   
   
   <entry>
-    <title>CodeTop-Day2</title>
+    <title>CodeTop刷题 Day2</title>
     <link href="/2025/02/28/CodeTop-Day2/"/>
     <url>/2025/02/28/CodeTop-Day2/</url>
     
@@ -587,9 +587,9 @@
       
       <tag>OS161</tag>
       
-      <tag>File Descriptor</tag>
-      
       <tag>System Calls</tag>
+      
+      <tag>File Descriptor</tag>
       
     </tags>
     
