@@ -19,23 +19,26 @@
   <meta name="author" content="Alex Sun">
   <meta name="keywords" content="">
   
-    <meta name="description" content="CodeTop高频面试题刷题，今天是Day2！  CodeTop刷题 Day2  Leetcode 25. K 个一组翻转链表(Hard)  给你链表的头节点 head ，每 k 个节点一组进行翻转，请你返回修改后的链表。 k 是一个正整数，它的值小于或等于链表的长度。如果节点总数不是 k 的整数倍，那么请将最后剩余的节点保持原有顺序。 你不能只是单纯的改变节点内部的值，而是需要实际进行节点交换。">
+    <meta name="description" content="CodeTop高频面试题 刷题记录 Day2！">
 <meta property="og:type" content="article">
 <meta property="og:title" content="CodeTop-Day2">
-<meta property="og:url" content="http://oooscar8.github.io/2025/03/01/CodeTop-Day2/index.html">
+<meta property="og:url" content="http://oooscar8.github.io/2025/02/28/CodeTop-Day2/index.html">
 <meta property="og:site_name" content="Alex&#39;s Space">
-<meta property="og:description" content="CodeTop高频面试题刷题，今天是Day2！  CodeTop刷题 Day2  Leetcode 25. K 个一组翻转链表(Hard)  给你链表的头节点 head ，每 k 个节点一组进行翻转，请你返回修改后的链表。 k 是一个正整数，它的值小于或等于链表的长度。如果节点总数不是 k 的整数倍，那么请将最后剩余的节点保持原有顺序。 你不能只是单纯的改变节点内部的值，而是需要实际进行节点交换。">
+<meta property="og:description" content="CodeTop高频面试题 刷题记录 Day2！">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://oooscar8.github.io/2025/03/01/imgs/reverse_ex1-1740714561484-25-1740820376665-1.jpg">
-<meta property="og:image" content="http://oooscar8.github.io/2025/03/01/imgs/reverse_ex2-1740820376666-2.jpg">
-<meta property="og:image" content="http://oooscar8.github.io/2025/03/01/imgs/image-20250228142239754-1740820376666-3.png">
-<meta property="og:image" content="http://oooscar8.github.io/2025/03/01/imgs/image-20250228154706185-1740820376666-4.png">
-<meta property="og:image" content="http://oooscar8.github.io/2025/03/01/imgs/image-20250301171414009.png">
-<meta property="article:published_time" content="2025-03-01T09:12:03.000Z">
-<meta property="article:modified_time" content="2025-03-01T09:14:45.677Z">
+<meta property="og:image" content="http://oooscar8.github.io/2025/02/28/imgs/reverse_ex1-1740714561484-25-1740820376665-1.jpg">
+<meta property="og:image" content="http://oooscar8.github.io/2025/02/28/imgs/reverse_ex2-1740820376666-2.jpg">
+<meta property="og:image" content="http://oooscar8.github.io/2025/02/28/imgs/image-20250228142239754-1740820376666-3.png">
+<meta property="og:image" content="http://oooscar8.github.io/2025/02/28/imgs/image-20250228154706185-1740820376666-4.png">
+<meta property="og:image" content="http://oooscar8.github.io/2025/02/28/imgs/image-20250301171414009.png">
+<meta property="article:published_time" content="2025-02-28T09:12:03.000Z">
+<meta property="article:modified_time" content="2025-03-01T09:17:44.656Z">
 <meta property="article:author" content="Alex Sun">
+<meta property="article:tag" content="CodeTop">
+<meta property="article:tag" content="Leetcode">
+<meta property="article:tag" content="刷题">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="http://oooscar8.github.io/2025/03/01/imgs/reverse_ex1-1740714561484-25-1740820376665-1.jpg">
+<meta name="twitter:image" content="http://oooscar8.github.io/2025/02/28/imgs/reverse_ex1-1740714561484-25-1740820376665-1.jpg">
   
   
   
@@ -216,8 +219,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2025-03-01 17:12" pubdate>
-          2025年3月1日 下午
+        <time datetime="2025-02-28 17:12" pubdate>
+          2025年2月28日 下午
         </time>
       </span>
     
@@ -282,17 +285,29 @@
               <div class="markdown-body">
                 
                 <p>CodeTop高频面试题刷题，今天是Day2！</p>
-<h1 id="codetop刷题-day2"><a class="markdownIt-Anchor" href="#codetop刷题-day2"></a> CodeTop刷题 Day2</h1>
-<h2 id="leetcode-25-k-个一组翻转链表hard"><a class="markdownIt-Anchor" href="#leetcode-25-k-个一组翻转链表hard"></a> <a target="_blank" rel="noopener" href="https://leetcode.cn/problems/reverse-nodes-in-k-group">Leetcode 25. K 个一组翻转链表(Hard)</a></h2>
+<h1 id="codetop刷题-day2">CodeTop刷题 Day2</h1>
+<h2 id="leetcode-25.-k-个一组翻转链表hard"><a
+target="_blank" rel="noopener" href="https://leetcode.cn/problems/reverse-nodes-in-k-group">Leetcode
+25. K 个一组翻转链表(Hard)</a></h2>
 <blockquote>
-<p>给你链表的头节点 <code>head</code> ，每 <code>k</code> 个节点一组进行翻转，请你返回修改后的链表。</p>
-<p><code>k</code> 是一个正整数，它的值小于或等于链表的长度。如果节点总数不是 <code>k</code> 的整数倍，那么请将最后剩余的节点保持原有顺序。</p>
+<p>给你链表的头节点 <code>head</code> ，每 <code>k</code>
+个节点一组进行翻转，请你返回修改后的链表。</p>
+<p><code>k</code>
+是一个正整数，它的值小于或等于链表的长度。如果节点总数不是
+<code>k</code> 的整数倍，那么请将最后剩余的节点保持原有顺序。</p>
 <p>你不能只是单纯的改变节点内部的值，而是需要实际进行节点交换。</p>
 <p><strong>示例 1：</strong></p>
-<p><img src="/imgs/reverse_ex1-1740714561484-25-1740820376665-1.jpg" srcset="/img/loading.gif" lazyload alt="img" /></p>
+<figure>
+<img src="/imgs/reverse_ex1-1740714561484-25-1740820376665-1.jpg" srcset="/img/loading.gif" lazyload
+alt="img" />
+<figcaption aria-hidden="true">img</figcaption>
+</figure>
 <figure class="highlight accesslog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs accesslog">输入：head = <span class="hljs-string">[1,2,3,4,5]</span>, k = <span class="hljs-number">2</span><br>输出：<span class="hljs-string">[2,1,4,3,5]</span><br></code></pre></td></tr></table></figure>
 <p><strong>示例 2：</strong></p>
-<p><img src="/imgs/reverse_ex2-1740820376666-2.jpg" srcset="/img/loading.gif" lazyload alt="img" /></p>
+<figure>
+<img src="/imgs/reverse_ex2-1740820376666-2.jpg" srcset="/img/loading.gif" lazyload alt="img" />
+<figcaption aria-hidden="true">img</figcaption>
+</figure>
 <figure class="highlight accesslog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs accesslog">输入：head = <span class="hljs-string">[1,2,3,4,5]</span>, k = <span class="hljs-number">3</span><br>输出：<span class="hljs-string">[3,2,1,4,5]</span><br></code></pre></td></tr></table></figure>
 <p><strong>提示：</strong></p>
 <ul>
@@ -300,37 +315,51 @@
 <li><code>1 &lt;= k &lt;= n &lt;= 5000</code></li>
 <li><code>0 &lt;= Node.val &lt;= 1000</code></li>
 </ul>
-<p>**进阶：**你可以设计一个只用 <code>O(1)</code> 额外内存空间的算法解决此问题吗？</p>
+<p><strong>进阶：</strong>你可以设计一个只用 <code>O(1)</code>
+额外内存空间的算法解决此问题吗？</p>
 </blockquote>
-<h3 id="递归"><a class="markdownIt-Anchor" href="#递归"></a> 递归</h3>
-<p>我第一个想到的办法是复用之前<a target="_blank" rel="noopener" href="https://leetcode.cn/problems/reverse-linked-list">Leetcode 206. 反转链表(Easy)</a>的代码：</p>
+<h3 id="递归">递归</h3>
+<p>我第一个想到的办法是复用之前<a
+target="_blank" rel="noopener" href="https://leetcode.cn/problems/reverse-linked-list">Leetcode 206.
+反转链表(Easy)</a>的代码：</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-comment">// Recursive solution.</span><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span><br>&#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function">ListNode *<span class="hljs-title">reverseList</span><span class="hljs-params">(ListNode *head)</span> </span>&#123;<br>        <span class="hljs-comment">// 递归结束条件，返回新的头结点</span><br>        <span class="hljs-keyword">if</span> (head == <span class="hljs-literal">NULL</span> || head-&gt;next == <span class="hljs-literal">NULL</span>) &#123;<br>            <span class="hljs-keyword">return</span> head;<br>        &#125;<br><br>        ListNode *new_head = <span class="hljs-built_in">reverseList</span>(head-&gt;next);<br><br>        head-&gt;next-&gt;next = head;<br>        head-&gt;next = <span class="hljs-literal">NULL</span>;<br><br>        <span class="hljs-keyword">return</span> new_head;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
 <p>我之前用递归的方法<strong>翻转一个链表</strong>。这题K个结点一组翻转链表无非就是<strong>翻转N/K个子链表</strong>。需要变化的点就是原先翻转后的链表末尾指向<code>NULL</code>，而这题中翻转后的<strong>子链表的末尾应该指向下一个子链表的头结点</strong>。并且递归条件从原本的<code>head-&gt;next == NULL</code>改成<code>k == 1</code>：</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-comment">// 翻转一个从head开始K个结点的子链表，翻转后的链表末尾指向tail</span><br><span class="hljs-comment">// 返回翻转后的子链表的头结点</span><br><span class="hljs-function">ListNode *<span class="hljs-title">reverseKList</span><span class="hljs-params">(ListNode *head, <span class="hljs-type">int</span> k, ListNode *tail)</span></span><br><span class="hljs-function"></span>&#123;<br>    <span class="hljs-comment">// 递归结束条件，返回新的头结点</span><br>    <span class="hljs-keyword">if</span> (k == <span class="hljs-number">1</span>)<br>    &#123;<br>        <span class="hljs-keyword">return</span> head;<br>    &#125;<br><br>    ListNode *new_head = <span class="hljs-built_in">reverseKList</span>(head-&gt;next, k - <span class="hljs-number">1</span>, tail);<br><br>    head-&gt;next-&gt;next = head;<br>    head-&gt;next = tail;<br><br>    <span class="hljs-keyword">return</span> new_head;<br>&#125;<br></code></pre></td></tr></table></figure>
-<p>有了这个helper function，下一步就是翻转一个个子链表(Group)然后让他们首尾相接就可以了。我还是用递归的方法实现<code>reverseKGroup</code>：</p>
-<ol>
+<p>有了这个helper
+function，下一步就是翻转一个个子链表(Group)然后让他们首尾相接就可以了。我还是用递归的方法实现<code>reverseKGroup</code>：</p>
+<ol type="1">
 <li>先翻转第一个Group之后的所有Group让他们首尾相接，返回翻转好的链表的头结点</li>
 <li>再翻转第一个Group，并将翻转好的第一个Group的末尾指向后面翻转好的链表的头结点</li>
 <li>最后返回新的头结点</li>
 </ol>
 <p>要特别注意的是<code>reverseKGroup</code>递归的结束条件是当前要翻转的链表中的结点数量小于K（不到一个Group），这种情况就不进行翻转直接返回原先的头结点。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function">ListNode *<span class="hljs-title">reverseKGroup</span><span class="hljs-params">(ListNode *head, <span class="hljs-type">int</span> k)</span></span><br><span class="hljs-function"></span>&#123;<br>    ListNode *tail = head;<br>    <span class="hljs-type">int</span> count = <span class="hljs-number">0</span>;<br>    <span class="hljs-keyword">while</span> (tail != <span class="hljs-literal">NULL</span> &amp;&amp; count &lt; k )<br>    &#123;<br>        tail = tail-&gt;next;<br>        ++count;<br>    &#125;<br>    <span class="hljs-keyword">if</span> (count &lt; k) &#123;<br>        <span class="hljs-keyword">return</span> head;<br>    &#125;<br><br>    tail = <span class="hljs-built_in">reverseKGroup</span>(tail, k);<br>    head = <span class="hljs-built_in">reverseKList</span>(head, k, tail);<br><br>    <span class="hljs-keyword">return</span> head;<br>&#125;<br></code></pre></td></tr></table></figure>
-<img src="/imgs/image-20250228142239754-1740820376666-3.png" srcset="/img/loading.gif" lazyload style="zoom:67%;" />
-<p>这个算法需要递归调用<code>reverseKGroup</code> N/K次，因此空间复杂度是<code>O(N/K)</code>。</p>
+<p><img src="/imgs/image-20250228142239754-1740820376666-3.png" srcset="/img/loading.gif" lazyload style="zoom:67%;" /></p>
+<p>这个算法需要递归调用<code>reverseKGroup</code>
+N/K次，因此空间复杂度是<code>O(N/K)</code>。</p>
 <p>那怎么才能实现进阶要求的<code>O(1)</code>空间复杂度呢？那<code>reverseKGroup</code>和<code>reverseKList</code>就不能用递归，得用迭代。</p>
-<h3 id="迭代"><a class="markdownIt-Anchor" href="#迭代"></a> 迭代</h3>
+<h3 id="迭代">迭代</h3>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span><br>&#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-comment">// Iterative solution</span><br>    <span class="hljs-function">ListNode *<span class="hljs-title">reverseKGroup</span><span class="hljs-params">(ListNode *head, <span class="hljs-type">int</span> k)</span></span><br><span class="hljs-function">    </span>&#123;<br>        ListNode *dummy = <span class="hljs-keyword">new</span> <span class="hljs-built_in">ListNode</span>(<span class="hljs-number">0</span>, head);<br><br>        ListNode* pre = dummy;<br>        <span class="hljs-keyword">while</span> (head) &#123;<br>            ListNode *tail = pre;<br>            <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; k; ++i) &#123;<br>                tail = tail-&gt;next;<br>                <span class="hljs-keyword">if</span> (tail == <span class="hljs-literal">NULL</span>) &#123;<br>                    <span class="hljs-keyword">return</span> dummy-&gt;next;<br>                &#125;<br>            &#125;<br>            <span class="hljs-comment">// 此时的tail就指向我们当前要翻转的子链表的尾结点</span><br>            ListNode *next  = tail-&gt;next;<br>            <span class="hljs-built_in">tie</span>(head, tail) = <span class="hljs-built_in">reverseKList</span>(head, tail);<br>            <span class="hljs-comment">// 将翻转后的子链表接回原链表</span><br>            tail-&gt;next = next;<br>            pre-&gt;next = head;<br>            <span class="hljs-comment">// 移动指针到下一个子链表的开头</span><br>            pre = tail;<br>            head = next;<br>        &#125;<br><br>        <span class="hljs-keyword">return</span> dummy-&gt;next;<br>    &#125;<br><br>    <span class="hljs-comment">// 翻转一个头结点为head，尾结点为tail的子链表</span><br>    <span class="hljs-comment">// 返回翻转后的子链表的头结点和尾结点</span><br>    <span class="hljs-function">pair&lt;ListNode*, ListNode*&gt; <span class="hljs-title">reverseKList</span><span class="hljs-params">(ListNode *head, ListNode *tail)</span></span><br><span class="hljs-function">    </span>&#123;<br>        ListNode *pre = tail-&gt;next;<br><br>        ListNode *p = head;<br>        <span class="hljs-keyword">while</span> (pre != tail) &#123;<br>            ListNode* next = p-&gt;next;<br>            p-&gt;next = pre;<br>            pre = p;<br>            p = next;<br>        &#125;<br><br>        <span class="hljs-keyword">return</span> &#123;pre, head&#125;;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
 <p>我们每翻转完一个Group的子链表，将子链表的尾结点作为<code>pre</code>记录下来，这样当翻转完下一个子链表的时候就可以将翻转后的子链表接回去。</p>
 <p>那第一个Group的子链表没有<code>pre</code>怎么办呢？难道要特殊处理吗？</p>
-<p>我们这里用到了一个tricky的方法，在整个链表的头结点前加一个dummy node指向头结点，这的<code>pre</code>的初始值就是dummy，不需要特殊处理。这个dummy node还有一个好处就是当最后返回整个翻转后的链表的头结点的时候，<code>dummy-&gt;next</code>就正好是我们要找的头结点！一举两得！</p>
-<img src="/imgs/image-20250228154706185-1740820376666-4.png" srcset="/img/loading.gif" lazyload style="zoom:67%;" />
+<p>我们这里用到了一个tricky的方法，在整个链表的头结点前加一个dummy
+node指向头结点，这的<code>pre</code>的初始值就是dummy，不需要特殊处理。这个dummy
+node还有一个好处就是当最后返回整个翻转后的链表的头结点的时候，<code>dummy-&gt;next</code>就正好是我们要找的头结点！一举两得！</p>
+<p><img src="/imgs/image-20250228154706185-1740820376666-4.png" srcset="/img/loading.gif" lazyload style="zoom:67%;" /></p>
 <p>这样实现我们只需要构造常数个变量，<code>pre</code>,<code>head</code>,<code>tail</code>指针都会跟着链表的遍历向后变化。</p>
-<h3 id="总结"><a class="markdownIt-Anchor" href="#总结"></a> 总结</h3>
-<p>从实现的思路上来看，我觉得递归法比迭代法更简洁直观，也更容易写对（不用dummy node这种trick）。但是从内存消耗上来说，递归法只需要创建常量个变量，而迭代法需要消耗栈空间。</p>
-<h2 id="leetcode-15-三数之和medium"><a class="markdownIt-Anchor" href="#leetcode-15-三数之和medium"></a> <a target="_blank" rel="noopener" href="https://leetcode.cn/problems/3sum">Leetcode 15. 三数之和(Medium)</a></h2>
+<h3 id="总结">总结</h3>
+<p>从实现的思路上来看，我觉得递归法比迭代法更简洁直观，也更容易写对（不用dummy
+node这种trick）。但是从内存消耗上来说，递归法只需要创建常量个变量，而迭代法需要消耗栈空间。</p>
+<h2 id="leetcode-15.-三数之和medium"><a
+target="_blank" rel="noopener" href="https://leetcode.cn/problems/3sum">Leetcode 15.
+三数之和(Medium)</a></h2>
 <blockquote>
-<p>给你一个整数数组 <code>nums</code> ，判断是否存在三元组 <code>[nums[i], nums[j], nums[k]]</code> 满足 <code>i != j</code>、<code>i != k</code> 且 <code>j != k</code> ，同时还满足 <code>nums[i] + nums[j] + nums[k] == 0</code> 。请你返回所有和为 <code>0</code> 且不重复的三元组。</p>
-<p>**注意：**答案中不可以包含重复的三元组。</p>
+<p>给你一个整数数组 <code>nums</code> ，判断是否存在三元组
+<code>[nums[i], nums[j], nums[k]]</code> 满足
+<code>i != j</code>、<code>i != k</code> 且 <code>j != k</code>
+，同时还满足 <code>nums[i] + nums[j] + nums[k] == 0</code>
+。请你返回所有和为 <code>0</code> 且不重复的三元组。</p>
+<p><strong>注意：</strong>答案中不可以包含重复的三元组。</p>
 <p><strong>示例 1：</strong></p>
 <figure class="highlight inform7"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs inform7">输入：nums = <span class="hljs-comment">[-1,0,1,2,-1,-4]</span><br>输出：<span class="hljs-comment">[<span class="hljs-comment">[-1,-1,2]</span>,<span class="hljs-comment">[-1,0,1]</span>]</span><br>解释：<br>nums<span class="hljs-comment">[0]</span> + nums<span class="hljs-comment">[1]</span> + nums<span class="hljs-comment">[2]</span> = (-1) + 0 + 1 = 0 。<br>nums<span class="hljs-comment">[1]</span> + nums<span class="hljs-comment">[2]</span> + nums<span class="hljs-comment">[4]</span> = 0 + 1 + (-1) = 0 。<br>nums<span class="hljs-comment">[0]</span> + nums<span class="hljs-comment">[3]</span> + nums<span class="hljs-comment">[4]</span> = (-1) + 2 + (-1) = 0 。<br>不同的三元组是 <span class="hljs-comment">[-1,0,1]</span> 和 <span class="hljs-comment">[-1,-1,2]</span> 。<br>注意，输出的顺序和三元组的顺序并不重要。<br></code></pre></td></tr></table></figure>
 <p><strong>示例 2：</strong></p>
@@ -343,10 +372,13 @@
 <li><code>-105 &lt;= nums[i] &lt;= 105</code></li>
 </ul>
 </blockquote>
-<h3 id="两数之和"><a class="markdownIt-Anchor" href="#两数之和"></a> 两数之和</h3>
+<h3 id="两数之和">两数之和</h3>
 <p>这题是两数之和问题的扩展，因此我先做了两数之和问题：</p>
 <blockquote>
-<p>给定一个整数数组 <code>nums</code> 和一个整数目标值 <code>target</code>，请你在该数组中找出 <strong>和为目标值</strong> <em><code>target</code></em> 的那 <strong>两个</strong> 整数，并返回它们的数组下标。</p>
+<p>给定一个整数数组 <code>nums</code> 和一个整数目标值
+<code>target</code>，请你在该数组中找出 <strong>和为目标值</strong>
+<em><code>target</code></em> 的那 <strong>两个</strong>
+整数，并返回它们的数组下标。</p>
 <p>你可以假设每种输入只会对应一个答案，并且你不能使用两次相同的元素。</p>
 <p>你可以按任意顺序返回答案。</p>
 <p><strong>示例 1：</strong></p>
@@ -362,21 +394,28 @@
 <li><code>-109 &lt;= target &lt;= 109</code></li>
 <li><strong>只会存在一个有效答案</strong></li>
 </ul>
-<p>**进阶：**你可以想出一个时间复杂度小于 <code>O(n2)</code> 的算法吗？</p>
+<p><strong>进阶：</strong>你可以想出一个时间复杂度小于
+<code>O(n2)</code> 的算法吗？</p>
 </blockquote>
 <p>这题就很简单，因为题目前提是只会存在一个有效答案，因此不需要担心重复问题。只需要用一个哈希表存储每个元素值和其对应的index。这样就可以以O(1)的时间复杂度找到对应值的index。因此总体的时间复杂度就是遍历一遍<code>nums</code>的<code>O(N)</code></p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span><br>&#123;<br>    <span class="hljs-keyword">public</span>:<br>    <span class="hljs-function">vector&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">twoSum</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt; &amp;nums, <span class="hljs-type">int</span> target)</span></span><br><span class="hljs-function">    </span>&#123;<br>        unordered_multimap&lt;<span class="hljs-type">int</span>, <span class="hljs-type">int</span>&gt; hashmap;<br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; nums.<span class="hljs-built_in">size</span>(); i++)<br>        &#123;<br>            hashmap.<span class="hljs-built_in">insert</span>(&#123;nums[i], i&#125;);<br>        &#125;<br><br>        vector&lt;<span class="hljs-type">int</span>&gt; index;<br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; nums.<span class="hljs-built_in">size</span>(); i++)<br>        &#123;<br>            <span class="hljs-keyword">auto</span> range = hashmap.<span class="hljs-built_in">equal_range</span>(target - nums[i]);<br>            <span class="hljs-keyword">for</span> (<span class="hljs-keyword">auto</span> it = range.first; it != range.second; it++)<br>                <span class="hljs-comment">// 找到第一个不是当前i的index</span><br>                <span class="hljs-keyword">if</span> (it-&gt;second != i)<br>                &#123;<br>                    index.<span class="hljs-built_in">push_back</span>(i);<br>                    index.<span class="hljs-built_in">push_back</span>(it-&gt;second);<br>                    <span class="hljs-keyword">return</span> index;<br>                &#125;<br>        &#125;<br><br>        <span class="hljs-keyword">return</span> index;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
 <p>然而此题三数之和问题如果沿用哈希表，先解决两数之和问题，再加上第三个数，就会得到大量的重复的三元组，还要用哈希表做去重操作，非常消耗时间和空间。因此需要更换思路。</p>
-<h3 id="三数之和排序双指针"><a class="markdownIt-Anchor" href="#三数之和排序双指针"></a> 三数之和：排序+双指针</h3>
-<p>三数之和这道题可以用双指针精妙地将原本三层遍历<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><msup><mi>N</mi><mn>3</mn></msup><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(N^3)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.064108em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">3</span></span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span>的时间复杂度降到<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><msup><mi>N</mi><mn>2</mn></msup><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(N^2)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.064108em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span>​，具体的证明过程非常建议去看一下leetcode官方题解，讲得非常好！在这里我尝试简单说明一下：</p>
+<h3 id="三数之和排序双指针">三数之和：排序+双指针</h3>
+<p>三数之和这道题可以用双指针精妙地将原本三层遍历<span
+class="math inline">\(O(N^3)\)</span>的时间复杂度降到<span
+class="math inline">\(O(N^2)\)</span>​，具体的证明过程非常建议去看一下leetcode官方题解，讲得非常好！在这里我尝试简单说明一下：</p>
 <p>首先我们要解决的是重复性问题，怎么才能保证不会得到重复的三元组？</p>
 <p>我们仍需要使用三重循环，第一重大循环获取第一个数，第二、三重循环获取第二、三个数，我们只需要规定好每重循环枚举到的元素大小顺序就可以了。</p>
-<p>具体来说，我们规定三重遍历中第二重循环枚举到的元素比第一重循环枚举到的元素大，第三重循环枚举到的元素比第二重循环枚举到的元素大，这样我们获得的三元组<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">(</mo><mi>a</mi><mo separator="true">,</mo><mi>b</mi><mo separator="true">,</mo><mi>c</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(a, b, c)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathnormal">a</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathnormal">b</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathnormal">c</span><span class="mclose">)</span></span></span></span>的大小顺序一定是<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>a</mi><mo>&lt;</mo><mo>=</mo><mi>b</mi><mo>&lt;</mo><mo>=</mo><mi>c</mi></mrow><annotation encoding="application/x-tex">a &lt;= b &lt;= c</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.5782em;vertical-align:-0.0391em;"></span><span class="mord mathnormal">a</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">&lt;</span></span><span class="base"><span class="strut" style="height:0.36687em;vertical-align:0em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.73354em;vertical-align:-0.0391em;"></span><span class="mord mathnormal">b</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">&lt;</span></span><span class="base"><span class="strut" style="height:0.36687em;vertical-align:0em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathnormal">c</span></span></span></span>。要实现这一点，我们就需要先对数组从小到大排序。同时，对数组从小到大排序后，我们每层循环时，就可以跳过相邻的重复元素。</p>
+<p>具体来说，我们规定三重遍历中第二重循环枚举到的元素比第一重循环枚举到的元素大，第三重循环枚举到的元素比第二重循环枚举到的元素大，这样我们获得的三元组<span
+class="math inline">\((a, b, c)\)</span>的大小顺序一定是<span
+class="math inline">\(a &lt;= b &lt;=
+c\)</span>。要实现这一点，我们就需要先对数组从小到大排序。同时，对数组从小到大排序后，我们每层循环时，就可以跳过相邻的重复元素。</p>
 <p>解决了重复性问题，接下来就是怎么才能将原本的三重循环降到只需要遍历两次数组呢？</p>
 <p>可以这样思考，一旦固定了第二个数，那么第三个数就唯一确定了。并且由于我们是从左到右（从小到大）遍历第二个数，那么我们可以同时从右到左遍历第三个数。一旦第三个数找到了，他右边的数就再也不会用到了（因为我们接下来遍历到的第二个数只会更大，所以以后只需要继续遍历这第三个数左边的数）。</p>
-<p>到这里解法就很清晰了，要用左右双指针分别指向遍历到的第二个数和第三个数。左指针只需要向右遍历，右指针只需要向左遍历，因此第二、三重循环加起来只需要遍历一次数组。再加上第一层大循环，总的时间复杂度就变成了<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><msup><mi>N</mi><mn>2</mn></msup><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(N^2)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.064108em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span>！</p>
+<p>到这里解法就很清晰了，要用左右双指针分别指向遍历到的第二个数和第三个数。左指针只需要向右遍历，右指针只需要向左遍历，因此第二、三重循环加起来只需要遍历一次数组。再加上第一层大循环，总的时间复杂度就变成了<span
+class="math inline">\(O(N^2)\)</span>！</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span><br>&#123;<br>    <span class="hljs-keyword">public</span>:<br>    vector&lt;vector&lt;<span class="hljs-type">int</span>&gt;&gt; <span class="hljs-built_in">threeSum</span>(vector&lt;<span class="hljs-type">int</span>&gt; &amp;nums) &#123;<br>        vector&lt;vector&lt;<span class="hljs-type">int</span>&gt; result;<br>        // 将nums数组从小到大排序<br>        nums.sort(nums.begin(), nums.end());<br><br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = 0; i &lt; nums.size(); ++i) &#123;<br>            <span class="hljs-keyword">if</span> (i != 0 &amp;&amp; nums[i] == nums[i - 1]) &#123;<br>                <span class="hljs-keyword">continue</span>;<br>            &#125;<br><br>            // 定义双指针<br>            <span class="hljs-type">int</span> l = i + 1;<br>            <span class="hljs-type">int</span> r = num.size() - 1;<br>            <span class="hljs-type">int</span> target = -nums[i];<br>            <span class="hljs-keyword">while</span> (l &lt; r) &#123;<br>                // 如果<br>                // 1. 当前左指针指向的数与前一个数相同；<br>                // 2. 或者左右指针指向的数相加小于target(说明再向左移动右指针也不可能找到等于target的和了)；<br>                // 则向右移动左指针，右指针不动<br>                <span class="hljs-keyword">if</span> ((l != i + 1 &amp;&amp; nums[l] == nums[l - 1]) || nums[l] + nums[r] &lt; target) &#123;<br>                    l++;<br>                    <span class="hljs-keyword">continue</span>;<br>                &#125;<br>                <span class="hljs-keyword">if</span> (nums[l] + nums[r] == target) &#123;<br>                    result.push_back(&#123;nums[i], nums[l], nums[r]&#125;);<br>                    l++;<br>                    r--;<br>                    <span class="hljs-keyword">continue</span>;<br>                &#125;<br>                // 到这一步，说明nums[l] + nums[r] &gt; target，那就要向左移动右指针, 左指针不动<br>                r--;<br>            &#125;<br>        &#125;<br><br>        <span class="hljs-keyword">return</span> result;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
-<img src="/imgs/image-20250301171414009.png" srcset="/img/loading.gif" lazyload style="zoom:67%;" />
+<p><img src="/imgs/image-20250301171414009.png" srcset="/img/loading.gif" lazyload style="zoom:67%;" /></p>
 
                 
               </div>
@@ -385,6 +424,45 @@
             <div>
               <div class="post-metas my-3">
   
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Leetcode/" class="category-chain-item">Leetcode</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/Leetcode/CodeTop/" class="category-chain-item">CodeTop</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/CodeTop/" class="print-no-link">#CodeTop</a>
+      
+        <a href="/tags/Leetcode/" class="print-no-link">#Leetcode</a>
+      
+        <a href="/tags/%E5%88%B7%E9%A2%98/" class="print-no-link">#刷题</a>
+      
+    </div>
   
 </div>
 
@@ -395,7 +473,7 @@
   <div class="license-box my-3">
     <div class="license-title">
       <div>CodeTop-Day2</div>
-      <div>http://oooscar8.github.io/2025/03/01/CodeTop-Day2/</div>
+      <div>http://oooscar8.github.io/2025/02/28/CodeTop-Day2/</div>
     </div>
     <div class="license-meta">
       
@@ -407,7 +485,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2025年3月1日</div>
+          <div>2025年2月28日</div>
         </div>
       
       
@@ -464,8 +542,8 @@
     
       <script type="text/javascript">
         var disqus_config = function() {
-          this.page.url = 'http://oooscar8.github.io/2025/03/01/CodeTop-Day2/';
-          this.page.identifier = '/2025/03/01/CodeTop-Day2/';
+          this.page.url = 'http://oooscar8.github.io/2025/02/28/CodeTop-Day2/';
+          this.page.identifier = '/2025/02/28/CodeTop-Day2/';
         };
         Fluid.utils.loadComments('#disqus_thread', function() {
           var d = document, s = d.createElement('script');
