@@ -240,7 +240,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          391 字
+          386 字
         
       </span>
     
@@ -294,8 +294,7 @@
               <div class="markdown-body">
                 
                 <p>In this part, we will talk about the topics of Job Scheduling in OS. We will cover different scheduling algorithm and real-life schedulers. Prepare for the journey of Scheduling!</p>
-<h1 id="scheduling"><a class="markdownIt-Anchor" href="#scheduling"></a> Scheduling</h1>
-<blockquote>
+<h1 id="Scheduling"><a href="#Scheduling" class="headerlink" title="Scheduling"></a>Scheduling</h1><blockquote>
 <p><strong>Learning Materials</strong></p>
 <p>Videos:</p>
 <p><a target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/download/cs161-video-materials/www.eecs.harvard.edu/~margo/cs161/videos/architecture.mp4">Computer Architecture Primer</a></p>
@@ -303,35 +302,30 @@
 <p><a target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/LECTURE-SLIDES/Scheduling.pptx">Scheduling</a></p>
 <p><a target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/LECTURE-SLIDES/AdvancedScheduling.pptx"> Advanced scheduling</a></p>
 <p>Readings:</p>
-<p>[<a target="_blank" rel="noopener" href="http://pages.cs.wisc.edu/~remzi/OSTEP/cpu-sched.pdf">OSTEP] Scheduling</a></p>
-<p>[<a target="_blank" rel="noopener" href="https://pages.cs.wisc.edu/~remzi/OSTEP/cpu-sched-mlfq.pdf">OSTEP] The multi-level feedback queue</a></p>
-<p>[<a target="_blank" rel="noopener" href="http://pages.cs.wisc.edu/~remzi/OSTEP/cpu-sched-lottery.pdf">OSTEP] Lottery scheduling and Linux CFS</a></p>
-<p>[<a target="_blank" rel="noopener" href="https://pages.cs.wisc.edu/~remzi/OSTEP/cpu-sched-multi.pdf">OSTEP] Multiprocessor scheduling</a></p>
+<p><a target="_blank" rel="noopener" href="http://pages.cs.wisc.edu/~remzi/OSTEP/cpu-sched.pdf">[OSTEP] Scheduling</a></p>
+<p><a target="_blank" rel="noopener" href="https://pages.cs.wisc.edu/~remzi/OSTEP/cpu-sched-mlfq.pdf">[OSTEP] The multi-level feedback queue</a></p>
+<p><a target="_blank" rel="noopener" href="http://pages.cs.wisc.edu/~remzi/OSTEP/cpu-sched-lottery.pdf">[OSTEP] Lottery scheduling and Linux CFS</a></p>
+<p><a target="_blank" rel="noopener" href="https://pages.cs.wisc.edu/~remzi/OSTEP/cpu-sched-multi.pdf">[OSTEP] Multiprocessor scheduling</a></p>
 <p><a target="_blank" rel="noopener" href="http://people.ece.ubc.ca/~sasha/papers/eurosys16-final29.pdf">A Decade of Wasted Cores (Paper)</a></p>
 </blockquote>
-<h2 id="architecture-overview"><a class="markdownIt-Anchor" href="#architecture-overview"></a> Architecture Overview</h2>
-<p>Basic Processor:</p>
-<img src="/imgs/202410011046870.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 67%;" />
+<h2 id="Architecture-Overview"><a href="#Architecture-Overview" class="headerlink" title="Architecture Overview"></a>Architecture Overview</h2><p>Basic Processor:</p>
+<p><img src="/imgs/202410011046870.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 67%;" /></p>
 <p>Multicore:</p>
-<img src="/imgs/202410011049694.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:67%;" />
+<p><img src="/imgs/202410011049694.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:67%;" /></p>
 <p>Modern Multiprocessor:</p>
-<img src="/imgs/202410011052076.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 80%;" />
+<p><img src="/imgs/202410011052076.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 80%;" /></p>
 <p><code>sys/161</code>:</p>
 <p>Not multithreaded: Each core/processor has only one thread</p>
 <p>Do not distinguish cores from processors; N-way <strong>single-core multiprocessors</strong></p>
-<h2 id="scheduling-introduction"><a class="markdownIt-Anchor" href="#scheduling-introduction"></a> Scheduling: Introduction</h2>
-<blockquote>
+<h2 id="Scheduling-Introduction"><a href="#Scheduling-Introduction" class="headerlink" title="Scheduling: Introduction"></a>Scheduling: Introduction</h2><blockquote>
 <p>How to build an optimal scheduler if we only consider <code>turnaround</code> time?</p>
 </blockquote>
 <ul>
-<li>
-<p>FIFO(First in First out)</p>
+<li><p>FIFO(First in First out)</p>
 </li>
-<li>
-<p>SJF(Shortest Job First)</p>
+<li><p>SJF(Shortest Job First)</p>
 </li>
-<li>
-<p>STCF(Shortest Time-to-Completion First)</p>
+<li><p>STCF(Shortest Time-to-Completion First)</p>
 </li>
 </ul>
 <p>Optimal, if we know job lengths and our only metric is <code>turnaround</code> time.</p>
@@ -346,33 +340,32 @@
 <p>How to take I/O into account?</p>
 </blockquote>
 <p>The answer is <strong>Overlap</strong>!: Treat each CPU burst as a job.</p>
-<img src="/imgs/202410031046437.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 80%;" />
+<p><img src="/imgs/202410031046437.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 80%;" /></p>
 <blockquote>
 <p>How to determine the <code>timeslice</code>?</p>
 </blockquote>
-<p><code>timeslice</code> should be short, maximizing multitasking, but shouldn't be too short, otherwise context switch time would be long</p>
+<p><code>timeslice</code> should be short, maximizing multitasking, but shouldn’t be too short, otherwise context switch time would be long</p>
 <p><strong>context switch</strong>:</p>
 <ul>
 <li>save the register of the old thread</li>
 <li>find the new thread from the <code>runqueue</code></li>
-<li>restore the new thread's register</li>
+<li>restore the new thread’s register</li>
 </ul>
-<img src="/imgs/202410011150498.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:80%;" />
+<p><img src="/imgs/202410011150498.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:80%;" /></p>
 <blockquote>
 <p>How do we pick the next thread from the <code>runqueue</code>?</p>
 </blockquote>
 <p><strong>Scheduling Algorithm</strong>:</p>
 <p>Multiple queues with different priority and <code>timeslice</code></p>
 <p>Short <code>timeslice</code> thread has higher priority.</p>
-<p>If a lower priority thread hasn't run for a long time, it will be moved to upper priority.</p>
-<img src="/imgs/202410011218661.png" srcset="/img/loading.gif" lazyload alt=""  />
-<h2 id="the-multi-level-feedback-queue"><a class="markdownIt-Anchor" href="#the-multi-level-feedback-queue"></a> The multi-level feedback queue</h2>
-<p>MLFQ observes the execution of a job and prioritizes it accordingly.</p>
+<p>If a lower priority thread hasn’t run for a long time, it will be moved to upper priority.</p>
+<p><img src="/imgs/202410011218661.png" srcset="/img/loading.gif" lazyload alt=""  /></p>
+<h2 id="The-multi-level-feedback-queue"><a href="#The-multi-level-feedback-queue" class="headerlink" title="The multi-level feedback queue"></a>The multi-level feedback queue</h2><p>MLFQ observes the execution of a job and prioritizes it accordingly.</p>
 <ul>
-<li>Rule 1: If Priority(A) &gt; Priority(B), A runs (B doesn’t).</li>
-<li>Rule 2: If Priority(A) = Priority(B), A &amp; B run in <strong>Round-Robin</strong> fashion using the <strong>time slice</strong> (quantum length) of the given queue.</li>
-<li>Rule 3: When a job enters the system, it is placed at the highest priority (the topmost queue).</li>
-<li>Rule 4: Once a job uses up its time allotment at a given level (<strong>regardless of how many times it has given up the CPU</strong>), its priority is reduced (i.e., it moves down one queue).</li>
+<li>Rule 1: If Priority(A) &gt; Priority(B), A runs (B doesn’t). </li>
+<li>Rule 2: If Priority(A) = Priority(B), A &amp; B run in <strong>Round-Robin</strong> fashion using the <strong>time slice</strong> (quantum length) of the given queue. </li>
+<li>Rule 3: When a job enters the system, it is placed at the highest priority (the topmost queue). </li>
+<li>Rule 4: Once a job uses up its time allotment at a given level (<strong>regardless of how many times it has given up the CPU</strong>), its priority is reduced (i.e., it moves down one queue). </li>
 <li>Rule 5: After some time period S, move all the jobs in the system to the topmost queue.</li>
 </ul>
 <p><strong>MLFQ Problem</strong>:</p>
@@ -384,7 +377,7 @@
 <li><code>Timeslice</code> equals to 10ms.</li>
 <li>Allotment equals to 20ms.</li>
 <li><em>S</em> equals to 100ms.</li>
-<li>All jobs use up their entire timeslice every time they are scheduled.</li>
+<li>All jobs use up their entire timeslice every time they are scheduled. </li>
 <li>Job J1 arrives at 0ms.</li>
 <li>Job J2 arrives at 20ms.</li>
 <li>J1 requires 60ms of CPU time to complete.</li>
@@ -392,26 +385,22 @@
 </ol>
 </blockquote>
 <p>bright color: J1;    light color: J2</p>
-<img src="/imgs/202410031119223.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:120%;" />
-<img src="/imgs/202410040048866.jpg" srcset="/img/loading.gif" lazyload alt="" style="zoom: 40%;" />
-<h2 id="scheduling-proportional-share"><a class="markdownIt-Anchor" href="#scheduling-proportional-share"></a> Scheduling: Proportional Share</h2>
-<p>Guarantee that each job obtains a certain percentage of CPU time.</p>
-<p>Use <strong>tickets</strong> to represent a process's share of the CPU</p>
-<hr />
-<h3 id="lottery-scheduling-decision-code"><a class="markdownIt-Anchor" href="#lottery-scheduling-decision-code"></a> Lottery Scheduling Decision Code</h3>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">// counter: used to track if we’ve found the winner yet</span><br><span class="hljs-type">int</span> counter = <span class="hljs-number">0</span>;<br><br><span class="hljs-comment">// winner: call some random number generator to</span><br><span class="hljs-comment">// get a value &gt;= 0 and &lt;= (totaltickets - 1)</span><br><span class="hljs-type">int</span> winner = getrandom(<span class="hljs-number">0</span>, totaltickets);<br><br><span class="hljs-comment">// current: use this to walk through the list of jobs</span><br><span class="hljs-type">node_t</span> *current = head;<br><span class="hljs-keyword">while</span> (current) &#123;<br>    counter = counter + current-&gt;tickets;<br>    <span class="hljs-keyword">if</span> (counter &gt; winner)<br>        <span class="hljs-keyword">break</span>; <span class="hljs-comment">// found the winner</span><br>    current = current-&gt;next;<br>&#125;<br><span class="hljs-comment">// ’current’ is the winner: schedule it...</span><br></code></pre></td></tr></table></figure>
-<hr />
-<h3 id="stride-scheduling"><a class="markdownIt-Anchor" href="#stride-scheduling"></a> Stride Scheduling</h3>
-<p>Deterministic fair-share scheduler</p>
+<p><img src="/imgs/202410031119223.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:120%;" /></p>
+<p><img src="/imgs/202410040048866.jpg" srcset="/img/loading.gif" lazyload alt="" style="zoom: 40%;" /></p>
+<h2 id="Scheduling-Proportional-Share"><a href="#Scheduling-Proportional-Share" class="headerlink" title="Scheduling: Proportional Share"></a>Scheduling: Proportional Share</h2><p>Guarantee that each job obtains a certain percentage of CPU time.</p>
+<p>Use <strong>tickets</strong> to represent a process’s share of the CPU</p>
+<hr>
+<h3 id="Lottery-Scheduling-Decision-Code"><a href="#Lottery-Scheduling-Decision-Code" class="headerlink" title="Lottery Scheduling Decision Code"></a>Lottery Scheduling Decision Code</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">// counter: used to track if we’ve found the winner yet</span><br><span class="hljs-type">int</span> counter = <span class="hljs-number">0</span>;<br><br><span class="hljs-comment">// winner: call some random number generator to</span><br><span class="hljs-comment">// get a value &gt;= 0 and &lt;= (totaltickets - 1)</span><br><span class="hljs-type">int</span> winner = getrandom(<span class="hljs-number">0</span>, totaltickets);<br><br><span class="hljs-comment">// current: use this to walk through the list of jobs</span><br><span class="hljs-type">node_t</span> *current = head;<br><span class="hljs-keyword">while</span> (current) &#123;<br>    counter = counter + current-&gt;tickets;<br>    <span class="hljs-keyword">if</span> (counter &gt; winner)<br>        <span class="hljs-keyword">break</span>; <span class="hljs-comment">// found the winner</span><br>    current = current-&gt;next;<br>&#125;<br><span class="hljs-comment">// ’current’ is the winner: schedule it...</span><br></code></pre></td></tr></table></figure>
+<hr>
+<h3 id="Stride-Scheduling"><a href="#Stride-Scheduling" class="headerlink" title="Stride Scheduling"></a>Stride Scheduling</h3><p>Deterministic fair-share scheduler</p>
 <p><strong>Stride</strong> is inverse in proportion to the number of tickets it has, computed by dividing some large number by the number of tickets each process has been assigned.</p>
 <p>Every time a process runs, we will <strong>increment a counter</strong> for it (called its pass value) <strong>by its stride</strong> to track its global progress. At any given time, the scheduler picks the process to run that has the lowest pass value so far.</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs c">curr = remove_min(<span class="hljs-built_in">queue</span>); <span class="hljs-comment">// pick client with min pass</span><br>schedule(curr); <span class="hljs-comment">// run for quantum</span><br>curr-&gt;pass += curr-&gt;stride; <span class="hljs-comment">// update pass using stride</span><br>insert(<span class="hljs-built_in">queue</span>, curr); <span class="hljs-comment">// return curr to queue</span><br></code></pre></td></tr></table></figure>
 <div class="note note-primary">
             <p>Lottery scheduling makes more sense than stride scheduling when incorporating new processes.</p>
           </div>
-<hr />
-<h3 id="linux-completely-fair-scheduler-cfs"><a class="markdownIt-Anchor" href="#linux-completely-fair-scheduler-cfs"></a> Linux Completely Fair Scheduler (CFS)</h3>
-<p>As each process runs, it accumulates <code>vruntime</code> at the same rate in proportion with real time.</p>
+<hr>
+<h3 id="Linux-Completely-Fair-Scheduler-CFS"><a href="#Linux-Completely-Fair-Scheduler-CFS" class="headerlink" title="Linux Completely Fair Scheduler (CFS)"></a>Linux Completely Fair Scheduler (CFS)</h3><p>As each process runs, it accumulates <code>vruntime</code> at the same rate in proportion with real time.</p>
 <p>When a scheduling decision occurs, CFS will pick the process with the lowest <code>vruntime</code> to run next.</p>
 <p>CFS uses <code>sched_latency</code> to determine how long one process should run before considering a switch, determining its time slice but in a dynamic fashion.</p>
 <p>CFS will never set the time slice to less than <code>min_granularity</code>.</p>
@@ -421,59 +410,50 @@
 <p>CFS gives each process a <strong>nice value</strong> indicating its priority.</p>
 <p>CFS maps the <strong>nice value</strong> of each process to a <strong>weight</strong>:</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">static</span> <span class="hljs-type">const</span> <span class="hljs-type">int</span> prio_to_weight[<span class="hljs-number">40</span>] = &#123;<br><span class="hljs-comment">/* -20 */</span> <span class="hljs-number">88761</span>, <span class="hljs-number">71755</span>, <span class="hljs-number">56483</span>, <span class="hljs-number">46273</span>, <span class="hljs-number">36291</span>,<br><span class="hljs-comment">/* -15 */</span> <span class="hljs-number">29154</span>, <span class="hljs-number">23254</span>, <span class="hljs-number">18705</span>, <span class="hljs-number">14949</span>, <span class="hljs-number">11916</span>,<br><span class="hljs-comment">/* -10 */</span> <span class="hljs-number">9548</span>, <span class="hljs-number">7620</span>, <span class="hljs-number">6100</span>, <span class="hljs-number">4904</span>, <span class="hljs-number">3906</span>,<br><span class="hljs-comment">/* -5 */</span> <span class="hljs-number">3121</span>, <span class="hljs-number">2501</span>, <span class="hljs-number">1991</span>, <span class="hljs-number">1586</span>, <span class="hljs-number">1277</span>,<br><span class="hljs-comment">/* 0 */</span> <span class="hljs-number">1024</span>, <span class="hljs-number">820</span>, <span class="hljs-number">655</span>, <span class="hljs-number">526</span>, <span class="hljs-number">423</span>,<br><span class="hljs-comment">/* 5 */</span> <span class="hljs-number">335</span>, <span class="hljs-number">272</span>, <span class="hljs-number">215</span>, <span class="hljs-number">172</span>, <span class="hljs-number">137</span>,<br><span class="hljs-comment">/* 10 */</span> <span class="hljs-number">110</span>, <span class="hljs-number">87</span>, <span class="hljs-number">70</span>, <span class="hljs-number">56</span>, <span class="hljs-number">45</span>,<br><span class="hljs-comment">/* 15 */</span> <span class="hljs-number">36</span>, <span class="hljs-number">29</span>, <span class="hljs-number">23</span>, <span class="hljs-number">18</span>, <span class="hljs-number">15</span>,<br>&#125;;<br></code></pre></td></tr></table></figure>
-<p>Then calculate each process's time slice:</p>
-<img src="/imgs/202410042248052.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:50%;" />
+<p>Then calculate each process’s time slice:</p>
+<p><img src="/imgs/202410042248052.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:50%;" /></p>
 <p>Change the way CFS calculates <code>vruntime</code>:</p>
-<img src="/imgs/202410042249814.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:50%;" />
+<p><img src="/imgs/202410042249814.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:50%;" /></p>
 <p>That is to say, a process has higher priority will dominate CPU for a longer time but its <code>vruntime</code> increases slower.</p>
 <ul>
 <li><strong>CFS Red Black Tree</strong></li>
 </ul>
 <p>CFS uses a red black tree to keep the runnable processes by their <code>vruntime</code>.</p>
-<img src="/imgs/202410042238024.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 40%;" />
+<p><img src="/imgs/202410042238024.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 40%;" /></p>
 <p>CFS handles sleeping processes by setting the <code>vruntime</code> of a job to the minimum value found in the tree when it wakes up.</p>
-<hr />
-<h3 id="problems-of-fair-share-schedulers"><a class="markdownIt-Anchor" href="#problems-of-fair-share-schedulers"></a> Problems of fair-share schedulers</h3>
-<ul>
-<li>
-<p>Do not particularly mesh well with I/O.</p>
+<hr>
+<h3 id="Problems-of-fair-share-schedulers"><a href="#Problems-of-fair-share-schedulers" class="headerlink" title="Problems of fair-share schedulers"></a>Problems of fair-share schedulers</h3><ul>
+<li><p>Do not particularly mesh well with I/O.</p>
 </li>
-<li>
-<p>leave open the hard problem of ticket or priority assignment (How to assign tickets? How to set nice values?)</p>
+<li><p>leave open the hard problem of ticket or priority assignment (How to assign tickets? How to set nice values?)</p>
 </li>
 </ul>
-<h2 id="multiprocessor-scheduling"><a class="markdownIt-Anchor" href="#multiprocessor-scheduling"></a> Multiprocessor scheduling</h2>
-<blockquote>
+<h2 id="Multiprocessor-scheduling"><a href="#Multiprocessor-scheduling" class="headerlink" title="Multiprocessor scheduling"></a>Multiprocessor scheduling</h2><blockquote>
 <p>How should the OS schedule jobs on multiple CPUs?</p>
 </blockquote>
-<h3 id="cache-affinity"><a class="markdownIt-Anchor" href="#cache-affinity"></a> Cache Affinity</h3>
-<p>A process, when run on a particular CPU, builds up a fair bit of state in the caches (and TLBs) of the CPU. Therefore, a multiprocessor scheduler should consider <strong>keeping a process on the same CPU if at all possible</strong>.</p>
-<hr />
-<h3 id="single-queue-scheduling"><a class="markdownIt-Anchor" href="#single-queue-scheduling"></a> Single-Queue Scheduling</h3>
-<p>It does not scale well (due to <strong>synchronization overheads</strong>), and it does not readily preserve <strong>cache affinity</strong>.</p>
-<hr />
-<h3 id="multi-queue-scheduling"><a class="markdownIt-Anchor" href="#multi-queue-scheduling"></a> Multi-Queue Scheduling</h3>
-<blockquote>
+<h3 id="Cache-Affinity"><a href="#Cache-Affinity" class="headerlink" title="Cache Affinity"></a>Cache Affinity</h3><p>A process, when run on a particular CPU, builds up a fair bit of state in the caches (and TLBs) of the CPU. Therefore, a multiprocessor scheduler should consider <strong>keeping a process on the same CPU if at all possible</strong>.</p>
+<hr>
+<h3 id="Single-Queue-Scheduling"><a href="#Single-Queue-Scheduling" class="headerlink" title="Single-Queue Scheduling"></a>Single-Queue Scheduling</h3><p>It does not scale well (due to <strong>synchronization overheads</strong>), and it does not readily preserve <strong>cache affinity</strong>.</p>
+<hr>
+<h3 id="Multi-Queue-Scheduling"><a href="#Multi-Queue-Scheduling" class="headerlink" title="Multi-Queue Scheduling"></a>Multi-Queue Scheduling</h3><blockquote>
 <p>How to deal with load imbalance?</p>
 </blockquote>
 <p><strong>work stealing</strong>: A (source) queue that is low on jobs will occasionally peek at another (target) queue, to see how full it is. If the target queue is (notably) more full than the source queue, the source will “steal” one or more jobs from the target to help balance load.</p>
-<h2 id="advanced-scheduling"><a class="markdownIt-Anchor" href="#advanced-scheduling"></a> Advanced Scheduling</h2>
-<p>Avoid scheduling memory-intensive threads on the same shared cache to prevent <strong>cache contention</strong>.</p>
-<img src="/imgs/202410081154427.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 67%;" />
+<h2 id="Advanced-Scheduling"><a href="#Advanced-Scheduling" class="headerlink" title="Advanced Scheduling"></a>Advanced Scheduling</h2><p>Avoid scheduling memory-intensive threads on the same shared cache to prevent <strong>cache contention</strong>.</p>
+<p><img src="/imgs/202410081154427.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 67%;" /></p>
 <blockquote>
 <p>Why  did performance suck on a NUMA system?</p>
-<img src="/imgs/202410081159768.png" srcset="/img/loading.gif" lazyload alt="" />
+<p><img src="/imgs/202410081159768.png" srcset="/img/loading.gif" lazyload alt="" /></p>
 </blockquote>
-<p>We didn't take account where the data lives in memory, resulting in <strong>remote latency</strong>.</p>
+<p>We didn’t take account where the data lives in memory, resulting in <strong>remote latency</strong>.</p>
 <p><strong>Our algorithm:</strong></p>
 <p>Continuously measure traffic(memory requests) of the thread.</p>
 <blockquote>
 <p>Why placing on random node?</p>
 </blockquote>
 <p>Balance the nodes and memory controllers.</p>
-<img src="/imgs/image-20250222160917877.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:80%;" />
-<h2 id="linuxs-completely-fair-scheduling-cfs"><a class="markdownIt-Anchor" href="#linuxs-completely-fair-scheduling-cfs"></a> Linux’s Completely Fair Scheduling (CFS)</h2>
-<div class="note note-danger">
+<p><img src="/imgs/image-20250222160917877.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:80%;" /></p>
+<h2 id="Linux’s-Completely-Fair-Scheduling-CFS"><a href="#Linux’s-Completely-Fair-Scheduling-CFS" class="headerlink" title="Linux’s Completely Fair Scheduling (CFS)"></a>Linux’s Completely Fair Scheduling (CFS)</h2><div class="note note-danger">
             <p>Bugs in the Linux Scheduler: Cores may stay idle for seconds while ready threads are waiting in <code>runqueue</code>s.</p>
           </div>
 <ul>
@@ -490,8 +470,8 @@
 <li><strong>The (Hierarchical) load balancing algorithm</strong></li>
 </ul>
 <p>CFS balances <code>runqueues</code> based on a metric called <strong>load</strong>, which is the <strong>combination of the thread’s weight and its average CPU utilization</strong>. If a thread does not use much of a CPU, its load will be decreased accordingly.</p>
-<p><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>l</mi><mi>o</mi><mi>a</mi><mi>d</mi><mo>=</mo><mi>w</mi><mi>e</mi><mi>i</mi><mi>g</mi><mi>h</mi><mi>t</mi><mo>∗</mo><mo stretchy="false">(</mo><mi>c</mi><mi>p</mi><mi>u</mi><mi>U</mi><mi>s</mi><mi>e</mi><msup><mo stretchy="false">)</mo><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">load = weight * (cpuUse)^2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.01968em;">l</span><span class="mord mathnormal">o</span><span class="mord mathnormal">a</span><span class="mord mathnormal">d</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathnormal" style="margin-right:0.02691em;">w</span><span class="mord mathnormal">e</span><span class="mord mathnormal">i</span><span class="mord mathnormal" style="margin-right:0.03588em;">g</span><span class="mord mathnormal">h</span><span class="mord mathnormal">t</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1.064108em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathnormal">c</span><span class="mord mathnormal">p</span><span class="mord mathnormal">u</span><span class="mord mathnormal" style="margin-right:0.10903em;">U</span><span class="mord mathnormal">s</span><span class="mord mathnormal">e</span><span class="mclose"><span class="mclose">)</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span></span></p>
-<img src="/imgs/202410081357697.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:67%;" />
+<p>$load = weight * (cpuUse)^2$</p>
+<p><img src="/imgs/202410081357697.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:67%;" /></p>
 <p>Function running on each cpu cur_cpu:</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><code class="hljs pseudocode">/* iterate through each scheduling domain */<br>for all sd in sched domains of cur_cpu do<br><br>  /* At each level, either the first idle core of the scheduling domain or the first core of the scheduling<br>domain is reponsible for balancing the load. */<br>  if sd has idle cores then<br>     first cpu = 1st idle CPU of sd<br>  else<br>     first cpu = 1st CPU of sd<br>  end if<br>  if cur_cpu != first cpu then<br>     continue<br>  end if<br>  <br>  /* Compute the average load of each scheduling group of the scheduling domain and pick the busiest group. */<br>  for all sched group sg in sd do<br>    sg.load = average loads of CPUs in sg<br>  end for<br>  busiest = overloaded sg with the highest load<br>    (or, if nonexistent) imbalanced sg with highest load<br>    (or, if nonexistent) sg with highest load<br>  <br>  /* If the busiest group’s load is lower than the local group’s load, the load is considered balanced at this level. */<br>  local = sg containing cur_cpu<br>  if busiest.load ≤ local.load then<br>     continue<br>  end if<br>  <br>  /*  Otherwise, the load is balanced between the local CPU and the busiest CPU of the group. */<br>  busiest cpu = pick busiest cpu of sg<br>  try to balance load between busiest cpu and cur_cpu<br>  if load cannot be balanced due to tasksets then<br>     exclude busiest cpu, goto line 29<br>  end if<br>  <br>end for<br></code></pre></td></tr></table></figure>
 <ul>
