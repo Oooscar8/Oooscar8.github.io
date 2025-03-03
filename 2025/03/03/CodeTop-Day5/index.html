@@ -30,7 +30,7 @@
 <meta property="og:image" content="http://oooscar8.github.io/2025/03/03/imgs/image-20250303144645759-1740997005128-2.png">
 <meta property="og:image" content="http://oooscar8.github.io/2025/03/03/imgs/image-20250303172305424-1740997005128-3.png">
 <meta property="article:published_time" content="2025-03-03T10:16:29.000Z">
-<meta property="article:modified_time" content="2025-03-03T10:18:57.911Z">
+<meta property="article:modified_time" content="2025-03-03T10:27:06.074Z">
 <meta property="article:author" content="Alex Sun">
 <meta property="article:tag" content="CodeTop">
 <meta property="article:tag" content="Leetcode">
@@ -229,7 +229,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.6k 字
+          1.7k 字
         
       </span>
     
@@ -240,7 +240,7 @@
         
         
         
-          14 分钟
+          15 分钟
         
       </span>
     
@@ -332,6 +332,13 @@
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-comment">// 动态规划 </span><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br>    <span class="hljs-keyword">public</span>:<br>        <span class="hljs-function">string <span class="hljs-title">longestPalindrome</span><span class="hljs-params">(string s)</span> </span>&#123;<br>            <span class="hljs-type">int</span> n = s.<span class="hljs-built_in">size</span>();<br>            <span class="hljs-type">int</span> maxLen = <span class="hljs-number">1</span>;<br>            <span class="hljs-type">int</span> begin = <span class="hljs-number">0</span>;<br>            vector&lt;vector&lt;<span class="hljs-type">bool</span>&gt;&gt; <span class="hljs-built_in">dp</span>(n, <span class="hljs-built_in">vector</span>&lt;<span class="hljs-type">bool</span>&gt;(n));<br>            <span class="hljs-comment">// 初始化dp数组</span><br>            <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; n; ++i) &#123;<br>                dp[i][i] = <span class="hljs-literal">true</span>;<br>            &#125;<br><br>            <span class="hljs-comment">// 从短字符开始循环更新dp数组，向长字符转移</span><br>            <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> L = <span class="hljs-number">2</span>; L &lt;= n; ++L) &#123;<br>                <span class="hljs-comment">// 先固定左指针，就能根据长度唯一确定右指针</span><br>                <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> l = <span class="hljs-number">0</span>; l &lt; n; ++l) &#123;<br>                    <span class="hljs-type">int</span> r = l + L - <span class="hljs-number">1</span>;<br>                    <span class="hljs-keyword">if</span> (r &gt;= n) &#123;<br>                        <span class="hljs-keyword">break</span>;<br>                    &#125;<br><br>                    <span class="hljs-keyword">if</span> (s[l] != s[r]) <span class="hljs-keyword">continue</span>;<br><br>                    <span class="hljs-comment">// 运行到这里，说明s[l] = s[r]，更新dp数组</span><br>                    <span class="hljs-keyword">if</span> (r - l &lt; <span class="hljs-number">3</span>) &#123;<br>                        dp[l][r] = <span class="hljs-literal">true</span>;<br>                    &#125; <span class="hljs-keyword">else</span> &#123;<br>                        dp[l][r] = dp[l+<span class="hljs-number">1</span>][r<span class="hljs-number">-1</span>];<br>                    &#125;<br><br>                    <span class="hljs-keyword">if</span> (dp[l][r] &amp;&amp; L &gt; maxLen) &#123;<br>                        begin = l;<br>                        maxLen = L;<br>                    &#125;<br>                &#125;<br>            &#125;<br><br>            <span class="hljs-keyword">return</span> s.<span class="hljs-built_in">substr</span>(begin, maxLen);<br>        &#125;<br>    &#125;;<br></code></pre></td></tr></table></figure>
 <p>动态规划的总时间复杂度还是$O(N^2)$，因为判断子串是否是回文子串可以根据转移前的状态来判断，时间复杂度是<code>O(1)</code></p>
 <p>但是空间复杂度是$O(N^2)$，因为需要构建二维dp数组来保存所有子串的状态（是否是回文子串）</p>
+<p>这里再总结一下动态规划的解题步骤：</p>
+<ol>
+<li>确定dp数组及下标的含义（有哪些变量？状态是什么？）</li>
+<li>确定状态转移方程/递推公式（如何根据前面已得知的状态推导出当前要求解的状态）</li>
+<li>初始化dp数组（包括边界条件）</li>
+<li>确定遍历顺序（已知的状态-&gt;未知的状态）</li>
+</ol>
 
                 
               </div>
