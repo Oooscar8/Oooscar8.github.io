@@ -303,287 +303,190 @@
             
               <div class="markdown-body">
                 
-                <p>In this part, we will cover the topics of processes, threads, context
-switch, pipes, file descriptors and some system calls that manage
-processes. This part is crucial for you to implementing OS/161
-Assignment 4&amp;5 correctly!</p>
-<h1 id="processes-and-threads">Processes and Threads</h1>
-<blockquote>
+                <p>In this part, we will cover the topics of processes, threads, context switch, pipes, file descriptors and some system calls that manage processes. This part is crucial for you to implementing OS/161 Assignment 4&amp;5 correctly!</p>
+<h1 id="Processes-and-Threads"><a href="#Processes-and-Threads" class="headerlink" title="Processes and Threads"></a>Processes and Threads</h1><blockquote>
 <p><strong>Learning Materials</strong></p>
 <p>Videos:</p>
-<p><a
-target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/download/cs161-video-materials/www.eecs.harvard.edu/~margo/cs161/videos/context-switching.mp4">Context
-switching</a></p>
-<p><a
-target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/download/cs161-video-materials/www.eecs.harvard.edu/~margo/cs161/videos/processes.mp4">Processes
-and threads</a></p>
-<p><a
-target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/download/cs161-video-materials/www.eecs.harvard.edu/~margo/cs161/videos/process-components.mp4">Process
-components</a></p>
-<p><a
-target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/download/cs161-video-materials/www.eecs.harvard.edu/~margo/cs161/videos/process-management.mp4">Process
-management</a></p>
-<p><a
-target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/download/cs161-video-materials/www.eecs.harvard.edu/~margo/cs161/videos/fork-exec.mp4">Fork
-and exec</a></p>
-<p><a target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/man/syscall/">OS161 man
-pages for the system calls you are implementing in A4.</a></p>
+<p><a target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/download/cs161-video-materials/www.eecs.harvard.edu/~margo/cs161/videos/context-switching.mp4">Context switching</a></p>
+<p><a target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/download/cs161-video-materials/www.eecs.harvard.edu/~margo/cs161/videos/processes.mp4">Processes and threads</a></p>
+<p><a target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/download/cs161-video-materials/www.eecs.harvard.edu/~margo/cs161/videos/process-components.mp4">Process components</a></p>
+<p><a target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/download/cs161-video-materials/www.eecs.harvard.edu/~margo/cs161/videos/process-management.mp4">Process management</a></p>
+<p><a target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/download/cs161-video-materials/www.eecs.harvard.edu/~margo/cs161/videos/fork-exec.mp4">Fork and exec</a></p>
+<p><a target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/man/syscall/">OS161 man pages for the system calls you are implementing in A4.</a></p>
 <p>Lecture Slides:</p>
-<p><a
-target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/LECTURE-SLIDES/Implementing-system-calls.pptx">Implementing
-system calls</a></p>
-<p><a
-target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/LECTURE-SLIDES/Processes-vs-threads.pptx">Processes
-and threads</a></p>
-<p><a
-target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/LECTURE-SLIDES/Processes-file-tables.pptx">Processes
-and file descriptors</a></p>
-<p><a
-target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/LECTURE-SLIDES/Processes-vs-threads.pptx">Processes
-and threads</a></p>
-<p><a
-target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/LECTURE-SLIDES/Process-creation.pptx">Process
-creation: fork() and shared file objects</a></p>
-<p><a
-target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/download/LECTURES-CODE/fork.c">fork.c</a>,
-<a
-target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/download/LECTURES-CODE/pipes.c">pipes.c</a>,
-<a
-target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/download/LECTURES-CODE/pipes2.c">pipes2.c</a>,
-<a
-target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/download/LECTURES-CODE/pipes2.c">pipes-exec.c</a>
-<a
-target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/LECTURE-SLIDES/Process-exec.pptx">Processes:
-exec()</a>, <a
-target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/download/LECTURES-CODE/exec.c">exec.c</a></p>
-<p><a
-target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/LECTURE-SLIDES/Process-wait-exit.pptx">Processes:
-waitpid/exit</a></p>
+<p><a target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/LECTURE-SLIDES/Implementing-system-calls.pptx">Implementing system calls</a></p>
+<p><a target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/LECTURE-SLIDES/Processes-vs-threads.pptx">Processes and threads</a></p>
+<p><a target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/LECTURE-SLIDES/Processes-file-tables.pptx">Processes and file descriptors</a></p>
+<p><a target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/LECTURE-SLIDES/Processes-vs-threads.pptx">Processes and threads</a></p>
+<p><a target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/LECTURE-SLIDES/Process-creation.pptx">Process creation: fork() and shared file objects</a></p>
+<p><a target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/download/LECTURES-CODE/fork.c">fork.c</a>, <a target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/download/LECTURES-CODE/pipes.c">pipes.c</a>, <a target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/download/LECTURES-CODE/pipes2.c">pipes2.c</a>, <a target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/download/LECTURES-CODE/pipes2.c">pipes-exec.c</a><br><a target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/LECTURE-SLIDES/Process-exec.pptx">Processes: exec()</a>, <a target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/download/LECTURES-CODE/exec.c">exec.c</a></p>
+<p><a target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/LECTURE-SLIDES/Process-wait-exit.pptx">Processes: waitpid/exit</a></p>
 <p>Readings:</p>
-<p><a
-target="_blank" rel="noopener" href="https://sites.google.com/view/cpen331fall2020/calendar/file-descriptors-in-unix">File
-descriptors in Unix</a></p>
-<p><a
-target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/download/book-rev8.pdf">Chapter 2
-in the xv6 book</a></p>
-<p>[<a target="_blank" rel="noopener" href="http://pages.cs.wisc.edu/~remzi/OSTEP/cpu-api.pdf">OSTEP]
-Introduction of the Unix process API (fork/exec, etc.)</a></p>
+<p><a target="_blank" rel="noopener" href="https://sites.google.com/view/cpen331fall2020/calendar/file-descriptors-in-unix">File descriptors in Unix</a></p>
+<p><a target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/download/book-rev8.pdf">Chapter 2 in the xv6 book</a></p>
+<p><a target="_blank" rel="noopener" href="http://pages.cs.wisc.edu/~remzi/OSTEP/cpu-api.pdf">[OSTEP] Introduction of the Unix process API (fork/exec, etc.)</a></p>
 </blockquote>
-<h2 id="context-switching">Context Switching</h2>
-<blockquote>
+<h2 id="Context-Switching"><a href="#Context-Switching" class="headerlink" title="Context Switching"></a>Context Switching</h2><blockquote>
 <p><strong>terminology</strong>:</p>
 <p><img src="/imgs/202410091638369.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 50%;" /></p>
-</blockquote>
-<blockquote>
 <p>What does the kernel do on a Trap?</p>
 </blockquote>
-<ol type="1">
-<li>The kernel finds a stack on which to run. (Every real* user-level
-thread has a corresponding kernel stack.)</li>
+<ol>
+<li>The kernel finds a stack on which to run. (Every real* user-level thread has a corresponding kernel stack.)</li>
 <li>The kernel saves state.</li>
 <li>Figure out what caused the trap.</li>
 </ol>
-<hr />
-<h3 id="process-switch">Process Switch</h3>
-<ol type="1">
+<hr>
+<h3 id="Process-Switch"><a href="#Process-Switch" class="headerlink" title="Process Switch"></a>Process Switch</h3><ol>
 <li>change protection domain(user to kernel)</li>
 <li>switch from using the user-level stack to using a kernel stack</li>
-<li>save execution state <strong>on kernel's stack</strong></li>
+<li>save execution state <strong>on kernel’s stack</strong></li>
 <li>do kernel stuff</li>
 <li>kernel thread switch</li>
 <li>restore user-level execution state</li>
 <li>change protection domain(kernel to user)</li>
 </ol>
-<hr />
-<h3 id="mips-r3000-hardware-in-trap-handling">MIPS R3000 Hardware in
-Trap Handling</h3>
-<p><img src="/imgs/image-20241009221502551.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 40%;" /></p>
-<p>When a trap happens, the hardware saves <code>PC</code> into
-<code>exception PC</code>, and sets <code>PC</code> to the address of
-the trap handler(software program). The hardware also sets the
-<code>status</code> register and <code>cause</code> register.</p>
-<p>As shown below, the left line of hardware registers need to be saved
-on the kernel stack(by trap handling software) and <code>K0</code> and
-<code>K1</code> are the two spare registers to achieve that.</p>
+<hr>
+<h3 id="MIPS-R3000-Hardware-in-Trap-Handling"><a href="#MIPS-R3000-Hardware-in-Trap-Handling" class="headerlink" title="MIPS R3000 Hardware in Trap Handling"></a>MIPS R3000 Hardware in Trap Handling</h3><p><img src="/imgs/image-20241009221502551.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 40%;" /></p>
+<p>When a trap happens, the hardware saves <code>PC</code> into <code>exception PC</code>, and sets <code>PC</code> to the address of the trap handler(software program). The hardware also sets the <code>status</code> register and <code>cause</code> register.</p>
+<p>As shown below, the left line of hardware registers need to be saved on the kernel stack(by trap handling software) and <code>K0</code> and <code>K1</code> are the two spare registers to achieve that. </p>
 <p><img src="/imgs/202410092232867.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 40%;" /></p>
-<p>After hardware does its job, we let the trap handling software to do
-the rest.</p>
-<hr />
-<h3 id="mips-r3000-software-in-trap-handling">MIPS R3000 Software in
-Trap Handling</h3>
-<ol type="1">
+<p>After hardware does its job, we let the trap handling software to do the rest.</p>
+<hr>
+<h3 id="MIPS-R3000-Software-in-Trap-Handling"><a href="#MIPS-R3000-Software-in-Trap-Handling" class="headerlink" title="MIPS R3000 Software in Trap Handling"></a>MIPS R3000 Software in Trap Handling</h3><ol>
 <li>Assembly code</li>
 </ol>
-<p>Use as few hareware registers as possible and save all the states
-that you need.</p>
+<p>Use as few hareware registers as possible and save all the states that you need.</p>
 <p><img src="/imgs/202410092220239.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:50%;" /></p>
-<p>Create a <strong>trap frame</strong> on the kernel stack:
-<strong>Save away all the registers</strong> and start using these
-registers to execute something else.</p>
+<p>Create a <strong>trap frame</strong> on the kernel stack: <strong>Save away all the registers</strong> and start using these registers to execute something else.</p>
 <blockquote>
 <p>How to find the kernel stack to save the <code>trapframe</code>?</p>
 </blockquote>
-<p>Each processor(cpu) has its own kernel stack to save the
-<code>trapframe</code>.</p>
-<p>Extract processor number from <code>K1</code>(<code>context</code>
-register) as an index(Base is in <code>K0</code>).</p>
-<p>Add K1 to K0 so that K0 points to the stack for the current
-processor.</p>
+<p>Each processor(cpu) has its own kernel stack to save the <code>trapframe</code>.</p>
+<p>Extract processor number from <code>K1</code>(<code>context</code> register) as an index(Base is in <code>K0</code>).</p>
+<p>Add K1 to K0 so that K0 points to the stack for the current processor. </p>
 <p><img src="/imgs/202410092310547.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 40%;" /></p>
-<ol start="2" type="1">
+<ol>
 <li>trap C code</li>
 </ol>
 <p><img src="/imgs/202410092226748.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:50%;" /></p>
-<hr />
-<h3 id="syscall-details">Syscall Details</h3>
-<blockquote>
+<hr>
+<h3 id="Syscall-Details"><a href="#Syscall-Details" class="headerlink" title="Syscall Details"></a>Syscall Details</h3><blockquote>
 <p>How did we leave the arguments?</p>
 </blockquote>
 <p>First four in a0-a3; rest on the stack.</p>
 <blockquote>
 <p>How does the kernel deal with <code>fork</code> system call?</p>
 </blockquote>
-<ol type="1">
+<ol>
 <li>Make sure forking process is not running on user level.</li>
 <li>Save all state from forking process.</li>
 <li>Make a copy of the code, data, and stack.</li>
-<li>Copy <code>trapframe</code> of the original process into the new
-one.</li>
+<li>Copy <code>trapframe</code> of the original process into the new one.</li>
 <li>Make the new process known to the dispatcher</li>
 </ol>
 <blockquote>
 <p>How does the kernel deal with <code>exec</code> system call?</p>
 </blockquote>
-<p>Replace the current program image with the code and data of a new
-program.</p>
-<h2 id="processes-and-threads-1">Processes and Threads</h2>
-<p>Multithreaded process:</p>
+<p>Replace the current program image with the code and data of a new program.</p>
+<h2 id="Processes-and-Threads-1"><a href="#Processes-and-Threads-1" class="headerlink" title="Processes and Threads"></a>Processes and Threads</h2><p>Multithreaded process:</p>
 <p><img src="/imgs/202410262233235.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 50%;" /></p>
 <p>User-level threads:</p>
-<p>The stack of the additional thread is created on the heap by the user
-program.</p>
+<p>The stack of the additional thread is created on the heap by the user program.</p>
 <p><img src="/imgs/202410262243094.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:50%;" /></p>
 <blockquote>
-<p>What comprises a process's state?</p>
+<p>What comprises a process’s state?</p>
 </blockquote>
 <p>1.Address space</p>
 <p>2.Threads</p>
 <p>3.Architectural state</p>
 <p>4.File table</p>
-<p>5.<strong>A kernel thread that gets assigned to a process when the
-process traps into the kernel</strong></p>
-<p>We can think of user processes and kernel, each with multiple
-threads, as running in their own address spaces.</p>
+<p>5.<strong>A kernel thread that gets assigned to a process when the process traps into the kernel</strong></p>
+<p>We can think of user processes and kernel, each with multiple threads, as running in their own address spaces.</p>
 <div class="note note-info">
-            <p>However, deep into the details, user address space often containskernel mappings, which is only accessible when the processor is inkernel mode.</p>
+            <p>However, deep into the details, user address space often contains kernel mappings, which is only accessible when the processor is in kernel mode.</p>
           </div>
-<h2 id="pipes">Pipes</h2>
-<p><img src="/imgs/202409162140360.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:33%;" /></p>
+<h2 id="Pipes"><a href="#Pipes" class="headerlink" title="Pipes"></a>Pipes</h2><p><img src="/imgs/202409162140360.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:33%;" /></p>
 <p>Mechanics:</p>
 <p>The pipe file is just a memory buffer.</p>
 <p><img src="/imgs/202410241127412.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:80%;" /></p>
 <p>Redirecting Pipe I/O:</p>
 <p><img src="/imgs/202410262357565.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:80%;" /></p>
-<h2 id="process-components">Process Components</h2>
-<h3 id="parts-of-a-process-not-in-the-executable">Parts of a process not
-in the Executable</h3>
-<ul>
+<h2 id="Process-Components"><a href="#Process-Components" class="headerlink" title="Process Components"></a>Process Components</h2><h3 id="Parts-of-a-process-not-in-the-Executable"><a href="#Parts-of-a-process-not-in-the-Executable" class="headerlink" title="Parts of a process not in the Executable"></a>Parts of a process not in the Executable</h3><ul>
 <li><strong>Execution state</strong></li>
 </ul>
-<p>Execution state is a snapshot of hardware, so it is
-hardware-specific</p>
+<p>Execution state is a snapshot of hardware, so it is hardware-specific</p>
 <ul>
 <li><strong>Resources</strong></li>
 </ul>
-<ol type="1">
+<ol>
 <li>File information</li>
 </ol>
 <p>Mutiple threads within a process share a file descriptor table.</p>
-<ol start="2" type="1">
+<ol>
 <li>Scheduling information</li>
 </ol>
 <ul>
-<li><p>How much time the process has used</p></li>
-<li><p>its priority</p></li>
-<li><p>resource consumption</p></li>
+<li><p>How much time the process has used</p>
+</li>
+<li><p>its priority</p>
+</li>
+<li><p>resource consumption</p>
+</li>
 </ul>
-<p>These information is provided to the scheduler for it to decide which
-process to run.</p>
+<p>These information is provided to the scheduler for it to decide which process to run.</p>
 <ul>
-<li><p><strong>Address space</strong></p></li>
-<li><p><strong>Other</strong></p></li>
+<li><p><strong>Address space</strong></p>
+</li>
+<li><p><strong>Other</strong></p>
+</li>
 </ul>
-<ol type="1">
+<ol>
 <li>process id(PID)</li>
 <li>credentials(what permissions/capabilities a process has)</li>
 <li>signal information</li>
 </ol>
-<hr />
-<h3 id="process-data-structures">Process Data Structures</h3>
-<blockquote>
+<hr>
+<h3 id="Process-Data-Structures"><a href="#Process-Data-Structures" class="headerlink" title="Process Data Structures"></a>Process Data Structures</h3><blockquote>
 <p>Which parts of the process are machine (in)dependent?</p>
-</blockquote>
-<blockquote>
-<p>Which parts need to be per-thread and which are per-process?(although
-not necessary in os161 which only considers single-thread process)</p>
+<p>Which parts need to be per-thread and which are per-process?(although not necessary in os161 which only considers single-thread process)</p>
 </blockquote>
 <p>Prcess Control Block(<strong>PCB</strong>)</p>
-<p>PCB encapsulates an entire process, which contains references to
-other structures:</p>
+<p>PCB encapsulates an entire process, which contains references to other structures:</p>
 <ul>
 <li>Address space</li>
 <li>Threads associated with the process</li>
 <li>Credentials</li>
 </ul>
-<p>All the PCBs are gathered together into a <strong>process
-table</strong>.</p>
-<h2 id="file-descriptors-in-unix">File descriptors in Unix</h2>
-<h3 id="kernel-three-table-data-structure-for-open-files">Kernel
-three-table data structure for open files</h3>
-<p><img src="/imgs/202410111635355.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 67%;" /></p>
+<p>All the PCBs are gathered together into a <strong>process table</strong>.</p>
+<h2 id="File-descriptors-in-Unix"><a href="#File-descriptors-in-Unix" class="headerlink" title="File descriptors in Unix"></a>File descriptors in Unix</h2><h3 id="Kernel-three-table-data-structure-for-open-files"><a href="#Kernel-three-table-data-structure-for-open-files" class="headerlink" title="Kernel three-table data structure for open files"></a>Kernel three-table data structure for open files</h3><p><img src="/imgs/202410111635355.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 67%;" /></p>
 <ul>
 <li>Table1: Process table</li>
 </ul>
-<p>Each process entry in the <strong>process table</strong> contains a
-<strong>file description table</strong>(a table of open file
-descriptors).</p>
+<p>Each process entry in the <strong>process table</strong> contains a <strong>file description table</strong>(a table of open file descriptors).</p>
 <ul>
 <li>Table2: Open file table</li>
 </ul>
-<p>The file descriptors index the entries in the file description table.
-Each entry contains a <strong>pointer</strong> to an entry in the
-<strong>open files table</strong>(a table that the kernel maintains for
-all open files).</p>
-<p>Each entry in this open files table contains the <strong>file status
-flags</strong> (read, write, append, etc.), the current <strong>file
-offset</strong>, and a <strong>pointer</strong> to the entry for this
-file in the so-called <strong>v-node table</strong>.</p>
+<p>The file descriptors index the entries in the file description table. Each entry contains a <strong>pointer</strong> to an entry in the <strong>open files table</strong>(a table that the kernel maintains for all open files).</p>
+<p>Each entry in this open files table contains the <strong>file status flags</strong> (read, write, append, etc.), the current <strong>file offset</strong>, and a <strong>pointer</strong> to the entry for this file in the so-called <strong>v-node table</strong>. </p>
 <ul>
 <li>Table3: V-node table</li>
 </ul>
-<p>The v-node table (or part of it) is stored on the physical device.
-For now, you can think of its entries as the "real'' file contents on a
-disk, with associated informations like file location on disk, size,
-name, owner, etc.</p>
+<p>The v-node table (or part of it) is stored on the physical device. For now, you can think of its entries as the “real’’ file contents on a disk, with associated informations like file location on disk, size, name, owner, etc.</p>
 <blockquote>
-<p>What if two processes want to independently open the same physical
-file, i.e. with each process mantaining its own access mode (read, write
-or append) and file offset as well?</p>
+<p>What if two processes want to independently open the same physical file, i.e. with each process mantaining its own access mode (read, write or append) and file offset as well?</p>
 </blockquote>
-<p>Here the <strong>open file table has two independent entries for the
-same file</strong>, each associated to one of the processes.</p>
+<p>Here the <strong>open file table has two independent entries for the same file</strong>, each associated to one of the processes. </p>
 <p><img src="/imgs/202410111653805.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:60%;" /></p>
 <blockquote>
-<p>What if we need to have in one process <em>two</em> file descriptors
-opened for the same file?</p>
+<p>What if we need to have in one process <em>two</em> file descriptors opened for the same file?</p>
 </blockquote>
 <p>Duplication of file descriptors:</p>
 <p><img src="/imgs/202410111701382.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:67%;" /></p>
 <blockquote>
 <p>How we achieve this?</p>
 </blockquote>
-<p>The <code>dup()</code> and <code>dup2()</code> system calls do this
-job.</p>
+<p>The <code>dup()</code> and <code>dup2()</code> system calls do this job.</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">/* duplicate the passed file descriptor, returning the smallest available one. */</span><br><span class="hljs-type">int</span> <span class="hljs-title function_">dup</span><span class="hljs-params">(<span class="hljs-type">int</span> fildes)</span>;<br><span class="hljs-comment">/* specify in what file descriptor you want the copy */</span><br><span class="hljs-type">int</span> <span class="hljs-title function_">dup2</span><span class="hljs-params">(<span class="hljs-type">int</span> fildes, <span class="hljs-type">int</span> fildes2)</span>;<br></code></pre></td></tr></table></figure>
 <blockquote>
 <p>Why we need the duplication of file descriptors?</p>
@@ -596,61 +499,43 @@ job.</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs c">...<br><span class="hljs-keyword">if</span> (fork()==<span class="hljs-number">0</span>)<br>&#123;<br>    <span class="hljs-comment">/* atomic operation */</span><br>    dup2(datafd, STDIN_FILENO);<br>    execlp(<span class="hljs-string">&quot;sed&quot;</span>, <span class="hljs-string">&quot;sed&quot;</span>, (<span class="hljs-type">char</span> *)<span class="hljs-number">0</span>);<br>    perror(<span class="hljs-string">&quot;sed&quot;</span>);<br>&#125;<br></code></pre></td></tr></table></figure>
 <p>A potential failure case:</p>
 <p><img src="/imgs/202410172312054.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 60%;" /></p>
-<p>This special case illustrates the need of the <strong>reference
-count</strong> field in the file object structure.</p>
-<h2 id="fork-and-exec-process-creation">fork and exec (process
-creation)</h2>
-<h3 id="the-oss-job-during-process-creation">The OS's job during process
-creation</h3>
-<p><img src="/imgs/202410111821822.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 50%;" /></p>
-<p>Child processes share the same file descriptor table with the parent
-process, which is the basis of <strong>pipes</strong>.</p>
-<hr />
-<h3 id="sys_fork"><code>sys_fork</code></h3>
-<p><code>sys_fork</code> is responsible for:</p>
-<ol type="1">
+<p>This special case illustrates the need of the <strong>reference count</strong> field in the file object structure.</p>
+<h2 id="fork-and-exec-process-creation"><a href="#fork-and-exec-process-creation" class="headerlink" title="fork and exec (process creation)"></a>fork and exec (process creation)</h2><h3 id="The-OS’s-job-during-process-creation"><a href="#The-OS’s-job-during-process-creation" class="headerlink" title="The OS’s job during process creation"></a>The OS’s job during process creation</h3><p> <img src="/imgs/202410111821822.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 50%;" /></p>
+<p>Child processes share the same file descriptor table with the parent process, which is the basis of <strong>pipes</strong>.</p>
+<hr>
+<h3 id="sys-fork"><a href="#sys-fork" class="headerlink" title="sys_fork"></a><code>sys_fork</code></h3><p><code>sys_fork</code> is responsible for:</p>
+<ol>
 <li>Copy address space</li>
 </ol>
 <p>Use the functions in <code>addrspace.c</code>.</p>
 <p><img src="/imgs/202410262300766.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:50%;" /></p>
-<ol start="2" type="1">
+<ol>
 <li>Copy the file table</li>
 </ol>
-<p>When a process is forked, file descriptor entries of the new process
-point to the <strong>same file objects</strong> as in the parent
-process.</p>
+<p>When a process is forked, file descriptor entries of the new process point to the <strong>same file objects</strong> as in the parent process.</p>
 <p><img src="/imgs/202410262300141.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:50%;" /></p>
 <blockquote>
 <p>What kind of race conditions do you have to worry about?</p>
 </blockquote>
 <p>Two processes simultaneously modifying the values of the offset.</p>
 <blockquote>
-<p>Can you hold a spinlock while doing I/O?</p>
+<p>Can you hold a spinlock while doing I/O? </p>
 </blockquote>
-<p>Spinlocks turn off interrupts; I/O completion is signaled via an
-interrupt. If you turn off interrupts and then go do I/O, YOU WILL NEVER
-GET NOTIFIED!</p>
+<p>Spinlocks turn off interrupts; I/O completion is signaled via an interrupt. If you turn off interrupts and then go do I/O, YOU WILL NEVER GET NOTIFIED!</p>
 <blockquote>
-<p>Hold a regular lock? That will work. But do we have to hold the
-lock?</p>
+<p>Hold a regular lock? That will work. But do we have to hold the lock? </p>
 </blockquote>
-<p>-- Not really. We can set up the <code>uio</code> struct with the
-right offset, release the lock, do the I/O, then acquire it again and
-update the offset if I/O was successful. Can’t update the offset prior
-to I/O completion – what if it fails?</p>
-<ol start="3" type="1">
+<p>— Not really. We can set up the <code>uio</code> struct with the right offset, release the lock, do the I/O, then acquire it again and update the offset if I/O was successful. Can’t update the offset prior to I/O completion – what if it fails? </p>
+<ol>
 <li>Copy architectural state(Copy and tweak <code>trapframe</code>)</li>
 </ol>
-<p>In the implementation of A5, you will have to make sure <strong>the
-right value is returned to the right process!</strong></p>
-<ol start="4" type="1">
+<p>In the implementation of A5, you will have to make sure <strong>the right value is returned to the right process!</strong></p>
+<ol>
 <li>Copy kernel thread(<code>thread_fork</code>)</li>
 </ol>
-<p><strong>When you fork a new process, you fork a new kernel thread to
-provide to the child process.</strong></p>
-<p><strong>To fork that thread, you need to provide it a function to
-run. You’ll need to write that function.</strong></p>
-<ol start="5" type="1">
+<p><strong>When you fork a new process, you fork a new kernel thread to provide to the child process.</strong> </p>
+<p><strong>To fork that thread, you need to provide it a function to run. You’ll need to write that function.</strong></p>
+<ol>
 <li>Return to user mode</li>
 <li>Both the parent and child return to user mode</li>
 </ol>
@@ -661,9 +546,8 @@ run. You’ll need to write that function.</strong></p>
 <p>How does a thread enter user mode for the first time?</p>
 </blockquote>
 <p><code>mips_usermode</code> in <code>trap.c</code></p>
-<hr />
-<h3 id="sys_execv"><code>sys_execv</code></h3>
-<p><code>sys_execv</code> is responsible for:</p>
+<hr>
+<h3 id="sys-execv"><a href="#sys-execv" class="headerlink" title="sys_execv"></a><code>sys_execv</code></h3><p><code>sys_execv</code> is responsible for:</p>
 <p>• Replace the old address space with a new one</p>
 <p>• Copy the arguments into the new address space</p>
 <p>• Return to user mode</p>
@@ -671,31 +555,19 @@ run. You’ll need to write that function.</strong></p>
 <p><img src="/imgs/202411041428372.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 67%;" /></p>
 <p><strong>To think before starting exec():</strong></p>
 <blockquote>
-<p><strong>Where are the arguments located</strong> when the exec system
-call in invoked? In whose address space? How do you know their
-address?</p>
+<p><strong>Where are the arguments located</strong> when the exec system call in invoked? In whose address space? How do you know their address?</p>
+<p>How do we get them into the kernel? How do you figure out their total size?</p>
+<p>Where do the arguments need to end up before we return to the user mode? Whose address space? Stack or heap?</p>
+<p>How do we get them there? How do we organize them there. </p>
 </blockquote>
-<blockquote>
-<p>How do we get them into the kernel? How do you figure out their total
-size?</p>
-</blockquote>
-<blockquote>
-<p>Where do the arguments need to end up before we return to the user
-mode? Whose address space? Stack or heap?</p>
-</blockquote>
-<blockquote>
-<p>How do we get them there? How do we organize them there.</p>
-</blockquote>
-<p><strong>Passing arguments(<code>copyin</code> and
-<code>copyout</code>)</strong>:</p>
+<p><strong>Passing arguments(<code>copyin</code> and <code>copyout</code>)</strong>:</p>
 <div class="note note-primary">
-            <p>It's important to emphasize that we need to pass not only thearguments, but also the pointers to those arguments.</p>
+            <p>It’s important to emphasize that we need to pass not only the arguments, but also the pointers to those arguments.</p>
           </div>
 <p><img src="/imgs/202411041449905.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:67%;" /></p>
 <p><img src="/imgs/202411041450806.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:67%;" /></p>
 <blockquote>
-<p>What if the arguments array is huge and you cannot allocate enough
-kernel memory contiguously?</p>
+<p>What if the arguments array is huge and you cannot allocate enough kernel memory contiguously?</p>
 </blockquote>
 <p><img src="/imgs/202411041454332.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:67%;" /></p>
 
