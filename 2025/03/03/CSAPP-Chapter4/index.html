@@ -60,8 +60,16 @@
 <meta property="og:image" content="http://oooscar8.github.io/2025/03/03/imgs/image-20250303122158896-1740980444215-107.png">
 <meta property="og:image" content="http://oooscar8.github.io/2025/03/03/imgs/image-20250303122845813-1740980444215-106.png">
 <meta property="og:image" content="http://oooscar8.github.io/2025/03/03/imgs/image-20250303123312158-1740980444215-108.png">
+<meta property="og:image" content="http://oooscar8.github.io/2025/03/03/imgs/image-20250306135337760-1741255158323-1.png">
+<meta property="og:image" content="http://oooscar8.github.io/2025/03/03/imgs/image-20250306155549361-1741255158324-4.png">
+<meta property="og:image" content="http://oooscar8.github.io/2025/03/03/imgs/image-20250306162310356-1741255158324-3.png">
+<meta property="og:image" content="http://oooscar8.github.io/2025/03/03/imgs/image-20250306163041978-1741255158324-2.png">
+<meta property="og:image" content="http://oooscar8.github.io/2025/03/03/imgs/image-20250306163945466-1741255158324-5.png">
+<meta property="og:image" content="http://oooscar8.github.io/2025/03/03/imgs/image-20250306171525626-1741255158324-8.png">
+<meta property="og:image" content="http://oooscar8.github.io/2025/03/03/imgs/image-20250306170849215-1741255158324-6.png">
+<meta property="og:image" content="http://oooscar8.github.io/2025/03/03/imgs/image-20250306172322252-1741255158324-7.png">
 <meta property="article:published_time" content="2025-03-03T04:37:01.000Z">
-<meta property="article:modified_time" content="2025-03-03T05:40:55.713Z">
+<meta property="article:modified_time" content="2025-03-06T10:00:06.995Z">
 <meta property="article:author" content="Alex Sun">
 <meta property="article:tag" content="ICS">
 <meta property="article:tag" content="Y86">
@@ -261,7 +269,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.7k 字
+          2.7k 字
         
       </span>
     
@@ -272,7 +280,7 @@
         
         
         
-          14 分钟
+          23 分钟
         
       </span>
     
@@ -317,7 +325,6 @@
                 <p>这篇笔记将记录我在ICS课上学习CSAPP第四章Processor
 Architecture(处理器体系结构)的过程。持续更新中…</p>
 <h1 id="processor-architecture">Processor Architecture</h1>
-<hr />
 <blockquote>
 <p>参考资料：</p>
 <p><a
@@ -570,6 +577,78 @@ if branch is taken(一般正确率在60%)</li>
 <p>Recover from PC misprediction:</p>
 <p><img src="/imgs/image-20250303123312158-1740980444215-108.png" srcset="/img/loading.gif" lazyload style="zoom:67%;" /></p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs HCL">int f_PC = [<br>#mispredicted branch. Fetch at incremented PC<br>	  M_icode == IJXX &amp;&amp; !M_Cnd : M_valA;<br>#completion of RET instruciton<br>	  W_icode == IRET : W_valM;<br>#default: Use predicted value of PC<br>	  1: F_predPC<br>];<br></code></pre></td></tr></table></figure>
+<h2 id="hazard">Hazard</h2>
+<p>Pipeline比起SEQ会带来Hazard的问题：</p>
+<ol type="1">
+<li>Data Hazard: 前一条指令修改某个寄存器，还没来得及将结果写入Register
+FIile, 后一条指令就需要读这个寄存器。这种情况在代码中非常普遍</li>
+<li>Control Hazard:
+jXX指令要根据前一条指令的ALU运算结果设置的CC才能确定下一条指令的PC</li>
+</ol>
+<h3 id="data-hazard">Data Hazard</h3>
+<ul>
+<li>Naive Solution 1: <code>nop</code></li>
+</ul>
+<p>最Naive的解决方案是在两条相互依赖的指令之间插<code>nop</code>指令（编译器可以分析你的代码，然后帮你做到这一点）。</p>
+<ul>
+<li>Naive Solution 2: Stalling</li>
+</ul>
+<p>在cpu内部解决，将指令停在decode阶段，（每个cycle）都将往上走（走到execution阶段）的该指令的<code>icode</code>改为nop
+(插入bubble)</p>
+<p><img src="/imgs/image-20250306135337760-1741255158323-1.png" srcset="/img/loading.gif" lazyload alt="连插三个bubble" style="zoom: 50%;" /></p>
+<p>但是这两种解决方案Pipeline的效果就变差了，因为相互依赖的指令在实际代码中非常普遍。</p>
+<p>有没有什么办法可以减少<code>nop/bubble</code>的插入？</p>
+<ul>
+<li>Data Forwarding</li>
+</ul>
+<p>我们其实可以把我们要的数据提前拉过来，而不一定要等上一条指令最后Write
+Back阶段结束后再从寄存器读出来。这种实现技术就叫Data Forwarding</p>
+<p>可以在decode阶段，加一个选择器。如果出现data
+dependency情况，就从later stage拉回来的信号取值，否则就正常从Register
+File中取值。</p>
+<p>什么时候可以从later
+stage里将信号拉回来取决于指令的类型，如果是从寄存器/立即数写入寄存器(<code>irmovq</code>,
+<code>rrmovq</code>)，那么可以在execute阶段结束将<code>e_valE</code>拉回来，如果是要从memory中写入寄存器(<code>mrmovq</code>)，那要在memory阶段结束将<code>m_valM</code>拉回来。</p>
+<p><img src="/imgs/image-20250306155549361-1741255158324-4.png" srcset="/img/loading.gif" lazyload style="zoom:67%;" /></p>
+<h3 id="control-hazard">Control Hazard</h3>
+<p>前面一条指令会改变执行流。因此我们需要猜测后一条指令的地址（PC
+Prediction）。</p>
+<ul>
+<li><code>ret</code></li>
+</ul>
+<p>对于<code>ret</code>指令，我们无法猜测后一条指令的地址，因此需要采取前面提到的Stalling技术，在fetch阶段将指令截停：</p>
+<p><img src="/imgs/image-20250306162310356-1741255158324-3.png" srcset="/img/loading.gif" lazyload style="zoom:67%;" /></p>
+<p>一个return就要插入三个bubble，所以其实return对于pipeline的overhead是比较大的。</p>
+<ul>
+<li><code>jXX</code></li>
+</ul>
+<p>对于jump指令，我们猜测他会跳转：<code>next PC = valC</code>。那如果猜错了怎么办呢？</p>
+<p>最Naive的方式就是在跳转处插入两个<code>nop</code>，这样无论猜没猜错都不需要擦除任何指令。但是这样跟不猜PC没区别了。</p>
+<p><img src="/imgs/image-20250306163041978-1741255158324-2.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:67%;" /></p>
+<p>因此我们的解决方案是让跳转后的指令先执行，如果发现猜错了，就将执行的指令的<code>icode</code>改为<code>nop</code>(插入bubble)。通常情况下，跳转后执行的两条指令在decode和execute阶段不会修改状态(只有在execute阶段末尾才会修改<code>CC</code>)。因此我们可以做到在指令修改<code>CC</code>前及时将其擦除掉，不会产生程序员可见的状态修改。</p>
+<p><img src="/imgs/image-20250306163945466-1741255158324-5.png" srcset="/img/loading.gif" lazyload style="zoom:67%;" /></p>
+<p>但是如果跳转后执行的指令本身是错误的指令呢？这两条指令本身就不该执行，但由于我们猜错了PC，这两条错误的指令执行的时候就会修改Program
+Status。</p>
+<p><img src="/imgs/image-20250306171525626-1741255158324-8.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:67%;" /></p>
+<p>我们需要专门的mechanism来处理执行流中遇到的错误，以能够避免上述情况。</p>
+<h3 id="exception-handling">Exception Handling</h3>
+<p>y86中的异常类型：</p>
+<ol type="1">
+<li>Invalid address</li>
+<li>Invalid instruction</li>
+<li>Halt</li>
+</ol>
+<p>正常执行流中遇到了异常，就需要exception
+handling。对y86来说，exception
+handling需要做到的是：program在遇到异常后停在正确的状态下，异常的指令停在当前位置，异常指令前的指令正常执行完，异常指令后的指令不执行。</p>
+<p>exception
+handling遇到的困难是：指令可能在流水线的不同阶段检测到异常。</p>
+<p><img src="/imgs/image-20250306170849215-1741255158324-6.png" srcset="/img/loading.gif" lazyload style="zoom:67%;" /></p>
+<p>如何让异常前的指令正常执行完呢？我们的解决方案是：在指令遇到异常的阶段，先将status写入pipeline
+register，然后将指令变为nop，当作无事发生继续执行，如果指令到Write
+Back了status依然是异常，那么此时再处理。注意对于因为分支预测错误执行的指令来说，应当在发现预测错误后擦除状态（将status改回成<code>OK</code>）。</p>
+<p><img src="/imgs/image-20250306172322252-1741255158324-7.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 80%;" /></p>
+<p>如何保证异常指令后面的指令不会产生效果（修改状态）？Memory肯定来得及在发现异常时及时关闭，但CC呢？我们可以在Memory阶段发现错误时就立即关闭CC，这样就可以保证在后一条指令执行完execute前CC就被关闭了。</p>
 
                 
               </div>
