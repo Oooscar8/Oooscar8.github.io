@@ -27,7 +27,7 @@
 <meta property="og:description" content="CodeTop高频面试题 刷题记录 Day13！">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2025-03-11T13:53:14.000Z">
-<meta property="article:modified_time" content="2025-03-11T13:54:25.692Z">
+<meta property="article:modified_time" content="2025-03-12T05:44:53.465Z">
 <meta property="article:author" content="Alex Sun">
 <meta property="article:tag" content="CodeTop">
 <meta property="article:tag" content="Leetcode">
@@ -279,9 +279,16 @@
               <div class="markdown-body">
                 
                 <p>CodeTop高频面试题刷题，今天是Day13！</p>
-<h1 id="CodeTop刷题-Day13"><a href="#CodeTop刷题-Day13" class="headerlink" title="CodeTop刷题 Day13"></a>CodeTop刷题 Day13</h1><h2 id="Leetcode-300-最长上升子序列-Medium"><a href="#Leetcode-300-最长上升子序列-Medium" class="headerlink" title="Leetcode 300. 最长上升子序列(Medium)"></a><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/longest-increasing-subsequence">Leetcode 300. 最长上升子序列(Medium)</a></h2><blockquote>
-<p>给你一个整数数组 <code>nums</code> ，找到其中最长严格递增子序列的长度。</p>
-<p><strong>子序列</strong> 是由数组派生而来的序列，删除（或不删除）数组中的元素而不改变其余元素的顺序。例如，<code>[3,6,2,7]</code> 是数组 <code>[0,3,1,6,2,2,7]</code> 的子序列。</p>
+<h1 id="codetop刷题-day13">CodeTop刷题 Day13</h1>
+<h2 id="leetcode-300.-最长上升子序列medium"><a
+target="_blank" rel="noopener" href="https://leetcode.cn/problems/longest-increasing-subsequence">Leetcode
+300. 最长上升子序列(Medium)</a></h2>
+<blockquote>
+<p>给你一个整数数组 <code>nums</code>
+，找到其中最长严格递增子序列的长度。</p>
+<p><strong>子序列</strong>
+是由数组派生而来的序列，删除（或不删除）数组中的元素而不改变其余元素的顺序。例如，<code>[3,6,2,7]</code>
+是数组 <code>[0,3,1,6,2,2,7]</code> 的子序列。</p>
 <p><strong>示例 1：</strong></p>
 <figure class="highlight dns"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs dns">输入：nums = [<span class="hljs-number">10,9,2,5</span>,<span class="hljs-number">3,7,101,18</span>]<br>输出：<span class="hljs-number">4</span><br>解释：最长递增子序列是 [<span class="hljs-number">2,3,7,101</span>]，因此长度为 <span class="hljs-number">4</span> 。<br></code></pre></td></tr></table></figure>
 <p><strong>示例 2：</strong></p>
@@ -298,18 +305,27 @@
 <li>你能将算法的时间复杂度降低到 <code>O(n log(n))</code> 吗?</li>
 </ul>
 </blockquote>
-<h3 id="动态规划"><a href="#动态规划" class="headerlink" title="动态规划"></a>动态规划</h3><p>这题的关键难点在于搞清楚<code>dp</code>数组究竟应该存储什么状态。可以这样想：一个数组我们求解出的最长递增子序列一定有一个末尾元素（虽然是废话），因此我们可以求出以每个元素作为末尾元素的最长递增子序列的长度。最后看谁最长，就是整个数组的最长递增子序列长度。</p>
+<h3 id="动态规划">动态规划</h3>
+<p>这题的关键难点在于搞清楚<code>dp</code>数组究竟应该存储什么状态。可以这样想：一个数组我们求解出的最长递增子序列一定有一个末尾元素（虽然是废话），因此我们可以求出以每个元素作为末尾元素的最长递增子序列的长度。最后看谁最长，就是整个数组的最长递增子序列长度。</p>
 <p>我们用<code>dp</code>数组保存以每个元素作为末尾元素的最长递增子序列的长度，<code>dp[i]</code>表示以数组中第<code>i</code>个元素作为末尾元素的最长递增子序列长度。那怎么求<code>dp[i]</code>呢？根据动态规划的状态转移特性，我们求<code>dp[i]</code>的时候已经求得了<code>dp[0...i−1]</code>的值，因此状态方程可以写为：</p>
-<p>$dp[i] = max(dp[j]) + 1，其中0 &lt;= j &lt; i且nums[j] &lt; nums[i]$​</p>
-<p>也就是找在以 当前元素前面的元素 为末尾的最长递增子序列中能接上当前元素的子序列中最大的子序列。</p>
+<p><span class="math inline">\(dp[i] = max(dp[j]) + 1，其中0 &lt;= j
+&lt; i且nums[j] &lt; nums[i]\)</span>​</p>
+<p>也就是找在以 当前元素前面的元素
+为末尾的最长递增子序列中能接上当前元素的子序列中最大的子序列。</p>
 <p>最后的结果就是<code>dp</code>数组中的最大值。</p>
 <p>可以看到，本题的动态规划求解当前状态时，不仅仅需要前一个位置的状态，而是要遍历前面所有位置的状态，因此必须要用<code>dp</code>数组来保存所有位置的状态。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br>    <span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">lengthOfLIS</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt;&amp; nums)</span> </span>&#123;<br>        <span class="hljs-type">int</span> n = nums.<span class="hljs-built_in">size</span>();<br><br>        <span class="hljs-function">vector&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">dp</span><span class="hljs-params">(n, <span class="hljs-number">1</span>)</span></span>;<br><br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; n; ++i) &#123;<br>            <span class="hljs-type">int</span> max = <span class="hljs-number">0</span>;<br>            <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> j = i - <span class="hljs-number">1</span>; j &gt;= <span class="hljs-number">0</span>; --j) &#123;<br>                <span class="hljs-keyword">if</span> (dp[j] &gt; max &amp;&amp; nums[j] &lt; nums[i]) max = dp[j];<br>            &#125;<br>            dp[i] = max + <span class="hljs-number">1</span>;<br>        &#125;<br><br>        <span class="hljs-type">int</span> max_length = <span class="hljs-number">0</span>;<br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; n; ++i) &#123;<br>            <span class="hljs-keyword">if</span> (dp[i] &gt; max_length) max_length = dp[i];<br>        &#125;<br><br>        <span class="hljs-keyword">return</span> max_length;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
 <p>本题动态规划的空间复杂度是<code>O(N)</code>，因为需要一个一维的<code>dp</code>数组；</p>
-<p>时间复杂度是$O(N^2)$，因为求解每个位置的状态时，需要遍历前面所有位置的状态。</p>
-<h2 id="Leetcode-415-字符串相加-Easy"><a href="#Leetcode-415-字符串相加-Easy" class="headerlink" title="Leetcode 415. 字符串相加(Easy)"></a><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/add-strings">Leetcode 415. 字符串相加(Easy)</a></h2><blockquote>
-<p>给定两个字符串形式的非负整数 <code>num1</code> 和<code>num2</code> ，计算它们的和并同样以字符串形式返回。</p>
-<p>你不能使用任何內建的用于处理大整数的库（比如 <code>BigInteger</code>）， 也不能直接将输入的字符串转换为整数形式。</p>
+<p>时间复杂度是<span
+class="math inline">\(O(N^2)\)</span>，因为求解每个位置的状态时，需要遍历前面所有位置的状态。</p>
+<h2 id="leetcode-415.-字符串相加easy"><a
+target="_blank" rel="noopener" href="https://leetcode.cn/problems/add-strings">Leetcode 415.
+字符串相加(Easy)</a></h2>
+<blockquote>
+<p>给定两个字符串形式的非负整数 <code>num1</code> 和<code>num2</code>
+，计算它们的和并同样以字符串形式返回。</p>
+<p>你不能使用任何內建的用于处理大整数的库（比如
+<code>BigInteger</code>）， 也不能直接将输入的字符串转换为整数形式。</p>
 <p><strong>示例 1：</strong></p>
 <figure class="highlight gcode"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs gcode">输入：<span class="hljs-symbol">num1</span> = <span class="hljs-string">&quot;11&quot;</span>, <span class="hljs-symbol">num2</span> = <span class="hljs-string">&quot;123&quot;</span><br>输出：<span class="hljs-string">&quot;134&quot;</span><br></code></pre></td></tr></table></figure>
 <p><strong>示例 2：</strong></p>
@@ -319,14 +335,16 @@
 <p><strong>提示：</strong></p>
 <ul>
 <li><code>1 &lt;= num1.length, num2.length &lt;= 104</code></li>
-<li><code>num1</code> 和<code>num2</code> 都只包含数字 <code>0-9</code></li>
+<li><code>num1</code> 和<code>num2</code> 都只包含数字
+<code>0-9</code></li>
 <li><code>num1</code> 和<code>num2</code> 都不包含任何前导零</li>
 </ul>
 </blockquote>
-<h3 id="模拟"><a href="#模拟" class="headerlink" title="模拟"></a>模拟</h3><p>本题其实就是模拟<strong>竖式加法</strong>的过程。从两个字符串的最后一个数（整数的个位数）开始加起，如果进位设置<code>of</code>加到下一位中。这里我用了一个trick：向较短的字符串前面补上0，让两个字符串一样长，方便循环做加法。</p>
+<h3 id="模拟">模拟</h3>
+<p>本题其实就是模拟<strong>竖式加法</strong>的过程。从两个字符串的最后一个数（整数的个位数）开始加起，如果进位设置<code>of</code>加到下一位中。这里我用了一个trick：向较短的字符串前面补上0，让两个字符串一样长，方便循环做加法。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br>    <span class="hljs-keyword">public</span>:<br>    <span class="hljs-function">string <span class="hljs-title">addStrings</span><span class="hljs-params">(string num1, string num2)</span> </span>&#123;<br>        <span class="hljs-type">int</span> length1 = num1.<span class="hljs-built_in">length</span>();<br>        <span class="hljs-type">int</span> length2 = num2.<span class="hljs-built_in">length</span>();<br>        <span class="hljs-type">int</span> length = <span class="hljs-built_in">max</span>(length1, length2);<br><br>        <span class="hljs-type">int</span> zeros;<br>        <span class="hljs-keyword">if</span> (length1 &gt; length2) &#123;<br>            zeros = length1 - length2;<br>            num2 = <span class="hljs-built_in">string</span>(zeros, <span class="hljs-string">&#x27;0&#x27;</span>) + num2;<br>        &#125; <span class="hljs-keyword">else</span> &#123;<br>            zeros = length2 - length1;<br>            num1 = <span class="hljs-built_in">string</span>(zeros, <span class="hljs-string">&#x27;0&#x27;</span>) + num1;<br>        &#125;<br><br>        string result;<br>        <span class="hljs-type">int</span> of = <span class="hljs-number">0</span>;  <span class="hljs-comment">// 是否有overflow</span><br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = length - <span class="hljs-number">1</span>; i &gt;= <span class="hljs-number">0</span>; --i) &#123;<br>            <span class="hljs-type">int</span> sum = (num1[i] - <span class="hljs-string">&#x27;0&#x27;</span>) + (num2[i] - <span class="hljs-string">&#x27;0&#x27;</span>) + of;<br>            <span class="hljs-keyword">if</span> (sum &gt; <span class="hljs-number">9</span>) &#123;<br>                sum -= <span class="hljs-number">10</span>;<br>                of = <span class="hljs-number">1</span>;<br>            &#125; <span class="hljs-keyword">else</span> &#123;<br>                of = <span class="hljs-number">0</span>;<br>            &#125;<br>            result = (<span class="hljs-type">char</span>)(<span class="hljs-string">&#x27;0&#x27;</span> + sum) + result;<br>        &#125;<br><br>        <span class="hljs-keyword">if</span> (of) result = <span class="hljs-string">&#x27;1&#x27;</span> + result;<br><br>        <span class="hljs-keyword">return</span> result;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
 <p>这个算法的时间复杂度是<code>O(max&#123;len1, len2&#125;)</code>；</p>
-<p>空间复杂度是<code>O(n)</code>，因为我通过向较短的字符串前面添加’0’字符使两个字符串长度相等，这会创建新的string对象，最坏情况下会需要<code>O(n)</code>的额外空间（当一个字符串远长于另一个时）。</p>
+<p>空间复杂度是<code>O(n)</code>，因为我通过向较短的字符串前面添加'0'字符使两个字符串长度相等，这会创建新的string对象，最坏情况下会需要<code>O(n)</code>的额外空间（当一个字符串远长于另一个时）。</p>
 
                 
               </div>
@@ -427,6 +445,12 @@
                 <div class="post-prevnext my-3">
                   <article class="post-prev col-6">
                     
+                    
+                      <a href="/2025/03/12/CodeTop-Day14/" title="CodeTop刷题 Day14">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">CodeTop刷题 Day14</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
                     
                   </article>
                   <article class="post-next col-6">

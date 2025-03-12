@@ -296,67 +296,139 @@
             
               <div class="markdown-body">
                 
-                <p>Think about this problem while you are learning this part: </p>
+                <p>Think about this problem while you are learning this part:</p>
 <blockquote>
 <p>Why we are doing paging?</p>
 </blockquote>
-<p>This part is crucial for you to implementing OS/161 Assignment 6 correctly!</p>
-<h1 id="Paging"><a href="#Paging" class="headerlink" title="Paging"></a>Paging</h1><blockquote>
+<p>This part is crucial for you to implementing OS/161 Assignment 6
+correctly!</p>
+<h1 id="paging">Paging</h1>
+<blockquote>
 <p><strong>Learning Materials</strong></p>
 <p>Video:</p>
-<p><a target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/download/cs161-video-materials/www.eecs.harvard.edu/~margo/cs161/videos/vm1-waudio.mp4">Intro to Virtual Memory</a></p>
-<p><a target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/download/cs161-video-materials/www.eecs.harvard.edu/~margo/cs161/videos/vm-tlb-waudio.mp4">Translation Lookaside Buffer (TLB)</a></p>
-<p><a target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/download/cs161-video-materials/www.eecs.harvard.edu/~margo/cs161/videos/vm-x86.mp4">Virtual memory on x86</a></p>
-<p><a target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/download/cs161-video-materials/www.eecs.harvard.edu/~margo/cs161/videos/vm-paging-waudio.mp4">Intro to paging</a></p>
-<p><a target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/download/cs161-video-materials/www.eecs.harvard.edu/~margo/cs161/videos/vm-paging2-waudio.mp4">Continuation of paging by Margo Seltzer</a></p>
+<p><a
+target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/download/cs161-video-materials/www.eecs.harvard.edu/~margo/cs161/videos/vm1-waudio.mp4">Intro
+to Virtual Memory</a></p>
+<p><a
+target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/download/cs161-video-materials/www.eecs.harvard.edu/~margo/cs161/videos/vm-tlb-waudio.mp4">Translation
+Lookaside Buffer (TLB)</a></p>
+<p><a
+target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/download/cs161-video-materials/www.eecs.harvard.edu/~margo/cs161/videos/vm-x86.mp4">Virtual
+memory on x86</a></p>
+<p><a
+target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/download/cs161-video-materials/www.eecs.harvard.edu/~margo/cs161/videos/vm-paging-waudio.mp4">Intro
+to paging</a></p>
+<p><a
+target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/download/cs161-video-materials/www.eecs.harvard.edu/~margo/cs161/videos/vm-paging2-waudio.mp4">Continuation
+of paging by Margo Seltzer</a></p>
 <p>Lecture Slides:</p>
-<p><a target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/LECTURE-SLIDES/VM-new.pptx"> Virtual memory (Intro)</a></p>
-<p><a target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/LECTURE-SLIDES/Paging-new.pptx">Paging</a></p>
-<p><a target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/LECTURE-SLIDES/Paging-disk.pptx">Paging to disk</a></p>
+<p><a
+target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/LECTURE-SLIDES/VM-new.pptx">Virtual
+memory (Intro)</a></p>
+<p><a
+target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/LECTURE-SLIDES/Paging-new.pptx">Paging</a></p>
+<p><a
+target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/LECTURE-SLIDES/Paging-disk.pptx">Paging
+to disk</a></p>
 <p>Readings:</p>
-<p><a target="_blank" rel="noopener" href="http://pages.cs.wisc.edu/~remzi/OSTEP/vm-api.pdf">[OSTEP] Memory API</a></p>
-<p><a target="_blank" rel="noopener" href="http://pages.cs.wisc.edu/~remzi/OSTEP/vm-tlbs.pdf">[OSTEP] Translation lookaside buffers</a></p>
-<p><a target="_blank" rel="noopener" href="http://pages.cs.wisc.edu/~remzi/OSTEP/vm-freespace.pdf">[OSTEP] Free space management</a></p>
-<p><a target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/download/mips-TLB.pdf">MIPS MMU and TLB</a></p>
-<p><a target="_blank" rel="noopener" href="http://pages.cs.wisc.edu/~remzi/OSTEP/vm-paging.pdf">[OSTEP] Introduction to Paging</a></p>
-<p><a target="_blank" rel="noopener" href="http://pages.cs.wisc.edu/~remzi/OSTEP/vm-smalltables.pdf">[OSTEP] Advanced paging</a></p>
+<p>[<a target="_blank" rel="noopener" href="http://pages.cs.wisc.edu/~remzi/OSTEP/vm-api.pdf">OSTEP]
+Memory API</a></p>
+<p>[<a target="_blank" rel="noopener" href="http://pages.cs.wisc.edu/~remzi/OSTEP/vm-tlbs.pdf">OSTEP]
+Translation lookaside buffers</a></p>
+<p>[<a
+target="_blank" rel="noopener" href="http://pages.cs.wisc.edu/~remzi/OSTEP/vm-freespace.pdf">OSTEP]
+Free space management</a></p>
+<p><a target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/download/mips-TLB.pdf">MIPS
+MMU and TLB</a></p>
+<p>[<a target="_blank" rel="noopener" href="http://pages.cs.wisc.edu/~remzi/OSTEP/vm-paging.pdf">OSTEP]
+Introduction to Paging</a></p>
+<p>[<a
+target="_blank" rel="noopener" href="http://pages.cs.wisc.edu/~remzi/OSTEP/vm-smalltables.pdf">OSTEP]
+Advanced paging</a></p>
 </blockquote>
-<h2 id="Paging-1"><a href="#Paging-1" class="headerlink" title="Paging"></a>Paging</h2><h3 id="Definition-and-Concept"><a href="#Definition-and-Concept" class="headerlink" title="Definition and Concept"></a>Definition and Concept</h3><h4 id="Define-paging"><a href="#Define-paging" class="headerlink" title="Define paging"></a>Define paging</h4><p>The operating system creates the illusion of unlimited memory by using physical memory as a cache of virtual pages.</p>
+<h2 id="paging-1">Paging</h2>
+<h3 id="definition-and-concept">Definition and Concept</h3>
+<h4 id="define-paging">Define paging</h4>
+<p>The operating system creates the illusion of unlimited memory by
+using physical memory as a cache of virtual pages.</p>
 <p><img src="/imgs/202411191055926.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:67%;" /></p>
-<h4 id="Page-Faults"><a href="#Page-Faults" class="headerlink" title="Page Faults"></a>Page Faults</h4><p>Paging relaxes the requirement that all the pages in a process’s virtual address space must be in physical memory. Instead, we allow a process to have pages either on disk or in memory. When the process issues an access to a page that is on disk, a page fault occurs. The operating system must retrieve the page from disk and bring it into memory.</p>
+<h4 id="page-faults">Page Faults</h4>
+<p>Paging relaxes the requirement that all the pages in a process's
+virtual address space must be in physical memory. Instead, we allow a
+process to have pages either on disk or in memory. When the process
+issues an access to a page that is on disk, a page fault occurs. The
+operating system must retrieve the page from disk and bring it into
+memory.</p>
 <p><img src="/imgs/202410291208365.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:67%;" /></p>
-<p>The translation does not exist in the page table (<strong>the page is on disk</strong>), the OS must:</p>
-<ol>
+<p>The translation does not exist in the page table (<strong>the page is
+on disk</strong>), the OS must:</p>
+<ol type="1">
 <li>Allocate a place in physical memory to store the page.</li>
-<li>(If physical memory is full, evict a page. If the evicted page is modified or does not currently have a copy on disk, write the page to disk)</li>
+<li>(If physical memory is full, evict a page. If the evicted page is
+modified or does not currently have a copy on disk, write the page to
+disk)</li>
 <li>Read the page from disk.</li>
-<li>Update the page table entry with the new virtual-to-physical address translation.</li>
+<li>Update the page table entry with the new virtual-to-physical address
+translation.</li>
 <li>Update the TLB to contain the new translation.</li>
 <li>Resume execution of the user program.</li>
 </ol>
-<p>Notice that when the operating system selects a location in physical memory in which to place the new page, the space may already be occupied. In this case, the operating system must <strong>evict</strong> that other page from memory. If the page has been <strong>modified</strong> or <strong>does not currently have a copy on disk</strong>, then the old page must first be written to disk before the physical page can be reallocated. If the old page has <strong>not been modified</strong> and <strong>already has a copy on disk</strong>, then the write to disk can be avoided. The appropriate page table entry must be updated to reflect the fact that the page is no longer in memory.</p>
-<p>Memory serves as the cache of disk. As with any caching system, performance of your virtual memory system depends on the policy used to decide which things are kept in memory(cache) and which are evicted (to disk). On a page fault, the kernel must decide which page to replace. Ideally, it will evict a page that will not be needed soon. Many systems (such as UNIX) avoid the delay of synchronously writing memory pages to disk on a page fault by <strong>writing modified pages to disk in advance</strong>, so that subsequent page faults can be completed more quickly.</p>
-<h4 id="Multi-Level-Page-Tables"><a href="#Multi-Level-Page-Tables" class="headerlink" title="Multi-Level Page Tables"></a>Multi-Level Page Tables</h4><p>Two-level page table:</p>
+<p>Notice that when the operating system selects a location in physical
+memory in which to place the new page, the space may already be
+occupied. In this case, the operating system must <strong>evict</strong>
+that other page from memory. If the page has been
+<strong>modified</strong> or <strong>does not currently have a copy on
+disk</strong>, then the old page must first be written to disk before
+the physical page can be reallocated. If the old page has <strong>not
+been modified</strong> and <strong>already has a copy on disk</strong>,
+then the write to disk can be avoided. The appropriate page table entry
+must be updated to reflect the fact that the page is no longer in
+memory.</p>
+<p>Memory serves as the cache of disk. As with any caching system,
+performance of your virtual memory system depends on the policy used to
+decide which things are kept in memory(cache) and which are evicted (to
+disk). On a page fault, the kernel must decide which page to replace.
+Ideally, it will evict a page that will not be needed soon. Many systems
+(such as UNIX) avoid the delay of synchronously writing memory pages to
+disk on a page fault by <strong>writing modified pages to disk in
+advance</strong>, so that subsequent page faults can be completed more
+quickly.</p>
+<h4 id="multi-level-page-tables">Multi-Level Page Tables</h4>
+<p>Two-level page table:</p>
 <p>Use a page directory which points to pages of the page table.</p>
 <p><img src="/imgs/202411221844280.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:67%;" /></p>
 <p><img src="/imgs/202411231627475.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 67%;" /></p>
-<h3 id="MIPS-Virtual-Memory-Map"><a href="#MIPS-Virtual-Memory-Map" class="headerlink" title="MIPS Virtual Memory Map"></a>MIPS Virtual Memory Map</h3><p>KSEG0, KSEG1 addresses: directly map to physical RAM starting at 0</p>
+<h3 id="mips-virtual-memory-map">MIPS Virtual Memory Map</h3>
+<p>KSEG0, KSEG1 addresses: directly map to physical RAM starting at
+0</p>
 <p>KUSEG, KSEG2 addresses: translate with the help of the TLB</p>
 <p><img src="/imgs/202411232002776.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:67%;" /></p>
-<h3 id="TLB"><a href="#TLB" class="headerlink" title="TLB"></a>TLB</h3><h4 id="Associative-TLB"><a href="#Associative-TLB" class="headerlink" title="Associative TLB"></a>Associative TLB</h4><p><img src="/imgs/202411262252428.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 50%;" /></p>
-<h4 id="Address-Translation-Process"><a href="#Address-Translation-Process" class="headerlink" title="Address Translation Process"></a>Address Translation Process</h4><p><img src="/imgs/202411262252356.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 50%;" /></p>
-<h4 id="MIPS-MMU-and-TLB"><a href="#MIPS-MMU-and-TLB" class="headerlink" title="MIPS MMU and TLB"></a>MIPS MMU and TLB</h4><p>No hardware support for page tables.</p>
-<p>MIPS makes the format and contents of the TLB entry public to the kernel. </p>
+<h3 id="tlb">TLB</h3>
+<h4 id="associative-tlb">Associative TLB</h4>
+<p><img src="/imgs/202411262252428.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 50%;" /></p>
+<h4 id="address-translation-process">Address Translation Process</h4>
+<p><img src="/imgs/202411262252356.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 50%;" /></p>
+<h4 id="mips-mmu-and-tlb">MIPS MMU and TLB</h4>
+<p>No hardware support for page tables.</p>
+<p>MIPS makes the format and contents of the TLB entry public to the
+kernel.</p>
 <p><img src="/imgs/202411261139273.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:80%;" /></p>
 <p><img src="/imgs/202411262254163.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:80%;" /></p>
 <p>MIPS R3000 TLB:</p>
 <p><img src="/imgs/202411232013748.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 67%;" /></p>
 <ul>
-<li><code>global</code>: 1 bit; if set, ignore the pid bits in the TLB.</li>
-<li><code>valid</code>: 1 bit; set if the TLB entry contains a valid translation.</li>
-<li><code>dirty</code>: 1 bit; enables writing to the page referenced by the entry; if this bit is 0, the page is only accessible for reading.</li>
-<li><code>nocache</code>: 1 bit; <strong>unused in System/161</strong>. In a real processor, indicates that the hardware cache will be disabled when accessing this page.</li>
-<li><code>pid</code>: 6 bits; a process or address space ID that can be used to allow entries to remain in the TLB after a process switch.</li>
+<li><code>global</code>: 1 bit; if set, ignore the pid bits in the
+TLB.</li>
+<li><code>valid</code>: 1 bit; set if the TLB entry contains a valid
+translation.</li>
+<li><code>dirty</code>: 1 bit; enables writing to the page referenced by
+the entry; if this bit is 0, the page is only accessible for
+reading.</li>
+<li><code>nocache</code>: 1 bit; <strong>unused in System/161</strong>.
+In a real processor, indicates that the hardware cache will be disabled
+when accessing this page.</li>
+<li><code>pid</code>: 6 bits; a process or address space ID that can be
+used to allow entries to remain in the TLB after a process switch.</li>
 </ul>
 <blockquote>
 <p>How to handle TLB miss in OS/161?</p>
@@ -366,28 +438,44 @@
 <blockquote>
 <p>What is the <strong>TLB shootdown</strong>?</p>
 </blockquote>
-<p>If we want to evict a page whose virtual-to-physical translation might be in one/more TLBs, we need to revoke the corresponding TLB entry in all the TLBs. But, from one processor you can’t directly access another processor’s TLB; instead you have to poke the other processor and ask it to do the revocation for you. The process of doing so is called “TLB shootdown”.</p>
+<p>If we want to evict a page whose virtual-to-physical translation
+might be in one/more TLBs, we need to revoke the corresponding TLB entry
+in all the TLBs. But, from one processor you can't directly access
+another processor's TLB; instead you have to poke the other processor
+and ask it to do the revocation for you. The process of doing so is
+called "TLB shootdown".</p>
 <blockquote>
 <p>How to implement the <strong>TLB shootdown</strong>?</p>
 </blockquote>
-<p>Issue an inter-processor interrupt (IPI) to the processors that (may) have the mappings you want removed in their TLBs. These processors, upon receiving the interrupt, do the necessary TLB flush operations, and then signal back in some fashion that they’ve finished.</p>
-<h3 id="MIPS-R3000-Virtual-Addresses"><a href="#MIPS-R3000-Virtual-Addresses" class="headerlink" title="MIPS R3000 Virtual Addresses"></a>MIPS R3000 Virtual Addresses</h3><p><img src="/imgs/202411232018049.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 50%;" /></p>
+<p>Issue an inter-processor interrupt (IPI) to the processors that (may)
+have the mappings you want removed in their TLBs. These processors, upon
+receiving the interrupt, do the necessary TLB flush operations, and then
+signal back in some fashion that they've finished.</p>
+<h3 id="mips-r3000-virtual-addresses">MIPS R3000 Virtual Addresses</h3>
+<p><img src="/imgs/202411232018049.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 50%;" /></p>
 <blockquote>
 <p>How to manage physical memory in OS/161?</p>
 </blockquote>
 <p><img src="/imgs/202411232038812.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 60%;" /></p>
-<h3 id="Roadmap-to-A6"><a href="#Roadmap-to-A6" class="headerlink" title="Roadmap to A6"></a>Roadmap to A6</h3><p><img src="/imgs/202411232040973.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 50%;" /></p>
-<h2 id="Paging-to-disk"><a href="#Paging-to-disk" class="headerlink" title="Paging to disk"></a>Paging to disk</h2><p><img src="/imgs/202411232048424.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:60%;" /></p>
+<h3 id="roadmap-to-a6">Roadmap to A6</h3>
+<p><img src="/imgs/202411232040973.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 50%;" /></p>
+<h2 id="paging-to-disk">Paging to disk</h2>
+<p><img src="/imgs/202411232048424.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:60%;" /></p>
 <blockquote>
-<p>How to choose pages to be evicted to disk? Which pages won’t be needed soon? Which pages are easier to evict?(Do all pages need to be written to disk?)</p>
+<p>How to choose pages to be evicted to disk? Which pages won't be
+needed soon? Which pages are easier to evict?(Do all pages need to be
+written to disk?)</p>
 </blockquote>
 <p><strong>Page replacement algorithm.</strong></p>
-<p>Clean pages(Code pages) are easier to evict since they don’t need to be written to disk.</p>
+<p>Clean pages(Code pages) are easier to evict since they don't need to
+be written to disk.</p>
 <p><img src="/imgs/202411241636311.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 50%;" /></p>
 <p><img src="/imgs/202411241748500.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:50%;" /></p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs pseudocode">/* Function call chain */<br>foo() -&gt; kmalloc -&gt; getppages -&gt; evict -&gt; write to swap<br></code></pre></td></tr></table></figure>
-<p>When a page get evicted, we need to <strong>invalidate the page in TLB</strong>.</p>
-<p>If the page you evict might be in another TLB, do a <strong>TLB shootdown</strong>.</p>
+<p>When a page get evicted, we need to <strong>invalidate the page in
+TLB</strong>.</p>
+<p>If the page you evict might be in another TLB, do a <strong>TLB
+shootdown</strong>.</p>
 
                 
               </div>
