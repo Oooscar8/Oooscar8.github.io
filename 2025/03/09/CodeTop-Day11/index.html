@@ -27,6 +27,8 @@
 <meta property="og:description" content="CodeTop高频面试题 刷题记录 Day11！">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://oooscar8.github.io/2025/03/09/imgs/circularlinkedlist-1741513173102-1.png">
+<meta property="og:image" content="http://oooscar8.github.io/2025/03/09/imgs/circularlinkedlist_test2-1741513173102-3.png">
+<meta property="og:image" content="http://oooscar8.github.io/2025/03/09/imgs/circularlinkedlist_test3-1741513173102-2.png">
 <meta property="og:image" content="http://oooscar8.github.io/2025/03/09/imgs/rev2ex2-1741513173102-4.jpg">
 <meta property="article:published_time" content="2025-03-09T09:39:25.000Z">
 <meta property="article:modified_time" content="2025-03-09T09:40:28.115Z">
@@ -282,57 +284,40 @@
               <div class="markdown-body">
                 
                 <p>CodeTop高频面试题刷题，今天是Day11！</p>
-<h1 id="codetop刷题-day11">CodeTop刷题 Day11</h1>
-<h2 id="leetcode-141.-环形链表easy"><a
-target="_blank" rel="noopener" href="https://leetcode.cn/problems/linked-list-cycle">Leetcode 141.
-环形链表(Easy)</a></h2>
+<h1 id="codetop刷题-day11"><a class="markdownIt-Anchor" href="#codetop刷题-day11"></a> CodeTop刷题 Day11</h1>
+<h2 id="leetcode-141-环形链表easy"><a class="markdownIt-Anchor" href="#leetcode-141-环形链表easy"></a> <a target="_blank" rel="noopener" href="https://leetcode.cn/problems/linked-list-cycle">Leetcode 141. 环形链表(Easy)</a></h2>
 <blockquote>
 <p>给你一个链表的头节点 <code>head</code> ，判断链表中是否有环。</p>
-<p>如果链表中有某个节点，可以通过连续跟踪 <code>next</code>
-指针再次到达，则链表中存在环。
-为了表示给定链表中的环，评测系统内部使用整数 <code>pos</code>
-来表示链表尾连接到链表中的位置（索引从 0
-开始）。<strong>注意：<code>pos</code> 不作为参数进行传递</strong>
-。仅仅是为了标识链表的实际情况。</p>
-<p><em>如果链表中存在环</em> ，则返回 <code>true</code> 。 否则，返回
-<code>false</code> 。</p>
+<p>如果链表中有某个节点，可以通过连续跟踪 <code>next</code> 指针再次到达，则链表中存在环。 为了表示给定链表中的环，评测系统内部使用整数 <code>pos</code> 来表示链表尾连接到链表中的位置（索引从 0 开始）。<strong>注意：<code>pos</code> 不作为参数进行传递</strong> 。仅仅是为了标识链表的实际情况。</p>
+<p><em>如果链表中存在环</em> ，则返回 <code>true</code> 。 否则，返回 <code>false</code> 。</p>
 <p><strong>示例 1：</strong></p>
-<p><img src="/imgs/circularlinkedlist-1741513173102-1.png" srcset="/img/loading.gif" lazyload /></p>
+<p><img src="/imgs/circularlinkedlist-1741513173102-1.png" srcset="/img/loading.gif" lazyload alt="" /></p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">输入：<span class="hljs-built_in">head</span> = [3,2,0,-4], pos = 1<br>输出：<span class="hljs-literal">true</span><br>解释：链表中有一个环，其尾部连接到第二个节点。<br></code></pre></td></tr></table></figure>
 <p><strong>示例 2：</strong></p>
-<p><img
-src="/imgs/circularlinkedlist_test2-1741513173102-3.png" srcset="/img/loading.gif" lazyload /></p>
+<p><img src="/imgs/circularlinkedlist_test2-1741513173102-3.png" srcset="/img/loading.gif" lazyload alt="" /></p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">输入：<span class="hljs-built_in">head</span> = [1,2], pos = 0<br>输出：<span class="hljs-literal">true</span><br>解释：链表中有一个环，其尾部连接到第一个节点。<br></code></pre></td></tr></table></figure>
 <p><strong>示例 3：</strong></p>
-<p><img
-src="/imgs/circularlinkedlist_test3-1741513173102-2.png" srcset="/img/loading.gif" lazyload /></p>
+<p><img src="/imgs/circularlinkedlist_test3-1741513173102-2.png" srcset="/img/loading.gif" lazyload alt="" /></p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">输入：<span class="hljs-built_in">head</span> = [1], pos = -1<br>输出：<span class="hljs-literal">false</span><br>解释：链表中没有环。<br></code></pre></td></tr></table></figure>
 <p><strong>提示：</strong></p>
 <ul>
 <li>链表中节点的数目范围是 <code>[0, 104]</code></li>
 <li><code>-105 &lt;= Node.val &lt;= 105</code></li>
-<li><code>pos</code> 为 <code>-1</code> 或者链表中的一个
-<strong>有效索引</strong> 。</li>
+<li><code>pos</code> 为 <code>-1</code> 或者链表中的一个 <strong>有效索引</strong> 。</li>
 </ul>
-<p><strong>进阶：</strong>你能用
-<code>O(1)</code>（即，常量）内存解决此问题吗？</p>
+<p>**进阶：**你能用 <code>O(1)</code>（即，常量）内存解决此问题吗？</p>
 </blockquote>
-<h3 id="哈希表">哈希表</h3>
+<h3 id="哈希表"><a class="markdownIt-Anchor" href="#哈希表"></a> 哈希表</h3>
 <p>最容易想到的是用哈希表存储我们访问过的节点。每遍历到一个节点，先检查该节点是否在哈希表中，如果是说明是环形链表。遍历到最后都没找到重复遍历过的节点，说明不是环形链表。</p>
 <p>代码很容易，这里就不写了。这个算法的空间复杂度是<code>O(N)</code>，有没有一种<code>O(1)</code>的空间复杂度的算法解此题呢？</p>
-<h3 id="双指针快慢指针">双指针（快慢指针）</h3>
+<h3 id="双指针快慢指针"><a class="markdownIt-Anchor" href="#双指针快慢指针"></a> 双指针（快慢指针）</h3>
 <p>这题可以用双指针的一个trick：<strong>快慢指针</strong>。我们通常使用双指针都是两个指针每次移动一格，速度一样。这题在我们判断环形链表的时候，可以使用一慢一快两个指针：慢指针一次移动一格，快指针一次移动两格。那么如果链表不是环形的，快指针应该会一直在慢指针的前方。而如果是环形链表，那么两个指针走着走着一定会重合。可以想象龟兔赛跑的场景：乌龟和兔子在链表上移动，兔子跑得快，如果链表是环形的，那么就会套圈，与乌龟相遇。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br>    <span class="hljs-keyword">public</span>:<br>        <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">hasCycle</span><span class="hljs-params">(ListNode *head)</span> </span>&#123;<br>            <span class="hljs-keyword">if</span> (!head) <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;<br>            TreeNode* one_step = head;<br>            TreeNode* two_step = head-&gt;next;<br><br>            <span class="hljs-keyword">while</span> (one_step &amp;&amp; two_step) &#123;<br>                <span class="hljs-keyword">if</span> (one_step == two_step) <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;<br>                one_step = one_step-&gt;next;<br>                <span class="hljs-keyword">if</span> (!two_step-&gt;next) <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;<br>                two_step = two_step-&gt;next-&gt;next;<br>            &#125;<br><br>            <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;<br>        &#125;<br>    &#125;;<br></code></pre></td></tr></table></figure>
-<h2 id="leetcode-92.-反转链表-iimedium"><a
-target="_blank" rel="noopener" href="https://leetcode.cn/problems/reverse-linked-list-ii">Leetcode 92.
-反转链表 II(Medium)</a></h2>
+<h2 id="leetcode-92-反转链表-iimedium"><a class="markdownIt-Anchor" href="#leetcode-92-反转链表-iimedium"></a> <a target="_blank" rel="noopener" href="https://leetcode.cn/problems/reverse-linked-list-ii">Leetcode 92. 反转链表 II(Medium)</a></h2>
 <blockquote>
-<p>给你单链表的头指针 <code>head</code> 和两个整数 <code>left</code> 和
-<code>right</code> ，其中 <code>left &lt;= right</code> 。请你反转从位置
-<code>left</code> 到位置 <code>right</code> 的链表节点，返回
-<strong>反转后的链表</strong> 。</p>
+<p>给你单链表的头指针 <code>head</code> 和两个整数 <code>left</code> 和 <code>right</code> ，其中 <code>left &lt;= right</code> 。请你反转从位置 <code>left</code> 到位置 <code>right</code> 的链表节点，返回 <strong>反转后的链表</strong> 。</p>
 <p><strong>示例 1：</strong></p>
-<p><img src="/imgs/rev2ex2-1741513173102-4.jpg" srcset="/img/loading.gif" lazyload /></p>
+<p><img src="/imgs/rev2ex2-1741513173102-4.jpg" srcset="/img/loading.gif" lazyload alt="" /></p>
 <figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs stylus">输入：head = <span class="hljs-selector-attr">[1,2,3,4,5]</span>, <span class="hljs-attribute">left</span> = <span class="hljs-number">2</span>, right = <span class="hljs-number">4</span><br>输出：<span class="hljs-selector-attr">[1,4,3,2,5]</span><br></code></pre></td></tr></table></figure>
 <p><strong>示例 2：</strong></p>
 <figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs stylus">输入：head = <span class="hljs-selector-attr">[5]</span>, <span class="hljs-attribute">left</span> = <span class="hljs-number">1</span>, right = <span class="hljs-number">1</span><br>输出：<span class="hljs-selector-attr">[5]</span><br></code></pre></td></tr></table></figure>
@@ -345,8 +330,7 @@ target="_blank" rel="noopener" href="https://leetcode.cn/problems/reverse-linked
 </ul>
 <p><strong>进阶：</strong> 你可以使用一趟扫描完成反转吗？</p>
 </blockquote>
-<p>此题难度并不大，就是翻转链表的变型。比普通的翻转一整个链表要多做的事情就是将[left,
-right]的子链表翻转后接回原本的链表，那就需要一个变量<code>pre_last</code>保存子链表的前一个节点，还需要一个<code>cur_first</code>指向翻转后的子链表的最后一个节点（这样就可以在翻转子链表的循环结束后将翻转后的子链表的最后一个节点的next指向原本子链表的后一个节点，也就是接回原链表）。翻转链表就是常规的套路：用一个<code>pre</code>节点保存遍历到的前一个节点，将当前节点指向<code>pre</code>。</p>
+<p>此题难度并不大，就是翻转链表的变型。比普通的翻转一整个链表要多做的事情就是将[left, right]的子链表翻转后接回原本的链表，那就需要一个变量<code>pre_last</code>保存子链表的前一个节点，还需要一个<code>cur_first</code>指向翻转后的子链表的最后一个节点（这样就可以在翻转子链表的循环结束后将翻转后的子链表的最后一个节点的next指向原本子链表的后一个节点，也就是接回原链表）。翻转链表就是常规的套路：用一个<code>pre</code>节点保存遍历到的前一个节点，将当前节点指向<code>pre</code>。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br>    <span class="hljs-keyword">public</span>:<br>        <span class="hljs-function">ListNode* <span class="hljs-title">reverseBetween</span><span class="hljs-params">(ListNode* head, <span class="hljs-type">int</span> left, <span class="hljs-type">int</span> right)</span> </span>&#123;<br>            ListNode* dummy = <span class="hljs-keyword">new</span> <span class="hljs-built_in">ListNode</span>(<span class="hljs-number">0</span>, head);<br>            head = dummy;<br>            <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>; i &lt; left; ++i) &#123;<br>                head = head-&gt;next;<br>            &#125;<br>            ListNode* pre_last = head; <span class="hljs-comment">// 将要翻转的第一个节点的前一个节点</span><br>            head = head-&gt;next;<br>            ListNode* cur_first = head; <span class="hljs-comment">// 将要翻转的第一个节点，也是翻转后的子链表的最后一个节点</span><br><br>            ListNode* pre = pre_last;<br>            <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt;= right - left; ++i) &#123;<br>                ListNode* next = head-&gt;next;<br>                head-&gt;next = pre;<br>                pre = head;<br>                head = next;<br>            &#125;<br>            <span class="hljs-comment">// 循环结束后，pre指向翻转后的子链表的第一个节点，head指向翻转的子链表的后面一个节点</span><br>            pre_last-&gt;next = pre;<br>            cur_first-&gt;next = head;<br><br>            <span class="hljs-keyword">return</span> dummy-&gt;next;<br>        &#125;<br>    &#125;;<br></code></pre></td></tr></table></figure>
 <p>这样就可以保证只需要扫描一次就完成翻转，时间复杂度是<code>O(N)</code>；并且只需要常数个变量，空间复杂度是<code>O(1)</code></p>
 

@@ -19,12 +19,12 @@
   <meta name="author" content="Alex Sun">
   <meta name="keywords" content="">
   
-    <meta name="description" content="解决Github Copilot在VSCode中无法使用问题 问题1：Github Copilot Chat消息发不出去 在VSCode中使用Copilot Chat消息发送不出去？很可能是与你别的自动补齐插件冲突了。我的情况是跟fitten code冲突了，卸载fitten code就可以解决。 问题2：远程环境中Github Copilot用不了 如果你在远程开发环境（如SS">
+    <meta name="description" content="解决Github Copilot在VSCode中无法使用问题  问题1：Github Copilot Chat消息发不出去 在VSCode中使用Copilot Chat消息发送不出去？很可能是与你别的自动补齐插件冲突了。我的情况是跟fitten code冲突了，卸载fitten code就可以解决。  问题2：远程环境中Github Copilot用不了 如果你在远程开发环境（如SSH、Cont">
 <meta property="og:type" content="article">
 <meta property="og:title" content="解决Github Copilot在VSCode中无法使用问题">
 <meta property="og:url" content="http://oooscar8.github.io/2025/03/12/copilot-issue/index.html">
 <meta property="og:site_name" content="Alex&#39;s Space">
-<meta property="og:description" content="解决Github Copilot在VSCode中无法使用问题 问题1：Github Copilot Chat消息发不出去 在VSCode中使用Copilot Chat消息发送不出去？很可能是与你别的自动补齐插件冲突了。我的情况是跟fitten code冲突了，卸载fitten code就可以解决。 问题2：远程环境中Github Copilot用不了 如果你在远程开发环境（如SS">
+<meta property="og:description" content="解决Github Copilot在VSCode中无法使用问题  问题1：Github Copilot Chat消息发不出去 在VSCode中使用Copilot Chat消息发送不出去？很可能是与你别的自动补齐插件冲突了。我的情况是跟fitten code冲突了，卸载fitten code就可以解决。  问题2：远程环境中Github Copilot用不了 如果你在远程开发环境（如SSH、Cont">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://oooscar8.github.io/2025/03/12/imgs/image-20250312222516317.png">
 <meta property="og:image" content="http://oooscar8.github.io/2025/03/12/imgs/image-20250312222732494.png">
@@ -227,7 +227,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          155 字
+          159 字
         
       </span>
     
@@ -280,26 +280,22 @@
             
               <div class="markdown-body">
                 
-                <h1 id="解决github-copilot在vscode中无法使用问题">解决Github
-Copilot在VSCode中无法使用问题</h1>
-<h2 id="问题1github-copilot-chat消息发不出去">问题1：Github Copilot
-Chat消息发不出去</h2>
-<p>在VSCode中使用Copilot
-Chat消息发送不出去？很可能是与你别的自动补齐插件冲突了。我的情况是跟fitten
-code冲突了，卸载fitten code就可以解决。</p>
-<h2 id="问题2远程环境中github-copilot用不了">问题2：远程环境中Github
-Copilot用不了</h2>
+                <h1 id="解决github-copilot在vscode中无法使用问题"><a class="markdownIt-Anchor" href="#解决github-copilot在vscode中无法使用问题"></a> 解决Github Copilot在VSCode中无法使用问题</h1>
+<h2 id="问题1github-copilot-chat消息发不出去"><a class="markdownIt-Anchor" href="#问题1github-copilot-chat消息发不出去"></a> 问题1：Github Copilot Chat消息发不出去</h2>
+<p>在VSCode中使用Copilot Chat消息发送不出去？很可能是与你别的自动补齐插件冲突了。我的情况是跟fitten code冲突了，卸载fitten code就可以解决。</p>
+<h2 id="问题2远程环境中github-copilot用不了"><a class="markdownIt-Anchor" href="#问题2远程环境中github-copilot用不了"></a> 问题2：远程环境中Github Copilot用不了</h2>
 <p>如果你在远程开发环境（如SSH、Container、WSL）中遇到下图的问题：</p>
-<p><img src="/imgs/image-20250312222516317.png" srcset="/img/loading.gif" lazyload /></p>
+<p><img src="/imgs/image-20250312222516317.png" srcset="/img/loading.gif" lazyload alt="" /></p>
 <p>可以配置Github Copilot扩展始终在本地客户端运行：</p>
-<ol type="1">
-<li>在VSCode Settings中搜索"Extension Kind"，点击"Edit in
-settings.json"</li>
+<ol>
+<li>在VSCode Settings中搜索&quot;Extension Kind&quot;，点击&quot;Edit in settings.json&quot;</li>
 </ol>
-<p><img src="/imgs/image-20250312222732494.png" srcset="/img/loading.gif" lazyload /></p>
-<ol start="2" type="1">
-<li><p>添加以下代码：</p>
-<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs json"><span class="hljs-attr">&quot;remote.extensionKind&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>    <span class="hljs-attr">&quot;GitHub.copilot&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-string">&quot;ui&quot;</span><span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">&quot;GitHub.copilot-chat&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-string">&quot;ui&quot;</span><span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span><br><span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">,</span><br></code></pre></td></tr></table></figure></li>
+<p><img src="/imgs/image-20250312222732494.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+<ol start="2">
+<li>
+<p>添加以下代码：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs json"><span class="hljs-attr">&quot;remote.extensionKind&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>    <span class="hljs-attr">&quot;GitHub.copilot&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-string">&quot;ui&quot;</span><span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">&quot;GitHub.copilot-chat&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-string">&quot;ui&quot;</span><span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span><br><span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">,</span><br></code></pre></td></tr></table></figure>
+</li>
 </ol>
 
                 

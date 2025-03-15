@@ -282,19 +282,12 @@
               <div class="markdown-body">
                 
                 <p>CodeTop高频面试题刷题，今天是Day6！今天这两题很简单，秒了</p>
-<h1 id="codetop刷题-day6">CodeTop刷题 Day6</h1>
-<h2 id="leetcode-102.-二叉树的层序遍历medium"><a
-target="_blank" rel="noopener" href="https://leetcode.cn/problems/binary-tree-level-order-traversal">Leetcode
-102. 二叉树的层序遍历(Medium)</a></h2>
+<h1 id="codetop刷题-day6"><a class="markdownIt-Anchor" href="#codetop刷题-day6"></a> CodeTop刷题 Day6</h1>
+<h2 id="leetcode-102-二叉树的层序遍历medium"><a class="markdownIt-Anchor" href="#leetcode-102-二叉树的层序遍历medium"></a> <a target="_blank" rel="noopener" href="https://leetcode.cn/problems/binary-tree-level-order-traversal">Leetcode 102. 二叉树的层序遍历(Medium)</a></h2>
 <blockquote>
-<p>给你二叉树的根节点 <code>root</code> ，返回其节点值的
-<strong>层序遍历</strong> 。 （即逐层地，从左到右访问所有节点）。</p>
+<p>给你二叉树的根节点 <code>root</code> ，返回其节点值的 <strong>层序遍历</strong> 。 （即逐层地，从左到右访问所有节点）。</p>
 <p><strong>示例 1：</strong></p>
-<figure>
-<img src="/imgs/tree1-1741019452271-54-1741022849649-1.jpg" srcset="/img/loading.gif" lazyload
-alt="img" />
-<figcaption aria-hidden="true">img</figcaption>
-</figure>
+<p><img src="/imgs/tree1-1741019452271-54-1741022849649-1.jpg" srcset="/img/loading.gif" lazyload alt="img" /></p>
 <figure class="highlight inform7"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs inform7">输入：root = <span class="hljs-comment">[3,9,20,null,null,15,7]</span><br>输出：<span class="hljs-comment">[<span class="hljs-comment">[3]</span>,<span class="hljs-comment">[9,20]</span>,<span class="hljs-comment">[15,7]</span>]</span><br></code></pre></td></tr></table></figure>
 <p><strong>示例 2：</strong></p>
 <figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs lua">输入：root = [<span class="hljs-number">1</span>]<br>输出：<span class="hljs-string">[[1]]</span><br></code></pre></td></tr></table></figure>
@@ -306,21 +299,16 @@ alt="img" />
 <li><code>-1000 &lt;= Node.val &lt;= 1000</code></li>
 </ul>
 </blockquote>
-<h3 id="bfs">BFS</h3>
+<h3 id="bfs"><a class="markdownIt-Anchor" href="#bfs"></a> BFS</h3>
 <p>二叉树的层序遍历，就是经典的BFS(深度优先搜索)算法，用一个queue来完成。每遍历一层，将每个节点的左右孩子push进queue，然后pop当前节点。每层遍历完后，正好这层的所有节点都pop出去了，下一层的所有节点都在queue中，通过<code>queue.size()</code>就可以知道下一层的节点个数，以此确定下层的循环遍历次数。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br>    <span class="hljs-keyword">public</span>:<br>        vector&lt;vector&lt;<span class="hljs-type">int</span>&gt;&gt; <span class="hljs-built_in">levelOrder</span>(TreeNode* root) &#123;<br>            vector&lt;vector&lt;<span class="hljs-type">int</span>&gt;&gt; result;<br><br>            queue&lt;TreeNode *&gt; queue;<br>            <span class="hljs-keyword">if</span> (root) queue.<span class="hljs-built_in">push</span>(root);<br><br>            <span class="hljs-keyword">while</span>(!queue.<span class="hljs-built_in">empty</span>()) &#123;<br>                vector&lt;<span class="hljs-type">int</span>&gt; vec;<br><br>                <span class="hljs-type">int</span> n = queue.<span class="hljs-built_in">size</span>();<br>                <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; n; ++i) &#123;<br>                    TreeNode* cur = queue.<span class="hljs-built_in">front</span>();<br>                    vec.<span class="hljs-built_in">push_back</span>(cur-&gt;val);<br>                    <span class="hljs-keyword">if</span> (cur-&gt;left) queue.<span class="hljs-built_in">push</span>(cur-&gt;left);<br>                    <span class="hljs-keyword">if</span> (cur-&gt;right) queue.<span class="hljs-built_in">push</span>(cur-&gt;right);<br>                    queue.<span class="hljs-built_in">pop</span>();<br>                &#125;<br>                <br>                result.<span class="hljs-built_in">push_back</span>(vec);<br>            &#125;<br><br>            <span class="hljs-keyword">return</span> result;<br>        &#125;<br>    &#125;;<br></code></pre></td></tr></table></figure>
-<h3 id="复杂度分析">复杂度分析</h3>
+<h3 id="复杂度分析"><a class="markdownIt-Anchor" href="#复杂度分析"></a> 复杂度分析</h3>
 <p>每个节点进队出队各一次，时间复杂度是O(N)；</p>
 <p>队列中的元素不超过N个，空间复杂度是O(N)。</p>
-<p><img src="/imgs/image-20250304010913490-1741022849650-2.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 67%;" /></p>
-<h2 id="leetcode-1.-两数之和easy"><a
-target="_blank" rel="noopener" href="https://leetcode.cn/problems/two-sum">Leetcode 1.
-两数之和(Easy)</a></h2>
+<img src="/imgs/image-20250304010913490-1741022849650-2.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 67%;" />
+<h2 id="leetcode-1-两数之和easy"><a class="markdownIt-Anchor" href="#leetcode-1-两数之和easy"></a> <a target="_blank" rel="noopener" href="https://leetcode.cn/problems/two-sum">Leetcode 1. 两数之和(Easy)</a></h2>
 <blockquote>
-<p>给定一个整数数组 <code>nums</code> 和一个整数目标值
-<code>target</code>，请你在该数组中找出 <strong>和为目标值</strong>
-<em><code>target</code></em> 的那 <strong>两个</strong>
-整数，并返回它们的数组下标。</p>
+<p>给定一个整数数组 <code>nums</code> 和一个整数目标值 <code>target</code>，请你在该数组中找出 <strong>和为目标值</strong> <em><code>target</code></em> 的那 <strong>两个</strong> 整数，并返回它们的数组下标。</p>
 <p>你可以假设每种输入只会对应一个答案，并且你不能使用两次相同的元素。</p>
 <p>你可以按任意顺序返回答案。</p>
 <p><strong>示例 1：</strong></p>
@@ -336,8 +324,7 @@ target="_blank" rel="noopener" href="https://leetcode.cn/problems/two-sum">Leetc
 <li><code>-109 &lt;= target &lt;= 109</code></li>
 <li><strong>只会存在一个有效答案</strong></li>
 </ul>
-<p><strong>进阶：</strong>你可以想出一个时间复杂度小于
-<code>O(n2)</code> 的算法吗？</p>
+<p>**进阶：**你可以想出一个时间复杂度小于 <code>O(n2)</code> 的算法吗？</p>
 </blockquote>
 <p>这题在Day3做三数之和问题的时候已经提前做过了，这里就当再复习一遍吧。</p>
 <p>题目前提是只会存在一个有效答案，因此不需要担心重复问题。只需要用一个哈希表存储每个元素值和其对应的index。这样就可以以O(1)的时间复杂度找到对应值的index。因此总体的时间复杂度就是遍历一遍<code>nums</code>的<code>O(N)</code>，空间复杂度也是<code>O(N)</code>。</p>

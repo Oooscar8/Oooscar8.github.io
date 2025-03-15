@@ -26,6 +26,7 @@
 <meta property="og:site_name" content="Alex&#39;s Space">
 <meta property="og:description" content="CodeTop高频面试题 刷题记录 Day12！">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://oooscar8.github.io/2025/03/10/imgs/6f70a6649d2192cf32af68500915d84b476aa34ec899f98766c038fc9cc54662-image-1741598703839-1.png">
 <meta property="og:image" content="http://oooscar8.github.io/2025/03/10/imgs/spiral1-1741598703840-2.jpg">
 <meta property="og:image" content="http://oooscar8.github.io/2025/03/10/imgs/spiral-1741598703840-3.jpg">
 <meta property="article:published_time" content="2025-03-10T09:24:13.000Z">
@@ -35,7 +36,7 @@
 <meta property="article:tag" content="Leetcode">
 <meta property="article:tag" content="刷题">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="http://oooscar8.github.io/2025/03/10/imgs/spiral1-1741598703840-2.jpg">
+<meta name="twitter:image" content="http://oooscar8.github.io/2025/03/10/imgs/6f70a6649d2192cf32af68500915d84b476aa34ec899f98766c038fc9cc54662-image-1741598703839-1.png">
   
   
   
@@ -282,10 +283,8 @@
               <div class="markdown-body">
                 
                 <p>CodeTop高频面试题刷题，今天是Day12！</p>
-<h1 id="codetop刷题-day12">CodeTop刷题 Day12</h1>
-<h2 id="leetcode-23.-合并k个排序链表hard"><a
-target="_blank" rel="noopener" href="https://leetcode.cn/problems/merge-k-sorted-lists">Leetcode 23.
-合并K个排序链表(Hard)</a></h2>
+<h1 id="codetop刷题-day12"><a class="markdownIt-Anchor" href="#codetop刷题-day12"></a> CodeTop刷题 Day12</h1>
+<h2 id="leetcode-23-合并k个排序链表hard"><a class="markdownIt-Anchor" href="#leetcode-23-合并k个排序链表hard"></a> <a target="_blank" rel="noopener" href="https://leetcode.cn/problems/merge-k-sorted-lists">Leetcode 23. 合并K个排序链表(Hard)</a></h2>
 <blockquote>
 <p>给你一个链表数组，每个链表都已经按升序排列。</p>
 <p>请你将所有链表合并到一个升序链表中，返回合并后的链表。</p>
@@ -305,32 +304,27 @@ target="_blank" rel="noopener" href="https://leetcode.cn/problems/merge-k-sorted
 <li><code>lists[i].length</code> 的总和不超过 <code>10^4</code></li>
 </ul>
 </blockquote>
-<h3 id="优先级队列">优先级队列</h3>
+<h3 id="优先级队列"><a class="markdownIt-Anchor" href="#优先级队列"></a> 优先级队列</h3>
 <p>这题可以使用优先级队列进行合并。先将每个链表的头节点放入<strong>最小堆</strong>中，然后每次从堆顶取出一个节点（这个节点就是当前所有链表中的最小值，接入结果链表中），然后将这个节点所在链表的next节点放入堆中。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span><br>&#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function">ListNode *<span class="hljs-title">mergeKLists</span><span class="hljs-params">(vector&lt;ListNode *&gt; &amp;lists)</span></span><br><span class="hljs-function">    </span>&#123;<br>        ListNode *dummy = <span class="hljs-keyword">new</span> <span class="hljs-built_in">ListNode</span>(<span class="hljs-number">0</span>);<br>        ListNode *tail = dummy;<br><br>        <span class="hljs-comment">// 将每个链表的头节点放入堆中</span><br>        <span class="hljs-keyword">for</span> (ListNode* node : lists)<br>        &#123;<br>            <span class="hljs-keyword">if</span> (node) minHeap.<span class="hljs-built_in">push</span>(node);<br>        &#125;<br><br>        <span class="hljs-keyword">while</span> (!minHeap.<span class="hljs-built_in">empty</span>())<br>        &#123;<br>            ListNode *smallest_node = minHeap.<span class="hljs-built_in">top</span>();<br>            minHeap.<span class="hljs-built_in">pop</span>();<br>            <span class="hljs-keyword">if</span> (smallest_node-&gt;next) minHeap.<span class="hljs-built_in">push</span>(smallest_node-&gt;next);<br><br>            tail-&gt;next = smallest_node;<br>            tail = tail-&gt;next;<br>        &#125;<br><br>        <span class="hljs-keyword">return</span> dummy-&gt;next;<br>    &#125;<br><br><span class="hljs-keyword">private</span>:<br>    <span class="hljs-comment">// 自定义比较器</span><br>    <span class="hljs-keyword">struct</span> <span class="hljs-title class_">CompareListNode</span><br>    &#123;<br>        <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">operator</span><span class="hljs-params">()</span><span class="hljs-params">(ListNode *a, ListNode *b)</span></span><br><span class="hljs-function">        </span>&#123;<br>            <span class="hljs-keyword">return</span> a-&gt;val &gt; b-&gt;val;   <span class="hljs-comment">// 最小堆中，大的元素放小的元素下方</span><br>        &#125;<br>    &#125;;<br><br>    <span class="hljs-comment">// 创建最小堆</span><br>    priority_queue&lt;ListNode *, vector&lt;ListNode *&gt;, CompareListNode&gt; minHeap;<br>&#125;;<br></code></pre></td></tr></table></figure>
 <p>堆中的元素是每个链表当前需要比较的最小值，因此最多有K个，空间复杂度是<code>O(K)</code>；</p>
 <p>堆的插入和删除操作时间复杂度都是<code>O(logK)</code>，K个链表中的每个元素都需要插入和删除各一次，因此总时间复杂度是<code>O(N * K * logK)</code></p>
-<h3 id="分治合并">分治合并</h3>
+<h3 id="分治合并"><a class="markdownIt-Anchor" href="#分治合并"></a> 分治合并</h3>
 <p>这题也可以用分治的思想进行合并，可以这样思考递归的思路：合并K个链表，就是先将前K/2个链表合并，再将后K/2个链表合并，然后将合并后的这两个链表合并。递归的结束条件是当前要合并的链表数量只有一个，那么直接返回当前链表。</p>
 <p>而合并两个链表的实现很简单，在Day5中已经做过了，就是用双指针。</p>
 <p>如下图：第一轮两两合并，第二轮再将第一轮合并后的链表两两合并，直到最后两个链表合并得到最终的合并链表。</p>
-<p><img
-src="/imgs/6f70a6649d2192cf32af68500915d84b476aa34ec899f98766c038fc9cc54662-image-1741598703839-1.png" srcset="/img/loading.gif" lazyload /></p>
+<p><img src="/imgs/6f70a6649d2192cf32af68500915d84b476aa34ec899f98766c038fc9cc54662-image-1741598703839-1.png" srcset="/img/loading.gif" lazyload alt="" /></p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-comment">// 分治合并</span><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span><br>&#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function">ListNode *<span class="hljs-title">mergeKLists</span><span class="hljs-params">(vector&lt;ListNode *&gt; &amp;lists)</span></span><br><span class="hljs-function">    </span>&#123;<br>        <span class="hljs-keyword">if</span> (lists.<span class="hljs-built_in">empty</span>()) <span class="hljs-keyword">return</span> <span class="hljs-literal">NULL</span>;<br>        <span class="hljs-keyword">return</span> <span class="hljs-built_in">merge</span>(lists, <span class="hljs-number">0</span>, lists.<span class="hljs-built_in">size</span>() - <span class="hljs-number">1</span>);<br>    &#125;<br><br><span class="hljs-keyword">private</span>:<br>    <span class="hljs-comment">// 将第l个链表到第r个链表合并成一个链表</span><br>    <span class="hljs-function">ListNode *<span class="hljs-title">merge</span><span class="hljs-params">(vector&lt;ListNode *&gt; &amp;lists, <span class="hljs-type">int</span> l, <span class="hljs-type">int</span> r)</span> </span>&#123;<br>        <span class="hljs-keyword">if</span> (l == r) <span class="hljs-keyword">return</span> lists[l];<br><br>        <span class="hljs-type">int</span> mid = l + (r - l) / <span class="hljs-number">2</span>;<br><br>        <span class="hljs-keyword">return</span> <span class="hljs-built_in">mergeTwoLists</span>(<span class="hljs-built_in">merge</span>(lists, l, mid), <span class="hljs-built_in">merge</span>(lists, mid + <span class="hljs-number">1</span>, r));<br>    &#125;<br><br>    <span class="hljs-function">ListNode *<span class="hljs-title">mergeTwoLists</span><span class="hljs-params">(ListNode* list1, ListNode* list2)</span> </span>&#123;<br>        ListNode* dummy = <span class="hljs-keyword">new</span> <span class="hljs-built_in">ListNode</span>(<span class="hljs-number">0</span>);<br>        ListNode* tail = dummy;<br><br>        ListNode* p1 = list1;<br>        ListNode* p2 = list2;<br>        <span class="hljs-keyword">while</span> (p1 &amp;&amp; p2) &#123;<br>            <span class="hljs-keyword">if</span> (p1-&gt;val &lt; p2-&gt;val) &#123;<br>                tail-&gt;next = p1;<br>                p1 = p1-&gt;next;<br>            &#125; <span class="hljs-keyword">else</span> &#123;<br>                tail-&gt;next = p2;<br>                p2 = p2-&gt;next;<br>            &#125;<br>            tail = tail-&gt;next;<br>        &#125;<br><br>        <span class="hljs-keyword">if</span> (!p1) tail-&gt;next = p2;<br>        <span class="hljs-keyword">if</span> (!p2) tail-&gt;next = p1;<br><br>        <span class="hljs-keyword">return</span> dummy-&gt;next;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
 <p>分治合并的递归深度是<code>log(K)</code>，空间复杂度就是消耗的栈空间<code>O(logK)</code>；</p>
 <p>时间复杂度需要好好计算以下，我们考虑递归<strong>向上回升</strong>的过程。第一轮是两两合并链表，共合并<code>K/2</code>组链表，合并每组的时间复杂度是<code>O(2N)</code>；第二层共合并<code>K/4</code>组链表，合并每组的时间复杂度是<code>O(4N)</code>...，而递归的层数是<code>log(K)</code>，因此总时间复杂度是<code>O(N * K * logK)</code></p>
-<h2 id="leetcode-54.-螺旋矩阵medium"><a
-target="_blank" rel="noopener" href="https://leetcode.cn/problems/spiral-matrix">Leetcode 54.
-螺旋矩阵(Medium)</a></h2>
+<h2 id="leetcode-54-螺旋矩阵medium"><a class="markdownIt-Anchor" href="#leetcode-54-螺旋矩阵medium"></a> <a target="_blank" rel="noopener" href="https://leetcode.cn/problems/spiral-matrix">Leetcode 54. 螺旋矩阵(Medium)</a></h2>
 <blockquote>
-<p>给你一个 <code>m</code> 行 <code>n</code> 列的矩阵
-<code>matrix</code> ，请按照 <strong>顺时针螺旋顺序</strong>
-，返回矩阵中的所有元素。</p>
+<p>给你一个 <code>m</code> 行 <code>n</code> 列的矩阵 <code>matrix</code> ，请按照 <strong>顺时针螺旋顺序</strong> ，返回矩阵中的所有元素。</p>
 <p><strong>示例 1：</strong></p>
-<p><img src="/imgs/spiral1-1741598703840-2.jpg" srcset="/img/loading.gif" lazyload /></p>
+<p><img src="/imgs/spiral1-1741598703840-2.jpg" srcset="/img/loading.gif" lazyload alt="" /></p>
 <figure class="highlight inform7"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs inform7">输入：matrix = <span class="hljs-comment">[<span class="hljs-comment">[1,2,3]</span>,<span class="hljs-comment">[4,5,6]</span>,<span class="hljs-comment">[7,8,9]</span>]</span><br>输出：<span class="hljs-comment">[1,2,3,6,9,8,7,4,5]</span><br></code></pre></td></tr></table></figure>
 <p><strong>示例 2：</strong></p>
-<p><img src="/imgs/spiral-1741598703840-3.jpg" srcset="/img/loading.gif" lazyload /></p>
+<p><img src="/imgs/spiral-1741598703840-3.jpg" srcset="/img/loading.gif" lazyload alt="" /></p>
 <figure class="highlight dns"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs dns">输入：matrix = [[<span class="hljs-number">1,2,3,4</span>],[<span class="hljs-number">5,6,7,8</span>],[<span class="hljs-number">9,10,11,12</span>]]<br>输出：[<span class="hljs-number">1,2,3,4</span>,<span class="hljs-number">8,12,11,10</span>,<span class="hljs-number">9,5,6,7</span>]<br></code></pre></td></tr></table></figure>
 <p><strong>提示：</strong></p>
 <ul>
@@ -340,7 +334,7 @@ target="_blank" rel="noopener" href="https://leetcode.cn/problems/spiral-matrix"
 <li><code>-100 &lt;= matrix[i][j] &lt;= 100</code></li>
 </ul>
 </blockquote>
-<h3 id="模拟">模拟</h3>
+<h3 id="模拟"><a class="markdownIt-Anchor" href="#模拟"></a> 模拟</h3>
 <p>本题就是模拟螺旋数组访问的路径，分别用4个变量维护四个方向的boundry：</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-type">int</span> rows = matrix.<span class="hljs-built_in">size</span>();<br><span class="hljs-type">int</span> cols = matrix[<span class="hljs-number">0</span>].<span class="hljs-built_in">size</span>();<br><br><span class="hljs-type">int</span> upper_boundry = <span class="hljs-number">0</span>;<br><span class="hljs-type">int</span> lower_boundry = rows - <span class="hljs-number">1</span>;<br><span class="hljs-type">int</span> left_boundry = <span class="hljs-number">0</span>;<br><span class="hljs-type">int</span> right_boundry = cols - <span class="hljs-number">1</span>;<br></code></pre></td></tr></table></figure>
 <p>用一个大循环表示路径访问了一圈，大循环中四个小循环分别表示四个路径访问方向。保证访问的路径始终落在boundry范围里面。每访问完一行或一列，更新boundry。如果更新后的boundry越界，说明整个数组访问结束，退出大循环。</p>
