@@ -38,7 +38,9 @@
 <meta property="og:image" content="http://oooscar8.github.io/2025/03/03/imgs/image-20250220235224580-1742058095649-10.png">
 <meta property="og:image" content="http://oooscar8.github.io/2025/03/03/imgs/image-20250221000206349-1742058095650-13.png">
 <meta property="og:image" content="http://oooscar8.github.io/2025/03/03/imgs/image-20250221000808416-1742058095650-11.png">
+<meta property="og:image" content="http://oooscar8.github.io/2025/03/03/imgs/image-20250225195335684-1742058095650-12.png">
 <meta property="og:image" content="http://oooscar8.github.io/2025/03/03/imgs/image-20250225215036893-1742058095650-14.png">
+<meta property="og:image" content="http://oooscar8.github.io/2025/03/03/imgs/image-20250225221408295-1742058095650-15.png">
 <meta property="og:image" content="http://oooscar8.github.io/2025/03/03/imgs/image-20250227223029445-1742058095650-16.png">
 <meta property="og:image" content="http://oooscar8.github.io/2025/03/03/imgs/image-20250227222756361-1742058095650-17.png">
 <meta property="og:image" content="http://oooscar8.github.io/2025/03/03/imgs/image-20250227223913654-1742058095650-19.png">
@@ -78,10 +80,10 @@
 <meta property="og:image" content="http://oooscar8.github.io/2025/03/03/imgs/image-20250316001611080-1742058095651-52.png">
 <meta property="og:image" content="http://oooscar8.github.io/2025/03/03/imgs/image-20250316003959533-1742058095651-53.png">
 <meta property="article:published_time" content="2025-03-03T04:37:01.000Z">
-<meta property="article:modified_time" content="2025-04-28T05:21:02.235Z">
+<meta property="article:modified_time" content="2025-05-08T07:10:38.341Z">
 <meta property="article:author" content="Alex Sun">
-<meta property="article:tag" content="Y86">
 <meta property="article:tag" content="ICS">
+<meta property="article:tag" content="Y86">
 <meta property="article:tag" content="Processor">
 <meta property="article:tag" content="Pipeline">
 <meta name="twitter:card" content="summary_large_image">
@@ -331,120 +333,88 @@
             
               <div class="markdown-body">
                 
-                <p>这篇笔记将记录我在ICS课上学习CSAPP第四章Processor
-Architecture(处理器体系结构)的过程。已完结。</p>
-<h1 id="processor-architecture">Processor Architecture</h1>
+                <p>这篇笔记将记录我在ICS课上学习CSAPP第四章Processor Architecture(处理器体系结构)的过程。已完结。</p>
+<h1 id="processor-architecture"><a class="markdownIt-Anchor" href="#processor-architecture"></a> Processor Architecture</h1>
 <blockquote>
 <p>参考资料：</p>
-<p><a
-target="_blank" rel="noopener" href="https://fengmuzi2003.gitbook.io/csapp3e/di-4-zhang-chu-li-qi-ti-xi-jie-gou">CSAPP
-第四章 gitbook</a></p>
+<p><a target="_blank" rel="noopener" href="https://fengmuzi2003.gitbook.io/csapp3e/di-4-zhang-chu-li-qi-ti-xi-jie-gou">CSAPP 第四章 gitbook</a></p>
 </blockquote>
-<h2 id="y86-instruction-set">y86 instruction set</h2>
-<p>这部分我们学习y86指令集和ISA，以便实现simulator和assembler
-lab。其中simulator模拟执行y86代码的硬件行为，assembler负责将y86汇编代码转化为硬件可以直接执行的二进制代码。学习y86指令集和ISA是为后续学习“<strong>程序是如何在CPU上运行的</strong>”打下基础。</p>
-<h3 id="y86-64处理器状态processor-state">y86-64处理器状态(Processor
-State)</h3>
-<ol type="1">
+<h2 id="y86-instruction-set"><a class="markdownIt-Anchor" href="#y86-instruction-set"></a> y86 instruction set</h2>
+<p>这部分我们学习y86指令集和ISA，以便实现simulator和assembler lab。其中simulator模拟执行y86代码的硬件行为，assembler负责将y86汇编代码转化为硬件可以直接执行的二进制代码。学习y86指令集和ISA是为后续学习“<strong>程序是如何在CPU上运行的</strong>”打下基础。</p>
+<h3 id="y86-64处理器状态processor-state"><a class="markdownIt-Anchor" href="#y86-64处理器状态processor-state"></a> y86-64处理器状态(Processor State)</h3>
+<ol>
 <li>Program Registers</li>
 </ol>
 <p>y86架构处理器包含15个寄存器，每个寄存器是64位的。</p>
-<figure>
-<img src="/imgs/202502171427340-1742058095648-1.png" srcset="/img/loading.gif" lazyload
-alt="Program Registers" />
-<figcaption aria-hidden="true">Program Registers</figcaption>
-</figure>
-<ol start="2" type="1">
+<p><img src="/imgs/202502171427340-1742058095648-1.png" srcset="/img/loading.gif" lazyload alt="Program Registers" /></p>
+<ol start="2">
 <li>Program Counter</li>
 <li>Condition Codes</li>
 </ol>
-<p>Single-bit flags: <code>OF</code>: Overflow <code>ZF</code>: Zero
-<code>SF</code>: Negative</p>
-<ol start="4" type="1">
+<p>Single-bit flags: <code>OF</code>: Overflow  <code>ZF</code>: Zero  <code>SF</code>: Negative</p>
+<ol start="4">
 <li>Status Code</li>
 </ol>
 <p>Program is running normally or some special event has occurred.</p>
-<ol start="5" type="1">
+<ol start="5">
 <li>Memory</li>
 </ol>
 <p>We can use a big array in the simulator to simulate memory.</p>
-<h3 id="类y86指令">12类y86指令</h3>
+<h3 id="12类y86指令"><a class="markdownIt-Anchor" href="#12类y86指令"></a> 12类y86指令</h3>
 <p>每条指令都访问或改变program state的某些部分。</p>
-<figure>
-<img src="/imgs/202502171432021-1742058095649-3.png" srcset="/img/loading.gif" lazyload
-alt="Y86-64指令集" />
-<figcaption aria-hidden="true">Y86-64指令集</figcaption>
-</figure>
-<p>每条指令都可以用一个byte来表示：其中前4 bits是instruction code, 后4
-bits是function code</p>
-<figure>
-<img src="/imgs/202502171439511-1742058095649-4.png" srcset="/img/loading.gif" lazyload alt="指令编码" />
-<figcaption aria-hidden="true">指令编码</figcaption>
-</figure>
+<p><img src="/imgs/202502171432021-1742058095649-3.png" srcset="/img/loading.gif" lazyload alt="Y86-64指令集" /></p>
+<p>每条指令都可以用一个byte来表示：其中前4 bits是instruction code, 后4 bits是function code</p>
+<p><img src="/imgs/202502171439511-1742058095649-4.png" srcset="/img/loading.gif" lazyload alt="指令编码" /></p>
 <p>每个寄存器用一个4-bit ID表示：其中F代表没有使用寄存器</p>
-<figure>
-<img src="/imgs/202502171436912-1742058095649-2.png" srcset="/img/loading.gif" lazyload
-alt="寄存器编码" />
-<figcaption aria-hidden="true">寄存器编码</figcaption>
-</figure>
+<p><img src="/imgs/202502171436912-1742058095649-2.png" srcset="/img/loading.gif" lazyload alt="寄存器编码" /></p>
 <p>y86 program stack: 栈顶是地址最小的位置，栈向低地址扩张。</p>
-<figure>
-<img src="/imgs/202502171442126-1742058095649-6.png" srcset="/img/loading.gif" lazyload alt="Stack" />
-<figcaption aria-hidden="true">Stack</figcaption>
-</figure>
+<p><img src="/imgs/202502171442126-1742058095649-6.png" srcset="/img/loading.gif" lazyload alt="Stack" /></p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs assembly">pushq rA<br>/* <br> * Decrement %rsp by 8<br> * Store word from rA to memory at %rsp<br> * Like x86-64 (pushq %rsp -&gt; save old %rsp)<br> */<br><br>popq rA<br>/* <br> * Read word from memory at %rsp<br> * Save in rA<br> * Increment %rsp by 8<br> * Like x86-64 (popq %rsp -&gt; movq (%rsp) %rsp)<br> */<br></code></pre></td></tr></table></figure>
-<h3 id="y86-64-assembly-code">y86-64 assembly code</h3>
+<h3 id="y86-64-assembly-code"><a class="markdownIt-Anchor" href="#y86-64-assembly-code"></a> y86-64 assembly code</h3>
 <p>一个简单的C函数：</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">long</span> <span class="hljs-title function_">sum</span><span class="hljs-params">(<span class="hljs-type">long</span> *start, <span class="hljs-type">long</span> count)</span><br>&#123;<br>	<span class="hljs-type">long</span> sum = <span class="hljs-number">0</span>;<br>	<span class="hljs-keyword">while</span> (count) &#123;<br>		sum += *start;<br>		start++;<br>		count--;<br>	&#125;<br>	<span class="hljs-keyword">return</span> sum;<br>&#125;<br></code></pre></td></tr></table></figure>
 <p>y86汇编代码：</p>
-<p>"."开头的词是assembler
-directives（汇编器伪指令），告诉编译器调整地址。</p>
+<p>&quot;.&quot;开头的词是assembler directives（汇编器伪指令），告诉编译器调整地址。</p>
 <p>注意代码的开头部分在main函数返回后就直接halt。因此这部分代码只能执行一个程序。</p>
-<p><img src="/imgs/202502171456840-1742058095649-5.png" srcset="/img/loading.gif" lazyload></p>
-<p><img src="/imgs/202502171456435-1742058095649-7.png" srcset="/img/loading.gif" lazyload></p>
-<p>simulator在执行结束后需要检查最后的Program
-State是否正确，以此来判断硬件是否成功运行了y86汇编代码。</p>
-<h3 id="isainstruction-set-architecture">ISA(Instruction Set
-Architecture)</h3>
+<img src="/imgs/202502171456840-1742058095649-5.png" srcset="/img/loading.gif" lazyload>
+<img src="/imgs/202502171456435-1742058095649-7.png" srcset="/img/loading.gif" lazyload>
+<p>simulator在执行结束后需要检查最后的Program State是否正确，以此来判断硬件是否成功运行了y86汇编代码。</p>
+<h3 id="isainstruction-set-architecture"><a class="markdownIt-Anchor" href="#isainstruction-set-architecture"></a> ISA(Instruction Set Architecture)</h3>
 <p>ISA（指令集架构）就是硬件呈现给上层汇编代码的接口，上层汇编代码通过ISA知晓底层硬件长什么样，可以提供哪些功能和接口，以此来调动硬件执行任务。</p>
-<p><img src="/imgs/image-20250220220533911-1742058095649-9.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:40%;" /></p>
-<h2 id="组成cpu的building-blocks">组成CPU的Building Blocks</h2>
+<img src="/imgs/image-20250220220533911-1742058095649-9.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:40%;" />
+<h2 id="组成cpu的building-blocks"><a class="markdownIt-Anchor" href="#组成cpu的building-blocks"></a> 组成CPU的Building Blocks</h2>
 <p>这部分我们从组成CPU的最基本的两个building blocks入手开始学习：</p>
-<ol type="1">
+<ol>
 <li>组合逻辑电路</li>
 <li>Clocked Registers</li>
 </ol>
-<h3 id="组合电路">组合电路</h3>
+<h3 id="组合电路"><a class="markdownIt-Anchor" href="#组合电路"></a> 组合电路</h3>
 <p>组合电路是由大量逻辑门组成的。HCL就是用来描述硬件行为，生成逻辑电路的语言。<strong>HCL表达式</strong>可以用来生成完成相应任务的逻辑电路。我们写的HCL表达式可以被现成的类似于Compiler的工具翻译成最佳的逻辑电路。</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs HCL">bool eq = (a &amp;&amp; b) || (!a &amp;&amp; !b)<br>bool xor = (!a &amp;&amp; b) || (a &amp;&amp; !b)<br></code></pre></td></tr></table></figure>
-<h3 id="storage-clocked-registers">Storage (Clocked Registers)</h3>
+<h3 id="storage-clocked-registers"><a class="markdownIt-Anchor" href="#storage-clocked-registers"></a> Storage (Clocked Registers)</h3>
 <p>当Clock由0-&gt;1跳变，新的Input就可以写入进去，写入之后Output读出来的就是新的值。</p>
-<p>有了Clock Register我们就可以实现存储功能。注意Clock
-Register不是我们所说的CPU中的寄存器。</p>
-<p><img src="/imgs/image-20250220234411249-1742058095649-8.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:50%;" /></p>
-<h3 id="state-machine">State Machine</h3>
-<p><img src="/imgs/image-20250220235224580-1742058095649-10.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:40%;" /></p>
+<p>有了Clock Register我们就可以实现存储功能。注意Clock Register不是我们所说的CPU中的寄存器。</p>
+<img src="/imgs/image-20250220234411249-1742058095649-8.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:50%;" />
+<h3 id="state-machine"><a class="markdownIt-Anchor" href="#state-machine"></a> State Machine</h3>
+<img src="/imgs/image-20250220235224580-1742058095649-10.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:40%;" />
 <p>上图是一个简单的状态机例子。其实我们可以把CPU就看做一个状态机，CPU对指令的执行就是对硬件状态的修改。真实的CPU其实就是更复杂的组合逻辑电路。</p>
-<h3 id="storage-random-access-memories">Storage (Random-access
-memories)</h3>
-<ol type="1">
+<h3 id="storage-random-access-memories"><a class="markdownIt-Anchor" href="#storage-random-access-memories"></a> Storage (Random-access memories)</h3>
+<ol>
 <li>Register File</li>
 </ol>
 <p>储存Program Registers, Register Identifiers serve as address.</p>
 <p>最多可以同时读取两个寄存器，因此有两个读取端，一个写入端。读取可以直接读出来，写入只能在Clock跳变0-&gt;1时才可以写入。其中src和dst是地址，val是寄存器的值：</p>
-<p><img src="/imgs/image-20250221000206349-1742058095650-13.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 80%;" /></p>
-<ol start="2" type="1">
+<img src="/imgs/image-20250221000206349-1742058095650-13.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 80%;" />
+<ol start="2">
 <li>Memory</li>
 </ol>
-<p>Memory是用来存放数据和指令的，有一个error信号端口表示invalid
-address。</p>
-<p><img src="/imgs/image-20250221000808416-1742058095650-11.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 50%;" /></p>
-<h2 id="sequential-cpu-implementation">Sequential CPU
-Implementation</h2>
-<h3 id="multi-stages-design">Multi-stages Design</h3>
+<p>Memory是用来存放数据和指令的，有一个error信号端口表示invalid address。</p>
+<img src="/imgs/image-20250221000808416-1742058095650-11.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 50%;" />
+<h2 id="sequential-cpu-implementation"><a class="markdownIt-Anchor" href="#sequential-cpu-implementation"></a> Sequential CPU Implementation</h2>
+<h3 id="multi-stages-design"><a class="markdownIt-Anchor" href="#multi-stages-design"></a> Multi-stages Design</h3>
 <p>将指令的执行分解为一系列的阶段(stage)，为了能够复用硬件（电路）。</p>
-<h3 id="指令执行的6个阶段stage">指令执行的6个阶段(stage)</h3>
-<ol type="1">
+<h3 id="指令执行的6个阶段stage"><a class="markdownIt-Anchor" href="#指令执行的6个阶段stage"></a> 指令执行的6个阶段(stage)</h3>
+<ol>
 <li>Fetch: 从内存中读取指令</li>
 <li>Decode: 读取寄存器</li>
 <li>Execute: 执行ALU操作（计算）</li>
@@ -453,97 +423,85 @@ Implementation</h2>
 <li>PC: 更新PC</li>
 </ol>
 <p>所有指令都要经过这6个阶段，共用相同的电路。</p>
-<p><img
-src="/imgs/image-20250225195335684-1742058095650-12.png" srcset="/img/loading.gif" lazyload /></p>
+<p><img src="/imgs/image-20250225195335684-1742058095650-12.png" srcset="/img/loading.gif" lazyload alt="" /></p>
 <p>For example, an OPq instruction:</p>
-<p><img src="/imgs/image-20250225215036893-1742058095650-14.png" srcset="/img/loading.gif" lazyload style="zoom:67%;" /></p>
+<img src="/imgs/image-20250225215036893-1742058095650-14.png" srcset="/img/loading.gif" lazyload style="zoom:67%;" />
 <blockquote>
-<p>在指令执行的过程中所有的Processor state (memory, registers, CC,
-program status, PC)都是什么时候修改的？</p>
+<p>在指令执行的过程中所有的Processor state (memory, registers, CC, program status, PC)都是什么时候修改的？</p>
 </blockquote>
-<p>你可能会想不同的processor
-state是在不同的阶段更新的。但其实所有的状态都存在clocked
-registers里面，而clock
-registers只有在clock从0跳变到1时才会写入新的值，整个CPU共用一个clock，clock跳一下（一个cycle）执行一条指令，因此所有的processor
-state其实是同时更新的！</p>
-<p>一条指令执行（一个cycle）的大部分时间，都是让信号流满整个组合电路。等所有更新后的状态值都准备好等在clocked
-registers门口了，clock跳变，将所有新的状态一起写入进去。</p>
-<p><img
-src="/imgs/image-20250225221408295-1742058095650-15.png" srcset="/img/loading.gif" lazyload /></p>
-<h3 id="逻辑电路实现">逻辑电路实现</h3>
+<p>你可能会想不同的processor state是在不同的阶段更新的。但其实所有的状态都存在clocked registers里面，而clock registers只有在clock从0跳变到1时才会写入新的值，整个CPU共用一个clock，clock跳一下（一个cycle）执行一条指令，因此所有的processor state其实是同时更新的！</p>
+<p>一条指令执行（一个cycle）的大部分时间，都是让信号流满整个组合电路。等所有更新后的状态值都准备好等在clocked registers门口了，clock跳变，将所有新的状态一起写入进去。</p>
+<p><img src="/imgs/image-20250225221408295-1742058095650-15.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+<h3 id="逻辑电路实现"><a class="markdownIt-Anchor" href="#逻辑电路实现"></a> 逻辑电路实现</h3>
 <p>上面介绍了CPU将指令分解成各个阶段的设计，下面将介绍每个阶段具体的逻辑电路实现。</p>
-<p><img src="/imgs/image-20250227223029445-1742058095650-16.png" srcset="/img/loading.gif" lazyload style="zoom:67%;" /></p>
+<img src="/imgs/image-20250227223029445-1742058095650-16.png" srcset="/img/loading.gif" lazyload style="zoom:67%;" />
 <ul>
 <li>Fetch Logic</li>
 </ul>
-<p><img src="/imgs/image-20250227222756361-1742058095650-17.png" srcset="/img/loading.gif" lazyload style="zoom:67%;" /></p>
+<img src="/imgs/image-20250227222756361-1742058095650-17.png" srcset="/img/loading.gif" lazyload style="zoom:67%;" />
 <p>Fetch中主要Control Logic的HCL表达式：</p>
-<p><img src="/imgs/image-20250227223913654-1742058095650-19.png" srcset="/img/loading.gif" lazyload style="zoom: 40%;" /></p>
-<p><img src="/imgs/image-20250227224335402-1742058095650-18.png" srcset="/img/loading.gif" lazyload style="zoom:40%;" /></p>
+<img src="/imgs/image-20250227223913654-1742058095650-19.png" srcset="/img/loading.gif" lazyload style="zoom: 40%;" />
+<img src="/imgs/image-20250227224335402-1742058095650-18.png" srcset="/img/loading.gif" lazyload style="zoom:40%;" />
 <p>注意如果mem出错，将<code>icode</code>设为<code>nop</code></p>
 <ul>
 <li>Decode &amp; Write-Back Logic</li>
 </ul>
-<p><img src="/imgs/image-20250227224513614-1742058095650-20.png" srcset="/img/loading.gif" lazyload style="zoom: 50%;" /></p>
+<img src="/imgs/image-20250227224513614-1742058095650-20.png" srcset="/img/loading.gif" lazyload style="zoom: 50%;" />
 <p>Decode中主要Control Logic的HCL表达式：</p>
-<p><img src="/imgs/image-20250227225209729-1742058095650-21.png" srcset="/img/loading.gif" lazyload style="zoom:40%;" /></p>
+<img src="/imgs/image-20250227225209729-1742058095650-21.png" srcset="/img/loading.gif" lazyload style="zoom:40%;" />
 <p>Write-Back中主要Control Logic的HCL表达式：</p>
-<p><img src="/imgs/image-20250227225453563-1742058095650-23.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:40%;" /></p>
+<img src="/imgs/image-20250227225453563-1742058095650-23.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:40%;" />
 <p>对<code>cmovXX</code>需要单独给他增加一条规则：如果Cnd为1，则dstE是rB，否则是RNONE</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs HCL">icode == IRRMOVQ &amp;&amp; Cnd : rB;<br></code></pre></td></tr></table></figure>
 <ul>
 <li>Execute Logic</li>
 </ul>
-<p><img src="/imgs/image-20250227230029619-1742058095650-22.png" srcset="/img/loading.gif" lazyload style="zoom: 50%;" /></p>
+<img src="/imgs/image-20250227230029619-1742058095650-22.png" srcset="/img/loading.gif" lazyload style="zoom: 50%;" />
 <p>Execute中主要Control Logic的HCL表达式：</p>
-<p><img src="/imgs/image-20250227230449629-1742058095650-24.png" srcset="/img/loading.gif" lazyload style="zoom:40%;" /></p>
-<p><img src="/imgs/image-20250227230542728-1742058095650-25.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:40%;" /></p>
+<img src="/imgs/image-20250227230449629-1742058095650-24.png" srcset="/img/loading.gif" lazyload style="zoom:40%;" />
+<img src="/imgs/image-20250227230542728-1742058095650-25.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:40%;" />
 <ul>
 <li>Memory Logic</li>
 </ul>
-<p><img src="/imgs/image-20250227230637783-1742058095650-26.png" srcset="/img/loading.gif" lazyload style="zoom:50%;" /></p>
+<img src="/imgs/image-20250227230637783-1742058095650-26.png" srcset="/img/loading.gif" lazyload style="zoom:50%;" />
 <p>Memory中主要Control Logic的HCL表达式：</p>
-<p><img src="/imgs/image-20250227231059194-1742058095650-28.png" srcset="/img/loading.gif" lazyload style="zoom:40%;" /></p>
+<img src="/imgs/image-20250227231059194-1742058095650-28.png" srcset="/img/loading.gif" lazyload style="zoom:40%;" />
 <ul>
 <li>PC Update Logic</li>
 </ul>
-<p><img src="/imgs/image-20250227231156293-1742058095650-27.png" srcset="/img/loading.gif" lazyload style="zoom:50%;" /></p>
+<img src="/imgs/image-20250227231156293-1742058095650-27.png" srcset="/img/loading.gif" lazyload style="zoom:50%;" />
 <p>PC Update中主要Control Logic的HCL表达式：</p>
-<p><img src="/imgs/image-20250303100657316-1742058095650-29.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 40%;" /></p>
-<h3 id="seq总结">SEQ总结</h3>
-<p>SEQ
-CPU执行起来是很慢的。一个cycle（clock跳变一次）只会执行一条指令。大部分时间都浪费掉了，没有发挥出CPU的潜力！</p>
-<h2 id="principles-of-pipeline">Principles of Pipeline</h2>
-<p>让多条指令同时充满整个CPU的所有stage。一次clock跳变每条指令前进一个stage。可以提升整体指令执行的吞吐量。通过Pipeline
-Registers存储指令执行阶段的中间值。</p>
-<p><img src="/imgs/image-20250303115438797-1742058095650-31.png" srcset="/img/loading.gif" lazyload alt="3-Way Pipeline" style="zoom: 50%;" /></p>
-<h3 id="limitations-of-pipeline">Limitations of Pipeline</h3>
-<ol type="1">
+<img src="/imgs/image-20250303100657316-1742058095650-29.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 40%;" />
+<h3 id="seq总结"><a class="markdownIt-Anchor" href="#seq总结"></a> SEQ总结</h3>
+<p>SEQ CPU执行起来是很慢的。一个cycle（clock跳变一次）只会执行一条指令。大部分时间都浪费掉了，没有发挥出CPU的潜力！</p>
+<h2 id="principles-of-pipeline"><a class="markdownIt-Anchor" href="#principles-of-pipeline"></a> Principles of Pipeline</h2>
+<p>让多条指令同时充满整个CPU的所有stage。一次clock跳变每条指令前进一个stage。可以提升整体指令执行的吞吐量。通过Pipeline Registers存储指令执行阶段的中间值。</p>
+<img src="/imgs/image-20250303115438797-1742058095650-31.png" srcset="/img/loading.gif" lazyload alt="3-Way Pipeline" style="zoom: 50%;" />
+<h3 id="limitations-of-pipeline"><a class="markdownIt-Anchor" href="#limitations-of-pipeline"></a> Limitations of Pipeline</h3>
+<ol>
 <li>Nonuniform delays:</li>
 </ol>
 <p>吞吐量会受最慢的stage的限制。在下图的例子中，一个cycle就是170ps。A阶段和C阶段会有大量的空闲时间</p>
-<p><img src="/imgs/image-20250303115609302-1742058095651-32.png" srcset="/img/loading.gif" lazyload style="zoom: 67%;" /></p>
-<ol start="2" type="1">
+<img src="/imgs/image-20250303115609302-1742058095651-32.png" srcset="/img/loading.gif" lazyload style="zoom: 67%;" />
+<ol start="2">
 <li>(Pipeline) Register Overhead</li>
 </ol>
 <p>如果每个阶段分得过细，那么加载pipeline register的overhead会很大。</p>
-<ol start="3" type="1">
+<ol start="3">
 <li>Data Dependency</li>
 </ol>
 <p>相邻的指令可能会依赖对方操作后的结果：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs assembly">irmovq $50, %rax<br>addq %rax, %rbx<br>mrmovq 100(%rbx), %rdx<br></code></pre></td></tr></table></figure>
 <p><strong>Data Hazards</strong>:</p>
 <p>这种情况就退化回了SEQ:</p>
-<p><img src="/imgs/image-20250303120422436-1742058095650-30.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 40%;" /></p>
-<ol start="4" type="1">
+<img src="/imgs/image-20250303120422436-1742058095650-30.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 40%;" />
+<ol start="4">
 <li>Control Dependency</li>
 </ol>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs assembly">loop:<br>	subq %rdx, %rbx<br>	jne targ<br>	irmovq $10, %rdx<br>	jmp loop<br>targ:<br>	halt<br></code></pre></td></tr></table></figure>
-<p>The <code>jne</code> instruction create a control dependency — Which
-instruction will be executed?</p>
-<h3 id="seq-hardware">SEQ+ Hardware</h3>
-<p>将PC
-Update阶段与Fetch阶段合并，不用实际的硬件寄存器存放PC，而是根据前一条指令的状态信息来动态计算PC：</p>
+<p>The <code>jne</code> instruction create a control dependency — Which instruction will be executed?</p>
+<h3 id="seq-hardware"><a class="markdownIt-Anchor" href="#seq-hardware"></a> SEQ+ Hardware</h3>
+<p>将PC Update阶段与Fetch阶段合并，不用实际的硬件寄存器存放PC，而是根据前一条指令的状态信息来动态计算PC：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs HCL">int pc= [<br>	picode == ICALL : pValC;<br>	picode == IJXX &amp;&amp; pCnd : pValC;<br>	picode == IRET : pValM;<br>	1 : pValP;<br>];<br></code></pre></td></tr></table></figure>
 <p>Fetch Logic:</p>
 <ul>
@@ -551,8 +509,8 @@ Update阶段与Fetch阶段合并，不用实际的硬件寄存器存放PC，而�
 <li>Read instruction</li>
 <li>Compute incremented PC</li>
 </ul>
-<h3 id="五级流水线">五级流水线</h3>
-<p><img src="/imgs/image-20250303115100611-1742058095651-33.png" srcset="/img/loading.gif" lazyload style="zoom:67%;" /></p>
+<h3 id="五级流水线"><a class="markdownIt-Anchor" href="#五级流水线"></a> 五级流水线</h3>
+<img src="/imgs/image-20250303115100611-1742058095651-33.png" srcset="/img/loading.gif" lazyload style="zoom:67%;" />
 <ul>
 <li>Forward Paths</li>
 </ul>
@@ -560,10 +518,9 @@ Update阶段与Fetch阶段合并，不用实际的硬件寄存器存放PC，而�
 <ul>
 <li>Feedback Paths</li>
 </ul>
-<p>PC Updates需要根据指令的类型，可能需要其他阶段的执行结果来决定next
-PC</p>
+<p>PC Updates需要根据指令的类型，可能需要其他阶段的执行结果来决定next PC</p>
 <p>Register Updates需要等Write Back阶段结束后才能将信号拉回来</p>
-<p><img src="/imgs/image-20250303122158896-1742058095651-35.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:67%;" /></p>
+<img src="/imgs/image-20250303122158896-1742058095651-35.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:67%;" />
 <ul>
 <li>预测PC</li>
 </ul>
@@ -572,28 +529,23 @@ PC</p>
 <p>What is our prediction strategy?</p>
 </blockquote>
 <ul>
-<li>Instructions that don't transfer control, always
-<code>next PC = valP</code></li>
-<li>Call and Unconditional Jumps, always
-<code>next PC = valC</code></li>
-<li>Conditional jumps, predict <code>next PC = valC</code>, only correct
-if branch is taken(一般正确率在60%)</li>
+<li>Instructions that don't transfer control, always <code>next PC = valP</code></li>
+<li>Call and Unconditional Jumps, always <code>next PC = valC</code></li>
+<li>Conditional jumps, predict <code>next PC = valC</code>, only correct if branch is taken(一般正确率在60%)</li>
 <li>Return Instruction, don't try to predict</li>
 </ul>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs HCL">Int F_predPC = [<br>	f_icode in &#123;IJXX, ICALL&#125; : f_valC;<br>	1: f_valP;<br>];<br></code></pre></td></tr></table></figure>
-<p><img src="/imgs/image-20250303122845813-1742058095651-36.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:67%;" /></p>
+<img src="/imgs/image-20250303122845813-1742058095651-36.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:67%;" />
 <p>Recover from PC misprediction:</p>
-<p><img src="/imgs/image-20250303123312158-1742058095651-34.png" srcset="/img/loading.gif" lazyload style="zoom:67%;" /></p>
+<img src="/imgs/image-20250303123312158-1742058095651-34.png" srcset="/img/loading.gif" lazyload style="zoom:67%;" />
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs HCL">int f_PC = [<br>#mispredicted branch. Fetch at incremented PC<br>	  M_icode == IJXX &amp;&amp; !M_Cnd : M_valA;<br>#completion of RET instruciton<br>	  W_icode == IRET : W_valM;<br>#default: Use predicted value of PC<br>	  1: F_predPC<br>];<br></code></pre></td></tr></table></figure>
-<h2 id="hazard">Hazard</h2>
+<h2 id="hazard"><a class="markdownIt-Anchor" href="#hazard"></a> Hazard</h2>
 <p>Pipeline比起SEQ会带来Hazard的问题：</p>
-<ol type="1">
-<li>Data Hazard: 前一条指令修改某个寄存器，还没来得及将结果写入Register
-FIile, 后一条指令就需要读这个寄存器。这种情况在代码中非常普遍</li>
-<li>Control Hazard:
-jXX指令要根据前一条指令的ALU运算结果设置的CC才能确定下一条指令的PC</li>
+<ol>
+<li>Data Hazard: 前一条指令修改某个寄存器，还没来得及将结果写入Register FIile, 后一条指令就需要读这个寄存器。这种情况在代码中非常普遍</li>
+<li>Control Hazard: jXX指令要根据前一条指令的ALU运算结果设置的CC才能确定下一条指令的PC</li>
 </ol>
-<h3 id="data-hazard">Data Hazard</h3>
+<h3 id="data-hazard"><a class="markdownIt-Anchor" href="#data-hazard"></a> Data Hazard</h3>
 <ul>
 <li>Naive Solution 1: <code>nop</code></li>
 </ul>
@@ -602,67 +554,54 @@ jXX指令要根据前一条指令的ALU运算结果设置的CC才能确定下一
 <li>Naive Solution 2: Stalling</li>
 </ul>
 <p>在cpu内部解决，将指令停在decode阶段，（每个cycle）都往上（execution阶段）插入bubble。</p>
-<p><img src="/imgs/image-20250306135337760-1742058095651-38.png" srcset="/img/loading.gif" lazyload alt="连插三个bubble" style="zoom: 50%;" /></p>
+<img src="/imgs/image-20250306135337760-1742058095651-38.png" srcset="/img/loading.gif" lazyload alt="连插三个bubble" style="zoom: 50%;" />
 <p>但是这两种解决方案Pipeline的效果就变差了，因为相互依赖的指令在实际代码中非常普遍。</p>
 <p>有没有什么办法可以减少<code>nop/bubble</code>的插入？</p>
 <ul>
 <li>Data Forwarding</li>
 </ul>
-<p>我们其实可以把我们要的数据提前拉过来，而不一定要等上一条指令最后Write
-Back阶段结束后再从寄存器读出来。这种实现技术就叫Data Forwarding</p>
-<p>可以在decode阶段，加一个选择器。如果出现data
-dependency情况，就从later stage拉回来的信号取值，否则就正常从Register
-File中取值。</p>
-<p>什么时候可以从later
-stage里将信号拉回来取决于指令的类型，如果是从寄存器/立即数写入寄存器(<code>irmovq</code>,
-<code>rrmovq</code>)，那么可以在execute阶段结束将<code>e_valE</code>拉回来，如果是要从memory中写入寄存器(<code>mrmovq</code>)，那要在memory阶段结束将<code>m_valM</code>拉回来。</p>
-<p><img src="/imgs/image-20250306155549361-1742058095651-39.png" srcset="/img/loading.gif" lazyload style="zoom:67%;" /></p>
-<h3 id="control-hazard">Control Hazard</h3>
-<p>前面一条指令会改变执行流。因此我们需要猜测后一条指令的地址（PC
-Prediction）。</p>
+<p>我们其实可以把我们要的数据提前拉过来，而不一定要等上一条指令最后Write Back阶段结束后再从寄存器读出来。这种实现技术就叫Data Forwarding</p>
+<p>可以在decode阶段，加一个选择器。如果出现data dependency情况，就从later stage拉回来的信号取值，否则就正常从Register File中取值。</p>
+<p>什么时候可以从later stage里将信号拉回来取决于指令的类型，如果是从寄存器/立即数写入寄存器(<code>irmovq</code>, <code>rrmovq</code>)，那么可以在execute阶段结束将<code>e_valE</code>拉回来，如果是要从memory中写入寄存器(<code>mrmovq</code>)，那要在memory阶段结束将<code>m_valM</code>拉回来。</p>
+<img src="/imgs/image-20250306155549361-1742058095651-39.png" srcset="/img/loading.gif" lazyload style="zoom:67%;" />
+<h3 id="control-hazard"><a class="markdownIt-Anchor" href="#control-hazard"></a> Control Hazard</h3>
+<p>前面一条指令会改变执行流。因此我们需要猜测后一条指令的地址（PC Prediction）。</p>
 <ul>
 <li><code>ret</code></li>
 </ul>
 <p>对于<code>ret</code>指令，我们无法猜测后一条指令的地址，因此需要采取前面提到的Stalling技术，在fetch阶段将指令截停：</p>
-<p><img src="/imgs/image-20250306162310356-1742058095651-37.png" srcset="/img/loading.gif" lazyload style="zoom:67%;" /></p>
+<img src="/imgs/image-20250306162310356-1742058095651-37.png" srcset="/img/loading.gif" lazyload style="zoom:67%;" />
 <p>一个return就要插入三个bubble，所以其实return对于pipeline的overhead是比较大的。</p>
 <ul>
 <li><code>jXX</code></li>
 </ul>
 <p>对于jump指令，我们猜测他会跳转：<code>next PC = valC</code>。那如果猜错了怎么办呢？</p>
 <p>最Naive的方式就是在跳转处插入两个<code>nop</code>，这样无论猜没猜错都不需要擦除任何指令。但是这样跟不猜PC没区别了。</p>
-<p><img src="/imgs/image-20250306163041978-1742058095651-40.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:67%;" /></p>
+<img src="/imgs/image-20250306163041978-1742058095651-40.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:67%;" />
 <p>因此我们的解决方案是让跳转后的指令先执行，如果发现猜错了，就将执行的指令的<code>icode</code>改为<code>nop</code>(变成bubble)。通常情况下，跳转后执行的两条指令在decode和execute阶段不会修改状态(只有在execute阶段末尾才会修改<code>CC</code>)。因此我们可以做到在指令修改<code>CC</code>前及时将其擦除掉，不会产生程序员可见的状态修改。</p>
-<p><img src="/imgs/image-20250306163945466-1742058095651-41.png" srcset="/img/loading.gif" lazyload style="zoom:67%;" /></p>
-<p>但是如果跳转后执行的指令本身是错误的指令呢？这两条指令本身就不该执行，但由于我们猜错了PC，这两条错误的指令执行的时候就会修改Program
-Status。</p>
-<p><img src="/imgs/image-20250306171525626-1742058095651-42.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:67%;" /></p>
+<img src="/imgs/image-20250306163945466-1742058095651-41.png" srcset="/img/loading.gif" lazyload style="zoom:67%;" />
+<p>但是如果跳转后执行的指令本身是错误的指令呢？这两条指令本身就不该执行，但由于我们猜错了PC，这两条错误的指令执行的时候就会修改Program Status。</p>
+<img src="/imgs/image-20250306171525626-1742058095651-42.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:67%;" />
 <p>我们需要专门的mechanism来处理执行流中遇到的错误，以能够避免上述情况。</p>
-<h3 id="exception-handling">Exception Handling</h3>
+<h3 id="exception-handling"><a class="markdownIt-Anchor" href="#exception-handling"></a> Exception Handling</h3>
 <p>y86中的异常类型：</p>
-<ol type="1">
+<ol>
 <li>Invalid address</li>
 <li>Invalid instruction</li>
 <li>Halt</li>
 </ol>
-<p>正常执行流中遇到了异常，就需要exception
-handling。对y86来说，exception
-handling需要做到的是：program在遇到异常后停在正确的状态下，异常的指令停在当前位置，异常指令前的指令正常执行完，异常指令后的指令不执行。</p>
-<p>exception
-handling遇到的困难是：指令可能在流水线的不同阶段检测到异常。</p>
-<p><img src="/imgs/image-20250306170849215-1742058095651-43.png" srcset="/img/loading.gif" lazyload style="zoom:67%;" /></p>
-<p>如何让异常前的指令正常执行完呢？我们的解决方案是：在指令遇到异常的阶段，先将status写入pipeline
-register，然后将指令变为nop，当作无事发生继续执行，如果指令到Write
-Back了status依然是异常，那么此时再处理。注意对于因为分支预测错误执行的指令来说，应当在发现预测错误后擦除状态（将status改回成<code>OK</code>）。</p>
-<p><img src="/imgs/image-20250306172322252-1742058095651-45.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 80%;" /></p>
-<p>如何保证异常指令后面的指令不会产生效果（修改状态）？当一条指令来到Memory阶段status是异常，说明该指令一定是异常指令（后续Write
-Back的时候会处理），此时Memory及时关闭肯定来得及，但CC呢？只要在Memory阶段发现错误时立即关闭CC，就可以保证在后一条指令执行完execute前CC就被关闭了，所以也来得及！</p>
-<h2 id="pipe-cpu-implementation">Pipe CPU Implementation</h2>
-<h3 id="pipe-stage-implementations">PIPE Stage Implementations</h3>
+<p>正常执行流中遇到了异常，就需要exception handling。对y86来说，exception handling需要做到的是：program在遇到异常后停在正确的状态下，异常的指令停在当前位置，异常指令前的指令正常执行完，异常指令后的指令不执行。</p>
+<p>exception handling遇到的困难是：指令可能在流水线的不同阶段检测到异常。</p>
+<img src="/imgs/image-20250306170849215-1742058095651-43.png" srcset="/img/loading.gif" lazyload style="zoom:67%;" />
+<p>如何让异常前的指令正常执行完呢？我们的解决方案是：在指令遇到异常的阶段，先将status写入pipeline register，然后将指令变为nop，当作无事发生继续执行，如果指令到Write Back了status依然是异常，那么此时再处理。注意对于因为分支预测错误执行的指令来说，应当在发现预测错误后擦除状态（将status改回成<code>OK</code>）。</p>
+<img src="/imgs/image-20250306172322252-1742058095651-45.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 80%;" />
+<p>如何保证异常指令后面的指令不会产生效果（修改状态）？当一条指令来到Memory阶段status是异常，说明该指令一定是异常指令（后续Write Back的时候会处理），此时Memory及时关闭肯定来得及，但CC呢？只要在Memory阶段发现错误时立即关闭CC，就可以保证在后一条指令执行完execute前CC就被关闭了，所以也来得及！</p>
+<h2 id="pipe-cpu-implementation"><a class="markdownIt-Anchor" href="#pipe-cpu-implementation"></a> Pipe CPU Implementation</h2>
+<h3 id="pipe-stage-implementations"><a class="markdownIt-Anchor" href="#pipe-stage-implementations"></a> PIPE Stage Implementations</h3>
 <ul>
 <li>Fetch</li>
 </ul>
-<p><img src="/imgs/image-20250311163417401-1742058095651-44.png" srcset="/img/loading.gif" lazyload style="zoom:67%;" /></p>
+<img src="/imgs/image-20250311163417401-1742058095651-44.png" srcset="/img/loading.gif" lazyload style="zoom:67%;" />
 <p>对于设置status来说：</p>
 <p>先取指令的地址，如果地址错误设置为<code>SADR</code>；再检查指令的<code>icode</code>，如果<code>icode</code>无效设置为<code>SINS</code>；再看<code>icode</code>是否为halt，如果是则设置为<code>SHLT</code>；如果都没发生，就设置为<code>SAOK</code>。</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs HCL">int f_stat = [<br>	imem_error: 	    SADR;<br>	!instr_valid: 	    SINS;<br>	f_icode == IHALT: 	SHLT;<br>	1: 			       SAOK;<br>];<br></code></pre></td></tr></table></figure>
@@ -670,35 +609,34 @@ Back的时候会处理），此时Memory及时关闭肯定来得及，但CC呢�
 <li>Decode and Write-Back</li>
 </ul>
 <p>Forwarding Logic: The Order Matters!</p>
-<p><img src="/imgs/image-20250311164815350-1742058095651-46.png" srcset="/img/loading.gif" lazyload style="zoom:67%;" /></p>
+<img src="/imgs/image-20250311164815350-1742058095651-46.png" srcset="/img/loading.gif" lazyload style="zoom:67%;" />
 <p>对于Write Back阶段，需要将bubble的status设置为OK：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs HCL">word Stat = [<br>W_stat == SBUB : SAOK;<br>1 : W_stat;<br>]<br></code></pre></td></tr></table></figure>
 <ul>
 <li>Execute</li>
 </ul>
-<p><img src="/imgs/image-20250311165558162-1742058095651-47.png" srcset="/img/loading.gif" lazyload style="zoom:67%;" /></p>
+<img src="/imgs/image-20250311165558162-1742058095651-47.png" srcset="/img/loading.gif" lazyload style="zoom:67%;" />
 <p>需要检查能否修改CC：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs HCL"># Should the condition codes be updated?<br>bool set_cc = (E_icode == IOPL)<br>	# State changes only during normal operation<br>	      &amp;&amp; !m_stat in &#123; SADR, SINS, SHLT &#125; <br>	      &amp;&amp; !W_stat in &#123; SADR, SINS, SHLT &#125;;<br></code></pre></td></tr></table></figure>
 <ul>
 <li>Memory</li>
 </ul>
-<p><img src="/imgs/image-20250311165818294-1742058095651-48.png" srcset="/img/loading.gif" lazyload style="zoom:67%;" /></p>
+<img src="/imgs/image-20250311165818294-1742058095651-48.png" srcset="/img/loading.gif" lazyload style="zoom:67%;" />
 <p>如果访问地址出错，需要设置status：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs HCL">int m_stat = [<br>	dmem_error : SADR;<br>	1 : M_stat;<br>];<br></code></pre></td></tr></table></figure>
-<h3 id="pipeline-control-logic">Pipeline Control Logic</h3>
-<p>Pipeline中有一些情况仅靠data forwarding和branch
-prediction无法解决。</p>
+<h3 id="pipeline-control-logic"><a class="markdownIt-Anchor" href="#pipeline-control-logic"></a> Pipeline Control Logic</h3>
+<p>Pipeline中有一些情况仅靠data forwarding和branch prediction无法解决。</p>
 <ul>
 <li>Load/Use Hazard</li>
 </ul>
 <p>Load指从memory写到register，Use指用到这个register。光用Forwarding来不及。</p>
 <p>前一条指令要写的寄存器是后一条指令要读的寄存器：</p>
-<p><img src="/imgs/image-20250311171641923-1742058095651-49.png" srcset="/img/loading.gif" lazyload alt = "Detect Load/Use Hazard" style="zoom:67%;" /></p>
+<img src="/imgs/image-20250311171641923-1742058095651-49.png" srcset="/img/loading.gif" lazyload alt = "Detect Load/Use Hazard" style="zoom:67%;" />
 <p>需要在Fetch和Decode阶段插stall，在execute阶段插一个bubble。</p>
 <ul>
 <li>Mispredicted Branch</li>
 </ul>
-<p><img src="/imgs/image-20250311172757769-1742058095651-51.png" srcset="/img/loading.gif" lazyload style="zoom:67%;" /></p>
+<img src="/imgs/image-20250311172757769-1742058095651-51.png" srcset="/img/loading.gif" lazyload style="zoom:67%;" />
 <p>jump指令去到了Memory，需要将decode和execute阶段的两条指令一起擦成bubble。</p>
 <ul>
 <li>Return</li>
@@ -707,43 +645,40 @@ prediction无法解决。</p>
 <ul>
 <li>Exception</li>
 </ul>
-<p>发现异常后在Write Back阶段插入stall，将错误指令停在Write
-Back阶段。在Memory阶段插入bubble。</p>
-<h2 id="performance-analysis">Performance Analysis</h2>
-<h3 id="performance-metrics">Performance Metrics</h3>
-<ol type="1">
+<p>发现异常后在Write Back阶段插入stall，将错误指令停在Write Back阶段。在Memory阶段插入bubble。</p>
+<h2 id="performance-analysis"><a class="markdownIt-Anchor" href="#performance-analysis"></a> Performance Analysis</h2>
+<h3 id="performance-metrics"><a class="markdownIt-Anchor" href="#performance-metrics"></a> Performance Metrics</h3>
+<ol>
 <li>Clock Rate</li>
 <li>CPI (cycles per instruction)</li>
 </ol>
 <p>理想情况下CPI = 1，但是流水线有时需要插入bubble，有时需要stall。</p>
-<p>$ CPI = C/I = (I+B)/I = 1.0 + B/I $</p>
+<p>$ CPI   =   C/I   =   (I+B)/I   =  1.0 + B/I $</p>
 <p><code>B/I</code>就是流水线设计的overhead。</p>
-<h3 id="modern-processor">Modern Processor</h3>
-<p>前面的流水线设计一个cycle最多执行一条指令。但是如果指令之间没有依赖关系，其实可以并行执行。Modern
-Processor有更多的硬件资源和指令分析能力，能够支持指令的并行执行。</p>
+<h3 id="modern-processor"><a class="markdownIt-Anchor" href="#modern-processor"></a> Modern Processor</h3>
+<p>前面的流水线设计一个cycle最多执行一条指令。但是如果指令之间没有依赖关系，其实可以并行执行。Modern Processor有更多的硬件资源和指令分析能力，能够支持指令的并行执行。</p>
 <ul>
-<li><p>Superscalar：每个clock cycle并行执行多条操作。</p></li>
-<li><p>Out-of-order execution（乱序执行）</p></li>
+<li>
+<p>Superscalar：每个clock cycle并行执行多条操作。</p>
+</li>
+<li>
+<p>Out-of-order execution（乱序执行）</p>
+</li>
 </ul>
 <p>现代处理器主要由以下两部分组成：</p>
-<ol type="1">
+<ol>
 <li>Instruction Control Unit (ICU)</li>
 <li>Execution Unit (EU)</li>
 </ol>
-<p><img src="/imgs/image-20250316001349190-1742058095651-50.png" srcset="/img/loading.gif" lazyload style="zoom: 67%;" /></p>
+<img src="/imgs/image-20250316001349190-1742058095651-50.png" srcset="/img/loading.gif" lazyload style="zoom: 67%;" />
 <p>ICU中的Fetch Control负责从Instruction Cache中读取指令。</p>
-<p>ICU中的Instruction Decode负责将上层指令分解为primitive
-operations（微指令）</p>
+<p>ICU中的Instruction Decode负责将上层指令分解为primitive operations（微指令）</p>
 <p>比如：</p>
-<p><img src="/imgs/image-20250316001611080-1742058095651-52.png" srcset="/img/loading.gif" lazyload style="zoom: 50%;" /></p>
-<p>EU是Multi-functional Units，指令可以并行。每个functional
-unit可能是pipelined的。</p>
-<p><img src="/imgs/image-20250316003959533-1742058095651-53.png" srcset="/img/loading.gif" lazyload style="zoom: 80%;" /></p>
-<p>每个functional unit执行完产生的结果会放到总线上，在所有function
-units间共享，这就是现代处理器的data forwarding技术。</p>
-<p>Reorder buffer根据上层register
-renaming操作的结果，判断指令的依赖关系，将重新排序的指令交给Dispatch，Dispatch负责将不同的指令交给不同的functional
-unit执行。</p>
+<img src="/imgs/image-20250316001611080-1742058095651-52.png" srcset="/img/loading.gif" lazyload style="zoom: 50%;" />
+<p>EU是Multi-functional Units，指令可以并行。每个functional unit可能是pipelined的。</p>
+<img src="/imgs/image-20250316003959533-1742058095651-53.png" srcset="/img/loading.gif" lazyload style="zoom: 80%;" />
+<p>每个functional unit执行完产生的结果会放到总线上，在所有function units间共享，这就是现代处理器的data forwarding技术。</p>
+<p>Reorder buffer根据上层register renaming操作的结果，判断指令的依赖关系，将重新排序的指令交给Dispatch，Dispatch负责将不同的指令交给不同的functional unit执行。</p>
 
                 
               </div>
@@ -784,9 +719,9 @@ unit执行。</p>
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/Y86/" class="print-no-link">#Y86</a>
-      
         <a href="/tags/ICS/" class="print-no-link">#ICS</a>
+      
+        <a href="/tags/Y86/" class="print-no-link">#Y86</a>
       
         <a href="/tags/Processor/" class="print-no-link">#Processor</a>
       
@@ -857,8 +792,8 @@ unit执行。</p>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2025/02/27/cs144-lab6/" title="CS144 Lab 6">
-                        <span class="hidden-mobile">CS144 Lab 6</span>
+                      <a href="/2025/03/03/CSAPP-Chapter6/" title="CSAPP Chapter6">
+                        <span class="hidden-mobile">CSAPP Chapter6</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
