@@ -1,0 +1,1392 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/imgs/wallhaven-p9qeze.jpg">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Alex Sun">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="A Top-Down Approach Chapter1-6 Studying Notes">
+<meta property="og:type" content="article">
+<meta property="og:title" content="A Top-Down Approach Studying Notes">
+<meta property="og:url" content="http://oooscar8.github.io/2024/12/16/Top-down-approach/index.html">
+<meta property="og:site_name" content="Alex&#39;s Space">
+<meta property="og:description" content="A Top-Down Approach Chapter1-6 Studying Notes">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://oooscar8.github.io/2024/12/16/imgs/202412271816523.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/12/16/imgs/202412271820546.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/12/16/imgs/202409041120064.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/12/16/imgs/202409041318239.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/12/16/imgs/202409041509538.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/12/16/imgs/202409041510599.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/12/16/imgs/202409041339786.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/12/16/imgs/202409041558726.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/12/16/imgs/202409121311655.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/12/16/imgs/202409121419327.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/12/16/imgs/202409121426382.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/12/16/imgs/202409121445872.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/12/16/imgs/202409221640398.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/12/16/imgs/202409221614053.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/12/16/imgs/image-20250220011638924.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/12/16/imgs/202409221937913.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/12/16/imgs/202409222317594.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/12/16/imgs/202409222320192.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/12/16/imgs/202410081900220.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/12/16/imgs/202410101654780.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/12/16/imgs/202410101710955.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/12/16/imgs/202410101743505.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/12/16/imgs/202410151249513.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/12/16/imgs/202410151358041.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/12/16/imgs/202410151542590.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/12/16/imgs/202410151558437.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/12/16/imgs/202410241418563.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/12/16/imgs/202410241515469.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/12/16/imgs/202411191030099.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/12/16/imgs/202411191113061.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/12/16/imgs/202411191555431.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/12/16/imgs/202411191623033.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/12/16/imgs/202411191633671.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/12/16/imgs/202411191642109.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/12/16/imgs/202411191644823.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/12/16/imgs/202411191654536.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/12/16/imgs/202411191708285.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/12/16/imgs/202411191836312.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/12/16/imgs/202411191846881.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/12/16/imgs/202411211025980.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/12/16/imgs/202411211056470.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/12/16/imgs/202411211253742.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/12/16/imgs/202411211256294.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/12/16/imgs/image-20250221174242095.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/12/16/imgs/202411211430700.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/12/16/imgs/202411211502816.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/12/16/imgs/202411211516954.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/12/16/imgs/202502211810664.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/12/16/imgs/202502211810666.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/12/16/imgs/202502211810667.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/12/16/imgs/202502211810668.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/12/16/imgs/202502211810669.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/12/16/imgs/202502211810670.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/12/16/imgs/202502211810671.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/12/16/imgs/202502211810672.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/12/16/imgs/202502211810673.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/12/16/imgs/202502211810674.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/12/16/imgs/202502211810675.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/12/16/imgs/202502211810676.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/12/16/imgs/202502211810677.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/12/16/imgs/202502211810678.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/12/16/imgs/202502211810679.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/12/16/imgs/202502211810680.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/12/16/imgs/202502211810681.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/12/16/imgs/202502211810682.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/12/16/imgs/202502211810683.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/12/16/imgs/202502211810684.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/12/16/imgs/202502211810685.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/12/16/imgs/202411252058039.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/12/16/imgs/202412051732443.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/12/16/imgs/202412051732443.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/12/16/imgs/202412151922392.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/12/16/imgs/202412152148301.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/12/16/imgs/202412051732443.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/12/16/imgs/202412160222283.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/12/16/imgs/202412161639345.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/12/16/imgs/202412161640250.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/12/16/imgs/202412161700708.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/12/16/imgs/202412161736416.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/12/16/imgs/202412161905144.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/12/16/imgs/202412161922853.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/12/16/imgs/image-20241216195033045-1740143775464-181.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/12/16/imgs/image-20241216200639093-1740143790085-183.png">
+<meta property="article:published_time" content="2024-12-15T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-02-22T09:42:21.260Z">
+<meta property="article:author" content="Alex Sun">
+<meta property="article:tag" content="ELEC331">
+<meta property="article:tag" content="Computer Networking">
+<meta property="article:tag" content="Top-Down Approach">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://oooscar8.github.io/2024/12/16/imgs/202412271816523.png">
+  
+  
+  
+  <title>A Top-Down Approach Studying Notes - Alex&#39;s Space</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"oooscar8.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.1.1"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Alex&#39;s Space</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/imgs/chuyin.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="A Top-Down Approach Studying Notes"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-12-16 00:00" pubdate>
+          2024年12月16日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          829 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          7 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">A Top-Down Approach Studying Notes</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>A Top-Down Approach is a classic textbook in the field of computer networking. Hope this studying note can help you get the key points when you read the textbook!</p>
+<h2 id="chapter-1-what-is-the-internet"><a class="markdownIt-Anchor" href="#chapter-1-what-is-the-internet"></a> Chapter 1 - What is the Internet?</h2>
+<h3 id="a-nuts-and-bolts-description"><a class="markdownIt-Anchor" href="#a-nuts-and-bolts-description"></a> A Nuts-and-Bolts Description</h3>
+<h4 id="basic-concepts"><a class="markdownIt-Anchor" href="#basic-concepts"></a> basic concepts</h4>
+<p>Devices connected to the Internet: <strong>hosts</strong> or <strong>end system</strong></p>
+<p>End systems are connected together by a network of <strong>communication links</strong> and <strong>packet switches</strong>.</p>
+<hr />
+<h4 id="communication-links"><a class="markdownIt-Anchor" href="#communication-links"></a> communication links</h4>
+<p>Made up of different types of physical media</p>
+<p>Different links have different <strong>transmission rate</strong>, measured in bits/seconds</p>
+<p>When one end system has data to send to another end system, the sending end system segments the data and adds header bytes to each segment. The resulting packages of information, known as <strong>packets</strong>, are then sent through the network to the destination end system, where they are reassembled into the original data</p>
+<hr />
+<h4 id="packet-switch"><a class="markdownIt-Anchor" href="#packet-switch"></a> packet switch</h4>
+<p>Takes a packet arriving on one of its incoming communication links and forwards that packet on one of its outgoing communication links</p>
+<ul>
+<li><strong>routers</strong></li>
+</ul>
+<blockquote>
+<p>used in the network core</p>
+</blockquote>
+<ul>
+<li><strong>link-layer switches</strong></li>
+</ul>
+<blockquote>
+<p>used in access networks</p>
+</blockquote>
+<p>The sequence of communication links and packet switches traversed by a packet from the sending end system to the receiving end system is known as a <strong>route</strong> or <strong>path</strong> through the network.</p>
+<hr />
+<h4 id="protocols"><a class="markdownIt-Anchor" href="#protocols"></a> Protocols</h4>
+<p>End systems, packet switches, and other pieces of the Internet run protocols that control the sending and receiving of information within the Internet.</p>
+<ul>
+<li>
+<p>TCP(Transmission Control Protocol)</p>
+</li>
+<li>
+<p>Internet Protocol (IP)</p>
+</li>
+</ul>
+<blockquote>
+<p>specifies the format of packets</p>
+</blockquote>
+<ul>
+<li>TCP/IP</li>
+</ul>
+<h3 id="a-services-description"><a class="markdownIt-Anchor" href="#a-services-description"></a> A services Description</h3>
+<h4 id="definition"><a class="markdownIt-Anchor" href="#definition"></a> Definition</h4>
+<p>The Internet is an infrastructure that provides services to <strong>distributed applications</strong>.</p>
+<hr />
+<h4 id="socket-interface"><a class="markdownIt-Anchor" href="#socket-interface"></a> socket interface</h4>
+<p>Socket interface is a set of rules that the sending program must follow so that the data can be delivered to destination program.</p>
+<h3 id="what-is-a-protocol"><a class="markdownIt-Anchor" href="#what-is-a-protocol"></a> What is a Protocol?</h3>
+<h4 id="a-human-analogy"><a class="markdownIt-Anchor" href="#a-human-analogy"></a> A Human Analogy</h4>
+<img src="/imgs/202412271816523.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 33%;" />
+<hr />
+<h4 id="network-protocols"><a class="markdownIt-Anchor" href="#network-protocols"></a> Network Protocols</h4>
+<p>A protocol defines the <strong>format</strong> and the <strong>order</strong> of messages exchanged between two or more communicating entities, as well as the <strong>actions</strong> taken on the transmission and/or receipt of a message or other event.</p>
+<h2 id="the-network-edge"><a class="markdownIt-Anchor" href="#the-network-edge"></a> The Network Edge</h2>
+<img src="/imgs/202412271820546.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:50%;" />
+<p>hosts:</p>
+<ul>
+<li>clients</li>
+</ul>
+<p>desktops, laptops, smartphones…</p>
+<ul>
+<li>servers</li>
+</ul>
+<p>powerful machines that store and distribute Web pages, stream video, relay e-mail…</p>
+<p><strong>in large data centers</strong></p>
+<h3 id="access-networks"><a class="markdownIt-Anchor" href="#access-networks"></a> Access Networks</h3>
+<h4 id="home-access"><a class="markdownIt-Anchor" href="#home-access"></a> Home Access</h4>
+<h5 id="dsl-internet-access"><a class="markdownIt-Anchor" href="#dsl-internet-access"></a> DSL Internet access</h5>
+<img src="/imgs/202409041120064.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:50%;" />
+<ul>
+<li>DSL modem</li>
+</ul>
+<p>Translate between digital data and high-frequency tones.</p>
+<p>Data and telephone signals are encoded at different frequencies.</p>
+<ul>
+<li>DSLAM</li>
+</ul>
+<p>On the telco side, DSLAM separates the data and phone signals and sends the data into the Internet.</p>
+<ul>
+<li>Splitter</li>
+</ul>
+<p>On the customer side, a splitter separates the data and telephone signals arriving to the home and forwards the data signal to the DSL modem.</p>
+<p>Asymmetric: downstream transmission rate is larger than upstream transmission rate</p>
+<hr />
+<h5 id="cable-internet-access"><a class="markdownIt-Anchor" href="#cable-internet-access"></a> cable Internet access</h5>
+<img src="/imgs/202409041318239.png" srcset="/img/loading.gif" lazyload style="zoom:50%;" />
+<img src="/imgs/202409041509538.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:50%;" />
+<img src="/imgs/202409041510599.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:50%;" />
+<p>Frequency division multiplexing(FDM): different channels transmitted in different frequency bands</p>
+<p>Asymmetric: downstream transmission rate is larger than upstream transmission rate</p>
+<p>CMTS‘s function is similar to DSLAM</p>
+<hr />
+<h5 id="fiber-to-the-home-ftth"><a class="markdownIt-Anchor" href="#fiber-to-the-home-ftth"></a> fiber to the home (FTTH)</h5>
+<p>even faster!</p>
+<p>provide an optical fiber path from the CO directly to the home</p>
+<p>FTTH using the PON distribution architecture (passive optical networks):</p>
+<img src="/imgs/202409041339786.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:50%;" />
+<p>packets sent from OLT are replicated at the splitter (similar to a cable head end)</p>
+<hr />
+<h5 id="5g-fixed-wireless"><a class="markdownIt-Anchor" href="#5g-fixed-wireless"></a> 5G fixed wireless</h5>
+<p>without installing costly and failure-prone cabling</p>
+<h4 id="access-in-the-enterprise-and-the-home-ethernet-and-wifi"><a class="markdownIt-Anchor" href="#access-in-the-enterprise-and-the-home-ethernet-and-wifi"></a> Access in the Enterprise (and the Home): Ethernet and WiFi</h4>
+<hr />
+<ul>
+<li>
+<p>Home Network</p>
+<img src="/imgs/202409041558726.png" srcset="/img/loading.gif" lazyload style="zoom:50%;" />
+</li>
+</ul>
+<h4 id="wide-area-wireless-access-3g-and-lte-4g-and-5g"><a class="markdownIt-Anchor" href="#wide-area-wireless-access-3g-and-lte-4g-and-5g"></a> Wide-Area Wireless Access: 3G and LTE 4G and 5G</h4>
+<p>Employ the same wireless infrastructure used for cellular telephony to send/receive packets through a base station that is operated by the cellular network provider.</p>
+<h3 id="physical-media"><a class="markdownIt-Anchor" href="#physical-media"></a> Physical Media</h3>
+<p>guided media / unguided media.</p>
+<ul>
+<li>Twisted-Pair Copper Wire</li>
+</ul>
+<p>Twisted pair is the dominant solution for high-speed LAN networking</p>
+<ul>
+<li>Coaxial Cable</li>
+</ul>
+<p>Coaxial cable can be used as a guided shared medium</p>
+<ul>
+<li>
+<p>Fiber Optics</p>
+</li>
+<li>
+<p>Terrestrial Radio Channels</p>
+</li>
+</ul>
+<p>Require no physical wire to be installed, can penetrate walls, provide connectivity to a mobile user, and can potentially carry a signal for long distances.</p>
+<ul>
+<li>Satellite Radio Channels</li>
+</ul>
+<h2 id="the-network-core"><a class="markdownIt-Anchor" href="#the-network-core"></a> The Network Core</h2>
+<h3 id="packet-switching"><a class="markdownIt-Anchor" href="#packet-switching"></a> Packet Switching</h3>
+<p>R: transmission rate (bps)</p>
+<p>L: length of a packet</p>
+<p><strong>transmission delay</strong>:</p>
+<img src="/imgs/202409121311655.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:50%;" />
+<h4 id="store-and-forward-transmission"><a class="markdownIt-Anchor" href="#store-and-forward-transmission"></a> Store-and Forward Transmission</h4>
+<p>it takes 2L/R(time) for a packet to be sent from Source to Destination</p>
+<p>it takes 4L/R(time) for all three packets to be sent from Source to Destination</p>
+<img src="/imgs/202409121419327.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 67%;" />
+<p>More general form: N links each of rate R</p>
+<p><strong>end-to-end delay</strong>:</p>
+<p><img src="/imgs/202409121426382.png" srcset="/img/loading.gif" lazyload alt="end-to-end delay" /></p>
+<h4 id="queuing-delays-and-packet-loss"><a class="markdownIt-Anchor" href="#queuing-delays-and-packet-loss"></a> Queuing Delays and Packet Loss</h4>
+<p><strong>output buffer</strong> (<strong>output queue</strong>): the arriving packet <strong>wait</strong> here</p>
+<p>result in output buffer <strong>queuing delays</strong></p>
+<p>if the output buffer is full, <strong>packet loss</strong> occurs</p>
+<img src="/imgs/202409121445872.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:67%;" />
+<h4 id="forwarding-tables-and-routing-protocols"><a class="markdownIt-Anchor" href="#forwarding-tables-and-routing-protocols"></a> Forwarding Tables and Routing Protocols</h4>
+<blockquote>
+<p>How do forwarding tables get set?</p>
+</blockquote>
+<p>The Internet has a number of special <strong>routing protocols</strong> that are used to <strong>automatically</strong> set the forwarding tables</p>
+<h3 id="circuit-switching"><a class="markdownIt-Anchor" href="#circuit-switching"></a> Circuit Switching</h3>
+<p>When two hosts want to communicate, the network establishes <strong>a dedicated end-to-end connection.</strong></p>
+<blockquote>
+<p>Why is circuit switching less efficient than packet switching?</p>
+</blockquote>
+<p>Circuit switching pre-allocates use of the transmission link  regardless of demand, with allocated but unneeded link time going unused</p>
+<p>Packet switching allocates link use on demand</p>
+<img src="/imgs/202409221640398.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:50%;" />
+<h3 id="internet-is-a-network-of-networks"><a class="markdownIt-Anchor" href="#internet-is-a-network-of-networks"></a> Internet is a &quot;network of networks&quot;!</h3>
+<p>Interconnection of ISPs:</p>
+<img src="/imgs/202409221614053.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 25%;" />
+<h2 id="delay-loss-and-throughput-in-packet-switched-networks"><a class="markdownIt-Anchor" href="#delay-loss-and-throughput-in-packet-switched-networks"></a> Delay, Loss, and Throughput in Packet-Switched Networks</h2>
+<p><strong>Four delays:</strong></p>
+<ul>
+<li>transmission delay: time to <strong>push</strong> the entire packet onto the link</li>
+<li>processing delay</li>
+<li>propagation delay</li>
+<li>queueing delay -&gt; congestion and packet loss</li>
+</ul>
+<p><img src="/imgs/image-20250220011638924.png" srcset="/img/loading.gif" lazyload alt="Four network delays" /></p>
+<p><strong>Throughput:</strong></p>
+<p>analogy to pipes</p>
+<p>rate(bits/time unit) at which bits are being sent from sender to receiver</p>
+<img src="/imgs/202409221937913.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:25%;" />
+<h2 id="layering-encapsulation-service-models"><a class="markdownIt-Anchor" href="#layering-encapsulation-service-models"></a> Layering, encapsulation, service models</h2>
+<p>Layering and encapsulation:</p>
+<img src="/imgs/202409222317594.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 33%;" />
+<p>The switches and routers only implement the lower layer of the protocol stack:</p>
+<img src="/imgs/202409222320192.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 33%;" />
+<h1 id="chapter-2-application-layer"><a class="markdownIt-Anchor" href="#chapter-2-application-layer"></a> Chapter 2 - Application Layer</h1>
+<h2 id="21-principles-of-network-applications"><a class="markdownIt-Anchor" href="#21-principles-of-network-applications"></a> 2.1 Principles of Network Applications</h2>
+<h3 id="network-application-architectures"><a class="markdownIt-Anchor" href="#network-application-architectures"></a> Network Application Architectures</h3>
+<ul>
+<li>client-server architecture</li>
+<li>peer-to-peer (P2P) architecture</li>
+</ul>
+<hr />
+<h3 id="processes-communicating"><a class="markdownIt-Anchor" href="#processes-communicating"></a> Processes Communicating</h3>
+<div class="note note-primary">
+            <p><strong>Processes</strong> on two different end systems communicate with each other by  <strong>exchanging messages</strong> across the computer network.</p>
+          </div>
+<h4 id="the-interface-between-the-process-and-the-computer-network"><a class="markdownIt-Anchor" href="#the-interface-between-the-process-and-the-computer-network"></a> The <strong>Interface</strong> Between the Process and the Computer Network</h4>
+<p>A process sends messages into, and receives messages from, the network through a <strong>software interface</strong> called a <strong>socket</strong>.</p>
+<img src="/imgs/202410081900220.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:80%;" />
+<h4 id="transport-services-available-to-applications"><a class="markdownIt-Anchor" href="#transport-services-available-to-applications"></a> Transport Services Available to Applications</h4>
+<p>reliable data transfer, throughput, timing, and security</p>
+<h4 id="transport-services-provided-by-the-internettcpip-networks"><a class="markdownIt-Anchor" href="#transport-services-provided-by-the-internettcpip-networks"></a> Transport Services Provided by the Internet(TCP/IP networks)</h4>
+<ul>
+<li><strong>TCP Services</strong></li>
+</ul>
+<p>Connection-oriented Service(handshaking)</p>
+<p>Reliable data transfer</p>
+<p>congestion-control mechanism</p>
+<blockquote>
+<p><em>TCP congestion control attempts to limit each TCP connection to its fair share of network bandwidth.</em></p>
+</blockquote>
+<ul>
+<li><strong>UDP Services</strong></li>
+</ul>
+<hr />
+<h3 id="application-layer-protocols"><a class="markdownIt-Anchor" href="#application-layer-protocols"></a> Application-Layer Protocols</h3>
+<div class="note note-primary">
+            <p>An <strong>application-layer protocol</strong> defines <strong>how an application’s processes</strong>, running on different end systems,  <strong>pass messages to each other</strong>.</p>
+          </div>
+<p>The Web’s application-layer protocol, <strong>HTTP</strong>, defines the <strong>format and sequence of messages</strong> exchanged between browser and Web server.</p>
+<h2 id="22-the-web-and-http"><a class="markdownIt-Anchor" href="#22-the-web-and-http"></a> 2.2 The Web and HTTP</h2>
+<h3 id="http-message-format"><a class="markdownIt-Anchor" href="#http-message-format"></a> HTTP Message Format</h3>
+<h4 id="http-request-message"><a class="markdownIt-Anchor" href="#http-request-message"></a> HTTP Request Message</h4>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs http"><span class="hljs-keyword">GET</span> <span class="hljs-string">/somedir/page.html</span> <span class="hljs-meta">HTTP/1.1</span><br><span class="hljs-attribute">Host</span><span class="hljs-punctuation">: </span>www.someschool.edu<br><span class="hljs-attribute">Connection</span><span class="hljs-punctuation">: </span>close<br><span class="hljs-attribute">User-agent</span><span class="hljs-punctuation">: </span>Mozilla/5.0<br><span class="hljs-attribute">Accept-language</span><span class="hljs-punctuation">: </span>fr<br></code></pre></td></tr></table></figure>
+<p>The first line of an HTTP request message is called the <strong>request line</strong>; the  subsequent lines are called the <strong>header lines</strong>.</p>
+<p><strong>General format:</strong></p>
+<img src="/imgs/202410101654780.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 67%;" />
+<p>If the value of the method field is POST, then the <strong>entity body</strong> contains what the user entered into the form fields.(e.g. when a  user provides search words to a search engine)</p>
+<h4 id="http-response-message"><a class="markdownIt-Anchor" href="#http-response-message"></a> HTTP Response Message</h4>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs http"><span class="hljs-meta">HTTP/1.1</span> <span class="hljs-number">200</span> OK<br><span class="hljs-attribute">Connection</span><span class="hljs-punctuation">: </span>close<br><span class="hljs-attribute">Date</span><span class="hljs-punctuation">: </span>Tue, 18 Aug 2015 15:44:04 GMT<br><span class="hljs-attribute">Server</span><span class="hljs-punctuation">: </span>Apache/2.2.3 (CentOS)<br><span class="hljs-attribute">Last-Modified</span><span class="hljs-punctuation">: </span>Tue, 18 Aug 2015 15:11:03 GMT<br><span class="hljs-attribute">Content-Length</span><span class="hljs-punctuation">: </span>6821<br><span class="hljs-attribute">Content-Type</span><span class="hljs-punctuation">: </span>text/html<br>(data data data data data ...)<br></code></pre></td></tr></table></figure>
+<p><strong>General Format:</strong></p>
+<img src="/imgs/202410101710955.png" srcset="/img/loading.gif" lazyload alt="" />
+<hr />
+<h3 id="cookies"><a class="markdownIt-Anchor" href="#cookies"></a> Cookies</h3>
+<p>Cookies allow sites to keep track of users.</p>
+<img src="/imgs/202410101743505.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:80%;" />
+<hr />
+<h3 id="web-caching"><a class="markdownIt-Anchor" href="#web-caching"></a> Web Caching</h3>
+<h4 id="web-caching-2"><a class="markdownIt-Anchor" href="#web-caching-2"></a> Web caching</h4>
+<img src="/imgs/202410151249513.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:80%;" />
+<h4 id="conditional-get"><a class="markdownIt-Anchor" href="#conditional-get"></a> Conditional GET</h4>
+<img src="/imgs/202410151358041.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:80%;" />
+<hr />
+<h3 id="http2"><a class="markdownIt-Anchor" href="#http2"></a> HTTP/2</h3>
+<ul>
+<li>Framing</li>
+</ul>
+<p>The ability to <strong>break down an HTTP message into independent frames</strong>, <strong>interleave</strong> them, and then <strong>reassemble</strong> them on the other end is the single most important  enhancement of HTTP/2.</p>
+<ul>
+<li>Message Prioritization</li>
+<li>Server Pushing</li>
+</ul>
+<h2 id="23-email"><a class="markdownIt-Anchor" href="#23-email"></a> 2.3 Email</h2>
+<img src="/imgs/202410151542590.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:80%;" />
+<h2 id="24-the-domain-name-system-dns"><a class="markdownIt-Anchor" href="#24-the-domain-name-system-dns"></a> 2.4 The Domain Name System: DNS</h2>
+<p><strong>DNS is a distributed, hierarchical database.</strong></p>
+<img src="/imgs/202410151558437.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 80%;" />
+<h2 id="25-peer-to-peer-file-distribution"><a class="markdownIt-Anchor" href="#25-peer-to-peer-file-distribution"></a> 2.5 Peer-to-Peer File Distribution</h2>
+<img src="/imgs/202410241418563.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 67%;" />
+<h2 id="26-video-streaming-and-content-distribution-networks"><a class="markdownIt-Anchor" href="#26-video-streaming-and-content-distribution-networks"></a> 2.6 Video Streaming and Content Distribution Networks</h2>
+<p>DNS redirects a user’s request to a CDN server:</p>
+<img src="/imgs/202410241515469.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:60%;" />
+<h2 id="27-socket-programming-with-udp-and-tcp"><a class="markdownIt-Anchor" href="#27-socket-programming-with-udp-and-tcp"></a> 2.7 Socket programming with UDP and TCP</h2>
+<p>UDP client:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> socket <span class="hljs-keyword">import</span> *<br>serverName = <span class="hljs-string">&#x27;hostname&#x27;</span><br>serverPort = <span class="hljs-number">12000</span><br><span class="hljs-comment"># create UDP socket for server</span><br>clientSocket = socket(AF_INET, SOCK_DGRAM)<br>message = raw_input(<span class="hljs-string">&#x27;Input lowercase sentence:&#x27;</span>)<br>clientSocket.sendto(message.encode(), (serverName, serverPort))<br>modifiedMessage, serverAddress = clientSocket.recvfrom(<span class="hljs-number">2048</span>)<br><span class="hljs-built_in">print</span> modifiedMessage.decode()<br>clientSocket.close()<br></code></pre></td></tr></table></figure>
+<p>UDP server:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> socket <span class="hljs-keyword">import</span> *<br>serverPort = <span class="hljs-number">12000</span><br>serverSocket = socket(AF_INET, SOCK_DGRAM)<br><span class="hljs-comment"># bind socket to local port number 12000</span><br>serverSocket.bind((<span class="hljs-string">&#x27;&#x27;</span>, serverPort))<br><span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;The server is ready to receive&quot;</span>)<br><span class="hljs-keyword">while</span> <span class="hljs-literal">True</span>:<br>    message, clientAddress = serverSocket.recvfrom(<span class="hljs-number">2048</span>)<br>    modifiedMessage = message.decode().upper()<br>    serverSocket.sendto(modifiedMessage.encode(), clientAddress)<br></code></pre></td></tr></table></figure>
+<p>TCP client:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> socket <span class="hljs-keyword">import</span> *<br>serverName = <span class="hljs-string">&#x27;hostname&#x27;</span><br>serverPort = <span class="hljs-number">12000</span><br><span class="hljs-comment"># create TCP socket for server</span><br>clientSocket = socket(AF_INET, SOCK_STREAM)<br>clientSocket.connect((serverName, serverPort))<br>sentence = raw_input(<span class="hljs-string">&#x27;Input lowercase sentence:&#x27;</span>)<br>clientSocket.send(sentence.encode())<br>modifiedSentence = clientSocket.recv(<span class="hljs-number">1024</span>)<br><span class="hljs-built_in">print</span> modifiedSentence.decode()<br>clientSocket.close()<br></code></pre></td></tr></table></figure>
+<p>TCP server:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> socket <span class="hljs-keyword">import</span> *<br>serverPort = <span class="hljs-number">12000</span><br>serverSocket = socket(AF_INET, SOCK_STREAM)<br><span class="hljs-comment"># bind socket to local port number 12000</span><br>serverSocket.bind((<span class="hljs-string">&#x27;&#x27;</span>, serverPort))<br>serverSocket.listen(<span class="hljs-number">1</span>);<br><span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;The server is ready to receive&quot;</span>)<br><span class="hljs-keyword">while</span> <span class="hljs-literal">True</span>:<br>    connectionSocket, addr = serverSocket.accept()<br><br>    sentence = connectionSocket.recv(<span class="hljs-number">1024</span>).decode()<br>    capitalizedSentence = sentence.upper()<br>    connectionSocket.send(capitalizedSentence.encode())<br><br>    connectionSocket.close()<br></code></pre></td></tr></table></figure>
+<h1 id="chapter-3-transport-layer"><a class="markdownIt-Anchor" href="#chapter-3-transport-layer"></a> Chapter 3 – Transport Layer</h1>
+<h2 id="31-introduction-and-transport-layer-services"><a class="markdownIt-Anchor" href="#31-introduction-and-transport-layer-services"></a> 3.1 Introduction and Transport-Layer Services</h2>
+<p>UDP services:</p>
+<ul>
+<li>process-to-process data delivery(multiplexing and demultiplexing)</li>
+<li>error checking</li>
+</ul>
+<p>TCP additional services:</p>
+<ul>
+<li>
+<p>reliable data transfer</p>
+</li>
+<li>
+<p>congestion control</p>
+</li>
+</ul>
+<h2 id="32-multiplexing-and-demultiplexing"><a class="markdownIt-Anchor" href="#32-multiplexing-and-demultiplexing"></a> 3.2 Multiplexing and Demultiplexing</h2>
+<p>The transport layer in the receiving host delivers data to an intermediary socket.</p>
+<p>The job of delivering the data in a transport-layer segment to the correct socket is  called <strong>demultiplexing</strong>.</p>
+<p>The job of gathering data chunks at the source host from different sockets, encapsulating each data chunk with header information to create segments, and passing the segments to the network layer is called <strong>multiplexing</strong>.</p>
+<img src="/imgs/202411191030099.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:80%;" />
+<h3 id="connectionlessconnection-oriented-multiplexing-and-demultiplexing"><a class="markdownIt-Anchor" href="#connectionlessconnection-oriented-multiplexing-and-demultiplexing"></a> Connectionless/connection-Oriented Multiplexing and Demultiplexing</h3>
+<p>A UDP socket is fully identified by a two-tuple consisting of a destination IP address and a destination port number.</p>
+<p>A TCP socket is identified by a four-tuple:  (source IP address, source port number, destination IP address, destination port number)</p>
+<img src="/imgs/202411191113061.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:80%;" />
+<h2 id="33-connectionless-transport-udp"><a class="markdownIt-Anchor" href="#33-connectionless-transport-udp"></a> 3.3 Connectionless Transport: UDP</h2>
+<blockquote>
+<p>Why UDP over TCP?</p>
+</blockquote>
+<ul>
+<li>Finer application-level control over what data is sent, and when.</li>
+<li>No connection establishment.</li>
+<li>No connection state.</li>
+<li>Small packet header overhead.</li>
+</ul>
+<p>DNS: Use UDP to avoid TCP's connection-establishment delays.</p>
+<p>Multimedia applications: tolerate packet loss</p>
+<img src="/imgs/202411191555431.png" srcset="/img/loading.gif" lazyload alt=""  />
+<h2 id="34-principles-of-reliable-data-transfer"><a class="markdownIt-Anchor" href="#34-principles-of-reliable-data-transfer"></a> 3.4 Principles of Reliable Data Transfer</h2>
+<h3 id="reliable-data-transfer-over-a-perfectly-reliable-channel-rdt10"><a class="markdownIt-Anchor" href="#reliable-data-transfer-over-a-perfectly-reliable-channel-rdt10"></a> Reliable Data Transfer over a Perfectly Reliable Channel: rdt1.0</h3>
+<img src="/imgs/202411191623033.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:80%;" />
+<h3 id="reliable-data-transfer-over-a-channel-with-bit-errors-rdt20"><a class="markdownIt-Anchor" href="#reliable-data-transfer-over-a-channel-with-bit-errors-rdt20"></a> Reliable Data Transfer over a Channel with Bit Errors: rdt2.0</h3>
+<p><strong>stop-and-wait</strong> protocols:</p>
+<img src="/imgs/202411191633671.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:80%;" />
+<p>Introduce a <strong>sequence number</strong> field:</p>
+<img src="/imgs/202411191642109.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:80%;" />
+<img src="/imgs/202411191644823.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:80%;" />
+<h3 id="reliable-data-transfer-over-a-lossy-channel-with-bit-errors-rdt30"><a class="markdownIt-Anchor" href="#reliable-data-transfer-over-a-lossy-channel-with-bit-errors-rdt30"></a> Reliable Data Transfer over a Lossy Channel with Bit Errors: rdt3.0</h3>
+<p>Deal with packet loss:</p>
+<img src="/imgs/202411191654536.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:80%;" />
+<h3 id="go-back-n-gbn-protocol"><a class="markdownIt-Anchor" href="#go-back-n-gbn-protocol"></a> Go-Back-N (GBN) protocol</h3>
+<p><strong>sliding-window protocol</strong>:</p>
+<img src="/imgs/202411191708285.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:80%;" />
+<img src="/imgs/202411191836312.png" srcset="/img/loading.gif" lazyload alt=""  />
+<p>If a timeout occurs, the sender resends <strong>all packets</strong>(<strong>base ~ nextseqnum - 1</strong>) that have been previously sent but that have not yet been acknowledged.</p>
+<p>The receiver discards out-of-order packets instead of buffering them.</p>
+<p>For the case of a window size of 4 packets:</p>
+<img src="/imgs/202411191846881.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:80%;" />
+<h3 id="selective-repeat-sr-protocol"><a class="markdownIt-Anchor" href="#selective-repeat-sr-protocol"></a> Selective Repeat (SR) protocol</h3>
+<blockquote>
+<p>Problems of GBN protocol?</p>
+</blockquote>
+<p>When the window size is big and as the probability of channel errors increases, the pipeline can become filled with unnecessary retransmissions.</p>
+<h2 id="35-connection-oriented-transport-tcp"><a class="markdownIt-Anchor" href="#35-connection-oriented-transport-tcp"></a> 3.5 Connection-Oriented Transport: TCP</h2>
+<blockquote>
+<p>What is MSS(Maximum Segment Size)?</p>
+</blockquote>
+<p>The maximum amount of application-layer  data in each segment, not the maximum size of the TCP segment including headers.</p>
+<img src="/imgs/202411211025980.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 60%;" />
+<h3 id="tcp-segment-structure"><a class="markdownIt-Anchor" href="#tcp-segment-structure"></a> TCP segment structure</h3>
+<img src="/imgs/202411211056470.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 80%;" />
+<p>The acknowledgment number is the sequence number of the next byte of data that the host is waiting for.</p>
+<h3 id="tcp-flow-control"><a class="markdownIt-Anchor" href="#tcp-flow-control"></a> TCP flow control</h3>
+<p>The sender maintains: LastByteSent – LastByteAcked &lt;= rwnd(spare room in rcvbuffer)</p>
+<h3 id="tcp-three-way-handshake"><a class="markdownIt-Anchor" href="#tcp-three-way-handshake"></a> TCP three-way handshake</h3>
+<img src="/imgs/202411211253742.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:80%;" />
+<blockquote>
+<p>How to close a TCP connection?</p>
+</blockquote>
+<img src="/imgs/202411211256294.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 67%;" />
+<h3 id="tcp-congestion-control"><a class="markdownIt-Anchor" href="#tcp-congestion-control"></a> TCP Congestion Control</h3>
+<p>The sender maintain: LastByteSent – LastByteAcked &lt;= min{cwnd, rwnd}</p>
+<p>Because TCP uses acknowledgments to trigger (or clock) its increase in  congestion window size, TCP is said to be <strong>self-clocking</strong>.</p>
+<img src="/imgs/image-20250221174242095.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:80%;" />
+<p>TCP Reno and TCP CUBIC:</p>
+<img src="/imgs/202411211430700.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:80%;" />
+<p>Explicit Congestion Notification(ECN):</p>
+<img src="/imgs/202411211502816.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 67%;" />
+<blockquote>
+<p>Why is TCP's AIMD algorithm fair?</p>
+</blockquote>
+<p>TCP results in an equal share of bandwidth among connections.</p>
+<img src="/imgs/202411211516954.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 80%;" />
+<h1 id="chapter-4-the-network-layer-data-plane"><a class="markdownIt-Anchor" href="#chapter-4-the-network-layer-data-plane"></a> Chapter 4 - The Network Layer: Data Plane</h1>
+<h2 id="forwarding-and-routing"><a class="markdownIt-Anchor" href="#forwarding-and-routing"></a> Forwarding and Routing</h2>
+<h3 id="control-plane"><a class="markdownIt-Anchor" href="#control-plane"></a> Control Plane</h3>
+<ul>
+<li><strong>Traditional approach:</strong></li>
+</ul>
+<p>The routing algorithm determines the contents of the routers’ forwarding tables.</p>
+<p>The routing algorithm function in one router <strong>communicates</strong> with the routing algorithm function in other routers to compute the values for its forwarding table by <strong>exchanging routing messages</strong> containing routing information according to a <strong>routing protocol</strong>.</p>
+<img src="/imgs/202502211810664.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:67%;" />
+<ul>
+<li><strong>SDN approach:</strong></li>
+</ul>
+<p>A physically separate, remote controller computes and distributes the forwarding tables to be used by each and every router.</p>
+<p>Control-plane routing functionality is <strong>separated from the physical router</strong>.</p>
+<img src="/imgs/202502211810666.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 60%;" />
+<h2 id="inside-a-router"><a class="markdownIt-Anchor" href="#inside-a-router"></a> Inside a Router</h2>
+<h3 id="router-architecture"><a class="markdownIt-Anchor" href="#router-architecture"></a> Router architecture</h3>
+<img src="/imgs/202502211810667.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:80%;" />
+<h3 id="input-port-processing"><a class="markdownIt-Anchor" href="#input-port-processing"></a> Input Port Processing</h3>
+<img src="/imgs/202502211810668.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:80%;" />
+<p>The forwarding table is either:</p>
+<ol>
+<li>computed and updated by the <strong>routing processor</strong> (using a routing protocol to interact with the routing processors in other network routers)</li>
+<li>or is received from a <strong>remote SDN controller</strong>.</li>
+</ol>
+<p>Input Queueing:</p>
+<ol>
+<li>
+<p>switch fabric slower than input ports combined</p>
+</li>
+<li>
+<p><strong>HOL blocking</strong></p>
+</li>
+</ol>
+<img src="/imgs/202502211810669.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:80%;" />
+<h3 id="switching"><a class="markdownIt-Anchor" href="#switching"></a> Switching</h3>
+<ul>
+<li><strong>switching rate</strong>:</li>
+</ul>
+<p>rate at which packets can be transfer from inputs to outputs</p>
+<p>N inputs: <strong>switching rate N times line rate</strong> desirable</p>
+<ul>
+<li><strong>Three switching techniques:</strong></li>
+</ul>
+<img src="/imgs/202502211810670.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:80%;" />
+<ul>
+<li><strong>Parallelism</strong>:</li>
+</ul>
+<ol>
+<li>Multistage switch</li>
+</ol>
+<p>fragment datagram into fixed length cells at the input port</p>
+<p>switch cells through the fabric, reassemble datagram at the output port</p>
+<img src="/imgs/202502211810671.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:80%;" />
+<ol start="2">
+<li>multiple switching planes in parallel</li>
+</ol>
+<img src="/imgs/202502211810672.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:80%;" />
+<h3 id="output-port-processing"><a class="markdownIt-Anchor" href="#output-port-processing"></a> Output Port Processing</h3>
+<img src="/imgs/202502211810673.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:80%;" />
+<ul>
+<li><strong>Output port queuing</strong>:</li>
+</ul>
+<img src="/imgs/202502211810674.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:80%;" />
+<ul>
+<li><strong>Packet Scheduling</strong>:</li>
+</ul>
+<ol>
+<li>FIFO</li>
+<li>Priority Queuing</li>
+</ol>
+<img src="/imgs/202502211810675.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:80%;" />
+<ol start="3">
+<li>Round Robin and Weighted Fair Queuing (WFQ)</li>
+</ol>
+<img src="/imgs/202502211810676.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:80%;" />
+<h2 id="ip-protocol"><a class="markdownIt-Anchor" href="#ip-protocol"></a> IP Protocol</h2>
+<h3 id="ipv4"><a class="markdownIt-Anchor" href="#ipv4"></a> IPv4</h3>
+<p>Network layer functions:</p>
+<img src="/imgs/202502211810677.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:80%;" />
+<p><strong>IPv4 datagram format</strong>:</p>
+<img src="/imgs/202502211810678.png" srcset="/img/loading.gif" lazyload alt=""  />
+<h3 id="ip-addressing"><a class="markdownIt-Anchor" href="#ip-addressing"></a> IP Addressing</h3>
+<p>An IP address is technically associated with an <strong>interface</strong>,  rather than with the host or router containing that interface.</p>
+<blockquote>
+<p>What is a subnet?</p>
+</blockquote>
+<p>Device interfaces that can physically reach each other without passing through an intervening router.</p>
+<p><strong>Address Aggregation</strong>:</p>
+<img src="/imgs/202502211810679.png" srcset="/img/loading.gif" lazyload alt=""  />
+<blockquote>
+<p>How to obtain a block of IP addresses?</p>
+</blockquote>
+<ol>
+<li>Contact its ISP</li>
+</ol>
+<img src="/imgs/202502211810680.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 67%;" />
+<ol start="2">
+<li>Contact global authority (ICANN)</li>
+</ol>
+<blockquote>
+<p>How to obtain a Host Address?</p>
+</blockquote>
+<p>Dynamic Host Configuration Protocol (DHCP): <strong>plug-and-play</strong> capability</p>
+<p>DHCP is a client-server protocol:</p>
+<img src="/imgs/202502211810681.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 60%;" />
+<p>DHCP protocol is a four-step process:</p>
+<ol>
+<li>Broadcast <strong>DHCP discover message</strong> to all nodes attached to the subnet.(Discover the DHCP server)</li>
+<li>A DHCP server receiving a DHCP discover message broadcasts <strong>DHCP offer message</strong> to all nodes on the subnet.</li>
+<li>The newly arriving client choose from among one or more server offers and respond to its selected offer with a <strong>DHCP request message</strong>,  echoing back the configuration parameters.</li>
+<li>The server responds to the DHCP request message with a <strong>DHCP ACK message</strong>, confirming the requested parameters.</li>
+</ol>
+<img src="/imgs/202502211810682.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:80%;" />
+<h3 id="network-address-translation-nat"><a class="markdownIt-Anchor" href="#network-address-translation-nat"></a> Network Address Translation (NAT)</h3>
+<p>In essence, the NAT-enabled router is <strong>hiding the details of the home network from the outside world</strong>.</p>
+<p>The router gets its address from the ISP’s DHCP server, and the router runs a DHCP server to provide addresses to computers within the <strong>NAT-DHCP-router-controlled</strong> home network’s address space.</p>
+<img src="/imgs/202502211810683.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:80%;" />
+<h2 id="generalized-forwarding-and-sdn"><a class="markdownIt-Anchor" href="#generalized-forwarding-and-sdn"></a> Generalized Forwarding and SDN</h2>
+<img src="/imgs/202502211810684.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:80%;" />
+<p>OpenFlow: flow table entries</p>
+<img src="/imgs/202502211810685.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:80%;" />
+<h2 id="middleboxes"><a class="markdownIt-Anchor" href="#middleboxes"></a> Middleboxes</h2>
+<blockquote>
+<p>Definition: Any intermediary box performing functions apart from normal, <strong>standard functions of an IP router</strong> on the data path between a source host and destination  host</p>
+</blockquote>
+<ul>
+<li>THE IP HOURGLASS</li>
+</ul>
+<p>The IP protocol <strong>hides the detailed differences</strong> among the various underlying technologies and present a <strong>uniform service interface</strong> to the applications above.</p>
+<img src="/imgs/202411252058039.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 67%;" />
+<h1 id="chapter-5-the-network-layer-control-plane"><a class="markdownIt-Anchor" href="#chapter-5-the-network-layer-control-plane"></a> Chapter 5 - The Network  Layer: Control Plane</h1>
+<h2 id="routing-algorithm"><a class="markdownIt-Anchor" href="#routing-algorithm"></a> Routing Algorithm</h2>
+<img src="/imgs/202412051732443.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 80%;" />
+<p><strong>Centralized Routing Algorithm (link-state (LS) algorithm)</strong>: the algorithm has complete information about connectivity and link costs.</p>
+<p><strong>Decentralized Routing Algorithm (distance-vector (DV) algorithm)</strong>: each node maintains a vector of estimates of the costs (distances) to all other nodes in the net work.</p>
+<hr />
+<h3 id="link-state-ls-algorithm"><a class="markdownIt-Anchor" href="#link-state-ls-algorithm"></a> Link-State (LS) Algorithm</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs pseudocode">/* Link-State (LS) Algorithm for Source Node u */<br>Initialization: <br> N’ = &#123;u&#125;<br> for all nodes v<br>   if v is a neighbor of u<br>     then D(v) = c(u,v)<br>   else D(v) = infinity<br><br>Loop<br> find w not in N’ such that D(w) is a minimum<br> add w to N’<br> update D(v) for each neighbor v of w and not in N’:<br>       D(v) = min(D(v), D(w)+ c(w,v) )<br>  /* new cost to v is either old cost to v or known<br>  least path cost to w plus cost from w to v */<br>until N’= N<br></code></pre></td></tr></table></figure>
+<img src="/imgs/202412051732443.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 80%;" />
+<img src="/imgs/202412151922392.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:80%;" />
+<img src="/imgs/202412152148301.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:80%;" />
+<p>The implementation of this LS algorithm has worst-case complexity of order n squared: <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><msup><mi>n</mi><mn>2</mn></msup><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(n^2)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.064108em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal">n</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span>​</p>
+<div class="note note-primary">
+            <blockquote><p>How to avoid <strong>oscillations</strong> with <strong>congestion-sensitive</strong> routing?</p></blockquote><p>Ensure that not all routers run the LS algorithm at the same time.</p><p><strong>Randomize</strong> the time each router sends out a link advertisement in order to avoid the self-synchronization of the algorithm execution instance.</p>
+          </div>
+<hr />
+<h3 id="distance-vector-dv-routing-algorithm"><a class="markdownIt-Anchor" href="#distance-vector-dv-routing-algorithm"></a> Distance-Vector (DV) Routing Algorithm</h3>
+<img src="/imgs/202412051732443.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 80%;" />
+<p>Bellman-Ford equation:</p>
+<p><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>d</mi><mi>x</mi></msub><mo stretchy="false">(</mo><mi>y</mi><mo stretchy="false">)</mo><mo>=</mo><mi>m</mi><mi>i</mi><msub><mi>n</mi><mi>v</mi></msub><mo stretchy="false">{</mo><mi>c</mi><mo stretchy="false">(</mo><mi>x</mi><mo separator="true">,</mo><mi>v</mi><mo stretchy="false">)</mo><mo>+</mo><msub><mi>d</mi><mi>v</mi></msub><mo stretchy="false">(</mo><mi>y</mi><mo stretchy="false">)</mo><mo stretchy="false">}</mo></mrow><annotation encoding="application/x-tex">d_{x}(y) = min_v \{c(x, v) + d_v(y)\}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathnormal">d</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">x</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">m</span><span class="mord mathnormal">i</span><span class="mord"><span class="mord mathnormal">n</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.03588em;">v</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mopen">{</span><span class="mord mathnormal">c</span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">v</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathnormal">d</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.03588em;">v</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="mclose">)</span><span class="mclose">}</span></span></span></span></p>
+<p><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>D</mi><mi>x</mi><mo>=</mo><mo stretchy="false">[</mo><msub><mi>D</mi><mi>x</mi></msub><mo stretchy="false">(</mo><mi>y</mi><mo stretchy="false">)</mo><mo>:</mo><mi>y</mi><mtext> </mtext><mi>i</mi><mi>n</mi><mtext> </mtext><mi>N</mi><mo stretchy="false">]</mo></mrow><annotation encoding="application/x-tex">Dx = [D_x(y): y\ in\ N]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">D</span><span class="mord mathnormal">x</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">[</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.02778em;">D</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:-0.02778em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">x</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">:</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="mspace"> </span><span class="mord mathnormal">i</span><span class="mord mathnormal">n</span><span class="mspace"> </span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="mclose">]</span></span></span></span> is node x’s distance vector</p>
+<p>From time to time, each node sends a copy of its <strong>distance vector</strong> to each of its neighbors. When a node x receives a new distance vector from any of its neighbors w, it saves w’s distance vector, and then uses the Bellman-Ford equation to update its own distance vector as follows:</p>
+<p><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>D</mi><mi>x</mi></msub><mo stretchy="false">(</mo><mi>y</mi><mo stretchy="false">)</mo><mo>=</mo><mi>m</mi><mi>i</mi><msub><mi>n</mi><mi>v</mi></msub><mo stretchy="false">{</mo><mi>c</mi><mo stretchy="false">(</mo><mi>x</mi><mo separator="true">,</mo><mi>v</mi><mo stretchy="false">)</mo><mo>+</mo><msub><mi>D</mi><mi>v</mi></msub><mo stretchy="false">(</mo><mi>y</mi><mo stretchy="false">)</mo><mo stretchy="false">}</mo><mtext> </mtext><mi>f</mi><mi>o</mi><mi>r</mi><mtext> </mtext><mi>e</mi><mi>a</mi><mi>c</mi><mi>h</mi><mtext> </mtext><mi>n</mi><mi>o</mi><mi>d</mi><mi>e</mi><mtext> </mtext><mi>y</mi><mtext> </mtext><mi>i</mi><mi>n</mi><mtext> </mtext><mi>N</mi></mrow><annotation encoding="application/x-tex">D_{x}(y) = min_v \{c(x, v) + D_v(y)\}\ for\ each\ node\ y\ in\ N</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.02778em;">D</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:-0.02778em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">x</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">m</span><span class="mord mathnormal">i</span><span class="mord"><span class="mord mathnormal">n</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.03588em;">v</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mopen">{</span><span class="mord mathnormal">c</span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">v</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.02778em;">D</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:-0.02778em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.03588em;">v</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="mclose">)</span><span class="mclose">}</span><span class="mspace"> </span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="mord mathnormal">o</span><span class="mord mathnormal" style="margin-right:0.02778em;">r</span><span class="mspace"> </span><span class="mord mathnormal">e</span><span class="mord mathnormal">a</span><span class="mord mathnormal">c</span><span class="mord mathnormal">h</span><span class="mspace"> </span><span class="mord mathnormal">n</span><span class="mord mathnormal">o</span><span class="mord mathnormal">d</span><span class="mord mathnormal">e</span><span class="mspace"> </span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="mspace"> </span><span class="mord mathnormal">i</span><span class="mord mathnormal">n</span><span class="mspace"> </span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span></span></span></span></p>
+<p>If node x’s distance vector has changed as a result of this update step, node x will then  send its updated distance vector to each of its neighbors, which can in turn update  their own distance vectors.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs pseudocode">/* Distance-Vector (DV) Algorithm <br> * At each node, x:<br> */<br>Initialization:<br>   for all destinations y in N:<br>      Dx(y)= c(x,y)/* if y is not a neighbor then c(x,y)= infinity */<br>   for each neighbor w<br>      Dw(y) = ? for all destinations y in N<br>   for each neighbor w<br>      send distance vector  Dx = [Dx(y): y in N] to w<br><br>loop <br>    wait  (until I see a link cost change to some neighbor w              or until I receive a distance vector from some                neighbor w)<br>    <br>    for each y in N:<br>        Dx(y) = minv&#123;c(x,v) + Dv(y)&#125;<br>    /* for each destination y, node x also determines v*(y)          and updates its forwarding table for destination y. */<br><br>if Dx(y) changed for any destination y<br>        send distance vector Dx  = [Dx(y): y in N] to all             neighbors<br><br>forevers<br></code></pre></td></tr></table></figure>
+<blockquote>
+<p>How to avoid the <strong>count-to-infinity</strong> problem?</p>
+</blockquote>
+<img src="/imgs/202412160222283.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:80%;" />
+<p><strong>Poisoned reverse</strong>: If z routes through y to get to destination x,  then z will advertise to y that its distance to x is infinity, that is, z will advertise to y that <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>D</mi><mi>z</mi></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>=</mo><mi>i</mi><mi>n</mi><mi>f</mi><mi>i</mi><mi>n</mi><mi>i</mi><mi>t</mi><mi>y</mi></mrow><annotation encoding="application/x-tex">D_z(x) = infinity</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.02778em;">D</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:-0.02778em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.04398em;">z</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathnormal">i</span><span class="mord mathnormal">n</span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="mord mathnormal">i</span><span class="mord mathnormal">n</span><span class="mord mathnormal">i</span><span class="mord mathnormal">t</span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span></span></span></span></p>
+<h2 id="intra-as-routing-in-the-internet-ospf"><a class="markdownIt-Anchor" href="#intra-as-routing-in-the-internet-ospf"></a> Intra-AS Routing in the Internet: OSPF</h2>
+<p>The routing algorithm running within an AS(<strong>autonomous system</strong>) is called an <strong>intra-autonomous system routing protocol</strong>.</p>
+<hr />
+<h3 id="open-shortest-path-first-ospf"><a class="markdownIt-Anchor" href="#open-shortest-path-first-ospf"></a> Open Shortest Path First (OSPF)</h3>
+<p>OSPF is a <strong>link-state protocol</strong> that uses flooding of <strong>link-state information</strong> and a <strong>Dijkstra’s least-cost path algorithm</strong>.</p>
+<p>A router broadcasts <strong>link-state information</strong> whenever there is a change in a link’s state. It also broadcasts a link’s state periodically, even if the link’s state has not changed.</p>
+<p>OSPF runs directly over IP.</p>
+<div class="note note-info">
+            <blockquote><p>OSPF supports <strong>hierarchy</strong> within a single AS</p></blockquote><p>An OSPF autonomous system can be configured hierarchically into <strong>areas</strong>.</p><p>Within each area, there are one or more <strong>area border routers</strong>.</p><p>Within an AS, there is exactly one <strong>backbone area</strong>.</p><p><strong>Inter-area routing</strong> within the AS requires that the packet be first routed to an <strong>area border router</strong> (intra-area routing), then routed through the backbone to the area border router that is in the destination area, and then routed to the final destination.</p>
+          </div>
+<h2 id="routing-among-the-isps-bgp"><a class="markdownIt-Anchor" href="#routing-among-the-isps-bgp"></a> Routing Among the ISPs: BGP</h2>
+<img src="/imgs/202412161639345.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 67%;" />
+<img src="/imgs/202412161640250.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 80%;" />
+<p>Each BGP route is a list with three components: <strong>NEXT-HOP</strong>; <strong>AS-PATH</strong>; <strong>destination prefix</strong></p>
+<img src="/imgs/202412161700708.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 67%;" />
+<hr />
+<h3 id="route-selection-algorithm"><a class="markdownIt-Anchor" href="#route-selection-algorithm"></a> Route-Selection Algorithm</h3>
+<ol>
+<li>A route is assigned a <strong>local preference value</strong> as one of its attributes (in addition  to the AS-PATH and NEXT-HOP attributes). The routes with the highest local preference values are selected.</li>
+<li>From the remaining routes (all with the same highest local preference value),  the route with the <strong>shortest AS-PATH</strong> is selected.</li>
+<li>From the remaining routes, <strong>hot potato routing</strong> is used, that is, the route with the <strong>closest NEXT-HOP router</strong> is selected.</li>
+<li>If more than one route still remains, the router uses <strong>BGP identifiers</strong> to select the route</li>
+</ol>
+<hr />
+<h3 id="ip-anycast"><a class="markdownIt-Anchor" href="#ip-anycast"></a> IP-Anycast</h3>
+<img src="/imgs/202412161736416.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 67%;" />
+<p>IP-anycast is extensively used by the DNS system to direct DNS queries to the <strong>closest root DNS server</strong>.</p>
+<h1 id="chapter-6-the-link-layer-and-lans"><a class="markdownIt-Anchor" href="#chapter-6-the-link-layer-and-lans"></a> Chapter 6 - The Link Layer and LANs</h1>
+<p>A typical host architecture:</p>
+<img src="/imgs/202412161905144.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 67%;" />
+<h2 id="switched-local-area-networks"><a class="markdownIt-Anchor" href="#switched-local-area-networks"></a> Switched Local Area Networks</h2>
+<h3 id="link-layer-addressing-and-arp"><a class="markdownIt-Anchor" href="#link-layer-addressing-and-arp"></a> Link-Layer Addressing and ARP</h3>
+<img src="/imgs/202412161922853.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 80%;" />
+<ul>
+<li>ARP</li>
+</ul>
+<p>ARP resolves IP addresses only for hosts and router interfaces on the <strong>same subnet</strong>.</p>
+<img src="/imgs/image-20241216195033045-1740143775464-181.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:80%;" />
+<hr />
+<h3 id="ethernet"><a class="markdownIt-Anchor" href="#ethernet"></a> Ethernet</h3>
+<img src="/imgs/image-20241216200639093-1740143790085-183.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:80%;" />
+<h2 id="link-layer-switches"><a class="markdownIt-Anchor" href="#link-layer-switches"></a> Link-Layer Switches</h2>
+<p>switches are <strong>self-learning</strong>:</p>
+<ol>
+<li>The switch table is initially empty.</li>
+<li>For each incoming frame received on an interface, the switch stores in its table  (1) the MAC address in the frame’s source address field, (2) the interface from  which the frame arrived, and (3) the current time.</li>
+<li>The switch deletes an address in the table if no frames are received with that  address as the source address after some period of time (<strong>the aging time</strong>). In  this manner, if a PC is replaced by another PC (with a different adapter),</li>
+</ol>
+<p>Switches are <strong>plug-and-play</strong> devices.</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Computer-Networking/" class="category-chain-item">Computer Networking</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/ELEC331/" class="print-no-link">#ELEC331</a>
+      
+        <a href="/tags/Computer-Networking/" class="print-no-link">#Computer Networking</a>
+      
+        <a href="/tags/Top-Down-Approach/" class="print-no-link">#Top-Down Approach</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>A Top-Down Approach Studying Notes</div>
+      <div>http://oooscar8.github.io/2024/12/16/Top-down-approach/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Alex Sun</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年12月16日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/12/31/File-System/" title="File Systems">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">File Systems</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/11/14/Paging/" title="Paging">
+                        <span class="hidden-mobile">Paging</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div class="disqus" style="width:100%">
+    <div id="disqus_thread"></div>
+    
+      <script type="text/javascript">
+        var disqus_config = function() {
+          this.page.url = 'http://oooscar8.github.io/2024/12/16/Top-down-approach/';
+          this.page.identifier = '/2024/12/16/Top-down-approach/';
+        };
+        Fluid.utils.loadComments('#disqus_thread', function() {
+          var d = document, s = d.createElement('script');
+          s.src = '//' + 'fluid' + '.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', new Date());
+          (d.head || d.body).appendChild(s);
+        });
+      </script>
+    
+    <noscript>Please enable JavaScript to view the comments</noscript>
+  </div>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

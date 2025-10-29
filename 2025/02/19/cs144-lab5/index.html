@@ -1,0 +1,850 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/imgs/wallhaven-p9qeze.jpg">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Alex Sun">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="实现连接网络层IP datagram和链路层Ethernet frame之间的Network Interface">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CS144 Lab 5">
+<meta property="og:url" content="http://oooscar8.github.io/2025/02/19/cs144-lab5/index.html">
+<meta property="og:site_name" content="Alex&#39;s Space">
+<meta property="og:description" content="实现连接网络层IP datagram和链路层Ethernet frame之间的Network Interface">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://oooscar8.github.io/2025/02/19/imgs/202502171212064-1739988824415-108.png">
+<meta property="og:image" content="http://oooscar8.github.io/2025/02/19/imgs/202502190143600-1739984763181-30-1739988835302-110.png">
+<meta property="article:published_time" content="2025-02-18T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-02-26T18:18:38.691Z">
+<meta property="article:author" content="Alex Sun">
+<meta property="article:tag" content="CS144">
+<meta property="article:tag" content="计算机网络">
+<meta property="article:tag" content="Protocol Stack">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://oooscar8.github.io/2025/02/19/imgs/202502171212064-1739988824415-108.png">
+  
+  
+  
+  <title>CS144 Lab 5 - Alex&#39;s Space</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"oooscar8.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.1.1"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Alex&#39;s Space</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/imgs/chuyin.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="CS144 Lab 5"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-02-19 00:00" pubdate>
+          2025年2月19日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2.1k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          18 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">CS144 Lab 5</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="lab-checkpoint-5-down-the-stack-the-network-interface"><a class="markdownIt-Anchor" href="#lab-checkpoint-5-down-the-stack-the-network-interface"></a> Lab Checkpoint 5: down the stack (the network interface)</h1>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://cs144.github.io/assignments/check5.pdf">Checkpoint5 spec</a></p>
+</blockquote>
+<div class="note note-warning">
+            <p>注意，这篇笔记My implementation的后半部分全程代码剧透！</p>
+          </div>
+<h2 id="overview"><a class="markdownIt-Anchor" href="#overview"></a> Overview</h2>
+<p>In this lab, you'll go down the stack and implement the network interface:  the bridge between <strong>Internet datagrams</strong> that travel the world, and <strong>link-layer Ethernet frames</strong> that travel one hop.</p>
+<p>The figure below shows that the network interface we are going to implement is part of a host's TCP/IP protocol stack and also a part of an IP router.</p>
+<p><img src="/imgs/202502171212064-1739988824415-108.png" srcset="/img/loading.gif" lazyload alt="Our protocol stack" /></p>
+<blockquote>
+<p>What's the responsibility of the network interface?</p>
+</blockquote>
+<p>When an IP datagram is handed to the kernel, the kernel needs to construct an appropriate link-layer (Ethernet) frame with the IP datagram as its payload. This means the kernel needs to know its (IP address, Ethernet address) mapping. These functions are performed by the network interface.</p>
+<p>Most of the work you will do is to implement the <strong>Address Resolution Protocol(ARP)</strong>, which looks up (and cache) the Ethernet address for each next-hop IP address.</p>
+<p>In lab6, you will use this network interface as part of an IP router.</p>
+<h2 id="my-implementation"><a class="markdownIt-Anchor" href="#my-implementation"></a> My implementation</h2>
+<div class="note note-success">
+            <p>前言：coding前一定要认真读spec，将逻辑细节清楚后再写code。这个lab的代码量会相对较大，一定要多写helper functions！否则函数内部实现就会很臃肿。spec将函数逻辑讲解得很清晰，而且不像lab2和lab3那样有那么多corner case，所以难度适中。如果test没有通过，那一定是你在函数的逻辑细节问题上疏漏了。</p>
+          </div>
+<p>这个lab需要我们实现网络层(IP)和链路层(Ethernet)之间的网络接口(Network Interface)，负责：</p>
+<ol>
+<li>将从host/router上层(IP)收到的network datagram包装成Ethernet frame发送给上层IP协议指定的下一个host(next hop)。可能需要发送ARP request并将datagram暂放在waiting area中等待发送（详见ARP协议）</li>
+<li>接收外来的Ethernet frame，解析出payload，并根据其类型决定下一步操作：
+<ul>
+<li>如果是IPv4 datagram, 则将其存入buffer中供上层协议读取</li>
+<li>如果是ARP message，则记录下sender's IP-to-Ethernet mapping，如果是ARP request for自己的Ethernet地址，那就回复相应的ARP reply</li>
+</ul>
+</li>
+</ol>
+<p>如spec所说，这个Network Interface的关键在于实现<strong>ARP协议</strong>：</p>
+<p>这个Network Interface需要一个结构来缓存所有next hop的IP-to-Ethernet mapping。当需要发送一个network datagram的时候，如果next hop的Ethernet地址未知，就需要broadcast一个ARP request，并将这个datagram放入一个waiting area等待接收到ARP reply后再发送出去</p>
+<p>当Network Interface接收到一个ARP message的时候，需要将sender's IP-to-Ethernet mapping缓存下来。这时候需要检查waiting area中是否有正在等待这个mapping的datagram，如果有的话现在就可以发送这个datagram了。如果是一个ARP request，并且请求的还是自己的Ethernet地址，那么还需要将相应的ARP reply发送给sender</p>
+<div class="note note-danger">
+            <p>需要注意的点：</p><p>next hop的IP-to-Ethernet mapping是会随着设备的接入和离开随时变化的，因此每个缓存的IP-to-Ethernet mapping每隔一段时间（lab规定为30秒）会过期，需要清除。</p><p>在发送一个ARP request之后，5秒内（lab规定的）不应再发送针对相同IP地址的ARP request，但是仍需要将datagram放入waiting area中。</p><p>datagram不会永远等待在waiting area中，如果被放入waiting area后的5秒内（lab规定的）还没接收到等待的Ethernet地址，那么我们的Network Interface就会drop掉这个datagram。</p>
+          </div>
+<p>接下来进入我的实现细节（后面将是全程代码剧透！）：</p>
+<p>首先要确定用什么数据结构来表示：</p>
+<ol>
+<li>所有缓存的IP-to-Ethernet mappings</li>
+<li>所有在waiting area中的datagrams</li>
+</ol>
+<p>考虑到清除IP-to-Ethernet mappings操作是清除那些早于当前时间30秒的所有mappings，因此我决定使用可以根据mapping插入的时间顺序（时间戳）来排序所有mappings的数据结构，以提高清除操作的速度。我选择使用一个multimap，将mapping插入的时间（时间戳）作为key，IP-to-Ethernet mapping pair作为value。用multimap而不是map是因为不同mapping pair的时间戳可能相同。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">// Define the value type as a pair of EthernetAddress and IP address.</span><br>using MappingPair = <span class="hljs-built_in">std</span>::<span class="hljs-built_in">pair</span>&lt;EthernetAddress, <span class="hljs-type">uint32_t</span>&gt;;<br><br><span class="hljs-comment">// Define the map type with timestamp as key and (Ethernet, IP) pair as value.</span><br><span class="hljs-comment">// This is the data structure that will be used to store all the IP-to-Ethernet mappings.</span><br>using NetworkMappings = <span class="hljs-built_in">std</span>::<span class="hljs-built_in">multimap</span>&lt;<span class="hljs-type">uint64_t</span>, MappingPair&gt;;<br><br>NetworkMappings mappings &#123;&#125;;<br></code></pre></td></tr></table></figure>
+<p>同样的道理，在waiting area中等待过期的datagrams也需要定期清除（每次调用<code>tick</code>时），因此我也用一个multimap存储queued datagram。注意queued datagram需要包含datagram本身，以及其需要去往的next hop的ip地址。</p>
+<div class="note note-info">
+            <p>注意不要将<code>datagram_queued_</code>与<code>datagram_received_</code>搞混淆了，前者是需要等待ARP request收到回应后才能发送出去的pending(queued) datagrams，而datagram_received_是Network Interface从外部接收并解析出的IPv4 datagrams，暂存在Network Interface中供上层协议读取的。</p>
+          </div>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">QueuedDatagram</span></span><br><span class="hljs-class">&#123;</span><br>    <span class="hljs-type">uint32_t</span> next_hop_ip &#123;&#125;;<br>    InternetDatagram dgram &#123;&#125;;<br>&#125;;<br><br><span class="hljs-comment">// Datagrams that queued to learn the Ethernet address of the next hop</span><br><span class="hljs-built_in">std</span>::<span class="hljs-built_in">multimap</span>&lt;<span class="hljs-type">uint64_t</span>, QueuedDatagram&gt; datagrams_queued_ &#123;&#125;;<br></code></pre></td></tr></table></figure>
+<p><code>send_datagram</code> method还需要一个结构来存储针对每一个ip地址发送的ARF request的上一次发送时间，以此来检查是否可以发送当前的ARP request，这里我选择使用<code>unordered_map</code>，ip地址作为key，时间戳作为value。因为访问该结构的时候是通过ip地址寻找的，无法进行顺序查找，因此不需要排序，用hash table存储访问效率较高。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-built_in">std</span>::<span class="hljs-built_in">unordered_map</span>&lt;<span class="hljs-type">uint32_t</span>, <span class="hljs-type">uint64_t</span>&gt; last_arp_request_time_ &#123;&#125;;<br></code></pre></td></tr></table></figure>
+<p>确定好所有的数据结构后，就可以开始尝试实现Network Interface提供的3个methods，<strong>实现的过程中尽量将具体的逻辑细节封装在helper functions中</strong>：</p>
+<ul>
+<li><code>tick</code></li>
+</ul>
+<p><code>tick</code>是最容易实现的，首先更新当前时间，然后就是根据更新后的时间将过期的IP-to-Ethernet mappings和queued datagram清除。这里可以分别写两个helper function来实现：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">// Remove expired mappings (older than 30 seconds)</span><br><span class="hljs-type">void</span> <span class="hljs-title function_">remove_expired_mappings</span><span class="hljs-params">()</span><br>&#123;<br>    <span class="hljs-keyword">if</span> ( time_elapsed_ &lt; MAPPING_TIMEOUT ) &#123;<br>        <span class="hljs-keyword">return</span>;<br>    &#125;<br><br>    <span class="hljs-comment">// Calculate the expiration threshold</span><br>    <span class="hljs-type">uint64_t</span> expiration_threshold = time_elapsed_ - MAPPING_TIMEOUT;<br><br>    <span class="hljs-comment">// Find the first element that is not expired</span><br>    <span class="hljs-comment">// Since map is ordered by timestamp, we can remove all elements</span><br>    <span class="hljs-comment">// from beginning until we find a non-expired entry</span><br>    <span class="hljs-keyword">auto</span> it = mappings.lower_bound( expiration_threshold );<br>    mappings.erase( mappings.begin(), it );<br>&#125;<br></code></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">// Drop any expired datagrams</span><br><span class="hljs-type">void</span> <span class="hljs-title function_">drop_expired_datagrams</span><span class="hljs-params">()</span><br>&#123;<br>    <span class="hljs-comment">// Calculate the expiration threshold</span><br>    <span class="hljs-type">uint64_t</span> expiration_threshold = time_elapsed_ - ARP_REQUEST_TIMEOUT;<br>    <span class="hljs-keyword">if</span> ( time_elapsed_ &lt; ARP_REQUEST_TIMEOUT ) &#123;<br>        <span class="hljs-keyword">return</span>;<br>    &#125;<br><br>    <span class="hljs-comment">// Drop all expired datagrams</span><br>    <span class="hljs-keyword">auto</span> it = datagrams_queued_.begin();<br>    <span class="hljs-keyword">while</span> ( it != datagrams_queued_.end() &amp;&amp; it-&gt;first &lt;= expiration_threshold ) &#123;<br>        it = datagrams_queued_.erase( it );<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>这两个helper function虽然是处理不同的数据结构，但是逻辑很相似，都是从multimap的开头开始顺序清除，直到遇到第一个没有过期的元素后停止。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">//! \param[in] ms_since_last_tick the number of milliseconds since the last call to this method</span><br><span class="hljs-type">void</span> <span class="hljs-title function_">NetworkInterface::tick</span><span class="hljs-params">( <span class="hljs-type">const</span> <span class="hljs-type">size_t</span> ms_since_last_tick )</span><br>&#123;<br>  time_elapsed_ += ms_since_last_tick;<br><br>  <span class="hljs-comment">// Remove any expired IP-to-Ethernet mappings</span><br>  remove_expired_mappings();<br><br>  <span class="hljs-comment">// Drop any expired datagrams</span><br>  drop_expired_datagrams();<br>&#125;<br></code></pre></td></tr></table></figure>
+<ul>
+<li><code>send_datagram</code></li>
+</ul>
+<p>分两种情况：</p>
+<ol>
+<li>已知next hop的Ethernet address（缓存在Network Interface中了）</li>
+</ol>
+<p>从IP-to-Ethernet中获取需要的mapping，创建并设置Ethernet frame，frame header中的dst field设为获取的mapping中的Ethernet address。将frame的payload设为serialized后的datagram。设置完成后传输该Ethernet frame</p>
+<p>根据next hop的ip地址获取mapping缓存，并将获知的Ethernet地址写入frame header的过程可以写一个helper function：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">// Get mapping by IP address</span><br><span class="hljs-type">bool</span> <span class="hljs-title function_">getMapping</span><span class="hljs-params">( <span class="hljs-type">uint32_t</span> target_ip, EthernetAddress&amp; eth )</span> <span class="hljs-type">const</span><br>&#123;<br>    <span class="hljs-keyword">for</span> ( <span class="hljs-type">const</span> <span class="hljs-keyword">auto</span>&amp; [ts, mapping] : mappings ) &#123;<br>        <span class="hljs-keyword">if</span> ( mapping.second == target_ip ) &#123;<br>            eth = mapping.first;<br>            <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;<br>        &#125;<br>    &#125;<br>    <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>在<code>send_datagram</code>中：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs c">EthernetFrame eframe;<br><br><span class="hljs-comment">// If the destination Ethernet address is already known, create a Ethernet frame and send it right away</span><br><span class="hljs-keyword">if</span> ( getMapping( next_hop.ipv4_numeric(), eframe.header.dst ) ) &#123;<br>    <span class="hljs-comment">// Set up the Ethernet frame header</span><br>    eframe.header.type = EthernetHeader::TYPE_IPv4;<br>    eframe.header.src = ethernet_address_;<br><br>    <span class="hljs-comment">// Set up the Ethernet frame payload to be the serialized datagram</span><br>    Serializer serializer;<br>    dgram.serialize( serializer );<br>    eframe.payload = serializer.finish();<br><br>    <span class="hljs-comment">// Send the Ethernet frame</span><br>    transmit( eframe );<br>    <span class="hljs-keyword">return</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<ol start="2">
+<li>未知next hop的Ethernet address（不在缓存中）</li>
+</ol>
+<p>需要发送一个请求next hop的ip地址的ARP request（如果5秒内没发送过请求该ip地址的ARP request），并将datagram放入waiting area中。</p>
+<p>我用一个helper function来创建ARP message：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><code class="hljs c">EthernetFrame <span class="hljs-title function_">create_arp_message</span><span class="hljs-params">( <span class="hljs-type">uint16_t</span> opcode,</span><br><span class="hljs-params">                                 <span class="hljs-type">const</span> EthernetAddress&amp; sender_eth,</span><br><span class="hljs-params">                                 <span class="hljs-type">uint32_t</span> sender_ip,</span><br><span class="hljs-params">                                 <span class="hljs-type">const</span> EthernetAddress&amp; target_eth,</span><br><span class="hljs-params">                                 <span class="hljs-type">uint32_t</span> target_ip )</span><br>&#123;<br>    EthernetFrame frame;<br>    <span class="hljs-keyword">if</span> ( opcode == ARPMessage::OPCODE_REQUEST ) &#123;<br>        frame.header.dst = ETHERNET_BROADCAST;<br>    &#125; <span class="hljs-keyword">else</span> &#123;<br>        frame.header.dst = target_eth;<br>    &#125;<br>    frame.header.src = sender_eth;<br>    frame.header.type = EthernetHeader::TYPE_ARP;<br><br>    ARPMessage arp;<br>    arp.opcode = opcode;<br>    arp.sender_ethernet_address = sender_eth;<br>    arp.sender_ip_address = sender_ip;<br>    arp.target_ethernet_address = target_eth;<br>    arp.target_ip_address = target_ip;<br><br>    Serializer serializer;<br>    arp.serialize( serializer );<br>    frame.payload = serializer.finish();<br><br>    <span class="hljs-keyword">return</span> frame;<br>&#125;<br></code></pre></td></tr></table></figure>
+<div class="note note-info">
+            <p>注意，<code>send_datagram</code>（可能）需要的ARP request message和<code>recv_frame</code>（可能）需要的ARP reply message都是用上面这个函数创建。创建request和reply message使用的参数模板都是一样的，不同的是：</p><ol><li><p><code>opcode</code>不同</p></li><li><p>request message的<code>target_ethernet_address</code>是<code>{ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }</code>，而reply message的是要回复对象的Ethernet地址</p></li><li><p>request message的<code>target_ip_address</code>是请求的ip地址，reply message的是要回复对象的ip地址</p></li><li><p>request message的frame header中的<code>dst</code>是Ethernet Broadcast地址，而reply message的就是要回复对象的Ethernet地址</p></li></ol>
+          </div>
+<p>接下来，我用一个helper function来检查是否可以发送ARP request，再用一个来更新ARP request发送时间：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">bool</span> <span class="hljs-title function_">can_send_arp_request</span><span class="hljs-params">( <span class="hljs-type">uint32_t</span> target_ip )</span> <span class="hljs-type">const</span><br>&#123;<br>    <span class="hljs-keyword">auto</span> it = last_arp_request_time_.find( target_ip );<br>    <span class="hljs-keyword">if</span> ( it == last_arp_request_time_.end() ) &#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;<br>    &#125;<br><br>    <span class="hljs-keyword">return</span> time_elapsed_ - it-&gt;second &gt;= ARP_REQUEST_TIMEOUT;<br>&#125;<br><br><span class="hljs-type">void</span> <span class="hljs-title function_">update_arp_request_time</span><span class="hljs-params">( <span class="hljs-type">uint32_t</span> target_ip )</span> &#123; last_arp_request_time_[target_ip] = time_elapsed_; &#125;<br></code></pre></td></tr></table></figure>
+<p>在<code>send_datagram</code>中：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">// The destination Ethernet address is unknown,</span><br><span class="hljs-comment">// broadcast an ARP request and queue the datagram</span><br>EthernetFrame arp_request = create_arp_message( ARPMessage::OPCODE_REQUEST,<br>                                               ethernet_address_,<br>                                               ip_address_.ipv4_numeric(),<br>                                               &#123; <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span>, <span class="hljs-number">0x00</span> &#125;,<br>                                               next_hop.ipv4_numeric() );<br><br><span class="hljs-keyword">if</span> ( can_send_arp_request( next_hop.ipv4_numeric() ) ) &#123;<br>    transmit( arp_request );<br>    update_arp_request_time( next_hop.ipv4_numeric() );<br>&#125;<br><br>QueuedDatagram qdgram;<br>qdgram.next_hop_ip = next_hop.ipv4_numeric();<br>qdgram.dgram = dgram;<br>datagrams_queued_.insert( <span class="hljs-built_in">make_pair</span>( time_elapsed_, qdgram ) );<br></code></pre></td></tr></table></figure>
+<ul>
+<li><code>recv_datagram</code></li>
+</ul>
+<p>首先判断接收到的Ethernet frame是不是发送给自己的，如果不是的话直接ignore：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">// Ignore any frames not destined for the network interface</span><br><span class="hljs-keyword">if</span> ( frame.header.dst != ethernet_address_ &amp;&amp; frame.header.dst != ETHERNET_BROADCAST ) &#123;<br>    <span class="hljs-keyword">return</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>后续处理该frame也分两种情况：</p>
+<ol>
+<li>如果接收到的是IPv4类型的frame，将payload解析为network datagram，如果解析成功就将其放入<code>datagram_received_</code> buffer中供上层协议读取</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">// If inbound frame is IPv4, parse the payload as an InternetDatagram</span><br><span class="hljs-comment">// and if successful, push the resulting datagram to the datagrams_received_ queue</span><br><span class="hljs-keyword">if</span> ( frame.header.type == EthernetHeader::TYPE_IPv4 ) &#123;<br>    Parser <span class="hljs-title function_">parser</span><span class="hljs-params">( frame.payload )</span>;<br><br>    InternetDatagram dgram;<br>    dgram.parse( parser );<br>    <span class="hljs-keyword">if</span> ( parser.has_error() )<br>        <span class="hljs-keyword">return</span>;<br>    datagrams_received_.push( dgram );<br>&#125;<br></code></pre></td></tr></table></figure>
+<ol start="2">
+<li>
+<p>如果接收到的是ARP类型的frame，将payload解析为ARP message，如果解析成功就将sender的IP-to-Ethernet mapping写入缓存中。并且，如果是ARP request，那么还需要回复相应的ARP reply。</p>
+<p>最后，我们需要遍历<code>datagram_queued_</code>检查刚接收到的IP-to-Ethernet mapping是否可以让我们发送等待在waiting area中的pending(queued) datagrams。</p>
+</li>
+</ol>
+<p>写入IP-to-Ethernet mapping缓存的过程可以用一个helper function：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">// Add a new IP-to-Ethernet mapping</span><br><span class="hljs-type">void</span> <span class="hljs-title function_">addMapping</span><span class="hljs-params">( <span class="hljs-type">uint64_t</span> timestamp, <span class="hljs-type">const</span> EthernetAddress&amp; eth, <span class="hljs-type">uint32_t</span> ip )</span><br>&#123;<br>    mappings.insert( <span class="hljs-built_in">make_pair</span>( timestamp, MappingPair( eth, ip ) ) );<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>创建并设置ARP reply使用之前写的<code>create_arp_message</code> function。</p>
+<p>在<code>recv_datagram</code>中：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">// If the inbound frame is ARP, parse the payload as an ARPMessage</span><br><span class="hljs-comment">// an if successful, add the IP-to-Ethernet mapping to the mappings.</span><br><span class="hljs-comment">// In addition, if it&#x27;s an ARP request asking for our IP address,</span><br><span class="hljs-comment">// send an appropriate ARP reply.</span><br><span class="hljs-keyword">if</span> ( frame.header.type == EthernetHeader::TYPE_ARP ) &#123;<br>    Parser <span class="hljs-title function_">parser</span><span class="hljs-params">( frame.payload )</span>;<br><br>    ARPMessage arp_message;<br>    arp_message.parse( parser );<br>    <span class="hljs-keyword">if</span> ( parser.has_error() )<br>        <span class="hljs-keyword">return</span>;<br>    addMapping( time_elapsed_, arp_message.sender_ethernet_address, arp_message.sender_ip_address );<br>    <span class="hljs-keyword">if</span> ( arp_message.opcode == ARPMessage::OPCODE_REQUEST<br>        &amp;&amp; arp_message.target_ip_address == ip_address_.ipv4_numeric() ) &#123;<br>        EthernetFrame arp_reply = create_arp_message( ARPMessage::OPCODE_REPLY,<br>                                                     ethernet_address_,<br>                                                     ip_address_.ipv4_numeric(),<br>                                                     arp_message.sender_ethernet_address,<br>                                                     arp_message.sender_ip_address );<br>        transmit( arp_reply );<br>    &#125;<br><br>    <span class="hljs-comment">// Since we have received an ARP message, we can probably send any queued datagrams</span><br>    <span class="hljs-keyword">auto</span> it = datagrams_queued_.begin();<br>    <span class="hljs-keyword">while</span> ( it != datagrams_queued_.end() ) &#123;<br>        <span class="hljs-keyword">if</span> ( it-&gt;second.next_hop_ip == arp_message.sender_ip_address ) &#123;<br>            send_datagram( it-&gt;second.dgram, Address::from_ipv4_numeric( it-&gt;second.next_hop_ip ) );<br>            it = datagrams_queued_.erase( it );<br>        &#125; <span class="hljs-keyword">else</span> &#123;<br>            ++it;<br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h2 id="finish"><a class="markdownIt-Anchor" href="#finish"></a> Finish!</h2>
+<p>All tests in check5 pass!</p>
+<p><img src="/imgs/202502190143600-1739984763181-30-1739988835302-110.png" srcset="/img/loading.gif" lazyload alt="Test check5" /></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Computer-Networking/" class="category-chain-item">Computer Networking</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/Computer-Networking/CS144/" class="category-chain-item">CS144</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/CS144/" class="print-no-link">#CS144</a>
+      
+        <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" class="print-no-link">#计算机网络</a>
+      
+        <a href="/tags/Protocol-Stack/" class="print-no-link">#Protocol Stack</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>CS144 Lab 5</div>
+      <div>http://oooscar8.github.io/2025/02/19/cs144-lab5/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Alex Sun</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年2月19日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2025/02/20/hexo-blog/" title="hexo解析图片路径">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">hexo解析图片路径</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2025/02/14/cs144-lab3/" title="CS144 Lab 3">
+                        <span class="hidden-mobile">CS144 Lab 3</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div class="disqus" style="width:100%">
+    <div id="disqus_thread"></div>
+    
+      <script type="text/javascript">
+        var disqus_config = function() {
+          this.page.url = 'http://oooscar8.github.io/2025/02/19/cs144-lab5/';
+          this.page.identifier = '/2025/02/19/cs144-lab5/';
+        };
+        Fluid.utils.loadComments('#disqus_thread', function() {
+          var d = document, s = d.createElement('script');
+          s.src = '//' + 'fluid' + '.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', new Date());
+          (d.head || d.body).appendChild(s);
+        });
+      </script>
+    
+    <noscript>Please enable JavaScript to view the comments</noscript>
+  </div>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

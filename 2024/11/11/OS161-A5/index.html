@@ -1,0 +1,1149 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/imgs/wallhaven-p9qeze.jpg">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Alex Sun">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Implement fork&#x2F;exec system calls and the process management system">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OS161 Assignment 5">
+<meta property="og:url" content="http://oooscar8.github.io/2024/11/11/OS161-A5/index.html">
+<meta property="og:site_name" content="Alex&#39;s Space">
+<meta property="og:description" content="Implement fork&#x2F;exec system calls and the process management system">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://oooscar8.github.io/2024/11/11/imgs/202410262356451.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/11/11/imgs/202410262356432.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/11/11/imgs/202410262324165-1740473621641-3.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/11/11/imgs/202411041428372-1740473621641-5.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/11/11/imgs/202411041449905-1740473621641-7.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/11/11/imgs/202411041450806-1740473621641-9.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/11/11/imgs/202411041454332-1740473621641-11.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/11/11/imgs/202502170921959.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/11/11/imgs/202411041449905-1740473621641-7.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/11/11/imgs/202411041450806-1740473621641-9.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/11/11/imgs/202411041454332-1740464409429-5-1740473621644-15.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/11/11/imgs/202412151509009.jpg">
+<meta property="og:image" content="http://oooscar8.github.io/2024/11/11/imgs/image-20250225164450312-1740473621644-16.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/11/11/imgs/image-20250225164904864-1740473621645-17.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/11/11/imgs/image-20250225164949387-1740473621645-18.png">
+<meta property="article:published_time" content="2024-11-10T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-03-05T11:04:11.984Z">
+<meta property="article:author" content="Alex Sun">
+<meta property="article:tag" content="OS">
+<meta property="article:tag" content="OS161">
+<meta property="article:tag" content="System Calls">
+<meta property="article:tag" content="Process Management">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://oooscar8.github.io/2024/11/11/imgs/202410262356451.png">
+  
+  
+  
+  <title>OS161 Assignment 5 - Alex&#39;s Space</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"oooscar8.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.1.1"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Alex&#39;s Space</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/imgs/chuyin.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="OS161 Assignment 5"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-11-11 00:00" pubdate>
+          2024年11月11日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2.5k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          21 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">OS161 Assignment 5</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="assignment5"><a class="markdownIt-Anchor" href="#assignment5"></a> Assignment5</h1>
+<blockquote>
+<p>Implement <code>fork, execv, waitpid, getpid and _exit</code>.</p>
+</blockquote>
+<h2 id="questions-to-think-about"><a class="markdownIt-Anchor" href="#questions-to-think-about"></a> Questions to think about</h2>
+<blockquote>
+<ol>
+<li>How to <strong>create a copy of an existing user process</strong> and make the new process <strong>return to user mode with a different return value</strong> than the original process. Code in <code>runprogram.c</code> and in the function it calls and in <code>proc_create_runprogram</code> will be very helpful in figuring that out.</li>
+</ol>
+</blockquote>
+<p><code>fork</code> system call is responsible for creating a copy of an existing user process and making the new(child) process return to user mode with a different return value than the original(parent) process.</p>
+<p>To create a new user process, we first need to create a new kernel thread to provide to it. This newly-created kernel thread should change child's <code>trapframe</code> and return to user mode in a different manner than the parent.</p>
+<blockquote>
+<ol start="2">
+<li>How to replace the address space of a process created via <code>fork</code> with a completely new address space and executable.</li>
+</ol>
+</blockquote>
+<p>When we want to create a process with a completely new address space and executable. we need to call <code>execv</code> after <code>fork</code>. In <code>execv</code>, we need to create the new address space, switch to and activate it. With the new address space set up, we can load the new executable and define the user stack.</p>
+<blockquote>
+<ol start="3">
+<li>How to copy in/out of the <code>userspace</code> the argument vector for the <code>execv</code> system call. This code requires lots of pointer arithmetic and handling various corner cases.</li>
+</ol>
+</blockquote>
+<p>This is the most tricky part when we implement <code>execv</code>. We need to copy in/out not only the argument array, but also the pointers pointing to those arguments. First, we need to copy argument array and pointer array into the kernel from the old address space, then copy those out to the new address space.</p>
+<blockquote>
+<ol start="4">
+<li>How to manage the process IDs, so you don't run out as processes are created and retired.</li>
+</ol>
+</blockquote>
+<p>We need to implement the <strong>PID system</strong> that dynamically allocates and reclaims PID.</p>
+<blockquote>
+<ol start="5">
+<li>How to synchronize the parent and child processes in <code>waitpid()</code> and <code>_exit()</code>.</li>
+</ol>
+</blockquote>
+<p>To synchronize parent and child processes, we need to implement the <strong>process wait and exit mechanism</strong>. For now, just need to understand that parent processes call <code>waitpid</code> to wait for their child processes to exit. When child processes exit, they need to signal their parents.</p>
+<div class="note note-danger">
+            <p>It's important to note that a process will not necessarily be cleaned up right after it exits. It strongly depends on how you design your process wait and cleanup mechanism.</p>
+          </div>
+<blockquote>
+<ol start="6">
+<li>How to manage the file table synchronization, given that starting from this assignment two or more processes might concurrently access the same file object (<strong>processes created via fork share the file objects</strong>).</li>
+</ol>
+</blockquote>
+<p>In the last assignment, we already take this synchronization problem into account. As long as we hold the file handle lock right after we get the file handle, we are fine.</p>
+<h2 id="system-calls-to-implement"><a class="markdownIt-Anchor" href="#system-calls-to-implement"></a> System calls to implement</h2>
+<p>Make sure to read the system calls man page carefully to understand every detail of these system calls:</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs stylus"><span class="hljs-function"><span class="hljs-title">getpid</span><span class="hljs-params">()</span></span><br></code></pre></td></tr></table></figure>
+<p>Main task: Implement <strong><code>pid</code> allocation and reclamation</strong></p>
+<hr />
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs stylus"><span class="hljs-function"><span class="hljs-title">fork</span><span class="hljs-params">()</span></span><br></code></pre></td></tr></table></figure>
+<p><code>sys_fork</code> is responsible for:</p>
+<ol>
+<li>Copy address space(<code>as_copy</code> in <code>dumbvm</code>)</li>
+</ol>
+<p>The forked process should have the exact same address space as the original process.</p>
+<img src="/imgs/202410262356451.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:50%;" />
+<ol start="2">
+<li>Copy the file table</li>
+</ol>
+<p>When a process is forked, file descriptor entries of the new process point to the <strong>same file handles</strong> as in the parent process.</p>
+<img src="/imgs/202410262356432.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:50%;" />
+<blockquote>
+<p>What kind of race conditions do you have to worry about?</p>
+</blockquote>
+<p>Two processes simultaneously modifying the values of the offset.</p>
+<blockquote>
+<p>Can you hold a spinlock while doing I/O?</p>
+</blockquote>
+<p>Spinlocks turn off interrupts; I/O completion is signaled via an interrupt. If you turn off interrupts and then go do I/O, YOU WILL NEVER GET NOTIFIED!</p>
+<blockquote>
+<p>Hold a regular lock? That will work. But do we have to hold the lock?</p>
+</blockquote>
+<p>-- Not really. We can set up the <code>uio</code> struct with the right offset, release the lock, do the I/O, then acquire it again and update the offset if I/O was successful. Can’t update the offset prior to I/O completion – what if it fails?</p>
+<ol start="3">
+<li>Copy architectural state(Copy and tweak <code>trapframe</code>)</li>
+</ol>
+<p>In the implementation of A5, you will have to make sure <strong>the right value is returned to the right process!</strong></p>
+<blockquote>
+<p>How will you need to modify the child's <code>trapframe</code> to make sure that the child correctly returns to user mode?</p>
+</blockquote>
+<p>Set the correct return value (0), signal no error, and advance to next instruction in the <code>trapframe</code>.</p>
+<blockquote>
+<p>When do you need to copy the parent's <code>trapframe</code>? Remember that as soon as the parent is returned from the system call, its <code>trapframe</code> will be destroyed or modified!</p>
+</blockquote>
+<p>Copy the parent's <code>trapframe</code> to <code>child_tf</code> before creating the kernel thread for the child process.</p>
+<ol start="4">
+<li>Copy kernel thread(<code>thread_fork</code>)</li>
+</ol>
+<p><strong>When you fork a new process, you fork a new kernel thread to provide to the child process.</strong></p>
+<p><strong>To fork that thread, you need to provide it a function to run. You’ll need to write that function.</strong></p>
+<p>As mentioned above, <code>thread_fork</code> is used to fork a new kernel thread for the newly-forked process. <code>enter_forked_process</code> is provided to the newly-created thread.</p>
+<p>You need to implement the <code>enter_forked_process</code> to modify the child process's <code>trapframe</code> and return to user mode:</p>
+<img src="/imgs/202410262324165-1740473621641-3.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 67%;" />
+<ol start="5">
+<li>Return to user mode</li>
+<li>Both the parent and child return to user mode</li>
+</ol>
+<p>The parent just returns from exception(<code>mips_trap</code>).</p>
+<p>The child returns via the <code>mips_usermode</code> function.</p>
+<blockquote>
+<p>How does a thread enter user mode for the first time?</p>
+</blockquote>
+<p><code>mips_usermode</code> in <code>trap.c</code>. This function shouldn't used by threads returning from traps - they should just return from <code>mips_trap</code>.</p>
+<hr />
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs stylus"><span class="hljs-function"><span class="hljs-title">execv</span><span class="hljs-params">()</span></span><br></code></pre></td></tr></table></figure>
+<p>It must replace the existing address space with a brand new one for the new executable (created by calling <code>as_create</code> in the current <code>dumbvm</code> system) and then run it.</p>
+<p>While this is similar to starting a process straight out of the kernel (as <code>runprogram()</code> does), it's not quite that simple. Remember that this call is <strong>coming out of <code>userspace</code>, into the kernel, and then returning back to <code>userspace</code></strong>. You must manage the memory that travels across these boundaries very carefully.</p>
+<p>(Also, notice that <code>runprogram()</code> doesn't take an argument vector -- but this must of course be handled correctly in <code>execv()</code>)</p>
+<p>As you are replacing an old address space with a new one, you must not leak memory used by the old address space.</p>
+<p>Carefully read the <a target="_blank" rel="noopener" href="http://ece.ubc.ca/~os161/man/syscall/execv.html">man page</a> for <code>execv()</code> to understand the trickery in <strong>passing the potentially very large argument vector to/from <code>userspace</code></strong>.</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-function"><span class="hljs-type">int</span></span><br><span class="hljs-function"><span class="hljs-title">execv</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span> *program, <span class="hljs-type">char</span> **args)</span></span>;<br></code></pre></td></tr></table></figure>
+<p><code>sys_execv</code> is responsible for:</p>
+<p>• Replace the old address space with a new one</p>
+<p>• Copy the arguments into the new address space</p>
+<p>• Return to user mode</p>
+<p><strong>The mechanics of <code>exec()</code></strong>:</p>
+<p><img src="/imgs/202411041428372-1740473621641-5.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+<p><strong>To think before starting exec():</strong></p>
+<blockquote>
+<p><strong>Where are the arguments located</strong> when the exec system call in invoked? In whose address space? How do you know their address?</p>
+<p>How do we get them into the kernel? How do you figure out their total size?</p>
+<p>Where do the arguments need to end up before we return to the user mode? Whose address space? Stack or heap?</p>
+<p>How do we get them there? How do we organize them there.</p>
+<p>What if the arguments array is huge and you cannot allocate enough kernel memory contiguously?</p>
+</blockquote>
+<p><strong>Passing arguments(<code>copyin</code> and <code>copyout</code>)</strong>:</p>
+<div class="note note-primary">
+            <p>It's important to emphasize that we need to pass not only the arguments, but also the pointers to those arguments.</p>
+          </div>
+<p><img src="/imgs/202411041449905-1740473621641-7.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+<p><img src="/imgs/202411041450806-1740473621641-9.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+<p><img src="/imgs/202411041454332-1740473621641-11.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+<hr />
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs stylus"><span class="hljs-function"><span class="hljs-title">waitpid</span><span class="hljs-params">()</span></span><br></code></pre></td></tr></table></figure>
+<p>Require a fair bit of design.</p>
+<p><strong>If a parent process exits before one or more of its children, it can no longer be expected collect their exit status.</strong> There are several ways to handle this case in practice, of which the traditional Unix method is only one. This is something you should design.</p>
+<hr />
+<figure class="highlight isbl"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs isbl"><span class="hljs-function"><span class="hljs-title">_exit</span>()</span><br></code></pre></td></tr></table></figure>
+<p>Closely connected to the implementation of <code>waitpid()</code>.</p>
+<p>Most of the time, the code for <code>_exit()</code> will be simple and the code for <code>waitpid()</code> relatively complicated.</p>
+<h2 id="error-handling"><a class="markdownIt-Anchor" href="#error-handling"></a> Error handling</h2>
+<p>If there are conditions that can happen that are not listed in the man page, return the most appropriate error code from <code>kern/include/kern/errno.h</code>.</p>
+<p>Note that if you add an error code to <code>src/kern/include/kern/errno.h</code>, you need to add a corresponding error message to the file <code>src/kern/include/kern/errmsg.h</code>.</p>
+<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ebnf"><span class="hljs-attribute">kill_curthread</span><br></code></pre></td></tr></table></figure>
+<p>Feel free to write <code>kill_curthread()</code> in as simple a manner as possible.</p>
+<div class="note note-success">
+            <p><code>kill_curthread</code> is similar to <code>_exit</code>, except that in <code>kill_curthread</code>, we need to signal the parent process that current process is dead. We only need to change the <code>p_exitcode</code>.</p>
+          </div>
+<h2 id="plan-your-work"><a class="markdownIt-Anchor" href="#plan-your-work"></a> Plan your work</h2>
+<p>Implement <code>fork</code> first.</p>
+<p>You will be able to test it using <code>/testbin/forktest</code> (set <code>no wait</code> to 1 in <code>forktest.c</code> if you would like to run it before <code>waitpid</code> is implemented)</p>
+<p>You may first implement <code>fork()</code> with a very simple <code>pid</code> assignment scheme, and improve on it later as you are designing the rest of the system calls.</p>
+<h2 id="test-your-code"><a class="markdownIt-Anchor" href="#test-your-code"></a> Test your code</h2>
+<ol>
+<li><strong>Testing using the shell</strong></li>
+</ol>
+<p>In user <code>/bin/sh</code> you will find a simple shell that will allow you to test your new system call interfaces.</p>
+<p>You can exit the shell by typing &quot;exit&quot;.</p>
+<p>Before you run the shell, you need to put some synchronization code into <code>common_prog()</code>(in <code>menu.c</code>:114) to make sure that the menu thread is not trying to run concurrently with your shell and does not compete with it for the console input/output.</p>
+<ol start="2">
+<li><strong>Error handling</strong></li>
+</ol>
+<p>Use the devious <code>/testbin/badcall</code> (which you should now be able to invoke from a shell). At this point your system should not crash no matter what the user program does.</p>
+<p>Even <code>/testbin/forkbomb</code> should not crash your kernel.</p>
+<ol start="3">
+<li><strong>Memory leaks</strong></li>
+</ol>
+<p>Your <code>execv</code> should properly dispose of the old address space (and any other old unneeded state) and returned the memory back to the system.</p>
+<p>If a system call fails in the middle of execution (e.g., because of a bad pointer coming from user space) you must free up the resources allocated up to that point.</p>
+<p>You can debug memory leaks by changing <code>#undef LABELS</code> to <code>#define labels</code> in <code>vm/kmalloc.c</code> and then invoking <code>khdump</code> from the kernel menu to examine the heap.</p>
+<figure class="highlight dns"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs dns">OS/<span class="hljs-number">161</span> kernel [? for menu]: khdump<br>Remaining allocations from generation <span class="hljs-number">3</span>:<br>  <span class="hljs-number">16</span> bytes at <span class="hljs-number">0x80042e70</span>, allocated at <span class="hljs-number">0x80012d80</span><br>  <span class="hljs-number">64</span> bytes at <span class="hljs-number">0x80040140</span>, allocated at <span class="hljs-number">0x80006080</span><br>  <span class="hljs-number">64</span> bytes at <span class="hljs-number">0</span>x<span class="hljs-number">800401c0</span>, allocated at <span class="hljs-number">0</span>x8001162c<br>  <span class="hljs-number">64</span> bytes at <span class="hljs-number">0x80040200</span>, allocated at <span class="hljs-number">0x80006080</span><br>  <span class="hljs-number">64</span> bytes at <span class="hljs-number">0x80040340</span>, allocated at <span class="hljs-number">0x80006080</span><br>  <span class="hljs-number">64</span> bytes at <span class="hljs-number">0</span>x<span class="hljs-number">800403c0</span>, allocated at <span class="hljs-number">0x80006080</span><br>  <span class="hljs-number">64</span> bytes at <span class="hljs-number">0x80040480</span>, allocated at <span class="hljs-number">0x80006080</span><br>  <span class="hljs-number">64</span> bytes at <span class="hljs-number">0x80040540</span>, allocated at <span class="hljs-number">0x80006080</span><br>  <span class="hljs-number">64</span> bytes at <span class="hljs-number">0x80040680</span>, allocated at <span class="hljs-number">0x80006080</span><br> <span class="hljs-number">128</span> bytes at <span class="hljs-number">0</span>x<span class="hljs-number">8003f780</span>, allocated at <span class="hljs-number">0</span>x80023cfc<br> <span class="hljs-number">256</span> bytes at <span class="hljs-number">0x80041b00</span>, allocated at <span class="hljs-number">0</span>x8001162c<br> <span class="hljs-number">512</span> bytes at <span class="hljs-number">0x80043c00</span>, allocated at <span class="hljs-number">0</span>x8001162c<br>Operation took <span class="hljs-number">1.195788680</span> seconds<br></code></pre></td></tr></table></figure>
+<p>You see that this command outputs a bunch of virtual addresses that were allocated via <code>kmalloc</code> and the corresponding addresses of code locations, where those items were allocated. To find out what these code locations are, you can use <code>os161-addr2line</code> (the OS/161 version of this standard Unix tool). For example, using an address from the example above:</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs awk">os161-addr2line -e ~<span class="hljs-regexp">/Work/</span>os161<span class="hljs-regexp">/root/</span>kernel <span class="hljs-number">0</span>x80023cfc<br><span class="hljs-regexp">/Users/</span>UBC-home<span class="hljs-regexp">/Work/</span>os161<span class="hljs-regexp">/src/</span>kern<span class="hljs-regexp">/compile/</span>DUMBVM<span class="hljs-regexp">/../</span>..<span class="hljs-regexp">/thread/</span>thread.c:<span class="hljs-number">132</span><br></code></pre></td></tr></table></figure>
+<ol start="4">
+<li><strong>How we will mark your code</strong></li>
+</ol>
+<p>We will run a subset of the following tests on your kernel (all from /testbin)</p>
+<figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs mipsasm">forktest<br>argtest<br><span class="hljs-keyword">bigfile</span><br><span class="hljs-keyword"></span>crash<br>farm<br>faulter<br>forkbomb<br><span class="hljs-keyword">multiexec</span><br><span class="hljs-keyword"></span><span class="hljs-keyword">badcall</span><br><span class="hljs-keyword"></span><span class="hljs-keyword">bigexec</span><br></code></pre></td></tr></table></figure>
+<p><code>Forktest</code> and <code>argtest</code> are the simplest test programs, so first make sure that your kernel runs those. <code>Badcall</code> and <code>bigexec</code> are the most challenging.</p>
+<h2 id="my-solution"><a class="markdownIt-Anchor" href="#my-solution"></a> My Solution</h2>
+<p>I have revealed enough tips(secrets) above, more than enough for you to implement this assignment correctly! <strong>Please do not look at my solution below until you have finished coding!</strong> Otherwise, you will lose the joy of coding!</p>
+<p>Now, I will dive deep down into my design and implementation. SPOIL (CODE) ALERT!</p>
+<p>This assignment has 4 major parts:</p>
+<ol>
+<li>PID system</li>
+<li>Process creation(<code>fork</code>)</li>
+<li>Process wait and exit mechanism</li>
+<li>Program replacement(<code>execv</code>)</li>
+</ol>
+<h3 id="pid-system"><a class="markdownIt-Anchor" href="#pid-system"></a> PID system</h3>
+<p>First of all, we need to design our PID system that dynamically allocates and reclaims PID so that PID won't be used up as processes are created and destroyed.</p>
+<p>Although the assignment handout suggest that we first implement a simple PID scheme before implementing <code>fork</code> and improve on it later when we try to implement more system calls, personally I prefer implementing the complete PID system before moving on.</p>
+<p>My PID system design is rather simple. I maintain a global <code>pid_table</code>, with entries <code>pid_entry</code>. The index of the <code>pid_table</code> entry can be translated to <code>pid</code>. Since the index starts at 0 and the <code>pid</code> starts at <code>PID_MIN</code>(2), so <code>index = pid - PID_MIN</code>. I also use a <code>next_pid</code> variable to keep track of the next PID to try for allocation. Whenever we want to allocate a new PID, start trying from <code>next_pid</code>.</p>
+<p>How do we know whether a <code>pid</code> is available? The <code>pid_entry</code> structure has a <code>proc</code> field. We simply examines whether <code>pid_entry-&gt;proc == NULL</code>. We free a <code>pid</code> by setting <code>pid_entry-&gt;proc = NULL</code></p>
+<p>I set kernel process's <code>pid</code> to <code>PID_KERNEL</code>(1) just for convenience sake, and user processes' <code>pid</code> begin at 2(PID_MIN).</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-comment">/*</span><br><span class="hljs-comment"> * Create the process structure for the kernel.</span><br><span class="hljs-comment"> */</span><br><span class="hljs-function"><span class="hljs-type">void</span></span><br><span class="hljs-function"><span class="hljs-title">proc_bootstrap</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span></span><br><span class="hljs-function"></span>&#123;<br>	kproc = <span class="hljs-built_in">proc_create</span>(<span class="hljs-string">&quot;[kernel]&quot;</span>);<br>	<span class="hljs-keyword">if</span> (kproc == <span class="hljs-literal">NULL</span>) &#123;<br>		<span class="hljs-built_in">panic</span>(<span class="hljs-string">&quot;proc_create for kproc failed\n&quot;</span>);<br>	&#125;<br><br>	<span class="hljs-comment">/* Allocate PID for kernel process */</span><br>	kproc-&gt;p_pid = PID_KERNEL;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p><code>proc_remove_pid</code> is called only during process cleanup to free the <code>pid</code>. Therefore, in my implementation, <strong><code>pid</code> freeing is always called in company with process destruction</strong>. It is important to emphasize that <code>pid</code> should not be freed until the process is destroyed (not exits!).</p>
+<p><code>pid_bootstrap</code> needs to be called during initial boot sequence(early initialization) to indicate that all PIDs are available to use.</p>
+<p>Lastly, don't forget to call <code>pid_allocate</code> in <code>proc_create_fork</code> and <code>proc_create_runprogram</code>.</p>
+<p>The complete code of <code>pid.h</code> and <code>pid.c</code>:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">/*</span><br><span class="hljs-comment"> * Process ID management.</span><br><span class="hljs-comment"> */</span><br><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> PID_KERNEL    1</span><br><br><span class="hljs-comment">/* Number of PIDs available */</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> PID_COUNT   (PID_MAX - PID_MIN + 1)</span><br><br><span class="hljs-comment">/* Error value returned by pid_allocate */</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> ENOPID      (-1)    <span class="hljs-comment">/* No PIDs available */</span></span><br><br><span class="hljs-comment">/* PID table entry structure */</span><br><span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">pid_entry</span> &#123;</span><br>    <span class="hljs-type">pid_t</span> pid;               <span class="hljs-comment">/* Process ID */</span><br>    <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">proc</span> *<span class="hljs-title">proc</span>;</span>      <span class="hljs-comment">/* Pointer to process structure */</span><br>&#125;;<br><br><span class="hljs-comment">/* Global PID management state */</span><br><span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">pid_entry</span> *<span class="hljs-title">pid_table</span>;</span>     <span class="hljs-comment">/* PID allocation table */</span><br><span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">spinlock</span> <span class="hljs-title">pid_lock</span>;</span>        <span class="hljs-comment">/* Lock for PID operations */</span><br><span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> pid_count;          <span class="hljs-comment">/* Number of PIDs in use */</span><br><span class="hljs-type">pid_t</span> next_pid;                  <span class="hljs-comment">/* Next PID to try for allocation */</span><br><br><span class="hljs-comment">/* </span><br><span class="hljs-comment"> * Initialize the PID management system.</span><br><span class="hljs-comment"> * Called during system bootstrap.</span><br><span class="hljs-comment"> */</span><br><span class="hljs-type">void</span> <span class="hljs-title function_">pid_bootstrap</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span>;<br><br><span class="hljs-comment">/* </span><br><span class="hljs-comment"> * Allocate a new PID and associate it with a process.</span><br><span class="hljs-comment"> * Returns allocated PID on success, ENOPID on failure.</span><br><span class="hljs-comment"> */</span><br><span class="hljs-type">pid_t</span> <span class="hljs-title function_">pid_allocate</span><span class="hljs-params">(<span class="hljs-keyword">struct</span> proc *proc)</span>;<br><br><span class="hljs-comment">/* </span><br><span class="hljs-comment"> * Convert PID to table index.</span><br><span class="hljs-comment"> */</span><br><span class="hljs-type">int</span> <span class="hljs-title function_">pid_to_index</span><span class="hljs-params">(<span class="hljs-type">pid_t</span> pid)</span>;<br><br><span class="hljs-comment">/*</span><br><span class="hljs-comment"> * Get process structure associated with PID.</span><br><span class="hljs-comment"> * Returns NULL if PID is invalid or not in use.</span><br><span class="hljs-comment"> */</span><br><span class="hljs-keyword">struct</span> proc *<span class="hljs-title function_">pid_get_proc</span><span class="hljs-params">(<span class="hljs-type">pid_t</span> pid)</span>;<br><br><span class="hljs-comment">/* </span><br><span class="hljs-comment"> * Remove process from PID table. </span><br><span class="hljs-comment"> */</span><br><span class="hljs-type">void</span> <span class="hljs-title function_">proc_remove_pid</span><span class="hljs-params">(<span class="hljs-keyword">struct</span> proc *proc)</span>;<br></code></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">/*</span><br><span class="hljs-comment"> * Initialize the PID management system</span><br><span class="hljs-comment"> * Called during system bootstrap</span><br><span class="hljs-comment"> */</span><br><span class="hljs-type">void</span> <br><span class="hljs-title function_">pid_bootstrap</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span> <br>&#123;<br>    <span class="hljs-type">size_t</span> table_size = PID_COUNT * <span class="hljs-keyword">sizeof</span>(<span class="hljs-keyword">struct</span> pid_entry);<br>    <br>    <span class="hljs-comment">/* Allocate PID table */</span><br>    pid_table = kmalloc(table_size);<br>    <span class="hljs-keyword">if</span> (pid_table == <span class="hljs-literal">NULL</span>) &#123;<br>        panic(<span class="hljs-string">&quot;pid_bootstrap: Unable to allocate PID table\n&quot;</span>);<br>    &#125;<br><br>    <span class="hljs-comment">/* Initialize PID table entries */</span><br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; PID_COUNT; i++) &#123;<br>        pid_table[i].pid = PID_MIN + i;<br>        pid_table[i].proc = <span class="hljs-literal">NULL</span>;<br>    &#125;<br><br>    <span class="hljs-comment">/* Initialize lock and state */</span><br>    spinlock_init(&amp;pid_lock);<br>    pid_count = <span class="hljs-number">0</span>;<br>    next_pid = PID_MIN;<br>&#125;<br><br><span class="hljs-comment">/*</span><br><span class="hljs-comment"> * Convert PID to table index</span><br><span class="hljs-comment"> */</span><br><span class="hljs-type">int</span> <span class="hljs-title function_">pid_to_index</span><span class="hljs-params">(<span class="hljs-type">pid_t</span> pid)</span> <br>&#123;<br>    KASSERT(pid &gt;= PID_MIN &amp;&amp; pid &lt;= PID_MAX);<br>    <span class="hljs-keyword">return</span> pid - PID_MIN;<br>&#125;<br><br><span class="hljs-comment">/*</span><br><span class="hljs-comment"> * Check if a PID entry is available</span><br><span class="hljs-comment"> * Must be called with pid_lock held</span><br><span class="hljs-comment"> */</span><br><span class="hljs-type">static</span> <span class="hljs-keyword">inline</span> <span class="hljs-type">int</span><br><span class="hljs-title function_">is_pid_available</span><span class="hljs-params">(<span class="hljs-keyword">struct</span> pid_entry *entry)</span><br>&#123;<br>    <span class="hljs-keyword">return</span> entry-&gt;proc == <span class="hljs-literal">NULL</span>;<br>&#125;<br><br><span class="hljs-comment">/*</span><br><span class="hljs-comment"> * Find next available PID starting from next_pid</span><br><span class="hljs-comment"> * Must be called with pid_lock held</span><br><span class="hljs-comment"> */</span><br><span class="hljs-type">static</span> <span class="hljs-type">pid_t</span> <br><span class="hljs-title function_">find_free_pid</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span> <br>&#123;<br>    <span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> start = pid_to_index(next_pid);<br>    <span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> i = start;<br><br>    <span class="hljs-comment">/* Search for a free PID */</span><br>    <span class="hljs-keyword">do</span> &#123;<br>        <span class="hljs-keyword">if</span> (is_pid_available(&amp;pid_table[i])) &#123;<br>            <span class="hljs-keyword">return</span> PID_MIN + i;<br>        &#125;<br>        i = (i + <span class="hljs-number">1</span>) % PID_COUNT;<br>    &#125; <span class="hljs-keyword">while</span> (i != start);<br><br>    <span class="hljs-keyword">return</span> ENOPID;<br>&#125;<br><br><span class="hljs-comment">/*</span><br><span class="hljs-comment"> * Allocate a new PID and associate it with the given process</span><br><span class="hljs-comment"> * Returns allocated PID on success, ENOPID on failure</span><br><span class="hljs-comment"> */</span><br><span class="hljs-type">pid_t</span> <br><span class="hljs-title function_">pid_allocate</span><span class="hljs-params">(<span class="hljs-keyword">struct</span> proc *proc)</span> <br>&#123;<br>    <span class="hljs-type">pid_t</span> pid;<br>    <span class="hljs-type">int</span> index;<br><br>    KASSERT(proc != <span class="hljs-literal">NULL</span>);<br><br>    spinlock_acquire(&amp;pid_lock);<br><br>    <span class="hljs-comment">/* Check if we&#x27;ve reached maximum PIDs */</span><br>    <span class="hljs-keyword">if</span> (pid_count &gt;= PID_COUNT) &#123;<br>        spinlock_release(&amp;pid_lock);<br>        <span class="hljs-keyword">return</span> ENOPID;<br>    &#125;<br><br>    <span class="hljs-comment">/* Find next available PID */</span><br>    pid = find_free_pid();<br>    <span class="hljs-keyword">if</span> (pid == ENOPID) &#123;<br>        spinlock_release(&amp;pid_lock);<br>        <span class="hljs-keyword">return</span> ENOPID;<br>    &#125;<br><br>    <span class="hljs-comment">/* Associate PID with process */</span><br>    index = pid_to_index(pid);<br>    KASSERT(pid_table[index].proc == <span class="hljs-literal">NULL</span>);<br>    pid_table[index].proc = proc;<br>    pid_count++;<br><br>    <span class="hljs-comment">/* Update next_pid to start search from next position */</span><br>    next_pid = (pid &lt; PID_MAX) ? (pid + <span class="hljs-number">1</span>) : PID_MIN;<br><br>    spinlock_release(&amp;pid_lock);<br>    <span class="hljs-keyword">return</span> pid;<br>&#125;<br><br><span class="hljs-comment">/*</span><br><span class="hljs-comment"> * Get process structure associated with PID</span><br><span class="hljs-comment"> * Returns NULL if PID is invalid or not in use</span><br><span class="hljs-comment"> */</span><br><span class="hljs-keyword">struct</span> proc *<br><span class="hljs-title function_">pid_get_proc</span><span class="hljs-params">(<span class="hljs-type">pid_t</span> pid)</span> <br>&#123;<br>    <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">proc</span> *<span class="hljs-title">p</span> =</span> <span class="hljs-literal">NULL</span>;<br>    <br>    <span class="hljs-comment">/* Validate PID */</span><br>    <span class="hljs-keyword">if</span> (pid &lt; PID_MIN || pid &gt; PID_MAX) &#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-literal">NULL</span>;<br>    &#125;<br><br>    spinlock_acquire(&amp;pid_lock);<br>    <br>    <span class="hljs-type">int</span> index = pid_to_index(pid);<br>    p = pid_table[index].proc;<br>    <br>    spinlock_release(&amp;pid_lock);<br>    <span class="hljs-keyword">return</span> p;<br>&#125;<br><br><span class="hljs-comment">/* </span><br><span class="hljs-comment"> * Remove process from PID table </span><br><span class="hljs-comment"> */</span><br><span class="hljs-type">void</span> <span class="hljs-title function_">proc_remove_pid</span><span class="hljs-params">(<span class="hljs-keyword">struct</span> proc *proc)</span> &#123;<br>    spinlock_acquire(&amp;pid_lock);<br>    pid_table[pid_to_index(proc-&gt;p_pid)].proc = <span class="hljs-literal">NULL</span>;<br>    pid_count--;<br>    spinlock_release(&amp;pid_lock);<br>&#125;<br></code></pre></td></tr></table></figure>
+<h3 id="process-creationfork"><a class="markdownIt-Anchor" href="#process-creationfork"></a> Process creation(<code>fork</code>)</h3>
+<p>Once we have our PID system ready, we can implement our <code>fork</code> logic: creating a new process, which is the exact same copy of the original process. Review the <code>sys_fork</code>'s responsibility above and understand what it should do.</p>
+<p>Now let's break it down:</p>
+<ol>
+<li>Create a copy of the parent's <code>trapframe</code> to provide to the newly-created kernel thread for use.</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">// Create child trapframe copy</span><br>child_tf = kmalloc(<span class="hljs-keyword">sizeof</span>(<span class="hljs-keyword">struct</span> trapframe));<br><span class="hljs-keyword">if</span> (child_tf == <span class="hljs-literal">NULL</span>)<br>&#123;<br><span class="hljs-keyword">return</span> ENOMEM;<br>&#125;<br>*child_tf = *tf;<br></code></pre></td></tr></table></figure>
+<ol start="2">
+<li>Create the child's <code>proc</code> structure <code>child_proc</code></li>
+</ol>
+<p>Remember that we need to create a new kernel thread to provide to the child process. Therefore, we first need to create the child's <code>proc</code> structure.</p>
+<p>That's <code>proc_create_fork</code>'s responsibility! In this function, we need to make the exact same copy of the parent process: copy the file table and allocate a new PID.</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">/* Create a fresh proc for use by fork. */</span><br><span class="hljs-keyword">struct</span> proc *<br><span class="hljs-title function_">proc_create_fork</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span> *name)</span><br>&#123;<br>	<span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">proc</span> *<span class="hljs-title">newproc</span>;</span><br><br>	newproc = proc_create(name);<br>	<span class="hljs-keyword">if</span> (newproc == <span class="hljs-literal">NULL</span>) &#123;<br>		<span class="hljs-keyword">return</span> <span class="hljs-literal">NULL</span>;<br>	&#125;<br><br>    newproc-&gt;p_addrspace = <span class="hljs-literal">NULL</span>;<br>	<br>	<span class="hljs-comment">/* Copy file table from parent process. */</span><br>    newproc-&gt;p_ft = filetable_copy(curproc-&gt;p_ft);<br>    <span class="hljs-keyword">if</span> (newproc-&gt;p_ft == <span class="hljs-literal">NULL</span>)<br>    &#123;<br>        proc_destroy(newproc);<br>        <span class="hljs-keyword">return</span> <span class="hljs-literal">NULL</span>;<br>    &#125;<br><br>	<span class="hljs-comment">/* Allocate PID */</span><br>    newproc-&gt;p_pid = pid_allocate(newproc);<br>    <span class="hljs-keyword">if</span> (newproc-&gt;p_pid == ENOPID) &#123;<br>        proc_destroy(newproc);<br>        <span class="hljs-keyword">return</span> <span class="hljs-literal">NULL</span>;<br>    &#125;<br><br>	<span class="hljs-comment">/* Set parent process for fork. */</span><br>	newproc-&gt;p_parent = curproc;<br><br>	<span class="hljs-comment">/* Add to parent&#x27;s child array */</span><br>	<span class="hljs-keyword">if</span> (array_add(curproc-&gt;p_children, newproc, <span class="hljs-literal">NULL</span>)) &#123;<br>		proc_destroy(newproc);<br>		<span class="hljs-keyword">return</span> <span class="hljs-literal">NULL</span>;<br>	&#125;<br><br>	<span class="hljs-comment">/*</span><br><span class="hljs-comment">	 * Lock the current process to copy its current directory.</span><br><span class="hljs-comment">	 * (We don&#x27;t need to lock the new process, though, as we have</span><br><span class="hljs-comment">	 * the only reference to it.)</span><br><span class="hljs-comment">	 */</span><br>	spinlock_acquire(&amp;curproc-&gt;p_lock);<br>	<span class="hljs-keyword">if</span> (curproc-&gt;p_cwd != <span class="hljs-literal">NULL</span>) &#123;<br>		VOP_INCREF(curproc-&gt;p_cwd);<br>		newproc-&gt;p_cwd = curproc-&gt;p_cwd;<br>	&#125;<br>	spinlock_release(&amp;curproc-&gt;p_lock);<br><br>	<span class="hljs-keyword">return</span> newproc;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>You may be confused with the <code>p_parent</code> and <code>p_children</code> fields in the code above. Don't worry, I will explain why we need those fields in <code>proc</code> structure when I explain my process wait and exit mechanism.</p>
+<p>In <code>sys_fork</code>, we call <code>proc_create_fork</code> to get the child <code>proc</code>:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">// Create new process structure</span><br>child_proc = proc_create_fork(<span class="hljs-string">&quot;child&quot;</span>);<br><span class="hljs-keyword">if</span> (child_proc == <span class="hljs-literal">NULL</span>)<br>&#123;<br>    kfree(child_tf);<br>    <span class="hljs-keyword">return</span> ENOMEM;<br>&#125;<br></code></pre></td></tr></table></figure>
+<blockquote>
+<p>What's the difference between <code>proc_create_fork</code> and <code>proc_create_runprogram</code>?</p>
+</blockquote>
+<p><code>proc_create_fork</code> is called by <code>sys_fork</code>. In <code>proc_create_fork</code>, we create a new process that is the copy of the current process. Therefore, we need to copy the file table and add the new process to the current process's children array. <code>proc_create_runprogram</code> is called by the kernel to create a new process for use by <code>runprogram</code>. It will have no address space and will inherit the current process's (the kernel menu's) current directory.</p>
+<ol start="3">
+<li>Copy address space</li>
+</ol>
+<p>Notice that in <code>proc_create_fork</code>, I didn't copy the parent's address space. I choose to do this in <code>sys_fork</code> after we get a child <code>proc</code>.</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">// Copy address space</span><br>result = as_copy(proc_getas(), &amp;child_as);<br><span class="hljs-keyword">if</span> (result)<br>&#123;<br>    proc_destroy(child_proc);<br>    kfree(child_tf);<br>    <span class="hljs-keyword">return</span> result;<br>&#125;<br><br><span class="hljs-comment">// Set up child process</span><br>child_proc-&gt;p_addrspace = child_as;<br></code></pre></td></tr></table></figure>
+<ol start="4">
+<li>Create a new kernel thread</li>
+</ol>
+<p>Remember that we need to create a new kernel thread to provide to the child process so that the child and the parent can return to user mode in their own way.</p>
+<p><code>thread_fork</code> is used to create a new thread to provide to the forked process. It needs to have an <code>entrypoint</code> where the new thread starts executing. Remember that the new thread needs to tweak <code>trapframe</code> to make sure the child has a different return value and return to user mode in a different manner than the parent. This function is performed by <code>enter_forked_process</code>.</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-comment">// Create new thread for child process</span><br>result = thread_fork(<br>    curthread-&gt;t_name,<br>    child_proc,<br>    (<span class="hljs-type">void</span> (*)(<span class="hljs-type">void</span> *, <span class="hljs-type">unsigned</span> <span class="hljs-type">long</span>))enter_forked_process,    <span class="hljs-comment">// New entry point function</span><br>    child_tf,           <span class="hljs-comment">// Pass child trapframe as data1</span><br>    <span class="hljs-number">0</span>                    <span class="hljs-comment">// Unused data2</span><br>);<br></code></pre></td></tr></table></figure>
+<p>There we go! We find the <code>entrypoint</code> function for the new thread. Now it's time to implement <code>enter_forked_process</code>:</p>
+<ol>
+<li>Copy the child's <code>trapframe</code> to our kernel stack from the heap.</li>
+<li>Tweak the child's <code>trapframe</code></li>
+<li>Activate child process's address space</li>
+<li>Enter user mode</li>
+</ol>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-comment">/*</span><br><span class="hljs-comment"> * Enter user mode for a newly forked process.</span><br><span class="hljs-comment"> *</span><br><span class="hljs-comment"> * This function is provided as a reminder. You need to write</span><br><span class="hljs-comment"> * both it and the code that calls it.</span><br><span class="hljs-comment"> *</span><br><span class="hljs-comment"> * Thus, you can trash it and do things another way if you prefer.</span><br><span class="hljs-comment"> */</span><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">enter_forked_process</span><span class="hljs-params">(<span class="hljs-keyword">struct</span> trapframe *tf)</span></span><br><span class="hljs-function"></span>&#123;<br>	(<span class="hljs-type">void</span>)tf;<br>	<span class="hljs-keyword">struct</span> <span class="hljs-title class_">trapframe</span> child_tf; <span class="hljs-comment">// create child&#x27;s trapframe on the stack</span><br><br>	<span class="hljs-comment">// Copy trapframe to our kernel stack</span><br>	child_tf = *tf;<br><br>	<span class="hljs-built_in">kfree</span>(tf);<br><br>	<span class="hljs-comment">// Child process returns 0 from fork()</span><br>	child_tf.tf_v0 = <span class="hljs-number">0</span>;<br><br>	<span class="hljs-comment">/* signal no error */</span><br>	child_tf.tf_a3 = <span class="hljs-number">0</span>;<br><br>	<span class="hljs-comment">// Advance to next instruction</span><br>	child_tf.tf_epc += <span class="hljs-number">4</span>;<br><br>	<span class="hljs-comment">// Activate child&#x27;s address space</span><br>	<span class="hljs-built_in">as_activate</span>();<br><br>	<span class="hljs-comment">// Enter user mode with child&#x27;s trapframe</span><br>	<span class="hljs-built_in">mips_usermode</span>(&amp;child_tf);<br><br>	<span class="hljs-built_in">panic</span>(<span class="hljs-string">&quot;enter_forked_process: mips_usermode returned\n&quot;</span>);<br>&#125;<br></code></pre></td></tr></table></figure>
+<blockquote>
+<p>Have you thought about why we need the trouble to first copy parent's <code>trapframe</code> onto the heap and then copy it to the kernel stack from the heap?</p>
+</blockquote>
+<p>Because parent's <code>trapframe</code> is on its stack and will be destroyed as soon as it returns from trap. In the mean time, our newly-created kernel thread run concurrently and may lose the <code>trapframe</code> if the parent returns from trap too early. That's why we need to save a copy of the <code>trapframe</code> on the heap before the parent returns.</p>
+<ol start="5">
+<li>Parent returns from trap</li>
+</ol>
+<p>While the child returns via the <code>mips_usermode</code> function in its own kernel thread. The parent just returns from trap(<code>mips_trap</code>) with the return value of its child's PID.</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">// Parent returns child&#x27;s PID</span><br>*retval = child_proc-&gt;p_pid;<br></code></pre></td></tr></table></figure>
+<p>The complete code of <code>sys_fork</code>:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">int</span> <span class="hljs-title function_">sys_fork</span><span class="hljs-params">(<span class="hljs-keyword">struct</span> trapframe *tf, <span class="hljs-type">pid_t</span> *retval)</span><br>&#123;<br>    <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">trapframe</span> *<span class="hljs-title">child_tf</span>;</span>  <span class="hljs-comment">// Child&#x27;s trapframe</span><br>    <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">addrspace</span> *<span class="hljs-title">child_as</span>;</span>  <span class="hljs-comment">// Child&#x27;s address space</span><br>    <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">proc</span> *<span class="hljs-title">child_proc</span>;</span>     <span class="hljs-comment">// Child process</span><br>    <span class="hljs-type">int</span> result;<br><br>    <span class="hljs-comment">// Create child trapframe copy</span><br>    child_tf = kmalloc(<span class="hljs-keyword">sizeof</span>(<span class="hljs-keyword">struct</span> trapframe));<br>    <span class="hljs-keyword">if</span> (child_tf == <span class="hljs-literal">NULL</span>)<br>    &#123;<br>        <span class="hljs-keyword">return</span> ENOMEM;<br>    &#125;<br>    *child_tf = *tf;<br><br>    <span class="hljs-comment">// Create new process structure</span><br>    child_proc = proc_create_fork(<span class="hljs-string">&quot;child&quot;</span>);<br>    <span class="hljs-keyword">if</span> (child_proc == <span class="hljs-literal">NULL</span>)<br>    &#123;<br>        kfree(child_tf);<br>        <span class="hljs-keyword">return</span> ENOMEM;<br>    &#125;<br><br>    <span class="hljs-comment">// Copy address space</span><br>    result = as_copy(proc_getas(), &amp;child_as);<br>    <span class="hljs-keyword">if</span> (result)<br>    &#123;<br>        proc_destroy(child_proc);<br>        kfree(child_tf);<br>        <span class="hljs-keyword">return</span> result;<br>    &#125;<br><br>    <span class="hljs-comment">// Set up child process</span><br>    child_proc-&gt;p_addrspace = child_as;<br><br>    <span class="hljs-comment">// Create new thread for child process</span><br>    result = thread_fork(<br>        curthread-&gt;t_name,<br>        child_proc,<br>        (<span class="hljs-type">void</span> (*)(<span class="hljs-type">void</span> *, <span class="hljs-type">unsigned</span> <span class="hljs-type">long</span>))enter_forked_process,    <span class="hljs-comment">// New entry point function</span><br>        child_tf,           <span class="hljs-comment">// Pass child trapframe as data1</span><br>        <span class="hljs-number">0</span>                    <span class="hljs-comment">// Unused data2</span><br>    );<br><br>    <span class="hljs-keyword">if</span> (result)<br>    &#123;<br>        proc_destroy(child_proc);<br>        <span class="hljs-keyword">return</span> result;<br>    &#125;<br><br>    <span class="hljs-comment">// Parent returns child&#x27;s PID</span><br>    *retval = child_proc-&gt;p_pid;<br><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h3 id="process-wait-and-exit-mechanism"><a class="markdownIt-Anchor" href="#process-wait-and-exit-mechanism"></a> Process wait and exit mechanism</h3>
+<p>This assignment gives us the freedom to design the <strong>process wait and exit mechanism</strong>. The assignment handout says:</p>
+<blockquote>
+<p>Most of the time, the code for <code>_exit()</code> will be simple and the code for <code>waitpid()</code> relatively complicated.</p>
+</blockquote>
+<p>However, my design requires a more complex <code>_exit</code> than <code>waitpid</code>. Maybe it is not the best design, but it is a working design!</p>
+<p>Now let's break down my design:</p>
+<blockquote>
+<p>The crux of the problem:</p>
+<ol>
+<li>When should the process be cleaned up?</li>
+<li>How to implement the mechanism for the parent process to wait for its child to exit?</li>
+<li>How to kill a process when it encounters an error.</li>
+</ol>
+</blockquote>
+<ul>
+<li><strong>Process cleanup mechanism</strong></li>
+</ul>
+<p>The main problem is that when a process exits, it should not be cleaned up right away. Instead, it should become <code>zombie</code> until its parent process call <code>waitpid</code> to collect its exit code.</p>
+<p>Therefore, my first thought is to clean up the child process as soon as its parent collects its exit code.</p>
+<blockquote>
+<p>However, that bring us a new problem:</p>
+<p>What if the parent process never calls <code>waitpid</code> before it exits? Or the parent exits before its child exits? How to prevent its <code>zombie</code> child from hanging forever?</p>
+</blockquote>
+<p>My solution to this problem is to delay the child process's cleanup until the parent process exits. That is to say, when a process exits, it should traverse all of its children, clean up zombie children( exit code already be collected) and make running children(haven't yet exited) become orphans. Those orphan processes would be cleaned up right away as soon as they exits(skip the process of becoming <code>zombies</code>).</p>
+<p>After handling its children, the process should check if itself is orphaned. If so, just clean itself up(in <code>thread_exit</code>. If not, signal its parent and becomes <code>zombie</code>.</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">// In `thread_exit`</span><br><br><span class="hljs-comment">/* </span><br><span class="hljs-comment"> * The code below is a bit more complex than it needs to be.</span><br><span class="hljs-comment"> * Actually, it only needs to check current process is orphaned</span><br><span class="hljs-comment"> * before clean it up. I add some additional check just for</span><br><span class="hljs-comment"> * robustness.</span><br><span class="hljs-comment"> */</span><br><br>...<br><span class="hljs-comment">/* </span><br><span class="hljs-comment"> * Clean up process if:</span><br><span class="hljs-comment"> * 1. This is the last thread AND</span><br><span class="hljs-comment"> * 2. One of the following is true:</span><br><span class="hljs-comment"> *    - Process is marked DEAD (normal case) OR</span><br><span class="hljs-comment"> *    - Process has no parent (orphaned case)</span><br><span class="hljs-comment"> */</span><br><span class="hljs-keyword">if</span> (p != <span class="hljs-literal">NULL</span>) &#123;<br>    lock_acquire(p-&gt;p_mutex);<br>    <span class="hljs-keyword">if</span> (threadarray_num(&amp;p-&gt;p_threads) == <span class="hljs-number">0</span> &amp;&amp; <br>        (p-&gt;p_state == PROC_DEAD || p-&gt;p_parent == <span class="hljs-literal">NULL</span>)) &#123;<br>        lock_release(p-&gt;p_mutex);<br><br>        <span class="hljs-comment">/* Clean up process */</span><br>        proc_remove_pid(p);<br>        proc_destroy(p);<br>    &#125; <span class="hljs-keyword">else</span> &#123;<br>        lock_release(p-&gt;p_mutex);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>Now this explains why I maintain a <code>p_parent</code> and <code>p_children</code> field in <code>proc</code> structure.</p>
+<p>The flow chart below shows the normal life of a process:</p>
+<figure class="highlight livescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs livescript">PROC_RUNNING -&gt; <span class="hljs-function"><span class="hljs-params">(PROC_ZOMBIE)</span> -&gt;</span> PROC_DEAD &amp; proc_destroy &amp; proc_remove_pid -&gt; PID <span class="hljs-keyword">is</span> avaiable<br></code></pre></td></tr></table></figure>
+<p>The complete code of <code>sys__exit</code>:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">/*</span><br><span class="hljs-comment"> * Exit system call.</span><br><span class="hljs-comment"> */</span><br><span class="hljs-type">void</span> <span class="hljs-title function_">sys__exit</span><span class="hljs-params">(<span class="hljs-type">int</span> exitcode)</span><br>&#123;<br>    KASSERT(curproc != <span class="hljs-literal">NULL</span>);<br>    KASSERT(curproc != kproc); <span class="hljs-comment">/* Kernel process cannot exit */</span><br><br>    <span class="hljs-comment">/* Get the lock */</span><br>    lock_acquire(curproc-&gt;p_mutex);<br><br>    <span class="hljs-comment">/* Set exit code and change state to zombie */</span><br>    curproc-&gt;p_exitcode = _MKWAIT_EXIT(exitcode);<br>    curproc-&gt;p_state = PROC_ZOMBIE;<br><br>    <span class="hljs-comment">/*</span><br><span class="hljs-comment">     * Handle children</span><br><span class="hljs-comment">     * - zombies and dead children get cleaned up immediately,</span><br><span class="hljs-comment">     * - running processes become orphans that clean themselves up</span><br><span class="hljs-comment">     */</span><br>    <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">proc</span> *<span class="hljs-title">child</span>;</span><br>    <span class="hljs-keyword">while</span> (array_num(curproc-&gt;p_children) &gt; <span class="hljs-number">0</span>)<br>    &#123;<br>        child = array_get(curproc-&gt;p_children, <span class="hljs-number">0</span>);<br><br>        <span class="hljs-keyword">if</span> (child-&gt;p_state == PROC_ZOMBIE || child-&gt;p_state == PROC_DEAD)<br>        &#123;<br>            KASSERT(array_num(child-&gt;p_children) == <span class="hljs-number">0</span>);<br><br>            child-&gt;p_state = PROC_DEAD;<br><br>            <span class="hljs-comment">/* Remove from children array */</span><br>            array_remove(curproc-&gt;p_children, <span class="hljs-number">0</span>);<br><br>            <span class="hljs-comment">/* Clean up the zombie/dead child */</span><br>            proc_remove_pid(child);<br>            proc_destroy(child);<br>        &#125;<br>        <span class="hljs-keyword">else</span><br>        &#123;<br>            <span class="hljs-comment">/* Mark as orphaned - will self-cleanup when done */</span><br>            child-&gt;p_parent = <span class="hljs-literal">NULL</span>;<br><br>            <span class="hljs-comment">/* Remove from children array */</span><br>            array_remove(curproc-&gt;p_children, <span class="hljs-number">0</span>);<br>        &#125;<br>    &#125;<br><br>    <span class="hljs-comment">/* Signal parent if we have one, otherwise self-cleanup */</span><br>    <span class="hljs-keyword">if</span> (curproc-&gt;p_parent != <span class="hljs-literal">NULL</span>)<br>    &#123;<br>        cv_signal(curproc-&gt;p_cv, curproc-&gt;p_mutex); <span class="hljs-comment">// Wake up waiting parent</span><br>    &#125;<br>    <span class="hljs-keyword">else</span><br>    &#123;<br>        <span class="hljs-comment">/* Orphaned process cleans itself up */</span><br>        curproc-&gt;p_state = PROC_DEAD;<br>    &#125;<br><br>    lock_release(curproc-&gt;p_mutex);<br><br>    thread_exit();<br><br>    <span class="hljs-comment">/* Should never get here */</span><br>    panic(<span class="hljs-string">&quot;sys__exit: thread_exit returned\n&quot;</span>);<br>&#125;<br></code></pre></td></tr></table></figure>
+<ul>
+<li><strong>Process wait mechanism</strong></li>
+</ul>
+<p><code>waitpid</code> is called by the parent process to wait for its child process to exit. When the child process exits, it signals its parent. My design is to let the parent process wait on its child's condition variable. When the child exits, it wakes up the parent.</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">// In `sys_waitpid`</span><br><br>...<br><span class="hljs-comment">/* Wait for child to exit */</span><br><span class="hljs-keyword">while</span> (child-&gt;p_state == PROC_RUNNING) &#123;<br>    cv_wait(child-&gt;p_cv, child-&gt;p_mutex);<br>&#125;<br></code></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">// In `sys__exit`</span><br><br>...<br><span class="hljs-comment">/* Signal parent if we have one, otherwise self-cleanup */</span><br><span class="hljs-keyword">if</span> (curproc-&gt;p_parent != <span class="hljs-literal">NULL</span>)<br>&#123;<br>    cv_signal(curproc-&gt;p_cv, curproc-&gt;p_mutex); <span class="hljs-comment">// Wake up waiting parent</span><br>&#125;<br><span class="hljs-keyword">else</span><br>&#123;<br>    <span class="hljs-comment">/* Orphaned process cleans itself up */</span><br>    curproc-&gt;p_state = PROC_DEAD;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>Special case: recall that in my process cleanup mechanism, we clean up zombie children when the parent process exits. But if current process is the kernel process, it does not exit. Therefore, we need to clean up its child right after it collects its child's exit code in <code>waitpid</code>.</p>
+<p>As in fact, the kernel does need to wait for its child to exit in OS/161 and we need to implement that logic:</p>
+<p>In OS/161, the kernel thread, (or menu thread), after it gets command arguments from the command line, it goes into <code>common_prog</code>. In <code>common_prog</code>, it creates a new thread to provide to the new program. We need to make it wait for the subprogram to finish(exit) before allowing it to return to menu.</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">// In `common_prog`</span><br><br>...<br><span class="hljs-comment">/* Save the pid before we fork */</span><br>pid = proc-&gt;p_pid;<br><br>result = thread_fork(args[<span class="hljs-number">0</span>] <span class="hljs-comment">/* thread name */</span>,<br>                     proc <span class="hljs-comment">/* new process */</span>,<br>                     cmd_progthread <span class="hljs-comment">/* thread function */</span>,<br>                     args <span class="hljs-comment">/* thread arg */</span>, nargs <span class="hljs-comment">/* thread arg */</span>);<br><span class="hljs-keyword">if</span> (result) &#123;<br>    kprintf(<span class="hljs-string">&quot;thread_fork failed: %s\n&quot;</span>, strerror(result));<br>    proc_destroy(proc);<br>    <span class="hljs-keyword">return</span> result;<br>&#125;<br><br><span class="hljs-comment">/*</span><br><span class="hljs-comment">	 * The new process will be destroyed when the program exits...</span><br><span class="hljs-comment">	 * once you write the code for handling that.</span><br><span class="hljs-comment">	 */</span><br><span class="hljs-comment">/* Wait for the subprogram to finish */</span><br>result = sys_waitpid(pid, <span class="hljs-literal">NULL</span>, <span class="hljs-number">0</span>, &amp;result);<br><span class="hljs-keyword">if</span> (result) &#123;<br>    kprintf(<span class="hljs-string">&quot;waitpid failed: %s\n&quot;</span>, strerror(result));<br>    <span class="hljs-keyword">return</span> result;<br>&#125;<br><br><span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br><span class="hljs-comment">// Return to menu</span><br></code></pre></td></tr></table></figure>
+<p>The complete code of <code>sys_waitpid</code>:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">/*</span><br><span class="hljs-comment"> * Waitpid system call.</span><br><span class="hljs-comment"> */</span><br><span class="hljs-type">int</span><br><span class="hljs-title function_">sys_waitpid</span><span class="hljs-params">(<span class="hljs-type">pid_t</span> pid, <span class="hljs-type">userptr_t</span> status, <span class="hljs-type">int</span> options, <span class="hljs-type">int</span> *retval)</span><br>&#123;<br>    <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">proc</span> *<span class="hljs-title">child</span>;</span><br>    <span class="hljs-type">int</span> exitcode;<br>    <br>    <span class="hljs-comment">/* Check for invalid options */</span><br>    <span class="hljs-keyword">if</span> (options != <span class="hljs-number">0</span>) &#123;<br>        <span class="hljs-keyword">return</span> EINVAL;<br>    &#125;<br>    <br>    <span class="hljs-comment">/* Get the child process */</span><br>    child = pid_get_proc(pid);<br>    <span class="hljs-keyword">if</span> (child == <span class="hljs-literal">NULL</span>) &#123;<br>        <span class="hljs-keyword">return</span> ESRCH;  <span class="hljs-comment">/* No such process */</span><br>    &#125;<br>    <br>    <span class="hljs-comment">/* Verify this is our child */</span><br>    lock_acquire(child-&gt;p_mutex);<br>    <span class="hljs-keyword">if</span> (child-&gt;p_parent != curproc) &#123;<br>        lock_release(child-&gt;p_mutex);<br>        <span class="hljs-keyword">return</span> ECHILD;  <span class="hljs-comment">/* Not a child of calling process */</span><br>    &#125;<br><br>    <span class="hljs-comment">/* Wait for child to exit */</span><br>    <span class="hljs-keyword">while</span> (child-&gt;p_state == PROC_RUNNING) &#123;<br>        cv_wait(child-&gt;p_cv, child-&gt;p_mutex);<br>    &#125;<br><br>    <span class="hljs-comment">/* Get exit status while holding the lock */</span><br>    exitcode = child-&gt;p_exitcode;<br>    child-&gt;p_state = PROC_DEAD;<br><br>    lock_release(child-&gt;p_mutex);<br><br>    <span class="hljs-keyword">if</span> (curproc == kproc) &#123;<br>        <span class="hljs-comment">/* </span><br><span class="hljs-comment">         * If we&#x27;re the kernel, we do not exit, so we need to</span><br><span class="hljs-comment">         * clean up the child process here.</span><br><span class="hljs-comment">         */</span><br>        proc_remove_pid(child);<br>        proc_destroy(child);<br>    &#125;<br><br>    <span class="hljs-comment">/* Now copy out exit status if requested */</span><br>    <span class="hljs-keyword">if</span> (status != <span class="hljs-literal">NULL</span>) &#123;<br>        <span class="hljs-type">int</span> result = copyout(&amp;exitcode, status, <span class="hljs-keyword">sizeof</span>(<span class="hljs-type">int</span>));<br>        <span class="hljs-keyword">if</span> (result) &#123;<br>            <span class="hljs-keyword">return</span> EFAULT;<br>        &#125;<br>    &#125;<br>    <br>    *retval = pid;<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<ul>
+<li><strong>Kill a process</strong></li>
+</ul>
+<p>When a user process hits a fatal fault, we need to kill it. But instead of crashing the entire kernel, we need to signal parent of its death and clean it up neatly.</p>
+<p>This is very much like normal <code>_exit</code>, except that we need to set exit code to signal death.</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">/* Set exit code for signal death */</span><br>curproc-&gt;p_exitcode = _MKWAIT_SIG(sig);<br></code></pre></td></tr></table></figure>
+<p>The complete code of <code>kill_curthread</code>:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">// In `kill_curthread`</span><br><br>...<br><span class="hljs-comment">/*</span><br><span class="hljs-comment"> * We have faced a fatal fault in user-level code, instead of</span><br><span class="hljs-comment"> * crashing the entire kernel. We need to clean up the process</span><br><span class="hljs-comment"> * and signal the parent if necessary.</span><br><span class="hljs-comment"> */</span><br><br>kprintf(<span class="hljs-string">&quot;Fatal user mode trap %u sig %d (%s, epc 0x%x, vaddr 0x%x)\n&quot;</span>,<br>        code, sig, trapcodenames[code], epc, vaddr);<br><br>KASSERT(curproc != <span class="hljs-literal">NULL</span>);<br>KASSERT(curproc != kproc); <span class="hljs-comment">/* Kernel process cannot be killed */</span><br><br><span class="hljs-comment">/* Get the lock */</span><br>lock_acquire(curproc-&gt;p_mutex);<br><br><span class="hljs-comment">/* Set exit code for signal death and change state to zombie */</span><br>curproc-&gt;p_exitcode = _MKWAIT_SIG(sig);<br>curproc-&gt;p_state = PROC_ZOMBIE;<br><br><span class="hljs-comment">/*</span><br><span class="hljs-comment">     * Handle children</span><br><span class="hljs-comment">     * - zombies and dead children get cleaned up immediately,</span><br><span class="hljs-comment">     * - running processes become orphans that clean themselves up</span><br><span class="hljs-comment">     */</span><br><span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">proc</span> *<span class="hljs-title">child</span>;</span><br><span class="hljs-keyword">while</span> (array_num(curproc-&gt;p_children) &gt; <span class="hljs-number">0</span>)<br>&#123;<br>    child = array_get(curproc-&gt;p_children, <span class="hljs-number">0</span>);<br><br>    <span class="hljs-keyword">if</span> (child-&gt;p_state == PROC_ZOMBIE || child-&gt;p_state == PROC_DEAD)<br>    &#123;<br>        KASSERT(array_num(child-&gt;p_children) == <span class="hljs-number">0</span>);<br><br>        child-&gt;p_state = PROC_DEAD;<br><br>        <span class="hljs-comment">/* Remove from children array */</span><br>        array_remove(curproc-&gt;p_children, <span class="hljs-number">0</span>);<br><br>        <span class="hljs-comment">/* Clean up the zombie/dead child */</span><br>        proc_remove_pid(child);<br>        proc_destroy(child);<br>    &#125;<br>    <span class="hljs-keyword">else</span><br>    &#123;<br>        <span class="hljs-comment">/* Mark as orphaned - will self-cleanup when done */</span><br>        child-&gt;p_parent = <span class="hljs-literal">NULL</span>;<br><br>        <span class="hljs-comment">/* Remove from children array */</span><br>        array_remove(curproc-&gt;p_children, <span class="hljs-number">0</span>);<br>    &#125;<br>&#125;<br><br><span class="hljs-comment">/* Signal parent if we have one, otherwise self-cleanup */</span><br><span class="hljs-keyword">if</span> (curproc-&gt;p_parent != <span class="hljs-literal">NULL</span>)<br>&#123;<br>    cv_signal(curproc-&gt;p_cv, curproc-&gt;p_mutex); <span class="hljs-comment">// Wake up waiting parent</span><br>&#125;<br><span class="hljs-keyword">else</span><br>&#123;<br>    <span class="hljs-comment">/* Orphaned process cleans itself up */</span><br>    curproc-&gt;p_state = PROC_DEAD;<br>&#125;<br><br>lock_release(curproc-&gt;p_mutex);<br><br>thread_exit();<br><br><span class="hljs-comment">/* Should never reach here */</span><br>panic(<span class="hljs-string">&quot;thread_exit returned in kill_curthread!\n&quot;</span>);<br></code></pre></td></tr></table></figure>
+<h3 id="program-replacementexecv"><a class="markdownIt-Anchor" href="#program-replacementexecv"></a> Program replacement(<code>execv</code>)</h3>
+<p>We often needs to replace the currently executing program, (probably in a newly-forked process) with a newly-loaded program image(with completely new address space and executable).</p>
+<p>That's the job of <code>execv</code>! This is also the most tricky system call we need to implement in the entire OS/161. Review the <code>sys_execv</code>'s responsibility above and understand what it should do.</p>
+<p>I break it down into 4 parts:</p>
+<ol>
+<li><code>Copyin</code> the arguments from the old address space</li>
+<li>Load the new program image</li>
+<li><code>Copyout</code> the arguments into the new address space</li>
+<li>Clean the old address space and return</li>
+</ol>
+<p><code>Copyin</code> and <code>Copyout</code> arguments are the most tricky parts, you can really mess up with those pointers! It is important to emphasize it again that we need to pass both the arguments(strings) and the pointers pointing to those arguments(strings).</p>
+<p><img src="/imgs/202502170921959.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+<ul>
+<li><strong><code>Copyin</code> arguments from user space</strong></li>
+</ul>
+<div class="note note-primary">
+            <p>It's important to emphasize that we need to pass not only the arguments, but also the pointers to those arguments.</p>
+          </div>
+<p><img src="/imgs/202411041449905-1740473621641-7.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+<p><img src="/imgs/202411041450806-1740473621641-9.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+<p>First of all, I've defined two variables. <code>kargbuf</code> stores arguments(strings) in contiguous space(each individual string is stored in 4-bytes aligned address) and <code>kargs</code> stores the pointers array, pointing to individual strings in <code>kargbuf</code>.</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">char</span> **kargs;    <span class="hljs-comment">// Kernel buffer for args array</span><br><span class="hljs-type">char</span> *kargbuf;   <span class="hljs-comment">// Kernel buffer for arg strings</span><br></code></pre></td></tr></table></figure>
+<p>Next, we need to know the number of arguments(strings) and the total bytes needed for strings, so that we can reserve space on the kernel heap to incept them.</p>
+<ol>
+<li>Number of arguments(strings)</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">/* First, count the number of arguments */</span><br><span class="hljs-keyword">while</span> (<span class="hljs-literal">true</span>)<br>&#123;<br>    <span class="hljs-type">userptr_t</span> arg;<br>    result = copyin((<span class="hljs-type">const_userptr_t</span>)&amp;args[nargs], &amp;arg, <span class="hljs-keyword">sizeof</span>(<span class="hljs-type">userptr_t</span>));<br>    <span class="hljs-keyword">if</span> (result)<br>    &#123;<br>        <span class="hljs-keyword">goto</span> err1;<br>    &#125;<br>    <span class="hljs-keyword">if</span> (arg == <span class="hljs-literal">NULL</span>)<br>        <span class="hljs-keyword">break</span>;<br>    nargs++;<br>&#125;<br><br><span class="hljs-comment">/* Allocate kernel args array */</span><br><span class="hljs-keyword">if</span> (nargs &gt; <span class="hljs-number">0</span>)<br>&#123;<br>    kargs = kmalloc(nargs * <span class="hljs-keyword">sizeof</span>(<span class="hljs-type">char</span> *));<br>    <span class="hljs-keyword">if</span> (kargs == <span class="hljs-literal">NULL</span>)<br>    &#123;<br>        result = ENOMEM;<br>        <span class="hljs-keyword">goto</span> err1;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>After we know the number of arguments(strings) and reserve the space for <code>kargs</code>, we copy the array of argument pointers from user space to <code>kargs</code>:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">/* Copy the array of argument pointers from user space */</span><br>result = copyin((<span class="hljs-type">const_userptr_t</span>)args, kargs, nargs * <span class="hljs-keyword">sizeof</span>(<span class="hljs-type">char</span> *));<br><span class="hljs-keyword">if</span> (result)<br>&#123;<br>    <span class="hljs-keyword">goto</span> err2;<br>&#125;<br></code></pre></td></tr></table></figure>
+<div class="note note-info">
+            <p>Note that now the <code>karg</code> array store the pointers pointing to user address space. After we copy the arguments(strings) into the kernel, we need to make those pointers pointing to the arguments inside the kernel.</p>
+          </div>
+<ol start="2">
+<li>Total bytes for arguments(strings)</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">/* Calculate total bytes needed for strings */</span><br>total_bytes = <span class="hljs-number">0</span>;<br><span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; nargs; i++)<br>&#123;<br>    <span class="hljs-type">size_t</span> len;<br>    <span class="hljs-type">char</span> temp_buf;<br>    result = copyinstr((<span class="hljs-type">const_userptr_t</span>)kargs[i], &amp;temp_buf, ARG_MAX, &amp;len);<br>    <span class="hljs-keyword">if</span> (result)<br>    &#123;<br>        <span class="hljs-keyword">goto</span> err2;<br>    &#125;<br>    total_bytes += ROUNDUP(len, <span class="hljs-number">4</span>); <span class="hljs-comment">// Align to 4 bytes</span><br>&#125;<br><br><span class="hljs-comment">/* Check if total size exceeds ARG_MAX */</span><br><span class="hljs-keyword">if</span> (total_bytes &gt; ARG_MAX)<br>&#123;<br>    result = E2BIG;<br>    <span class="hljs-keyword">goto</span> err2;<br>&#125;<br><br><span class="hljs-comment">/* Allocate buffer for argument strings */</span><br>kargbuf = kmalloc(total_bytes);<br><span class="hljs-keyword">if</span> (kargbuf == <span class="hljs-literal">NULL</span>)<br>&#123;<br>    result = ENOMEM;<br>    <span class="hljs-keyword">goto</span> err2;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>After we know the total bytes needed for arguments(strings) and reserve space for <code>kargbuf</code>, we copy the arguments(strings) into <code>kargbuf</code> and make pointers in <code>kargs</code> pointing to the new locations(in kernel) of the arguments.</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">/* Copy strings to kernel buffer */</span><br><span class="hljs-type">char</span> *bufptr = kargbuf;<br><span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; nargs; i++)<br>&#123;<br>    <span class="hljs-type">size_t</span> len;<br>    <span class="hljs-comment">/* Copy string from user space */</span><br>    result = copyinstr((<span class="hljs-type">const_userptr_t</span>)kargs[i], bufptr, ARG_MAX, &amp;len);<br>    <span class="hljs-keyword">if</span> (result)<br>    &#123;<br>        <span class="hljs-keyword">goto</span> err3;<br>    &#125;<br>    kargs[i] = bufptr; <span class="hljs-comment">/* Store pointer to string in kernel array */</span><br>    bufptr += ROUNDUP(len, <span class="hljs-number">4</span>);<br>&#125;<br></code></pre></td></tr></table></figure>
+<ul>
+<li><strong>Load the new program image</strong></li>
+</ul>
+<ol>
+<li>Create and switch to the new address space</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">/* Create new address space */</span><br>new_as = as_create();<br><span class="hljs-keyword">if</span> (new_as == <span class="hljs-literal">NULL</span>)<br>&#123;<br>    result = ENOMEM;<br>    vfs_close(v);<br>    <span class="hljs-keyword">goto</span> err3;<br>&#125;<br><br><span class="hljs-comment">/* Switch to new address space */</span><br>old_as = proc_setas(new_as);<br>as_activate();<br></code></pre></td></tr></table></figure>
+<ol start="2">
+<li>Open and load the new executable</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">/* Copy the program path and verify it */</span><br>kprogram = kmalloc(PATH_MAX);<br><span class="hljs-keyword">if</span> (kprogram == <span class="hljs-literal">NULL</span>)<br>&#123;<br>    result = ENOMEM;<br>    <span class="hljs-keyword">goto</span> err1;<br>&#125;<br>result = copyinstr(program, kprogram, PATH_MAX, &amp;actual);<br><span class="hljs-keyword">if</span> (result)<br>&#123;<br>    <span class="hljs-keyword">goto</span> err1;<br>&#125;<br><br><span class="hljs-comment">/* Open the executable */</span><br>result = vfs_open(kprogram, O_RDONLY, <span class="hljs-number">0</span>, &amp;v);<br><span class="hljs-keyword">if</span> (result)<br>&#123;<br>    <span class="hljs-keyword">goto</span> err3;<br>&#125;<br><br><span class="hljs-comment">/* Load the new executable */</span><br>result = load_elf(v, &amp;entrypoint);<br>vfs_close(v);<br><span class="hljs-keyword">if</span> (result)<br>&#123;<br>    proc_setas(old_as);<br>    as_activate();<br>    as_destroy(new_as);<br>    <span class="hljs-keyword">goto</span> err3;<br>&#125;<br></code></pre></td></tr></table></figure>
+<ol start="3">
+<li>Define a new stack region</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">/* Define the user stack */</span><br>result = as_define_stack(new_as, &amp;stackptr);<br><span class="hljs-keyword">if</span> (result)<br>&#123;<br>    proc_setas(old_as);<br>    as_activate();<br>    as_destroy(new_as);<br>    <span class="hljs-keyword">goto</span> err3;<br>&#125;<br></code></pre></td></tr></table></figure>
+<ul>
+<li><strong><code>Copyout</code> arguments to user stack</strong></li>
+</ul>
+<blockquote>
+<p>How to copy the arguments to the new address space?</p>
+</blockquote>
+<p><img src="/imgs/202411041454332-1740464409429-5-1740473621644-15.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+<p>We first obtain the initial <code>stackptr</code> via <code>as_define_stack</code>.</p>
+<p>Next we calculate where the strings should begin:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">/* Adjust stack pointer for strings */</span><br>stackptr -= total_bytes;<br>stackptr = ROUNDUP(stackptr - <span class="hljs-number">7</span>, <span class="hljs-number">8</span>);<br><br><span class="hljs-comment">/* Remember where strings start */</span><br><span class="hljs-type">vaddr_t</span> strings_start = stackptr;<br></code></pre></td></tr></table></figure>
+<p>Then copy the strings starting at <code>stackptr</code>(<code>strings_start</code>) and save the new user space address of the strings in <code>kargs</code>.</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">/* Copy strings and save their user-space addresses in kargs */</span><br><span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; nargs; i++)<br>&#123;<br>    <span class="hljs-type">size_t</span> got;<br>    <span class="hljs-comment">/* Copy string to user stack */</span><br>    result = copyoutstr((<span class="hljs-type">const</span> <span class="hljs-type">char</span> *)kargs[i], (<span class="hljs-type">userptr_t</span>)stackptr, ARG_MAX, &amp;got);<br>    <span class="hljs-keyword">if</span> (result) &#123; ... &#125;<br>    <span class="hljs-comment">/* Save user space address in kargs */</span><br>    kargs[i] = (<span class="hljs-type">char</span> *)stackptr;<br>    <span class="hljs-comment">/* Move to next aligned position */</span><br>    stackptr += ROUNDUP(got, <span class="hljs-number">4</span>);<br>&#125;<br></code></pre></td></tr></table></figure>
+<blockquote>
+<p>Why do we need to save the strings' user space address?</p>
+</blockquote>
+<p>After we copy the strings to user space address, we also need to copy the pointers to those strings.</p>
+<p>We first calculate where the pointers should begin. Note that the pointers should store below the strings, as the stack grows in the direction of low address.</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">size_t</span> ptrs_space = (nargs + <span class="hljs-number">1</span>) * <span class="hljs-keyword">sizeof</span>(<span class="hljs-type">userptr_t</span>); <span class="hljs-comment">// +1 for NULL terminator</span><br><br><span class="hljs-comment">/* Adjust stack pointer for argv array */</span><br>stackptr = strings_start - ptrs_space;<br>stackptr = ROUNDUP(stackptr - <span class="hljs-number">7</span>, <span class="hljs-number">8</span>);<br></code></pre></td></tr></table></figure>
+<p>Then we copy the pointers (to the strings) starting at <code>stackptr</code>(This is also the final <code>stackptr</code> we need to pass to <code>enter_new_process</code> in order to enter user mode):</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">/* Copy out argv array */</span><br><span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; nargs; i++)<br>&#123;<br>    result = copyout((<span class="hljs-type">const_userptr_t</span>)&amp;kargs[i], (<span class="hljs-type">userptr_t</span>)(stackptr + i * <span class="hljs-keyword">sizeof</span>(<span class="hljs-type">userptr_t</span>)), <span class="hljs-keyword">sizeof</span>(<span class="hljs-type">userptr_t</span>));<br>    <span class="hljs-keyword">if</span> (result) &#123; ... &#125;<br>&#125;<br><br><span class="hljs-comment">/* Set the last pointer to NULL */</span><br><span class="hljs-type">void</span> *null_val = <span class="hljs-literal">NULL</span>;<br>result = copyout(&amp;null_val, (<span class="hljs-type">userptr_t</span>)(stackptr + nargs * <span class="hljs-keyword">sizeof</span>(<span class="hljs-type">userptr_t</span>)), <span class="hljs-keyword">sizeof</span>(<span class="hljs-type">userptr_t</span>));<br><span class="hljs-keyword">if</span> (result) &#123; ... &#125;<br></code></pre></td></tr></table></figure>
+<p>This is the overview of user stack before we enter user mode:</p>
+<p><img src="/imgs/202412151509009.jpg" srcset="/img/loading.gif" lazyload alt="" /></p>
+<ul>
+<li><strong>Clean the old address space and return to user mode</strong></li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">/* Clean up */</span><br>as_destroy(old_as);<br><span class="hljs-keyword">if</span> (kprogram)<br>    kfree(kprogram);<br><span class="hljs-keyword">if</span> (kargs)<br>    kfree(kargs);<br><span class="hljs-keyword">if</span> (kargbuf)<br>    kfree(kargbuf);<br><br><span class="hljs-comment">/* Enter user mode */</span><br>enter_new_process(nargs <span class="hljs-comment">/*argc*/</span>, (<span class="hljs-type">userptr_t</span>)stackptr <span class="hljs-comment">/*argv*/</span>, <span class="hljs-literal">NULL</span> <span class="hljs-comment">/*env*/</span>, stackptr, entrypoint);<br></code></pre></td></tr></table></figure>
+<h2 id="finish"><a class="markdownIt-Anchor" href="#finish"></a> Finish!</h2>
+<p>Those are the files I have modified/created. Do not get here unless you are stuck in coding!</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs awk">* kern<span class="hljs-regexp">/arch/mi</span>ps<span class="hljs-regexp">/locore/</span>trap.c<br>* kern<span class="hljs-regexp">/include/</span>syscall.h<br>* kern<span class="hljs-regexp">/arch/mi</span>ps<span class="hljs-regexp">/syscall/</span>syscall.c<br>* kern<span class="hljs-regexp">/include/</span>pid.h<br>* kern<span class="hljs-regexp">/proc/</span>pid.c<br>* kern<span class="hljs-regexp">/include/</span>proc.h<br>* kern<span class="hljs-regexp">/proc/</span>proc.c<br>* kern<span class="hljs-regexp">/main/m</span>ain.c<br>* kern<span class="hljs-regexp">/main/m</span>enu.c<br>* kern<span class="hljs-regexp">/syscall/</span>_exit_syscalls.c<br>* kern<span class="hljs-regexp">/syscall/</span>waitpid_syscalls.c<br>* kern<span class="hljs-regexp">/syscall/g</span>etpid_syscalls.c<br>* kern<span class="hljs-regexp">/syscall/</span>execv_syscalls.c<br>* kern<span class="hljs-regexp">/syscall/</span>fork_syscalls.c<br>* kern<span class="hljs-regexp">/thread/</span>thread.c<br></code></pre></td></tr></table></figure>
+<p>We have passed all tests in Assignment5!</p>
+<img src="/imgs/image-20250225164450312-1740473621644-16.png" srcset="/img/loading.gif" lazyload style="zoom:67%;" />
+<figure class="highlight vbnet"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br></pre></td><td class="code"><pre><code class="hljs vbnet">OS/<span class="hljs-number">161</span> kernel [? <span class="hljs-keyword">for</span> menu]: p testbin/crash<br>[a] read <span class="hljs-keyword">from</span> NULL<br>[b] read <span class="hljs-keyword">from</span> invalid address<br>[c] read <span class="hljs-keyword">from</span> kernel address<br>[d] write <span class="hljs-keyword">to</span> NULL<br>[e] write <span class="hljs-keyword">to</span> invalid address<br>[f] write <span class="hljs-keyword">to</span> code segment<br>[g] write <span class="hljs-keyword">to</span> kernel address<br>[h] jump <span class="hljs-keyword">to</span> NULL<br>[i] jump <span class="hljs-keyword">to</span> invalid address<br>[j] jump <span class="hljs-keyword">to</span> kernel address<br>[k] alignment <span class="hljs-keyword">error</span><br>[l] illegal instruction<br>[m] divide <span class="hljs-keyword">by</span> zero<br>[n] <span class="hljs-built_in">mod</span> <span class="hljs-keyword">by</span> zero<br>[o] Recurse infinitely<br>[*] Run everything (<span class="hljs-keyword">in</span> subprocesses)<br><span class="hljs-symbol">Note:</span> [f] may <span class="hljs-built_in">not</span> cause an exception <span class="hljs-keyword">on</span> some platforms, <span class="hljs-keyword">in</span> which<br><span class="hljs-keyword">case</span> it<span class="hljs-comment">&#x27;ll appear to fail.</span><br><span class="hljs-symbol">Choose:</span> Running: [a] read <span class="hljs-keyword">from</span> NULL<br>Fatal user mode trap <span class="hljs-number">2</span> sig <span class="hljs-number">11</span> (TLB miss <span class="hljs-keyword">on</span> load, epc <span class="hljs-number">0</span>x400310, vaddr <span class="hljs-number">0</span>x0)<br>Signal <span class="hljs-number">11</span> (correct)<br><span class="hljs-symbol">Running:</span> [b] read <span class="hljs-keyword">from</span> invalid address<br>Fatal user mode trap <span class="hljs-number">2</span> sig <span class="hljs-number">11</span> (TLB miss <span class="hljs-keyword">on</span> load, epc <span class="hljs-number">0</span>x40032c, vaddr <span class="hljs-number">0</span>x40000000)<br>Signal <span class="hljs-number">11</span> (correct)<br><span class="hljs-symbol">Running:</span> [c] read <span class="hljs-keyword">from</span> kernel address<br>Fatal user mode trap <span class="hljs-number">4</span> sig <span class="hljs-number">10</span> (Address <span class="hljs-keyword">error</span> <span class="hljs-keyword">on</span> load, epc <span class="hljs-number">0</span>x400348, vaddr <span class="hljs-number">0</span>x80000000)<br>Signal <span class="hljs-number">10</span> (correct)<br><span class="hljs-symbol">Running:</span> [d] write <span class="hljs-keyword">to</span> NULL<br>Fatal user mode trap <span class="hljs-number">3</span> sig <span class="hljs-number">11</span> (TLB miss <span class="hljs-keyword">on</span> store, epc <span class="hljs-number">0</span>x400364, vaddr <span class="hljs-number">0</span>x0)<br>Signal <span class="hljs-number">11</span> (correct)<br><span class="hljs-symbol">Running:</span> [e] write <span class="hljs-keyword">to</span> invalid address<br>Fatal user mode trap <span class="hljs-number">3</span> sig <span class="hljs-number">11</span> (TLB miss <span class="hljs-keyword">on</span> store, epc <span class="hljs-number">0</span>x400374, vaddr <span class="hljs-number">0</span>x40000000)<br>Signal <span class="hljs-number">11</span> (correct)<br><span class="hljs-symbol">Running:</span> [f] write <span class="hljs-keyword">to</span> code segment<br>I wasn<span class="hljs-comment">&#x27;t killed - test fails!</span><br><span class="hljs-keyword">Exit</span> <span class="hljs-number">1</span>; expected signal <span class="hljs-number">11</span><br><span class="hljs-symbol">Running:</span> [g] write <span class="hljs-keyword">to</span> kernel address<br>Fatal user mode trap <span class="hljs-number">5</span> sig <span class="hljs-number">10</span> (Address <span class="hljs-keyword">error</span> <span class="hljs-keyword">on</span> store, epc <span class="hljs-number">0</span>x400394, vaddr <span class="hljs-number">0</span>x80000000)<br>Signal <span class="hljs-number">10</span> (correct)<br><span class="hljs-symbol">Running:</span> [h] jump <span class="hljs-keyword">to</span> NULL<br>Fatal user mode trap <span class="hljs-number">2</span> sig <span class="hljs-number">11</span> (TLB miss <span class="hljs-keyword">on</span> load, epc <span class="hljs-number">0</span>x4003a0, vaddr <span class="hljs-number">0</span>x0)<br>Signal <span class="hljs-number">11</span> (correct)<br><span class="hljs-symbol">Running:</span> [i] jump <span class="hljs-keyword">to</span> invalid address<br>Fatal user mode trap <span class="hljs-number">2</span> sig <span class="hljs-number">11</span> (TLB miss <span class="hljs-keyword">on</span> load, epc <span class="hljs-number">0</span>x4003ac, vaddr <span class="hljs-number">0</span>x40000000)<br>Signal <span class="hljs-number">11</span> (correct)<br><span class="hljs-symbol">Running:</span> [j] jump <span class="hljs-keyword">to</span> kernel address<br>Fatal user mode trap <span class="hljs-number">4</span> sig <span class="hljs-number">10</span> (Address <span class="hljs-keyword">error</span> <span class="hljs-keyword">on</span> load, epc <span class="hljs-number">0</span>x4003b8, vaddr <span class="hljs-number">0</span>x80000000)<br>Signal <span class="hljs-number">10</span> (correct)<br><span class="hljs-symbol">Running:</span> [k] alignment <span class="hljs-keyword">error</span><br>Fatal user mode trap <span class="hljs-number">4</span> sig <span class="hljs-number">10</span> (Address <span class="hljs-keyword">error</span> <span class="hljs-keyword">on</span> load, epc <span class="hljs-number">0</span>x4003f0, vaddr <span class="hljs-number">0</span>x7fffffa9)<br>Signal <span class="hljs-number">10</span> (correct)<br><span class="hljs-symbol">Running:</span> [l] illegal instruction<br>Fatal user mode trap <span class="hljs-number">10</span> sig <span class="hljs-number">4</span> (Illegal instruction, epc <span class="hljs-number">0</span>x4003c0, vaddr <span class="hljs-number">0</span>x0)<br>Signal <span class="hljs-number">4</span> (correct)<br><span class="hljs-symbol">Running:</span> [m] divide <span class="hljs-keyword">by</span> zero<br>Fatal user mode trap <span class="hljs-number">9</span> sig <span class="hljs-number">5</span> (Break instruction, epc <span class="hljs-number">0</span>x40042c, vaddr <span class="hljs-number">0</span>x0)<br>Signal <span class="hljs-number">5</span> (correct)<br><span class="hljs-symbol">Running:</span> [n] <span class="hljs-built_in">mod</span> <span class="hljs-keyword">by</span> zero<br>Fatal user mode trap <span class="hljs-number">9</span> sig <span class="hljs-number">5</span> (Break instruction, epc <span class="hljs-number">0</span>x400468, vaddr <span class="hljs-number">0</span>x0)<br>Signal <span class="hljs-number">5</span> (correct)<br><span class="hljs-symbol">Running:</span> [o] Recurse infinitely<br>Fatal user mode trap <span class="hljs-number">3</span> sig <span class="hljs-number">11</span> (TLB miss <span class="hljs-keyword">on</span> store, epc <span class="hljs-number">0</span>x400488, vaddr <span class="hljs-number">0</span>x7ffedff0)<br>Signal <span class="hljs-number">11</span> (correct)<br>Operation took <span class="hljs-number">30.033709583</span> seconds<br></code></pre></td></tr></table></figure>
+<img src="/imgs/image-20250225164904864-1740473621645-17.png" srcset="/img/loading.gif" lazyload style="zoom:67%;" />
+<img src="/imgs/image-20250225164949387-1740473621645-18.png" srcset="/img/loading.gif" lazyload alt="badcall" style="zoom: 67%;" />
+<p>We have finished Assignment5!😊</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/OS/" class="category-chain-item">OS</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/OS/OS161/" class="category-chain-item">OS161</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/OS/" class="print-no-link">#OS</a>
+      
+        <a href="/tags/OS161/" class="print-no-link">#OS161</a>
+      
+        <a href="/tags/System-Calls/" class="print-no-link">#System Calls</a>
+      
+        <a href="/tags/Process-Management/" class="print-no-link">#Process Management</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>OS161 Assignment 5</div>
+      <div>http://oooscar8.github.io/2024/11/11/OS161-A5/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Alex Sun</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年11月11日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/11/14/Paging/" title="Paging">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Paging</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/10/24/Processes-and-Threads/" title="Processes and Threads">
+                        <span class="hidden-mobile">Processes and Threads</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div class="disqus" style="width:100%">
+    <div id="disqus_thread"></div>
+    
+      <script type="text/javascript">
+        var disqus_config = function() {
+          this.page.url = 'http://oooscar8.github.io/2024/11/11/OS161-A5/';
+          this.page.identifier = '/2024/11/11/OS161-A5/';
+        };
+        Fluid.utils.loadComments('#disqus_thread', function() {
+          var d = document, s = d.createElement('script');
+          s.src = '//' + 'fluid' + '.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', new Date());
+          (d.head || d.body).appendChild(s);
+        });
+      </script>
+    
+    <noscript>Please enable JavaScript to view the comments</noscript>
+  </div>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

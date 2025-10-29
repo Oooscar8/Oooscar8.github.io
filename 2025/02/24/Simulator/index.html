@@ -1,0 +1,787 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/imgs/wallhaven-p9qeze.jpg">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Alex Sun">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="SJTU ICS2 Y86-64 Simulator Lab">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Simulator Lab">
+<meta property="og:url" content="http://oooscar8.github.io/2025/02/24/Simulator/index.html">
+<meta property="og:site_name" content="Alex&#39;s Space">
+<meta property="og:description" content="SJTU ICS2 Y86-64 Simulator Lab">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://oooscar8.github.io/2025/02/24/imgs/202502171432021-1740397650876-106.png">
+<meta property="og:image" content="http://oooscar8.github.io/2025/02/24/imgs/image-20250224193608135.png">
+<meta property="article:published_time" content="2025-02-24T15:19:01.000Z">
+<meta property="article:modified_time" content="2025-03-18T12:09:26.164Z">
+<meta property="article:author" content="Alex Sun">
+<meta property="article:tag" content="Y86">
+<meta property="article:tag" content="CSAPP">
+<meta property="article:tag" content="Simulator">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://oooscar8.github.io/2025/02/24/imgs/202502171432021-1740397650876-106.png">
+  
+  
+  
+  <title>Simulator Lab - Alex&#39;s Space</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"oooscar8.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.1.1"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Alex&#39;s Space</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/imgs/chuyin.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Simulator Lab"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-02-24 23:19" pubdate>
+          2025年2月24日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.4k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          12 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Simulator Lab</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="ics-lab5-y86-64-simulator"><a class="markdownIt-Anchor" href="#ics-lab5-y86-64-simulator"></a> ICS Lab5: Y86-64 Simulator</h1>
+<p>在Lab5中，我们要实现一个Y86-64 Simulator来模拟执行y86二进制代码的硬件行为。</p>
+<p><code>y86sim.c</code>程序读进一个y86 instruction文件，根据y86指令结构来parse二进制代码。分析并确定指令后，该程序修改y86处理器状态。</p>
+<h2 id="skeleton-code"><a class="markdownIt-Anchor" href="#skeleton-code"></a> Skeleton Code</h2>
+<p>开始coding之前先认真看一下skeleton code的结构：</p>
+<p>关键是<code>y64sim_t</code>结构，用了4个变量分别表示y86处理器状态：PC, 寄存器，内存和CC，其中寄存器和内存各自用一块连续空间的数组表示，通过register specifer和内存地址作为数组index访问相应的寄存器和内存地址。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-keyword">typedef</span> <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">mem</span> &#123;</span><br>    <span class="hljs-type">int</span> len;<br>    <span class="hljs-type">byte_t</span> *data;<br>&#125; <span class="hljs-type">mem_t</span>;<br><br><span class="hljs-keyword">typedef</span> <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">y64sim</span> &#123;</span><br>    <span class="hljs-type">long_t</span> pc;<br>    <span class="hljs-type">mem_t</span> *r;<br>    <span class="hljs-type">mem_t</span> *m;<br>    <span class="hljs-type">cc_t</span> cc;<br>&#125; <span class="hljs-type">y64sim_t</span>;<br></code></pre></td></tr></table></figure>
+<h2 id="implementation-code-alert"><a class="markdownIt-Anchor" href="#implementation-code-alert"></a> Implementation (Code Alert!)</h2>
+<p>这个lab的关键在于实现<code>nexti</code>函数，这个函数的输入是当前的y86 image（包括PC， 寄存器，内存和CC）。</p>
+<p>首先第一步是parse指令，根据instruction code来获取寄存器和立即数。获取到的寄存器分别存在rA和rB里面，立即数存在valC里面。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">byte_t</span> codefun = <span class="hljs-number">0</span>; <span class="hljs-comment">/* 1 byte */</span><br><span class="hljs-type">itype_t</span> icode;<br><span class="hljs-type">alu_t</span> ifun;<br><span class="hljs-type">long_t</span> next_pc = sim-&gt;pc;<br><br><span class="hljs-comment">/* get code and function （1 byte) */</span><br><span class="hljs-keyword">if</span> (!get_byte_val(sim-&gt;m, next_pc, &amp;codefun))<br>&#123;<br>    err_print(<span class="hljs-string">&quot;PC = 0x%lx, Invalid instruction address&quot;</span>, sim-&gt;pc);<br>    <span class="hljs-keyword">return</span> STAT_ADR;<br>&#125;<br><span class="hljs-comment">/* get the instruction code */</span><br>icode = GET_ICODE(codefun);<br><span class="hljs-comment">/* get the ALU code */</span><br>ifun = GET_FUN(codefun);<br>next_pc++;<br><br><span class="hljs-comment">/* get registers if needed (1 byte) */</span><br><span class="hljs-type">reg_t</span> rA = &#123;<span class="hljs-number">0</span>&#125;, rB = &#123;<span class="hljs-number">0</span>&#125;;<br><span class="hljs-keyword">if</span> (get_register_needed(icode))<br>&#123;<br>    <span class="hljs-comment">/* get the register specifier */</span><br>    <span class="hljs-keyword">if</span> (!get_byte_val(sim-&gt;m, next_pc, &amp;codefun))<br>    &#123;<br>        err_print(<span class="hljs-string">&quot;PC = 0x%lx, Invalid instruction address&quot;</span>, sim-&gt;pc);<br>        <span class="hljs-keyword">return</span> STAT_ADR;<br>    &#125;<br>    rA = reg_table[GET_REGA(codefun)];<br>    rB = reg_table[GET_REGB(codefun)];<br>    next_pc++;<br>&#125;<br><br><span class="hljs-comment">/* get immediate if needed (8 bytes) */</span><br><span class="hljs-type">long_t</span> valC = <span class="hljs-number">0</span>;<br><span class="hljs-keyword">if</span> (get_immediate_needed(icode))<br>&#123;<br>    <span class="hljs-keyword">if</span> (!get_long_val(sim-&gt;m, next_pc, &amp;valC))<br>    &#123;<br>        err_print(<span class="hljs-string">&quot;PC = 0x%lx, Invalid instruction address&quot;</span>, sim-&gt;pc);<br>        <span class="hljs-keyword">return</span> STAT_ADR;<br>    &#125;<br>    next_pc += <span class="hljs-number">8</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>这里我用了两个helper function: <code>get_register_needed</code>和<code>get_immediate_needed</code>来根据instruction code确定是否需要获取register specifier和8位的immediate，参考下图y86指令集：</p>
+<img src="/imgs/202502171432021-1740397650876-106.png" srcset="/img/loading.gif" lazyload alt="Y86-64指令集" style="zoom:67%;" />
+<p>然后就是补全switch语句根据指令前4 bits的instruction code来分别执行相应的操作，需要注意以下几类指令：</p>
+<ol>
+<li>
+<p><code>OPq</code>: 根据function code确定具体需要执行的ALU操作。需要实现<code>compute_alu</code>执行ALU操作，<code>compute_cc</code>根据ALU操作结果设置CC。</p>
+<blockquote>
+<p>如何判断ADD和SUB操作有无overflow?</p>
+</blockquote>
+<p>如果两个<code>long_t</code>类型数相加，得到的和的符号与原本两个数符号相反，则overflow：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c">ovf = ((argA ^ val) &amp; (argB ^ val)) &gt;&gt; <span class="hljs-number">63</span>;<br></code></pre></td></tr></table></figure>
+<p>减法可以转化成第一个数加第二个数的相反数，与加法overflow判断方式相同。</p>
+</li>
+<li>
+<p><code>jXX</code>和<code>cmovXX</code>: 需要实现<code>cond_doit</code>，先根据function code和当前的cc来判断能否执行。</p>
+<blockquote>
+<p>如何判断Less和Greater?</p>
+</blockquote>
+<p>两个数相减，如果是负数且没有overflow，或是正数但overflow，那么说明第一个数Less than第二个数：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-keyword">case</span> C_L:<br>        <span class="hljs-keyword">return</span> (sf ^ of);<br></code></pre></td></tr></table></figure>
+<p>Greater就是Less反过来并加上!zero。</p>
+</li>
+</ol>
+<p>完整的switch代码：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">/* execute the instruction*/</span><br><span class="hljs-keyword">switch</span> (icode)<br>&#123;<br>    <span class="hljs-keyword">case</span> I_HALT: <span class="hljs-comment">/* 0:0 */</span><br>        <span class="hljs-keyword">return</span> STAT_HLT;<br>        <span class="hljs-keyword">break</span>;<br>    <span class="hljs-keyword">case</span> I_NOP: <span class="hljs-comment">/* 1:0 */</span><br>        <span class="hljs-keyword">break</span>;<br>    <span class="hljs-keyword">case</span> I_RRMOVQ: <span class="hljs-comment">/* 2:x regA:regB */</span><br>        <span class="hljs-keyword">if</span> (cond_doit(sim-&gt;cc, ifun))<br>        &#123;<br>            set_reg_val(sim-&gt;r, rB.id, get_reg_val(sim-&gt;r, rA.id));<br>        &#125;<br>        <span class="hljs-keyword">break</span>;<br>    <span class="hljs-keyword">case</span> I_IRMOVQ: <span class="hljs-comment">/* 3:0 F:regB imm */</span><br>        set_reg_val(sim-&gt;r, rB.id, valC);<br>        <span class="hljs-keyword">break</span>;<br>    <span class="hljs-keyword">case</span> I_RMMOVQ: <span class="hljs-comment">/* 4:0 regA:regB imm */</span><br>        <span class="hljs-keyword">if</span> (!set_long_val(sim-&gt;m, get_reg_val(sim-&gt;r, rB.id) + valC, get_reg_val(sim-&gt;r, rA.id)))<br>        &#123;<br>            err_print(<span class="hljs-string">&quot;PC = 0x%lx, Invalid data address 0x%lx&quot;</span>, sim-&gt;pc, get_reg_val(sim-&gt;r, rB.id) + valC);<br>            <span class="hljs-keyword">return</span> STAT_ADR;<br>        &#125;<br>        <span class="hljs-keyword">break</span>;<br>    <span class="hljs-keyword">case</span> I_MRMOVQ: <span class="hljs-comment">/* 5:0 regB:regA imm */</span><br>        <span class="hljs-type">long_t</span> valM;<br>        <span class="hljs-keyword">if</span> (!get_long_val(sim-&gt;m, get_reg_val(sim-&gt;r, rB.id) + valC, &amp;valM))<br>        &#123;<br>            err_print(<span class="hljs-string">&quot;PC = 0x%lx, Invalid data address 0x%lx&quot;</span>, sim-&gt;pc, get_reg_val(sim-&gt;r, rB.id) + valC);<br>            <span class="hljs-keyword">return</span> STAT_ADR;<br>        &#125;<br>        set_reg_val(sim-&gt;r, rA.id, valM);<br>        <span class="hljs-keyword">break</span>;<br>    <span class="hljs-keyword">case</span> I_ALU: <span class="hljs-comment">/* 6:x regA:regB */</span><br>        <span class="hljs-type">long_t</span> alu_val;<br>        <span class="hljs-comment">/* do the ALU operation and set condition codes */</span><br>        alu_val = compute_alu(ifun, get_reg_val(sim-&gt;r, rA.id), get_reg_val(sim-&gt;r, rB.id));<br>        sim-&gt;cc = compute_cc(ifun, get_reg_val(sim-&gt;r, rA.id), get_reg_val(sim-&gt;r, rB.id), alu_val);<br>        <span class="hljs-comment">/* save the result to the destination register */</span><br>        set_reg_val(sim-&gt;r, rB.id, alu_val);<br>        <span class="hljs-keyword">break</span>;<br>    <span class="hljs-keyword">case</span> I_JMP: <span class="hljs-comment">/* 7:x imm */</span><br>        <span class="hljs-keyword">if</span> (cond_doit(sim-&gt;cc, ifun)) &#123;<br>            next_pc = valC;<br>        &#125;<br>        <span class="hljs-keyword">break</span>;<br>    <span class="hljs-keyword">case</span> I_CALL:  <span class="hljs-comment">/* 8:x imm */</span><br>        <span class="hljs-comment">/*</span><br><span class="hljs-comment">         * Push address of next instruction onto stack;</span><br><span class="hljs-comment">         * Start executing instructions at Dest;</span><br><span class="hljs-comment">         */</span><br>        set_reg_val(sim-&gt;r, REG_RSP, get_reg_val(sim-&gt;r, REG_RSP) - <span class="hljs-number">8</span>);<br>        <span class="hljs-keyword">if</span> (!set_long_val(sim-&gt;m, get_reg_val(sim-&gt;r, REG_RSP), next_pc))<br>        &#123;<br>            err_print(<span class="hljs-string">&quot;PC = 0x%lx, Invalid stack address 0x%lx&quot;</span>, sim-&gt;pc, get_reg_val(sim-&gt;r, REG_RSP));<br>            set_reg_val(sim-&gt;r, REG_RSP, get_reg_val(sim-&gt;r, REG_RSP) + <span class="hljs-number">8</span>);<br>            <span class="hljs-keyword">return</span> STAT_ADR;<br>        &#125;<br>        next_pc = valC;<br>        <span class="hljs-keyword">break</span>;<br>    <span class="hljs-keyword">case</span> I_RET:   <span class="hljs-comment">/* 9:0 */</span><br>        <span class="hljs-comment">/* </span><br><span class="hljs-comment">         * Pop value from stack;</span><br><span class="hljs-comment">         * Use as address for next instruction; </span><br><span class="hljs-comment">         */</span><br>        <span class="hljs-keyword">if</span> (!get_long_val(sim-&gt;m, get_reg_val(sim-&gt;r, REG_RSP), &amp;next_pc)) &#123;<br>            err_print(<span class="hljs-string">&quot;PC = 0x%lx, Invalid stack address 0x%lx&quot;</span>, sim-&gt;pc, get_reg_val(sim-&gt;r, REG_RSP));<br>            <span class="hljs-keyword">return</span> STAT_ADR;<br>        &#125;<br>        set_reg_val(sim-&gt;r, REG_RSP, get_reg_val(sim-&gt;r, REG_RSP) + <span class="hljs-number">8</span>);<br>        <span class="hljs-keyword">break</span>;<br>    <span class="hljs-keyword">case</span> I_PUSHQ: <span class="hljs-comment">/* A:0 regA:F */</span><br>        <span class="hljs-comment">/* </span><br><span class="hljs-comment">         * Decrement %rsp by 8;</span><br><span class="hljs-comment">         * Store word from rA to memory at %rsp;</span><br><span class="hljs-comment">         * Like x86-64 (pushq %rsp -&gt; save old %rsp);</span><br><span class="hljs-comment">         */</span><br>        <span class="hljs-type">long_t</span> rA_val = get_reg_val(sim-&gt;r, rA.id);<br>        set_reg_val(sim-&gt;r, REG_RSP, get_reg_val(sim-&gt;r, REG_RSP) - <span class="hljs-number">8</span>);<br>        <span class="hljs-keyword">if</span> (!set_long_val(sim-&gt;m, get_reg_val(sim-&gt;r, REG_RSP), rA_val))<br>        &#123;<br>            err_print(<span class="hljs-string">&quot;PC = 0x%lx, Invalid stack address 0x%lx&quot;</span>, sim-&gt;pc, get_reg_val(sim-&gt;r, REG_RSP));<br>            set_reg_val(sim-&gt;r, REG_RSP, get_reg_val(sim-&gt;r, REG_RSP) + <span class="hljs-number">8</span>);<br>            <span class="hljs-keyword">return</span> STAT_ADR;<br>        &#125;<br>        <span class="hljs-keyword">break</span>;<br>    <span class="hljs-keyword">case</span> I_POPQ: <span class="hljs-comment">/* B:0 regA:F */</span><br>        <span class="hljs-comment">/* </span><br><span class="hljs-comment">         * Read word from memory at %rsp;</span><br><span class="hljs-comment">         * Save in rA;</span><br><span class="hljs-comment">         * Increment %rsp by 8;</span><br><span class="hljs-comment">         * Like x86-64 (popq %rsp -&gt; movq (%rsp) %rsp);</span><br><span class="hljs-comment">         */</span><br>        <span class="hljs-type">long_t</span> val_stack;<br>        <span class="hljs-keyword">if</span> (!get_long_val(sim-&gt;m, get_reg_val(sim-&gt;r, REG_RSP), &amp;val_stack)) &#123;<br>            err_print(<span class="hljs-string">&quot;PC = 0x%lx, Invalid stack address 0x%lx&quot;</span>, sim-&gt;pc, get_reg_val(sim-&gt;r, REG_RSP));<br>            <span class="hljs-keyword">return</span> STAT_ADR;<br>        &#125;<br>        set_reg_val(sim-&gt;r, rA.id, val_stack);<br>        <span class="hljs-keyword">if</span> (rA.id != REG_RSP)<br>        &#123;<br>            set_reg_val(sim-&gt;r, REG_RSP, get_reg_val(sim-&gt;r, REG_RSP) + <span class="hljs-number">8</span>);<br>        &#125;<br>        <span class="hljs-keyword">break</span>;<br>    <span class="hljs-keyword">default</span>:<br>        err_print(<span class="hljs-string">&quot;PC = 0x%lx, Invalid instruction %.2x&quot;</span>, sim-&gt;pc, codefun);<br>        <span class="hljs-keyword">return</span> STAT_INS;<br>&#125;<br><br>sim-&gt;pc = next_pc;<br></code></pre></td></tr></table></figure>
+<div class="note note-danger">
+            <p>这个lab的error handling容易出错！：</p><ol><li><p>status code的返回，只要是invalid address的错误，无论是invalid instruction address, invalid data address, invalid stack address，都是返回<code>STAT_ADR</code></p></li><li><p><code>pushq</code>和<code>call</code>都是先decrement <code>rsp</code>，然后尝试写入栈中。如果写入失败应该重新increment <code>rsp</code>到原来的值，如果忘记这一步的话test会fail:</p><figure class="highlight nestedtext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs nestedtext"><span class="hljs-attribute">[ Testing instruction</span><span class="hljs-punctuation">:</span> <span class="hljs-string">call ]</span><br><span class="hljs-attribute">3a4</span><br><span class="hljs-attribute">&gt; %rsp</span><span class="hljs-punctuation">:</span> <span class="hljs-string">0x0000000000000000      0xfffffffffffffff8</span><br><span class="hljs-attribute">[ Result</span><span class="hljs-punctuation">:</span> <span class="hljs-string">Fail ]</span><br><br><span class="hljs-attribute">[ Testing instruction</span><span class="hljs-punctuation">:</span> <span class="hljs-string">pushq ]</span><br><span class="hljs-attribute">3a4</span><br><span class="hljs-attribute">&gt; %rsp</span><span class="hljs-punctuation">:</span> <span class="hljs-string">0x0000000000000000      0xfffffffffffffff8</span><br><span class="hljs-attribute">[ Result</span><span class="hljs-punctuation">:</span> <span class="hljs-string">Fail ]</span><br><br><span class="hljs-attribute">[ Testing application</span><span class="hljs-punctuation">:</span> <span class="hljs-string">prog10 ]</span><br><span class="hljs-attribute">4a5</span><br><span class="hljs-attribute">&gt; %rsp</span><span class="hljs-punctuation">:</span> <span class="hljs-string">0x0000000000000000      0xfffffffffffffff8</span><br><span class="hljs-attribute">[ Result</span><span class="hljs-punctuation">:</span> <span class="hljs-string">Fail ]</span><br></code></pre></td></tr></table></figure></li></ol>
+          </div>
+<h2 id="test"><a class="markdownIt-Anchor" href="#test"></a> Test</h2>
+<p>To test and evaluate your Simulator:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs shell">./yat -c &lt;name&gt; [max_steps] # get the correct status of registers and memory<br>e.g., ./yat -c prog9 4<br><br><br>./yat -s &lt;ins_name&gt; [max_steps] # test .bin file of single instruction in y64-ins-bin directory<br>e.g., ./yat –s rrmovl<br><br><br>./yat -S # test all instructions 1<br><br><br>./yat -a &lt;app_name&gt; [max_steps] # test single application in y64-app-bin directory.<br>e.g., ./yat –a asum 1<br><br><br>./yat -A # test all applications 1<br><br><br>./yat -F # test all instructions and applications, and print out the final score.<br><br><br>./yat -h # print this message<br></code></pre></td></tr></table></figure>
+<p>All tests pass!🤗</p>
+<p><img src="/imgs/image-20250224193608135.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+<h2 id="总结"><a class="markdownIt-Anchor" href="#总结"></a> 总结</h2>
+<p>这个Simulator Lab就是在编写底层硬件执行上层y86指令的行为，很机械很有意思！</p>
+<p>完成这个Lab后，你就能理解为什么程序就是一台状态机！这个状态机每次读取一条指令，然后调动底层硬件更新处理器的状态，然后根据status code决定接下来是继续执行，halt，还是出错。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/ICS/" class="category-chain-item">ICS</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/ICS/Lab/" class="category-chain-item">Lab</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/Y86/" class="print-no-link">#Y86</a>
+      
+        <a href="/tags/CSAPP/" class="print-no-link">#CSAPP</a>
+      
+        <a href="/tags/Simulator/" class="print-no-link">#Simulator</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Simulator Lab</div>
+      <div>http://oooscar8.github.io/2025/02/24/Simulator/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Alex Sun</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年2月24日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2025/02/26/CodeTop/" title="CodeTop每日刷题">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">CodeTop每日刷题</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2025/02/21/STL/" title="STL Tutorial Note">
+                        <span class="hidden-mobile">STL Tutorial Note</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div class="disqus" style="width:100%">
+    <div id="disqus_thread"></div>
+    
+      <script type="text/javascript">
+        var disqus_config = function() {
+          this.page.url = 'http://oooscar8.github.io/2025/02/24/Simulator/';
+          this.page.identifier = '/2025/02/24/Simulator/';
+        };
+        Fluid.utils.loadComments('#disqus_thread', function() {
+          var d = document, s = d.createElement('script');
+          s.src = '//' + 'fluid' + '.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', new Date());
+          (d.head || d.body).appendChild(s);
+        });
+      </script>
+    
+    <noscript>Please enable JavaScript to view the comments</noscript>
+  </div>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

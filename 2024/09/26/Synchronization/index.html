@@ -1,0 +1,1052 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/imgs/wallhaven-p9qeze.jpg">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Alex Sun">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Notes on Synchronization when studying OS">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Synchronization">
+<meta property="og:url" content="http://oooscar8.github.io/2024/09/26/Synchronization/index.html">
+<meta property="og:site_name" content="Alex&#39;s Space">
+<meta property="og:description" content="Notes on Synchronization when studying OS">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://oooscar8.github.io/2024/09/26/imgs/202409261810347.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/09/26/imgs/202409162207497-1740397021871-1.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/09/26/imgs/202409182316777.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/09/26/imgs/202409261214362.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/09/26/imgs/202409241220158.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/09/26/imgs/202409261208607.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/09/26/imgs/202409171219021.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/09/26/imgs/202409241119699.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/09/26/imgs/202410011125421.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/09/26/imgs/202410011134578.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/09/26/imgs/202409281726294.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/09/26/imgs/202409191125150-1740397057572-4.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/09/26/imgs/202409241145650.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/09/26/imgs/202409241146785.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/09/26/imgs/202409241159164.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/09/26/imgs/202410011943446.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/09/26/imgs/202410011944559.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/09/26/imgs/202409241209739.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/09/26/imgs/l18-bounded-buffer-1740222672645-50.png">
+<meta property="article:published_time" content="2024-09-25T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-02-24T11:44:46.409Z">
+<meta property="article:author" content="Alex Sun">
+<meta property="article:tag" content="OS">
+<meta property="article:tag" content="Synchronization">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://oooscar8.github.io/2024/09/26/imgs/202409261810347.png">
+  
+  
+  
+  <title>Synchronization - Alex&#39;s Space</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"oooscar8.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.1.1"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Alex&#39;s Space</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/imgs/chuyin.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Synchronization"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-09-26 00:00" pubdate>
+          2024年9月26日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.9k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          17 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Synchronization</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>In this part, we will introduce the concepts of synchronization, some hardware support for synchronization, and some synchronization primitives/objects. This part is crucial for you to implementing OS161 Assignment 2&amp;3 correctly!</p>
+<h1 id="synchronization"><a class="markdownIt-Anchor" href="#synchronization"></a> Synchronization</h1>
+<blockquote>
+<p><strong>Learning Materials</strong></p>
+<p>Videos:</p>
+<p><a target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/download/cs161-video-materials/www.eecs.harvard.edu/~margo/cs161/videos/synch-overview.mp4">Overview of synchronization</a></p>
+<p><a target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/download/cs161-video-materials/www.eecs.harvard.edu/~margo/cs161/videos/synch-types.mp4">Synchronization types</a></p>
+<p>Lecture Slides:</p>
+<p><a target="_blank" rel="noopener" href="https://people.ece.ubc.ca/os161/LECTURE-SLIDES/TAS-lock-pitfalls.pptx">Test-and-set locks in-depth</a></p>
+<p><a target="_blank" rel="noopener" href="https://people.ece.ubc.ca/os161/LECTURE-SLIDES/Synch-patterns.pptx">Synchronization patterns</a></p>
+<p><a target="_blank" rel="noopener" href="https://people.ece.ubc.ca/os161/LECTURE-SLIDES/Synchronization.pptx">Synchronization</a></p>
+<p>Readings:</p>
+<p><a target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/download/synchronization.c">Semaphore implementation exercise</a></p>
+<p><a target="_blank" rel="noopener" href="https://cs.brown.edu/courses/csci0300/2024/index.html">Brown csci0300</a></p>
+<p>[<a target="_blank" rel="noopener" href="http://pages.cs.wisc.edu/~remzi/OSTEP/threads-intro.pdf">OSTEP] Concurrency: An Introduction</a></p>
+<p><a target="_blank" rel="noopener" href="http://www.barrgroup.com/Embedded-Systems/How-To/C-Volatile-Keyword">The volatile keyword explained</a></p>
+<p><a target="_blank" rel="noopener" href="https://computing.llnl.gov/tutorials/pthreads/#ConditionVariables">Condition variables</a></p>
+<p><a target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/download/protected/spinlock-chapter.pdf">spinlock-chapter.pdf (9.2 - 9.5.1)</a></p>
+<p><a target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/class-site/mesa-semantics.html">Mesa semantics</a></p>
+<p>[<a target="_blank" rel="noopener" href="http://pages.cs.wisc.edu/~remzi/OSTEP/threads-locks-usage.pdf">OSTEP] Concurrent data structures</a></p>
+<p>[<a target="_blank" rel="noopener" href="http://pages.cs.wisc.edu/~remzi/OSTEP/threads-cv.pdf">OSTEP] Condition variables and bounded buffer problem</a></p>
+<p><a target="_blank" rel="noopener" href="https://medium.com/@sasha_f/treacherous-shared-counters-2307d3df2cc8">Treacherous shared counters</a></p>
+<p><a target="_blank" rel="noopener" href="http://queue.acm.org/detail.cfm?id=2088916">You don't know jack about shared variables or memory models -- Data races are evil.</a></p>
+<p>Supplementary:</p>
+<p><a target="_blank" rel="noopener" href="https://cs.brown.edu/courses/csci0300/2024/notes/l24.html">Bounded Buffer (Brown csci0300 LEC24)</a></p>
+<p><a target="_blank" rel="noopener" href="https://cs.brown.edu/courses/csci0300/2024/notes/l25.html">Condition Variables, Distributed Systems, and <code>Sharding</code> (Brown csci0300 LEC25)</a></p>
+</blockquote>
+<h2 id="key-concepts"><a class="markdownIt-Anchor" href="#key-concepts"></a> Key Concepts</h2>
+<ul>
+<li>Threads</li>
+</ul>
+<p>All threads within the same process <strong>share the same virtual address space</strong> and <strong>file descriptor table</strong>, but each thread has its <strong>own set of registers and stack</strong>.</p>
+<img src="/imgs/202409261810347.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:60%;" />
+<img src="/imgs/202409162207497-1740397021871-1.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:80%;" />
+<ul>
+<li>Synchronization</li>
+</ul>
+<p>Sometimes multiple threads need to access and operate on shared resources. Synchronization provides mutual exclusion between threads.</p>
+<blockquote>
+<p>Why we do we need synchronization?</p>
+</blockquote>
+<p>If two or more threads concurrently access an object, and at least one of the accesses is a write, a <strong>race condition</strong> can occur and synchronization is required.</p>
+<ul>
+<li>Mutual Exclusion</li>
+</ul>
+<p><strong>mutex</strong>:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-built_in">std</span>::mutex mutex;<br><br><span class="hljs-type">void</span> <span class="hljs-title function_">threadfunc</span><span class="hljs-params">(<span class="hljs-type">unsigned</span>* x)</span> &#123;<br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i != <span class="hljs-number">10000000</span>; ++i) &#123;<br>        mutex.lock();<br>        *x += <span class="hljs-number">1</span>;<br>        mutex.unlock();<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p><strong>spinlock</strong>:</p>
+<p><code>spinlock.swap()</code> is one atomic step stores the specified value to the atomic <code>spinlock</code> variable and returns the old value of the variable.</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">mutex</span> &#123;</span><br>    <span class="hljs-built_in">std</span>::atomic spinlock;<br><br>    <span class="hljs-type">void</span> <span class="hljs-title function_">lock</span><span class="hljs-params">()</span> &#123;<br>        <span class="hljs-keyword">while</span> (spinlock.swap(<span class="hljs-number">1</span>) == <span class="hljs-number">1</span>) &#123;&#125;<br>    &#125;<br><br>    <span class="hljs-type">void</span> <span class="hljs-title function_">unlock</span><span class="hljs-params">()</span> &#123;<br>        spinlock.store(<span class="hljs-number">0</span>);<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
+<ul>
+<li>Critical Section</li>
+</ul>
+<p>The mutual exclusion policy is enforced in the code region between the <code>lock()</code> and <code>unlock()</code> invocations. We call this region the <em><strong>critical section</strong></em>.</p>
+<ul>
+<li>Deadlock</li>
+</ul>
+<img src="/imgs/202409182316777.png" srcset="/img/loading.gif" lazyload style="zoom: 25%;" />
+<img src="/imgs/202409261214362.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 67%;" />
+<h2 id="hardware-support"><a class="markdownIt-Anchor" href="#hardware-support"></a> Hardware Support</h2>
+<h3 id="hardware-primitives"><a class="markdownIt-Anchor" href="#hardware-primitives"></a> Hardware Primitives</h3>
+<blockquote>
+<p>In this part, we will introduce some hardware primitives that use atomic instructions to achieve mutual exclusion. Atomic instructions are the hardware basis for implementing synchronization.</p>
+</blockquote>
+<h4 id="cascompare-and-swap"><a class="markdownIt-Anchor" href="#cascompare-and-swap"></a> CAS(Compare and Swap)</h4>
+<p><code>old</code> is the value we assume <code>*p</code> would be. If they are not the same, it means someone else sneak in and change the <code>*p</code>, so we need to abort and try again</p>
+<img src="/imgs/202409241220158.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:67%;" />
+<p>Hardware implementation: Compare the contents of a memory location with a value; If they are the same, modify the memory location to a new value.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs assembly">Set Compare Value Application Register to 0<br>cpmxchg loc, 1<br>if ZF == 1    //The compare was true and you have the lock!<br></code></pre></td></tr></table></figure>
+<p><strong>example:</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">int</span> <span class="hljs-title function_">withdraw</span><span class="hljs-params">(account, amount)</span> <br>&#123;<br>    <span class="hljs-type">bool</span> success = <span class="hljs-literal">false</span>;<br>    <span class="hljs-keyword">while</span>(!success)<br>    &#123;<br>        balance = get_balance(account);<br>        new_balance = balance - amount;<br>        <span class="hljs-comment">/* </span><br><span class="hljs-comment">         * If balance has been changed by another thread,</span><br><span class="hljs-comment">         * just try again.</span><br><span class="hljs-comment">         */</span><br>        success = CAS(balance, &amp;account-&gt;balance,<br>                      new_balance);<br>    &#125; <br>    <span class="hljs-keyword">return</span> balance;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p><strong>typical use of CAS:</strong></p>
+<ol>
+<li>implement locks</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">bool</span> lockObtained = <span class="hljs-literal">false</span>;<br><span class="hljs-type">int</span> locked;<br><br>retry:<br><span class="hljs-comment">/* Spin while the lock looks taken */</span><br><span class="hljs-keyword">while</span>(lock-&gt;locked) ;         <br><br><span class="hljs-comment">/* Read the state of the lock */</span><br>locked = lock-&gt;locked;<br><span class="hljs-comment">/* If it is locked, try again */</span><br><span class="hljs-keyword">if</span>(locked)  <br>    <span class="hljs-keyword">goto</span> retry;<br><br><span class="hljs-comment">/* Try to get the lock */</span><br>lockObtained = CAS(locked, &amp;lock-&gt;locked, <span class="hljs-number">1</span>);<br><br><span class="hljs-comment">/* If we could not get the lock, try again */</span><br><span class="hljs-keyword">if</span>(! lockObtained)<br>    <span class="hljs-keyword">goto</span> retry;<br></code></pre></td></tr></table></figure>
+<ol start="2">
+<li>update shared counters</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">bool</span> success = <span class="hljs-literal">false</span>;<br><br><span class="hljs-keyword">while</span>(!success) &#123;<br>    <span class="hljs-type">int</span> old_val = counter;<br><br>    success = CAS(old_val, &amp;counter, old_val + <span class="hljs-number">1</span>);<br></code></pre></td></tr></table></figure>
+<img src="/imgs/202409261208607.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:60%;" />
+<blockquote>
+<p>Why performance drop using non-synchronized counters?</p>
+</blockquote>
+<p><strong>coherency protocol</strong> (Hardware does synchronization anyway!):</p>
+<p>Every core has its own private cache. If a copy of the same memory location happens to live in caches of other cores, the hardware will make sure that these copies have consistent values. So it will <strong>send messages</strong> to other caches to either <strong>invalidate</strong> the old copy or to <strong>forward</strong> the new value.</p>
+<p>Writes to the shared counter cause invalidations in hardware caches. Invalidations clog the system bus and delay instructions. Hardware synchronization is very expensive!</p>
+<hr />
+<h4 id="test-and-settas"><a class="markdownIt-Anchor" href="#test-and-settas"></a> Test-and-set(TAS)</h4>
+<p>TAS on Intel:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs c">src = <span class="hljs-number">1</span><br>xchg lock_var, src    <span class="hljs-comment">//exchange the value</span><br><span class="hljs-keyword">if</span> (src == <span class="hljs-number">0</span>)    <span class="hljs-comment">//You got the lock!</span><br></code></pre></td></tr></table></figure>
+<p>We will talk more about TAS when we learn the implementation of spinlock.</p>
+<hr />
+<h4 id="llscload-link-store-conditional"><a class="markdownIt-Anchor" href="#llscload-link-store-conditional"></a> LL/SC(load link &amp; store conditional)</h4>
+<p>SC only succeeds if the location hasn't changed since the last LL.</p>
+<p>LL/SC on MIPS:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs assembly">//r1 contains address of the spinlock<br>LL r2, (r1)    //Load value referenced by r1 into r2<br>if r2 is 0 (unlocked)<br>        SC r3, (r1)    //Store &quot;locked&quot; into location referenced by r1<br>        //r3 contains 0 on failure<br>if (r2 != 0 || r3 is 0) <br>        goto retry<br></code></pre></td></tr></table></figure>
+<h3 id="volatile-keyword"><a class="markdownIt-Anchor" href="#volatile-keyword"></a> <code>Volatile</code> keyword</h3>
+<p>A variable should be declared volatile whenever its value could change <strong>unexpectedly</strong>:</p>
+<ol>
+<li>Memory-mapped peripheral <strong>registers</strong></li>
+<li>Global variables modified by an <strong>interrupt service routine</strong></li>
+<li>Global variables accessed by multiple tasks within a <strong>multi-threaded</strong> application</li>
+</ol>
+<img src="/imgs/202409171219021.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:60%;" />
+<h3 id="cache"><a class="markdownIt-Anchor" href="#cache"></a> Cache</h3>
+<h4 id="multiprocessor"><a class="markdownIt-Anchor" href="#multiprocessor"></a> Multiprocessor</h4>
+<p>Each core has its own cache:</p>
+<img src="/imgs/202409241119699.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:60%;" />
+<hr />
+<h4 id="cache-miss"><a class="markdownIt-Anchor" href="#cache-miss"></a> cache miss</h4>
+<p>Every core has its own private cache.</p>
+<p>When a processor reads from an address in memory, it first checks whether that address and its contents are present in its cache. If so, then the processor has a <strong>cache hit</strong>. If not, then it has a <strong>cache miss</strong>.</p>
+<p><strong>cache miss</strong>: When a cache got the data, but was invalidated by another cache.</p>
+<p>Exercise:</p>
+<img src="/imgs/202410011125421.png" srcset="/img/loading.gif" lazyload alt=""  />
+<p>Solution:</p>
+<img src="/imgs/202410011134578.png" srcset="/img/loading.gif" lazyload alt="" />
+<hr />
+<h4 id="data-race"><a class="markdownIt-Anchor" href="#data-race"></a> Data Race</h4>
+<blockquote>
+<p>Why hardware optimization (cache) may cause problems?</p>
+</blockquote>
+<p>Real machines and compilers sometimes result in non-sequentially-consistent executions:</p>
+<p>The blue thread's write to <code>done</code> may be saved in its cache first.</p>
+<p>In some architectures, the blue thread’s write to <code>done</code> may become visible to the red thread, running on another core, <strong>before</strong> the blue thread’s write to x.</p>
+<img src="/imgs/202409281726294.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:50%;" />
+<p>For more information, see <a target="_blank" rel="noopener" href="http://queue.acm.org/detail.cfm?id=2088916">You don't know jack about shared variables or memory models -- Data races are evil.</a></p>
+<h2 id="synchronization-primitives"><a class="markdownIt-Anchor" href="#synchronization-primitives"></a> Synchronization Primitives</h2>
+<h3 id="synchronization-variables"><a class="markdownIt-Anchor" href="#synchronization-variables"></a> Synchronization Variables</h3>
+<p>Synchronization Variables avoid locking overhead, which is expensive.</p>
+<p>e.g.</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function">std::atomic&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">counter</span><span class="hljs-params">(<span class="hljs-number">0</span>)</span></span>;  <span class="hljs-comment">// atomic counter</span><br><br><span class="hljs-comment">// Multiple threads can operate on counter safely</span><br>counter++;  <span class="hljs-comment">// atomic operation</span><br>counter += <span class="hljs-number">5</span>;  <span class="hljs-comment">// atomic operation</span><br></code></pre></td></tr></table></figure>
+<div class="note note-danger">
+            <p>Synchronization variables are difficult to use for <strong>complex data structures</strong>, since there is no easy way to make multiple updates to a data structure in one atomic operation</p>
+          </div>
+<h3 id="wait-channels"><a class="markdownIt-Anchor" href="#wait-channels"></a> Wait Channels</h3>
+<p>An abstraction that lets a thread wait on a certain event.</p>
+<p>Includes a lock and a queue.</p>
+<h2 id="synchronization-objects"><a class="markdownIt-Anchor" href="#synchronization-objects"></a> Synchronization Objects</h2>
+<blockquote>
+<p>Synchronization objects are types whose methods can be used to achieve synchronization and atomicity on normal (non-<code>std::atomic</code>-wrapped) objects.</p>
+</blockquote>
+<h3 id="lock"><a class="markdownIt-Anchor" href="#lock"></a> Lock</h3>
+<p>A regular lock puts a thread to sleep and triggers context switch when someone else has already acquired the lock.</p>
+<p>mutex:</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs c++">std::mutex mutex;<br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">threadfunc</span><span class="hljs-params">(<span class="hljs-type">unsigned</span>* x)</span> </span>&#123;<br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i != <span class="hljs-number">10000000</span>; ++i) &#123;<br>        mutex.<span class="hljs-built_in">lock</span>();<br>        *x += <span class="hljs-number">1</span>;<br>        mutex.<span class="hljs-built_in">unlock</span>();<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<hr />
+<h4 id="lock-based-concurrent-data-structures"><a class="markdownIt-Anchor" href="#lock-based-concurrent-data-structures"></a> Lock-based Concurrent Data Structures</h4>
+<blockquote>
+<p>How to add to locks to data structures?</p>
+</blockquote>
+<h5 id="concurrent-counters"><a class="markdownIt-Anchor" href="#concurrent-counters"></a> Concurrent Counters</h5>
+<ul>
+<li>Basic Counting</li>
+</ul>
+<p>Simply add a lock for the counter structure.</p>
+<ul>
+<li>Scalable Counting</li>
+</ul>
+<p>Each CPU has its own local counter and there is a global counter.</p>
+<p>Once a local counter reaches threshold S, it updates the global counter.</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-keyword">typedef</span> <span class="hljs-class"><span class="hljs-keyword">struct</span> __<span class="hljs-title">counter_t</span> &#123;</span><br>    <span class="hljs-type">int</span> global; <span class="hljs-comment">// global counter</span><br>    <span class="hljs-type">pthread_mutex_t</span> glock; <span class="hljs-comment">// global lock</span><br>    <span class="hljs-type">int</span> local[NUMCPUS]; <span class="hljs-comment">// per-CPU local counter</span><br>    <span class="hljs-type">pthread_mutex_t</span> llock[NUMCPUS]; <span class="hljs-comment">// local locks</span><br>    <span class="hljs-type">int</span> threshold; <span class="hljs-comment">// threshold</span><br>&#125; <span class="hljs-type">counter_t</span>;<br><br><span class="hljs-comment">// init: record threshold, init locks, init values</span><br><span class="hljs-comment">// of all local counts and global count</span><br><span class="hljs-type">void</span> <span class="hljs-title function_">init</span><span class="hljs-params">(<span class="hljs-type">counter_t</span> *c, <span class="hljs-type">int</span> threshold)</span> &#123;<br>    c-&gt;threshold = threshold;<br>    c-&gt;global = <span class="hljs-number">0</span>;<br>    pthread_mutex_init(&amp;c-&gt;glock, <span class="hljs-literal">NULL</span>);<br>    <span class="hljs-type">int</span> i;<br>    <span class="hljs-keyword">for</span> (i = <span class="hljs-number">0</span>; i &lt; NUMCPUS; i++) &#123;<br>        c-&gt;local[i] = <span class="hljs-number">0</span>;<br>        pthread_mutex_init(&amp;c-&gt;llock[i], <span class="hljs-literal">NULL</span>);<br>    &#125;<br>&#125;<br><br><span class="hljs-comment">// update: usually, just grab local lock and update</span><br><span class="hljs-comment">// local amount; once it has risen ’threshold’,</span><br><span class="hljs-comment">// grab global lock and transfer local values to it</span><br><span class="hljs-type">void</span> <span class="hljs-title function_">update</span><span class="hljs-params">(<span class="hljs-type">counter_t</span> *c, <span class="hljs-type">int</span> threadID, <span class="hljs-type">int</span> amt)</span> &#123;<br>    <span class="hljs-comment">//which cpu is the thread on is determined by its thread ID</span><br>    <span class="hljs-type">int</span> cpu = threadID % NUMCPUS;<br>    <span class="hljs-comment">//acquire the local lock</span><br>    pthread_mutex_lock(&amp;c-&gt;llock[cpu]);<br>    c-&gt;local[cpu] += amt;<br>    <span class="hljs-keyword">if</span> (c-&gt;local[cpu] &gt;= c-&gt;threshold) &#123;<br>        <span class="hljs-comment">// transfer to global (assumes amt&gt;0)</span><br>        pthread_mutex_lock(&amp;c-&gt;glock);<br>        c-&gt;global += c-&gt;local[cpu];<br>        pthread_mutex_unlock(&amp;c-&gt;glock);<br>        c-&gt;local[cpu] = <span class="hljs-number">0</span>;<br>    &#125;<br>    pthread_mutex_unlock(&amp;c-&gt;llock[cpu]);<br>&#125;s<br><br><span class="hljs-comment">// get: just return global amount (approximate)</span><br><span class="hljs-type">int</span> <span class="hljs-title function_">get</span><span class="hljs-params">(<span class="hljs-type">counter_t</span> *c)</span> &#123;<br>    pthread_mutex_lock(&amp;c-&gt;glock);<br>    <span class="hljs-type">int</span> val = c-&gt;global;<br>    pthread_mutex_unlock(&amp;c-&gt;glock);<br>    <span class="hljs-keyword">return</span> val; <span class="hljs-comment">// only approximate!</span><br>&#125;<br></code></pre></td></tr></table></figure>
+<div class="note note-success">
+            <p>More concurrency(more locks) isn't necessarily faster!</p>
+          </div>
+<h5 id="concurrent-linked-list"><a class="markdownIt-Anchor" href="#concurrent-linked-list"></a> Concurrent Linked List</h5>
+<ul>
+<li>Basic Concurrent Linked List</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">void</span> <span class="hljs-title function_">List_Init</span><span class="hljs-params">(<span class="hljs-type">list_t</span> *L)</span> &#123;<br>    L-&gt;head = <span class="hljs-literal">NULL</span>;<br>    pthread_mutex_init(&amp;L-&gt;lock, <span class="hljs-literal">NULL</span>);<br>&#125;<br><br><span class="hljs-type">int</span> <span class="hljs-title function_">List_Insert</span><span class="hljs-params">(<span class="hljs-type">list_t</span> *L, <span class="hljs-type">int</span> key)</span> &#123;<br>    <span class="hljs-comment">// synchronization not needed</span><br>    <span class="hljs-type">node_t</span> *new = <span class="hljs-built_in">malloc</span>(<span class="hljs-keyword">sizeof</span>(<span class="hljs-type">node_t</span>));<br>    <span class="hljs-keyword">if</span> (new == <span class="hljs-literal">NULL</span>) &#123;<br>        perror(<span class="hljs-string">&quot;malloc&quot;</span>);<br>        <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;<br>    &#125;<br>    new-&gt;key = key;<br>    <span class="hljs-comment">// just lock critical section</span><br>    pthread_mutex_lock(&amp;L-&gt;lock);<br>    new-&gt;next = L-&gt;head;<br>    L-&gt;head = new;<br>    pthread_mutex_unlock(&amp;L-&gt;lock);<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>; <span class="hljs-comment">// success</span><br>&#125;<br><br><span class="hljs-type">int</span> <span class="hljs-title function_">List_Lookup</span><span class="hljs-params">(<span class="hljs-type">list_t</span> *L, <span class="hljs-type">int</span> key)</span> &#123;<br>    <span class="hljs-type">int</span> rv = <span class="hljs-number">-1</span>;<br>    pthread_mutex_lock(&amp;L-&gt;lock);<br>    <span class="hljs-type">node_t</span> *curr = L-&gt;head;<br>    <span class="hljs-keyword">while</span> (curr) &#123;<br>        <span class="hljs-keyword">if</span> (curr-&gt;key == key) &#123;<br>            rv = <span class="hljs-number">0</span>;<br>            <span class="hljs-keyword">break</span>;<br>        &#125;<br>        curr = curr-&gt;next;<br>    &#125;<br>    pthread_mutex_unlock(&amp;L-&gt;lock);<br>    <span class="hljs-keyword">return</span> rv; <span class="hljs-comment">// now both success and failure</span><br>&#125;<br></code></pre></td></tr></table></figure>
+<ul>
+<li>Scaling Linked List</li>
+</ul>
+<p>Add a lock per node of the list.</p>
+<p>However, the performance is not better than using a single lock.</p>
+<h5 id="concurrent-queues"><a class="markdownIt-Anchor" href="#concurrent-queues"></a> Concurrent Queues</h5>
+<p>A tail lock for enqueue and a head lock for dequeue.</p>
+<p>Add a dummy node to the queue separate enqueue and dequeue operations, enables better concurrency.</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-keyword">typedef</span> <span class="hljs-class"><span class="hljs-keyword">struct</span> __<span class="hljs-title">node_t</span> &#123;</span><br>    <span class="hljs-type">int</span> value;<br>    <span class="hljs-class"><span class="hljs-keyword">struct</span> __<span class="hljs-title">node_t</span> *<span class="hljs-title">next</span>;</span><br>&#125; <span class="hljs-type">node_t</span>;<br><br><span class="hljs-keyword">typedef</span> <span class="hljs-class"><span class="hljs-keyword">struct</span> __<span class="hljs-title">queue_t</span> &#123;</span><br>    <span class="hljs-type">node_t</span> *head;<br>    <span class="hljs-type">node_t</span> *tail;<br>    <span class="hljs-type">pthread_mutex_t</span> head_lock, tail_lock;<br>&#125; <span class="hljs-type">queue_t</span>;<br><br><span class="hljs-type">void</span> <span class="hljs-title function_">Queue_Init</span><span class="hljs-params">(<span class="hljs-type">queue_t</span> *q)</span> &#123;<br>    <span class="hljs-type">node_t</span> *tmp = <span class="hljs-built_in">malloc</span>(<span class="hljs-keyword">sizeof</span>(<span class="hljs-type">node_t</span>));<br>    tmp-&gt;next = <span class="hljs-literal">NULL</span>;<br>    <span class="hljs-comment">//Add a dummy node to the queue.</span><br>    q-&gt;head = q-&gt;tail = tmp;<br>    pthread_mutex_init(&amp;q-&gt;head_lock, <span class="hljs-literal">NULL</span>);<br>    pthread_mutex_init(&amp;q-&gt;tail_lock, <span class="hljs-literal">NULL</span>);<br>&#125;<br><br><span class="hljs-type">void</span> <span class="hljs-title function_">Queue_Enqueue</span><span class="hljs-params">(<span class="hljs-type">queue_t</span> *q, <span class="hljs-type">int</span> value)</span> &#123;<br>    <span class="hljs-type">node_t</span> *tmp = <span class="hljs-built_in">malloc</span>(<span class="hljs-keyword">sizeof</span>(<span class="hljs-type">node_t</span>));<br>    assert(tmp != <span class="hljs-literal">NULL</span>);<br>    tmp-&gt;value = value;<br>    tmp-&gt;next = <span class="hljs-literal">NULL</span>;<br><br>    pthread_mutex_lock(&amp;q-&gt;tail_lock);<br>    q-&gt;tail-&gt;next = tmp;<br>    q-&gt;tail = tmp;<br>    pthread_mutex_unlock(&amp;q-&gt;tail_lock);<br>&#125;<br><br><span class="hljs-type">int</span> <span class="hljs-title function_">Queue_Dequeue</span><span class="hljs-params">(<span class="hljs-type">queue_t</span> *q, <span class="hljs-type">int</span> *value)</span> &#123;<br>    pthread_mutex_lock(&amp;q-&gt;head_lock);<br>    <span class="hljs-type">node_t</span> *tmp = q-&gt;head;<br>    <span class="hljs-type">node_t</span> *new_head = tmp-&gt;next;<br>    <span class="hljs-keyword">if</span> (new_head == <span class="hljs-literal">NULL</span>) &#123;<br>        pthread_mutex_unlock(&amp;q-&gt;head_lock);<br>        <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>; <span class="hljs-comment">// queue was empty</span><br>    &#125;<br>    *value = new_head-&gt;value;<br>    q-&gt;head = new_head;<br>    pthread_mutex_unlock(&amp;q-&gt;head_lock);<br>    <span class="hljs-built_in">free</span>(tmp);<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h5 id="concurrent-hash-table"><a class="markdownIt-Anchor" href="#concurrent-hash-table"></a> Concurrent Hash Table</h5>
+<p>Use the list we built above as a bucket.</p>
+<p>That is to say, we use a lock per hash bucket, each of which is represented by a list.</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">define</span> BUCKETS (101)</span><br><br><span class="hljs-keyword">typedef</span> <span class="hljs-class"><span class="hljs-keyword">struct</span> __<span class="hljs-title">hash_t</span> &#123;</span><br>    <span class="hljs-type">list_t</span> lists[BUCKETS];<br>&#125; <span class="hljs-type">hash_t</span>;<br><br><span class="hljs-type">void</span> <span class="hljs-title function_">Hash_Init</span><span class="hljs-params">(<span class="hljs-type">hash_t</span> *H)</span> &#123;<br>    <span class="hljs-type">int</span> i;<br>    <span class="hljs-keyword">for</span> (i = <span class="hljs-number">0</span>; i &lt; BUCKETS; i++)<br>        List_Init(&amp;H-&gt;lists[i]);<br>&#125;<br><br><span class="hljs-type">int</span> <span class="hljs-title function_">Hash_Insert</span><span class="hljs-params">(<span class="hljs-type">hash_t</span> *H, <span class="hljs-type">int</span> key)</span> &#123;<br>    <span class="hljs-keyword">return</span> List_Insert(&amp;H-&gt;lists[key % BUCKETS], key);<br>&#125;<br><br><span class="hljs-type">int</span> <span class="hljs-title function_">Hash_Lookup</span><span class="hljs-params">(<span class="hljs-type">hash_t</span> *H, <span class="hljs-type">int</span> key)</span> &#123;<br>    <span class="hljs-keyword">return</span> List_Lookup(&amp;H-&gt;lists[key % BUCKETS], key);<br>&#125;<br></code></pre></td></tr></table></figure>
+<div class="note note-primary">
+            <p>Hash table has far better performance than simply a linked list!</p>
+          </div>
+<h3 id="spinlock"><a class="markdownIt-Anchor" href="#spinlock"></a> Spinlock</h3>
+<p>A regular lock puts a thread to sleep and triggers context switch when someone else has already acquired the lock. While a spinlock avoids context switch by keeping the CPU busy testing if the lock becomes available continuously.</p>
+<blockquote>
+<p>Why spinlock implementation in os161 does both disabling interrupts and spinning</p>
+</blockquote>
+<p>Disabling interrupts when acquiring the spinlock prevents the CPU from switching to another thread which may tries to acquire the same spinlock, potentially causing a deadlock.</p>
+<p>That is to say, when a CPU is holding the spinlock, we don't want it to switch to another thread. When the current thread releases the spinlock, we can re-enable interrupts.</p>
+<p>Therefore, we can say spinlock is held by CPU.</p>
+<hr />
+<h4 id="test-and-set-locks-in-depth"><a class="markdownIt-Anchor" href="#test-and-set-locks-in-depth"></a> Test-and-Set locks in-depth</h4>
+<blockquote>
+<p>How can we improve the performance of spinlock?</p>
+</blockquote>
+<h5 id="tastest-and-set"><a class="markdownIt-Anchor" href="#tastest-and-set"></a> TAS(test-and-set)</h5>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">TASLock</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">Lock</span> &#123;<br>    <span class="hljs-type">AtomicBoolean</span> <span class="hljs-variable">state</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">AtomicBoolean</span>(<span class="hljs-literal">false</span>);<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">lock</span> <span class="hljs-params">()</span> &#123;<br>        <span class="hljs-keyword">while</span> (state.getAndSet(<span class="hljs-literal">true</span>)) &#123;&#125; <span class="hljs-comment">// spin while true</span><br>    &#125;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">unlock</span><span class="hljs-params">()</span> &#123; <br>        state.set(<span class="hljs-literal">false</span>);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h5 id="ttastest-test-and-set"><a class="markdownIt-Anchor" href="#ttastest-test-and-set"></a> TTAS(test-test-and-set)</h5>
+<blockquote>
+<p>Can we further optimize spinning?</p>
+</blockquote>
+<img src="/imgs/202409191125150-1740397057572-4.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:60%;" />
+<p>Yes, since test-and-set is expensive, we can test-and-test-and-set!</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">void</span> <span class="hljs-title function_">acquire</span><span class="hljs-params">(lock)</span> <br>&#123; <br>    retry:<br>    <span class="hljs-keyword">while</span>(lock-&gt;held)    <span class="hljs-comment">//test first</span><br>        ; <span class="hljs-comment">//spin</span><br>    <span class="hljs-keyword">if</span>(test_and_set(&amp;lock-&gt;held))    <span class="hljs-comment">//test and set</span><br>        <span class="hljs-keyword">goto</span> retry; <span class="hljs-comment">//lock not acquired</span><br>&#125; <br></code></pre></td></tr></table></figure>
+<img src="/imgs/202409241145650.png" srcset="/img/loading.gif" lazyload alt="" />
+<p>When someone releases the lock, that core will send the invalidation message, and other threads will know the lock is freed and try to acquire it.</p>
+<p>Performance:</p>
+<img src="/imgs/202409241146785.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:60%;" />
+<blockquote>
+<p>Why still not ideal?</p>
+</blockquote>
+<p>When a lock is released, everyone tries to acquire it. Everyone is trying to load the data from the cache, although only one thread can actually acquire the lock. i.e. invalidation message will be sent to multiple threads.</p>
+<blockquote>
+<p>How can we avoid this waste?</p>
+</blockquote>
+<h5 id="a-solution-ttas-lock-with-backoff"><a class="markdownIt-Anchor" href="#a-solution-ttas-lock-with-backoff"></a> A solution: TTAS Lock with Backoff</h5>
+<p>For a specific thread,</p>
+<p>If I fail to get the lock there must be contention</p>
+<p>So I should back off before trying again(no need to try again immediately)</p>
+<p>Introduce a <strong>random “sleep” delay</strong> before trying to acquire the lock again</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">void</span> <span class="hljs-title function_">ttas_lock</span><span class="hljs-params">(TTASLock *lock)</span> &#123;<br>    <span class="hljs-keyword">while</span> (<span class="hljs-number">1</span>) &#123;<br>        <span class="hljs-comment">// First test: wait until lock seems available (flag is clear)</span><br>        <span class="hljs-keyword">while</span> (lock-&gt;flag) &#123;<br>            <span class="hljs-comment">// Lock is busy. Wait and retry.</span><br>        &#125;<br>        <span class="hljs-comment">// Second test: Try to set the flag</span><br>        <span class="hljs-keyword">if</span> (!atomic_flag_test_and_set(&amp;lock-&gt;flag)) &#123;<br>            <span class="hljs-comment">// Acquired the lock</span><br>            <span class="hljs-keyword">return</span>;<br>        &#125; <span class="hljs-keyword">else</span> &#123;<br>            <span class="hljs-comment">// Contention occurred, </span><br>            <span class="hljs-comment">// back off before trying again</span><br>            backoff();<br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<hr />
+<h4 id="anderson-queue-lock"><a class="markdownIt-Anchor" href="#anderson-queue-lock"></a> Anderson Queue Lock</h4>
+<p>Each thread spins on its own location.</p>
+<p>We only need to send invalidation message to the next thread.</p>
+<p>T: &quot;Ture&quot; means the lock is available.</p>
+<img src="/imgs/202409241159164.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:50%;" />
+<p>Array-Based queue lock</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">ALock</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">Lock</span> &#123;<br>    <span class="hljs-comment">// thread−local variable, each thread has its own mySlot</span><br>    ThreadLocal&lt;Integer&gt; mySlot = <span class="hljs-keyword">new</span> <span class="hljs-title class_">ThreadLocal</span>&lt;Integer&gt; ()&#123;<br>        <span class="hljs-keyword">protected</span> <span class="hljs-keyword">synchronized</span> Integer <span class="hljs-title function_">initialValue</span> <span class="hljs-params">()</span> &#123;<br>            <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>        &#125;<br>    &#125;;<br>    AtomicInteger tail;<br>    <span class="hljs-type">boolean</span>[] flag;<br>    <span class="hljs-type">int</span> size ;<br>    <span class="hljs-keyword">public</span> <span class="hljs-title function_">ALock</span><span class="hljs-params">(<span class="hljs-type">int</span> capacity)</span> &#123;<br>        size = capacity;<br>        tail = <span class="hljs-keyword">new</span> <span class="hljs-title class_">AtomicInteger</span>(<span class="hljs-number">0</span>);<br>        flag = <span class="hljs-keyword">new</span> <span class="hljs-title class_">boolean</span>[capacity];<br>        flag [<span class="hljs-number">0</span>] = <span class="hljs-literal">true</span>;<br>    &#125;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">lock</span> <span class="hljs-params">()</span> &#123;<br>        <span class="hljs-type">int</span> <span class="hljs-variable">slot</span> <span class="hljs-operator">=</span> tail.getAndIncrement() % size;<br>        mySlot.set(slot);<br>        <span class="hljs-comment">//Each thread spins on its own location</span><br>        <span class="hljs-keyword">while</span> (!flag[mySlot.get()]) &#123;&#125;; <span class="hljs-comment">// spin</span><br>    &#125;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">unlock</span><span class="hljs-params">()</span> &#123;<br>        flag [mySlot.get ()] = <span class="hljs-literal">false</span>;<br>        flag [(mySlot.get() + <span class="hljs-number">1</span>) % size] = <span class="hljs-literal">true</span>;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<div class="note note-primary">
+            <p>Contention can still occur because of <strong>false sharing</strong>:</p><img src="/imgs/202410011943446.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 80%;" /><blockquote><p>How to solve it?</p></blockquote><p><strong>Padding</strong>: Map distinct elements to distinct cache lines.</p><img src="/imgs/202410011944559.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:80%;" />
+          </div>
+<p>Performance:</p>
+<p>Nearly ideal!</p>
+<img src="/imgs/202409241209739.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 67%;" />
+<h3 id="semaphore"><a class="markdownIt-Anchor" href="#semaphore"></a> Semaphore</h3>
+<p>Uniprocessor Semaphores using SPL:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">semaphore</span> &#123;</span><br>    <span class="hljs-type">char</span> *name;<br>    <span class="hljs-keyword">volatile</span> <span class="hljs-type">int</span> count;<br>&#125;<br><br>P (<span class="hljs-keyword">struct</span> semaphore *sem) &#123;<br>    <span class="hljs-type">int</span> spl;<br>    <br>    <span class="hljs-keyword">while</span>(<span class="hljs-number">1</span>) &#123;<br>        spl = splhigh();    <span class="hljs-comment">//disable interrupts, save current priority level</span><br>        <span class="hljs-keyword">if</span> (sem-&gt;count &gt; <span class="hljs-number">0</span>)<br>            <span class="hljs-keyword">break</span>;<br>        thread_sleep(sem);<br>        splx(spl);    <span class="hljs-comment">//restore the interrupt priority level before sleeping</span><br>    &#125;<br>    <br>    sem-&gt;count--;<br>    splx(spl);    <span class="hljs-comment">//restore priority interrupt level</span><br>    <span class="hljs-keyword">return</span>;<br>&#125;<br><br>V(<span class="hljs-keyword">struct</span> semaphore *sem) &#123;<br>    <span class="hljs-type">int</span> spl;<br>    <br>    spl = splhigh();<br>    sem-&gt;count++;<br>    thread_wakeup(sem);<br>    splx(spl);<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>Multiprocessor:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">semaphore</span> &#123;</span><br>    <span class="hljs-type">char</span> *name;<br>    <span class="hljs-keyword">volatile</span> <span class="hljs-type">int</span> count;<br>    <span class="hljs-keyword">volatile</span> <span class="hljs-type">int</span> tas;    <span class="hljs-comment">//the protection of count, meaning that if a thread holds the test-and-set, no other threads can modify the count. Obviously, holding the test-and-set operation should be atomic, namely (TAS(sem-&gt;tas) != 0)</span><br>&#125;<br><br>V(<span class="hljs-keyword">struct</span> semaphore *sem) &#123;<br>    <span class="hljs-type">int</span> spl;<br>    <br>    spl = splhigh();<br>    <span class="hljs-keyword">while</span>(TAS(sem-&gt;tas != <span class="hljs-number">0</span>));    <span class="hljs-comment">//Only break when sem-&gt;tas = 0 and we set it to 1, meaning that the thread holds the test-and-set on the semaphore    </span><br>    sem-&gt;count++; <br>    sem-&gt;tas = <span class="hljs-number">0</span>;    <span class="hljs-comment">//release the test-and-set</span><br>    thread_wakeup(sem);<br>    splx(spl)；<br>&#125;<br><br>P(<span class="hljs-keyword">struct</span> semaphore *sem) &#123;<br>    <span class="hljs-type">int</span> spl;<br>    spl = splhigh();    <span class="hljs-comment">//make sure to disable interrupt when we use test-and-set</span><br>    <span class="hljs-keyword">while</span>(<span class="hljs-number">1</span>) &#123;<br>        <span class="hljs-keyword">while</span>(TAS(sem-&gt;tas) != <span class="hljs-number">0</span>);    <span class="hljs-comment">//Only break when sem-&gt;tas = 0 and we set it to 1, meaning that the thread holds the test-and-set on the semaphore</span><br>        <span class="hljs-keyword">if</span> (sem-&gt;count &gt; <span class="hljs-number">0</span>) <span class="hljs-keyword">break</span>;<br>        sem-&gt;tas = <span class="hljs-number">0</span>;    <span class="hljs-comment">//release the test-and-set;</span><br>        thread_sleep(sem);<br>    &#125;<br>    sem-&gt;count--;<br>    sem-&gt;tas = <span class="hljs-number">0</span>;<br>    splx(spl);<br>    <span class="hljs-keyword">return</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>Serious problem! Wake-up Loss!</p>
+<p>==<strong>OS/161 Solution:</strong>==</p>
+<blockquote>
+<p>How do we solve the problem of wake-up loss?</p>
+</blockquote>
+<p>The wait channel should be locked when a thread wants to go to sleep.</p>
+<p>The sleep operation should release the wait channel lock after go to sleep.</p>
+<p>The wakeup operation should acquire the wait channel lock first. If the channel is locked, it means someone is trying to go to sleep, so the wakeup operation should block.</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">semaphore</span> &#123;</span><br>    <span class="hljs-type">char</span> *sem_name;<br>    <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">wchan</span> *<span class="hljs-title">sem_wchan</span>;</span><br>    <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">spinlock</span> <span class="hljs-title">sem_lock</span>;</span><br>    <span class="hljs-keyword">volatile</span> <span class="hljs-type">unsigned</span> sem_count;<br>&#125;<br><br><span class="hljs-type">void</span> <span class="hljs-title function_">V</span><span class="hljs-params">(<span class="hljs-keyword">struct</span> semaphore *sem)</span> &#123;<br>    KASSERT(sem != <span class="hljs-literal">NULL</span>);<br>    <br>    spinlock_acquire(&amp;sem-&gt;sem_lock);<br>    <br>    sem-&gt;sem_count++;<br>    KASSERT(sem-&gt;sem_count &gt; <span class="hljs-number">0</span>);<br>    wchan_wakeone(sem-&gt;sem_wchan); <span class="hljs-comment">//require the wait channel lock</span><br>    <br>    spinlock_release(&amp;sem-&gt;sem_lock);<br>&#125;<br><br><span class="hljs-type">void</span> <span class="hljs-title function_">P</span><span class="hljs-params">(<span class="hljs-keyword">struct</span> semaphore *sem)</span> &#123;<br>    KASSERT(sem != <span class="hljs-literal">NULL</span>);<br>    KASSERT(curthread-&gt;t_in_interrupt == <span class="hljs-literal">false</span>); <span class="hljs-comment">//make sure current thread is not in an interrupt context</span><br>    spinlock_acquire(&amp;sem-&gt;sem_lock);<br>    <span class="hljs-keyword">while</span>(sem-&gt;sem_count == <span class="hljs-number">0</span>) &#123;<br>        wchan_lock(sem-&gt;sem_wchan); <span class="hljs-comment">//obtain the lock on the wait channel, preventing other threads(V operation) coming in and manipulating the queue(wake up someone)</span><br>        spinlock_release(&amp;sem-&gt;sem_lock); <span class="hljs-comment">//lock the wait channel before release the sem_lock, making sure nobody can sneak in and take the sem_lock to manipulate the wait channel before we go to sleep(for example, V can sneak in and wake up other threads since the wait channel has not been locked.)</span><br>        wchan_sleep(sem-&gt;sem_wchan); <span class="hljs-comment">//go to sleep while also release the wait channel lock</span><br>        <br>        spinlock_acquire(&amp;sem-&gt;sem_lock);<br>    &#125;<br>    KASSERT(sem-&gt;sem_count &gt; <span class="hljs-number">0</span>);<br>    sem-&gt;sem_count--;<br>    spinlock_release(&amp;sem-&gt;sem_lock);<br>&#125;<br></code></pre></td></tr></table></figure>
+<h3 id="condition-variables"><a class="markdownIt-Anchor" href="#condition-variables"></a> Condition Variables</h3>
+<p>A condition variable is always paired with one single lock</p>
+<p>Three methods:</p>
+<ol>
+<li>
+<p><code>cv_wait</code>: block until the condition becomes true(atomically release the lock and go to sleep waiting to be waken)</p>
+</li>
+<li>
+<p><code>cv_broadcast</code>: wake all threads waiting on this condition variable</p>
+</li>
+<li>
+<p><code>cv_signal</code>: wake a single thread waiting on this condition variable</p>
+</li>
+</ol>
+<p>These three methods support the <strong>Waiting and Signaling</strong> mechanism of CV.</p>
+<ul>
+<li>Waiting and Signaling</li>
+</ul>
+<p><code>pthread_cond_wait()</code> blocks the calling thread until the specified condition is signaled. This routine should be called while mutex is locked, and it will automatically release the mutex while it waits.</p>
+<p>After signal is received and thread is awakened, mutex will be automatically locked for use by the thread.</p>
+<p>When the thread finishes, unlock the lock explicitly.</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">// lock the mutex</span><br>...<br>    <br><span class="hljs-comment">//when condition is reached, call signal()</span><br>signal();<br><br><span class="hljs-comment">// unlock the mutex to allow a matching wait routine to complete</span><br></code></pre></td></tr></table></figure>
+<div class="note note-success">
+            <p>Hold the lock when calling <code>wait</code>! (<code>wait</code> will release the lock before going to sleep and reacquire the lock before returning!)</p><p>Always hold the lock while signaling!(not mandatory)</p><p><strong>Mesa Semantics</strong>: Always use while loop to check the waited condition.</p>
+          </div>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">// lock the mutex</span><br>...<br><br><span class="hljs-keyword">while</span> (check the condition) &#123;<br>    wait();    <span class="hljs-comment">//wait on the condition variable</span><br>&#125;    <span class="hljs-comment">//wait will automatically and automically release the lock</span><br><br><span class="hljs-comment">// After being awakened, mutex will be automatically locked</span><br></code></pre></td></tr></table></figure>
+<p>An example:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;pthread.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdlib.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;unistd.h&gt;</span></span><br><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> BUFFER_SIZE 5</span><br><br><span class="hljs-type">int</span> buffer[BUFFER_SIZE]; <span class="hljs-comment">// Shared buffer</span><br><span class="hljs-type">int</span> count = <span class="hljs-number">0</span>;           <span class="hljs-comment">// Items in buffer</span><br><br><span class="hljs-type">pthread_mutex_t</span> mutex = PTHREAD_MUTEX_INITIALIZER;<br><span class="hljs-type">pthread_cond_t</span> cond_produce = PTHREAD_COND_INITIALIZER;<br><span class="hljs-type">pthread_cond_t</span> cond_consume = PTHREAD_COND_INITIALIZER;<br><br><span class="hljs-type">void</span> *<span class="hljs-title function_">producer</span><span class="hljs-params">(<span class="hljs-type">void</span> *arg)</span> &#123;<br>    <span class="hljs-type">int</span> i = <span class="hljs-number">0</span>;<br>    <span class="hljs-keyword">while</span> (<span class="hljs-number">1</span>) &#123;<br>        pthread_mutex_lock(&amp;mutex);<br><br>        <span class="hljs-comment">// Buffer is full, wait for consumer</span><br>        <span class="hljs-keyword">while</span> (count == BUFFER_SIZE) &#123;<br>            <span class="hljs-comment">//wait on the condition variable cond_produce</span><br>            <span class="hljs-comment">//automically release the mutex, and relock it before returning</span><br>            pthread_cond_wait(&amp;cond_produce, &amp;mutex);<br>            <span class="hljs-comment">//After waking up, we need to check the condition again as mesa semantics makes no guarantee.</span><br>        &#125;<br><br>        <span class="hljs-comment">// Produce an item</span><br>        buffer[count] = i;<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Produced: %d\n&quot;</span>, i);<br>        count++;<br>        i++;<br><br>        <span class="hljs-comment">// Signal consumer that an item is produced</span><br>        <span class="hljs-comment">// atomic action</span><br>        pthread_cond_signal(&amp;cond_consume);    <br>        <span class="hljs-comment">//After signal, remember to release the lock explicitly!</span><br>        pthread_mutex_unlock(&amp;mutex);<br><br>        sleep(<span class="hljs-number">1</span>); <span class="hljs-comment">// Simulate time to produce</span><br>    &#125;<br>    <span class="hljs-keyword">return</span> <span class="hljs-literal">NULL</span>;<br>&#125;<br><br><span class="hljs-type">void</span> *<span class="hljs-title function_">consumer</span><span class="hljs-params">(<span class="hljs-type">void</span> *arg)</span> &#123;<br>    <span class="hljs-keyword">while</span> (<span class="hljs-number">1</span>) &#123;<br>        pthread_mutex_lock(&amp;mutex);<br><br>        <span class="hljs-comment">// If buffer is empty, wait for producer</span><br>        <span class="hljs-keyword">while</span> (count == <span class="hljs-number">0</span>) &#123;<br>            <span class="hljs-comment">//wait on the condition variable cond_consume, and automically release the mutex</span><br>            pthread_cond_wait(&amp;cond_consume, &amp;mutex);<br>            <span class="hljs-comment">//When being awaken, mutex will be automatically locked.</span><br>        &#125;<br><br>        <span class="hljs-comment">// Consume an item</span><br>        count--;<br>        <span class="hljs-type">int</span> item = buffer[count];<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Consumed: %d\n&quot;</span>, item);<br><br>        <span class="hljs-comment">// Signal producer that an item is consumed</span><br>        <span class="hljs-comment">// atomic action</span><br>        pthread_cond_signal(&amp;cond_produce);<br>        <span class="hljs-comment">//After signal, remember to release the lock explicitly!</span><br>        pthread_mutex_unlock(&amp;mutex);<br><br>        sleep(<span class="hljs-number">1</span>); <span class="hljs-comment">// Simulate time to consume</span><br>    &#125;<br>    <span class="hljs-keyword">return</span> <span class="hljs-literal">NULL</span>;<br>&#125;<br><br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">()</span> &#123;<br>    <span class="hljs-type">pthread_t</span> prod_thread, cons_thread;<br><br>    <span class="hljs-comment">// Create producer and consumer threads</span><br>    pthread_create(&amp;prod_thread, <span class="hljs-literal">NULL</span>, producer, <span class="hljs-literal">NULL</span>);<br>    pthread_create(&amp;cons_thread, <span class="hljs-literal">NULL</span>, consumer, <span class="hljs-literal">NULL</span>);<br><br>    <span class="hljs-comment">// Wait for both threads to finish (they won&#x27;t, in this example)</span><br>    pthread_join(prod_thread, <span class="hljs-literal">NULL</span>);<br>    pthread_join(cons_thread, <span class="hljs-literal">NULL</span>);<br><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<hr />
+<h4 id="a-typical-usage-of-cv-bounded-buffer"><a class="markdownIt-Anchor" href="#a-typical-usage-of-cv-bounded-buffer"></a> A typical usage of CV: Bounded Buffer</h4>
+<p>cyclic buffer:</p>
+<img src="/imgs/l18-bounded-buffer-1740222672645-50.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 80%;" />
+<p>Unsynchronized buffer:</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">struct</span> <span class="hljs-title class_">bbuffer</span> &#123;<br>    <span class="hljs-type">static</span> <span class="hljs-keyword">constexpr</span> <span class="hljs-type">size_t</span> bcapacity = <span class="hljs-number">128</span>;<br>    <span class="hljs-type">char</span> bbuf_[bcapacity];<br>    <span class="hljs-type">size_t</span> bpos_ = <span class="hljs-number">0</span>;<br>    <span class="hljs-type">size_t</span> blen_ = <span class="hljs-number">0</span>;<br>    <span class="hljs-type">bool</span> write_closed_ = <span class="hljs-literal">false</span>;<br><br>    <span class="hljs-function"><span class="hljs-type">ssize_t</span> <span class="hljs-title">read</span><span class="hljs-params">(<span class="hljs-type">char</span>* buf, <span class="hljs-type">size_t</span> sz)</span></span>;<br>    <span class="hljs-function"><span class="hljs-type">ssize_t</span> <span class="hljs-title">write</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span>* buf, <span class="hljs-type">size_t</span> sz)</span></span>;<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">shutdown_write</span><span class="hljs-params">()</span></span>;<br>&#125;;<br><br><span class="hljs-function"><span class="hljs-type">ssize_t</span> <span class="hljs-title">bbuffer::write</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span>* buf, <span class="hljs-type">size_t</span> sz)</span> </span>&#123;<br>    <span class="hljs-built_in">assert</span>(!<span class="hljs-keyword">this</span>-&gt;write_closed_);<br>    <span class="hljs-type">size_t</span> pos = <span class="hljs-number">0</span>;<br>    <span class="hljs-keyword">while</span> (pos &lt; sz &amp;&amp; <span class="hljs-keyword">this</span>-&gt;blen_ &lt; bcapacity) &#123;<br>        <span class="hljs-comment">/* calculate the position where we write */</span><br>        <span class="hljs-type">size_t</span> bindex = (<span class="hljs-keyword">this</span>-&gt;bpos_ + <span class="hljs-keyword">this</span>-&gt;blen_) % bcapacity;<br>        <span class="hljs-keyword">this</span>-&gt;bbuf_[bindex] = buf[pos];<br>        ++<span class="hljs-keyword">this</span>-&gt;blen_;<br>        ++pos;<br>    &#125;<br>    <span class="hljs-keyword">if</span> (pos == <span class="hljs-number">0</span> &amp;&amp; sz &gt; <span class="hljs-number">0</span>) &#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;  <span class="hljs-comment">// try again</span><br>    &#125; <span class="hljs-keyword">else</span> &#123;<br>        <span class="hljs-keyword">return</span> pos;<br>    &#125;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">ssize_t</span> <span class="hljs-title">bbuffer::read</span><span class="hljs-params">(<span class="hljs-type">char</span>* buf, <span class="hljs-type">size_t</span> sz)</span> </span>&#123;<br>    <span class="hljs-type">size_t</span> pos = <span class="hljs-number">0</span>;<br>    <span class="hljs-keyword">while</span> (pos &lt; sz &amp;&amp; <span class="hljs-keyword">this</span>-&gt;blen_ &gt; <span class="hljs-number">0</span>) &#123;<br>        buf[pos] = <span class="hljs-keyword">this</span>-&gt;bbuf_[<span class="hljs-keyword">this</span>-&gt;bpos_];<br>        <span class="hljs-keyword">this</span>-&gt;bpos_ = (<span class="hljs-keyword">this</span>-&gt;bpos_ + <span class="hljs-number">1</span>) % bcapacity;<br>        --<span class="hljs-keyword">this</span>-&gt;blen_;<br>        ++pos;<br>    &#125;<br>    <span class="hljs-keyword">if</span> (pos == <span class="hljs-number">0</span> &amp;&amp; sz &gt; <span class="hljs-number">0</span> &amp;&amp; !<span class="hljs-keyword">this</span>-&gt;write_closed_) &#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;  <span class="hljs-comment">// try again</span><br>    &#125; <span class="hljs-keyword">else</span> &#123;<br>        <span class="hljs-keyword">return</span> pos;<br>    &#125;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">bbuffer::shutdown_write</span><span class="hljs-params">()</span> </span>&#123;<br>    <span class="hljs-keyword">this</span>-&gt;write_closed_ = <span class="hljs-literal">true</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>Synchronized buffer:</p>
+<p>Use a lock to protect the internal state of the buffer(shared variables, not local variables).</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">struct</span> <span class="hljs-title class_">bbuffer</span> &#123;<br>    ...<br><br>    std::mutex mutex_;<br><br>    ...<br>&#125;;<br><br><span class="hljs-function"><span class="hljs-type">ssize_t</span> <span class="hljs-title">bbuffer::write</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span>* buf, <span class="hljs-type">size_t</span> sz)</span> </span>&#123;<br>    <span class="hljs-keyword">this</span>-&gt;mutex_.<span class="hljs-built_in">lock</span>();<br><br>    ...<br><br>    <span class="hljs-keyword">this</span>-&gt;mutex_.<span class="hljs-built_in">unlock</span>();<br>    <span class="hljs-keyword">if</span> (pos == <span class="hljs-number">0</span> &amp;&amp; sz &gt; <span class="hljs-number">0</span>) &#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;  <span class="hljs-comment">// try again</span><br>    &#125; <span class="hljs-keyword">else</span> &#123;<br>        <span class="hljs-keyword">return</span> pos;<br>    &#125;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">ssize_t</span> <span class="hljs-title">bbuffer::read</span><span class="hljs-params">(<span class="hljs-type">char</span>* buf, <span class="hljs-type">size_t</span> sz)</span> </span>&#123;<br>    <span class="hljs-keyword">this</span>-&gt;mutex_.<span class="hljs-built_in">lock</span>();<br><br>    ...<br><br>    <span class="hljs-keyword">if</span> (pos == <span class="hljs-number">0</span> &amp;&amp; sz &gt; <span class="hljs-number">0</span> &amp;&amp; !<span class="hljs-keyword">this</span>-&gt;write_closed_) &#123;<br>        <span class="hljs-keyword">this</span>-&gt;mutex_.<span class="hljs-built_in">unlock</span>();<br>        <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;  <span class="hljs-comment">// try again</span><br>    &#125; <span class="hljs-keyword">else</span> &#123;<br>        <span class="hljs-keyword">this</span>-&gt;mutex_.<span class="hljs-built_in">unlock</span>();<br>        <span class="hljs-keyword">return</span> pos;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>Use a <strong>C++ scoped lock</strong>:</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">ssize_t</span> <span class="hljs-title">bbuffer::write</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span>* buf, <span class="hljs-type">size_t</span> sz)</span> </span>&#123;<br>    <span class="hljs-comment">/* lock the mutex for the scope of the function */</span><br>    <span class="hljs-function">std::unique_lock <span class="hljs-title">guard</span><span class="hljs-params">(<span class="hljs-keyword">this</span>-&gt;mutex_)</span></span>;<br>    <span class="hljs-built_in">assert</span>(!<span class="hljs-keyword">this</span>-&gt;write_closed_);<br>    <span class="hljs-type">size_t</span> pos = <span class="hljs-number">0</span>;<br>    <span class="hljs-keyword">while</span> (pos &lt; sz &amp;&amp; <span class="hljs-keyword">this</span>-&gt;blen_ &lt; bcapacity) &#123;<br>        <span class="hljs-type">size_t</span> bindex = (<span class="hljs-keyword">this</span>-&gt;bpos_ + <span class="hljs-keyword">this</span>-&gt;blen_) % bcapacity;<br>        <span class="hljs-keyword">this</span>-&gt;bbuf_[bindex] = buf[pos];<br>        ++<span class="hljs-keyword">this</span>-&gt;blen_;<br>        ++pos;<br>    &#125;<br>    ...<br>&#125;<br></code></pre></td></tr></table></figure>
+<blockquote>
+<p>Why not efficient?</p>
+</blockquote>
+<p>Bounded buffer simply returns -1 if <code>read</code> or <code>write</code> fails, and retry immediately.</p>
+<p>We need another synchronization object: <strong>Condition Variable</strong></p>
+<p>By using a Condition Variable, the writer should wait on cv <code>nonfull_</code>:</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">ssize_t</span> <span class="hljs-title">bbuffer::write</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span>* buf, <span class="hljs-type">size_t</span> sz)</span> </span>&#123;<br>    <span class="hljs-comment">/* `guard` is a scoped lock that locks the mutex for the scope of the function */</span><br>    <span class="hljs-function">std::unique_lock <span class="hljs-title">guard</span><span class="hljs-params">(<span class="hljs-keyword">this</span>-&gt;mutex_)</span></span>;<br>    <span class="hljs-built_in">assert</span>(!<span class="hljs-keyword">this</span>-&gt;write_closed_);<br>    <span class="hljs-keyword">while</span> (<span class="hljs-keyword">this</span>-&gt;blen_ == bcapacity) &#123;  <br>        <span class="hljs-comment">// #1</span><br>        <span class="hljs-keyword">this</span>-&gt;nonfull_.<span class="hljs-built_in">wait</span>(guard);<br>    &#125;<br>    <span class="hljs-type">size_t</span> pos = <span class="hljs-number">0</span>;<br>    <span class="hljs-keyword">while</span> (pos &lt; sz &amp;&amp; <span class="hljs-keyword">this</span>-&gt;blen_ &lt; bcapacity) &#123;<br>        <span class="hljs-type">size_t</span> bindex = (<span class="hljs-keyword">this</span>-&gt;bpos_ + <span class="hljs-keyword">this</span>-&gt;blen_) % bcapacity;<br>        <span class="hljs-keyword">this</span>-&gt;bbuf_[bindex] = buf[pos];<br>        ++<span class="hljs-keyword">this</span>-&gt;blen_;<br>        ++pos;<br>    &#125;<br>    ...<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">ssize_t</span> <span class="hljs-title">bbuffer::read</span><span class="hljs-params">(<span class="hljs-type">char</span>* buf, <span class="hljs-type">size_t</span> sz)</span> </span>&#123;<br>    <span class="hljs-function">std::unique_lock <span class="hljs-title">guard</span><span class="hljs-params">(<span class="hljs-keyword">this</span>-&gt;mutex_)</span></span>;<br>    ...<br>    <span class="hljs-keyword">while</span> (pos &lt; sz &amp;&amp; <span class="hljs-keyword">this</span>-&gt;blen_ &gt; <span class="hljs-number">0</span>) &#123;<br>        buf[pos] = <span class="hljs-keyword">this</span>-&gt;bbuf_[<span class="hljs-keyword">this</span>-&gt;bpos_];<br>        <span class="hljs-keyword">this</span>-&gt;bpos_ = (<span class="hljs-keyword">this</span>-&gt;bpos_ + <span class="hljs-number">1</span>) % bcapacity;<br>        --<span class="hljs-keyword">this</span>-&gt;blen_;<br>        ++pos;<br>    &#125;<br>    <span class="hljs-keyword">if</span> (pos &gt; <span class="hljs-number">0</span>) &#123;                   <br>        <span class="hljs-comment">// #2</span><br>        <span class="hljs-keyword">this</span>-&gt;nonfull_.<span class="hljs-built_in">notify_all</span>();<br>    &#125;<br>    ...<br>&#125;<br></code></pre></td></tr></table></figure>
+<h3 id="other-synchronization-objects"><a class="markdownIt-Anchor" href="#other-synchronization-objects"></a> other synchronization objects</h3>
+<ul>
+<li>monitors</li>
+</ul>
+<p>Provide API-level synchronization typically built in languages or libraries</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/OS/" class="category-chain-item">OS</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/OS/" class="print-no-link">#OS</a>
+      
+        <a href="/tags/Synchronization/" class="print-no-link">#Synchronization</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Synchronization</div>
+      <div>http://oooscar8.github.io/2024/09/26/Synchronization/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Alex Sun</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年9月26日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/09/27/OS161-A2/" title="OS161 Assignment 2">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">OS161 Assignment 2</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/09/16/OS161-A1/" title="OS161 Assignment 1">
+                        <span class="hidden-mobile">OS161 Assignment 1</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div class="disqus" style="width:100%">
+    <div id="disqus_thread"></div>
+    
+      <script type="text/javascript">
+        var disqus_config = function() {
+          this.page.url = 'http://oooscar8.github.io/2024/09/26/Synchronization/';
+          this.page.identifier = '/2024/09/26/Synchronization/';
+        };
+        Fluid.utils.loadComments('#disqus_thread', function() {
+          var d = document, s = d.createElement('script');
+          s.src = '//' + 'fluid' + '.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', new Date());
+          (d.head || d.body).appendChild(s);
+        });
+      </script>
+    
+    <noscript>Please enable JavaScript to view the comments</noscript>
+  </div>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

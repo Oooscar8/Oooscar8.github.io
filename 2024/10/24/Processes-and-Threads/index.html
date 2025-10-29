@@ -1,0 +1,1057 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/imgs/wallhaven-p9qeze.jpg">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Alex Sun">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Notes on processes, threads, context switch, pipes, file descriptors and some system calls that manage processes when studying OS">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Processes and Threads">
+<meta property="og:url" content="http://oooscar8.github.io/2024/10/24/Processes-and-Threads/index.html">
+<meta property="og:site_name" content="Alex&#39;s Space">
+<meta property="og:description" content="Notes on processes, threads, context switch, pipes, file descriptors and some system calls that manage processes when studying OS">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://oooscar8.github.io/2024/10/24/imgs/202410091638369.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/10/24/imgs/image-20241009221502551.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/10/24/imgs/202410092232867.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/10/24/imgs/202410092220239.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/10/24/imgs/202410092310547.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/10/24/imgs/202410092226748.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/10/24/imgs/202410262233235.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/10/24/imgs/202410262243094.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/10/24/imgs/202409162140360.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/10/24/imgs/202410241127412.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/10/24/imgs/202410262357565.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/10/24/imgs/202410111635355.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/10/24/imgs/202410111653805.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/10/24/imgs/202410111701382.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/10/24/imgs/202410172312054.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/10/24/imgs/202410111821822.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/10/24/imgs/202410262300766.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/10/24/imgs/202410262300141.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/10/24/imgs/202410262324165.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/10/24/imgs/202411041428372.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/10/24/imgs/202411041449905.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/10/24/imgs/202411041450806.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/10/24/imgs/202411041454332.png">
+<meta property="article:published_time" content="2024-10-23T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-02-22T15:35:17.359Z">
+<meta property="article:author" content="Alex Sun">
+<meta property="article:tag" content="OS">
+<meta property="article:tag" content="File Descriptor">
+<meta property="article:tag" content="Process">
+<meta property="article:tag" content="Thread">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://oooscar8.github.io/2024/10/24/imgs/202410091638369.png">
+  
+  
+  
+  <title>Processes and Threads - Alex&#39;s Space</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"oooscar8.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.1.1"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Alex&#39;s Space</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/imgs/chuyin.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Processes and Threads"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-10-24 00:00" pubdate>
+          2024年10月24日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          313 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          3 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Processes and Threads</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>In this part, we will cover the topics of processes, threads, context switch, pipes, file descriptors and some system calls that manage processes. This part is crucial for you to implementing OS/161 Assignment 4&amp;5 correctly!</p>
+<h1 id="processes-and-threads"><a class="markdownIt-Anchor" href="#processes-and-threads"></a> Processes and Threads</h1>
+<blockquote>
+<p><strong>Learning Materials</strong></p>
+<p>Videos:</p>
+<p><a target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/download/cs161-video-materials/www.eecs.harvard.edu/~margo/cs161/videos/context-switching.mp4">Context switching</a></p>
+<p><a target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/download/cs161-video-materials/www.eecs.harvard.edu/~margo/cs161/videos/processes.mp4">Processes and threads</a></p>
+<p><a target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/download/cs161-video-materials/www.eecs.harvard.edu/~margo/cs161/videos/process-components.mp4">Process components</a></p>
+<p><a target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/download/cs161-video-materials/www.eecs.harvard.edu/~margo/cs161/videos/process-management.mp4">Process management</a></p>
+<p><a target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/download/cs161-video-materials/www.eecs.harvard.edu/~margo/cs161/videos/fork-exec.mp4">Fork and exec</a></p>
+<p><a target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/man/syscall/">OS161 man pages for the system calls you are implementing in A4.</a></p>
+<p>Lecture Slides:</p>
+<p><a target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/LECTURE-SLIDES/Implementing-system-calls.pptx">Implementing system calls</a></p>
+<p><a target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/LECTURE-SLIDES/Processes-vs-threads.pptx">Processes and threads</a></p>
+<p><a target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/LECTURE-SLIDES/Processes-file-tables.pptx">Processes and file descriptors</a></p>
+<p><a target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/LECTURE-SLIDES/Processes-vs-threads.pptx">Processes and threads</a></p>
+<p><a target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/LECTURE-SLIDES/Process-creation.pptx">Process creation: fork() and shared file objects</a></p>
+<p><a target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/download/LECTURES-CODE/fork.c">fork.c</a>, <a target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/download/LECTURES-CODE/pipes.c">pipes.c</a>, <a target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/download/LECTURES-CODE/pipes2.c">pipes2.c</a>, <a target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/download/LECTURES-CODE/pipes2.c">pipes-exec.c</a>
+<a target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/LECTURE-SLIDES/Process-exec.pptx">Processes: exec()</a>, <a target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/download/LECTURES-CODE/exec.c">exec.c</a></p>
+<p><a target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/LECTURE-SLIDES/Process-wait-exit.pptx">Processes: waitpid/exit</a></p>
+<p>Readings:</p>
+<p><a target="_blank" rel="noopener" href="https://sites.google.com/view/cpen331fall2020/calendar/file-descriptors-in-unix">File descriptors in Unix</a></p>
+<p><a target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/download/book-rev8.pdf">Chapter 2 in the xv6 book</a></p>
+<p>[<a target="_blank" rel="noopener" href="http://pages.cs.wisc.edu/~remzi/OSTEP/cpu-api.pdf">OSTEP] Introduction of the Unix process API (fork/exec, etc.)</a></p>
+</blockquote>
+<h2 id="context-switching"><a class="markdownIt-Anchor" href="#context-switching"></a> Context Switching</h2>
+<blockquote>
+<p><strong>terminology</strong>:</p>
+<img src="/imgs/202410091638369.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 50%;" />
+</blockquote>
+<blockquote>
+<p>What does the kernel do on a Trap?</p>
+</blockquote>
+<ol>
+<li>The kernel finds a stack on which to run. (Every real* user-level thread has a corresponding kernel stack.)</li>
+<li>The kernel saves state.</li>
+<li>Figure out what caused the trap.</li>
+</ol>
+<hr />
+<h3 id="process-switch"><a class="markdownIt-Anchor" href="#process-switch"></a> Process Switch</h3>
+<ol>
+<li>change protection domain(user to kernel)</li>
+<li>switch from using the user-level stack to using a kernel stack</li>
+<li>save execution state <strong>on kernel's stack</strong></li>
+<li>do kernel stuff</li>
+<li>kernel thread switch</li>
+<li>restore user-level execution state</li>
+<li>change protection domain(kernel to user)</li>
+</ol>
+<hr />
+<h3 id="mips-r3000-hardware-in-trap-handling"><a class="markdownIt-Anchor" href="#mips-r3000-hardware-in-trap-handling"></a> MIPS R3000 Hardware in Trap Handling</h3>
+<img src="/imgs/image-20241009221502551.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 40%;" />
+<p>When a trap happens, the hardware saves <code>PC</code> into <code>exception PC</code>, and sets <code>PC</code> to the address of the trap handler(software program). The hardware also sets the <code>status</code> register and <code>cause</code> register.</p>
+<p>As shown below, the left line of hardware registers need to be saved on the kernel stack(by trap handling software) and <code>K0</code> and <code>K1</code> are the two spare registers to achieve that.</p>
+<img src="/imgs/202410092232867.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 40%;" />
+<p>After hardware does its job, we let the trap handling software to do the rest.</p>
+<hr />
+<h3 id="mips-r3000-software-in-trap-handling"><a class="markdownIt-Anchor" href="#mips-r3000-software-in-trap-handling"></a> MIPS R3000 Software in Trap Handling</h3>
+<ol>
+<li>Assembly code</li>
+</ol>
+<p>Use as few hareware registers as possible and save all the states that you need.</p>
+<img src="/imgs/202410092220239.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:50%;" />
+<p>Create a <strong>trap frame</strong> on the kernel stack: <strong>Save away all the registers</strong> and start using these registers to execute something else.</p>
+<blockquote>
+<p>How to find the kernel stack to save the <code>trapframe</code>?</p>
+</blockquote>
+<p>Each processor(cpu) has its own kernel stack to save the <code>trapframe</code>.</p>
+<p>Extract processor number from <code>K1</code>(<code>context</code> register) as an index(Base is in <code>K0</code>).</p>
+<p>Add K1 to K0 so that K0 points to the stack for the current processor.</p>
+<img src="/imgs/202410092310547.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 40%;" />
+<ol start="2">
+<li>trap C code</li>
+</ol>
+<img src="/imgs/202410092226748.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:50%;" />
+<hr />
+<h3 id="syscall-details"><a class="markdownIt-Anchor" href="#syscall-details"></a> Syscall Details</h3>
+<blockquote>
+<p>How did we leave the arguments?</p>
+</blockquote>
+<p>First four in a0-a3; rest on the stack.</p>
+<blockquote>
+<p>How does the kernel deal with <code>fork</code> system call?</p>
+</blockquote>
+<ol>
+<li>Make sure forking process is not running on user level.</li>
+<li>Save all state from forking process.</li>
+<li>Make a copy of the code, data, and stack.</li>
+<li>Copy <code>trapframe</code> of the original process into the new one.</li>
+<li>Make the new process known to the dispatcher</li>
+</ol>
+<blockquote>
+<p>How does the kernel deal with <code>exec</code> system call?</p>
+</blockquote>
+<p>Replace the current program image with the code and data of a new program.</p>
+<h2 id="processes-and-threads-2"><a class="markdownIt-Anchor" href="#processes-and-threads-2"></a> Processes and Threads</h2>
+<p>Multithreaded process:</p>
+<img src="/imgs/202410262233235.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 50%;" />
+<p>User-level threads:</p>
+<p>The stack of the additional thread is created on the heap by the user program.</p>
+<img src="/imgs/202410262243094.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:50%;" />
+<blockquote>
+<p>What comprises a process's state?</p>
+</blockquote>
+<p>1.Address space</p>
+<p>2.Threads</p>
+<p>3.Architectural state</p>
+<p>4.File table</p>
+<p>5.<strong>A kernel thread that gets assigned to a process when the process traps into the kernel</strong></p>
+<p>We can think of user processes and kernel, each with multiple threads, as running in their own address spaces.</p>
+<div class="note note-info">
+            <p>However, deep into the details, user address space often contains kernel mappings, which is only accessible when the processor is in kernel mode.</p>
+          </div>
+<h2 id="pipes"><a class="markdownIt-Anchor" href="#pipes"></a> Pipes</h2>
+<img src="/imgs/202409162140360.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:33%;" />
+<p>Mechanics:</p>
+<p>The pipe file is just a memory buffer.</p>
+<img src="/imgs/202410241127412.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:80%;" />
+<p>Redirecting Pipe I/O:</p>
+<img src="/imgs/202410262357565.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:80%;" />
+<h2 id="process-components"><a class="markdownIt-Anchor" href="#process-components"></a> Process Components</h2>
+<h3 id="parts-of-a-process-not-in-the-executable"><a class="markdownIt-Anchor" href="#parts-of-a-process-not-in-the-executable"></a> Parts of a process not in the Executable</h3>
+<ul>
+<li><strong>Execution state</strong></li>
+</ul>
+<p>Execution state is a snapshot of hardware, so it is hardware-specific</p>
+<ul>
+<li><strong>Resources</strong></li>
+</ul>
+<ol>
+<li>File information</li>
+</ol>
+<p>Mutiple threads within a process share a file descriptor table.</p>
+<ol start="2">
+<li>Scheduling information</li>
+</ol>
+<ul>
+<li>
+<p>How much time the process has used</p>
+</li>
+<li>
+<p>its priority</p>
+</li>
+<li>
+<p>resource consumption</p>
+</li>
+</ul>
+<p>These information is provided to the scheduler for it to decide which process to run.</p>
+<ul>
+<li>
+<p><strong>Address space</strong></p>
+</li>
+<li>
+<p><strong>Other</strong></p>
+</li>
+</ul>
+<ol>
+<li>process id(PID)</li>
+<li>credentials(what permissions/capabilities a process has)</li>
+<li>signal information</li>
+</ol>
+<hr />
+<h3 id="process-data-structures"><a class="markdownIt-Anchor" href="#process-data-structures"></a> Process Data Structures</h3>
+<blockquote>
+<p>Which parts of the process are machine (in)dependent?</p>
+</blockquote>
+<blockquote>
+<p>Which parts need to be per-thread and which are per-process?(although not necessary in os161 which only considers single-thread process)</p>
+</blockquote>
+<p>Prcess Control Block(<strong>PCB</strong>)</p>
+<p>PCB encapsulates an entire process, which contains references to other structures:</p>
+<ul>
+<li>Address space</li>
+<li>Threads associated with the process</li>
+<li>Credentials</li>
+</ul>
+<p>All the PCBs are gathered together into a <strong>process table</strong>.</p>
+<h2 id="file-descriptors-in-unix"><a class="markdownIt-Anchor" href="#file-descriptors-in-unix"></a> File descriptors in Unix</h2>
+<h3 id="kernel-three-table-data-structure-for-open-files"><a class="markdownIt-Anchor" href="#kernel-three-table-data-structure-for-open-files"></a> Kernel three-table data structure for open files</h3>
+<img src="/imgs/202410111635355.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 67%;" />
+<ul>
+<li>Table1: Process table</li>
+</ul>
+<p>Each process entry in the <strong>process table</strong> contains a <strong>file description table</strong>(a table of open file descriptors).</p>
+<ul>
+<li>Table2: Open file table</li>
+</ul>
+<p>The file descriptors index the entries in the file description table. Each entry contains a <strong>pointer</strong> to an entry in the <strong>open files table</strong>(a table that the kernel maintains for all open files).</p>
+<p>Each entry in this open files table contains the <strong>file status flags</strong> (read, write, append, etc.), the current <strong>file offset</strong>, and a <strong>pointer</strong> to the entry for this file in the so-called <strong>v-node table</strong>.</p>
+<ul>
+<li>Table3: V-node table</li>
+</ul>
+<p>The v-node table (or part of it) is stored on the physical device. For now, you can think of its entries as the &quot;real'' file contents on a disk, with associated informations like file location on disk, size, name, owner, etc.</p>
+<blockquote>
+<p>What if two processes want to independently open the same physical file, i.e. with each process mantaining its own access mode (read, write or append) and file offset as well?</p>
+</blockquote>
+<p>Here the <strong>open file table has two independent entries for the same file</strong>, each associated to one of the processes.</p>
+<img src="/imgs/202410111653805.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:60%;" />
+<blockquote>
+<p>What if we need to have in one process <em>two</em> file descriptors opened for the same file?</p>
+</blockquote>
+<p>Duplication of file descriptors:</p>
+<img src="/imgs/202410111701382.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:67%;" />
+<blockquote>
+<p>How we achieve this?</p>
+</blockquote>
+<p>The <code>dup()</code> and <code>dup2()</code> system calls do this job.</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">/* duplicate the passed file descriptor, returning the smallest available one. */</span><br><span class="hljs-type">int</span> <span class="hljs-title function_">dup</span><span class="hljs-params">(<span class="hljs-type">int</span> fildes)</span>;<br><span class="hljs-comment">/* specify in what file descriptor you want the copy */</span><br><span class="hljs-type">int</span> <span class="hljs-title function_">dup2</span><span class="hljs-params">(<span class="hljs-type">int</span> fildes, <span class="hljs-type">int</span> fildes2)</span>;<br></code></pre></td></tr></table></figure>
+<blockquote>
+<p>Why we need the duplication of file descriptors?</p>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs c">...<br>    <span class="hljs-keyword">if</span> (fork()==<span class="hljs-number">0</span>)<br>    &#123;<br>        close(STDIN_FILENO); <br>        dup(datafd); <span class="hljs-comment">/* datafd duplicated in stdin */</span><br>        execlp(<span class="hljs-string">&quot;sed&quot;</span>, <span class="hljs-string">&quot;sed&quot;</span>, (<span class="hljs-type">char</span> *)<span class="hljs-number">0</span>);<br>        perror(<span class="hljs-string">&quot;sed&quot;</span>);<br>    &#125;<br></code></pre></td></tr></table></figure>
+<blockquote>
+<p>What is the problem of <code>dup()</code>? How we solve this?</p>
+</blockquote>
+<p>The close-and-duplicate sequence above is not atomic.</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs c">...<br><span class="hljs-keyword">if</span> (fork()==<span class="hljs-number">0</span>)<br>&#123;<br>    <span class="hljs-comment">/* atomic operation */</span><br>    dup2(datafd, STDIN_FILENO);<br>    execlp(<span class="hljs-string">&quot;sed&quot;</span>, <span class="hljs-string">&quot;sed&quot;</span>, (<span class="hljs-type">char</span> *)<span class="hljs-number">0</span>);<br>    perror(<span class="hljs-string">&quot;sed&quot;</span>);<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>A potential failure case:</p>
+<img src="/imgs/202410172312054.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 60%;" />
+<p>This special case illustrates the need of the <strong>reference count</strong> field in the file object structure.</p>
+<h2 id="fork-and-exec-process-creation"><a class="markdownIt-Anchor" href="#fork-and-exec-process-creation"></a> fork and exec (process creation)</h2>
+<h3 id="the-oss-job-during-process-creation"><a class="markdownIt-Anchor" href="#the-oss-job-during-process-creation"></a> The OS's job during process creation</h3>
+ <img src="/imgs/202410111821822.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 50%;" />
+<p>Child processes share the same file descriptor table with the parent process, which is the basis of <strong>pipes</strong>.</p>
+<hr />
+<h3 id="sys_fork"><a class="markdownIt-Anchor" href="#sys_fork"></a> <code>sys_fork</code></h3>
+<p><code>sys_fork</code> is responsible for:</p>
+<ol>
+<li>Copy address space</li>
+</ol>
+<p>Use the functions in <code>addrspace.c</code>.</p>
+<img src="/imgs/202410262300766.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:50%;" />
+<ol start="2">
+<li>Copy the file table</li>
+</ol>
+<p>When a process is forked, file descriptor entries of the new process point to the <strong>same file objects</strong> as in the parent process.</p>
+<img src="/imgs/202410262300141.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:50%;" />
+<blockquote>
+<p>What kind of race conditions do you have to worry about?</p>
+</blockquote>
+<p>Two processes simultaneously modifying the values of the offset.</p>
+<blockquote>
+<p>Can you hold a spinlock while doing I/O?</p>
+</blockquote>
+<p>Spinlocks turn off interrupts; I/O completion is signaled via an interrupt. If you turn off interrupts and then go do I/O, YOU WILL NEVER GET NOTIFIED!</p>
+<blockquote>
+<p>Hold a regular lock? That will work. But do we have to hold the lock?</p>
+</blockquote>
+<p>-- Not really. We can set up the <code>uio</code> struct with the right offset, release the lock, do the I/O, then acquire it again and update the offset if I/O was successful. Can’t update the offset prior to I/O completion – what if it fails?</p>
+<ol start="3">
+<li>Copy architectural state(Copy and tweak <code>trapframe</code>)</li>
+</ol>
+<p>In the implementation of A5, you will have to make sure <strong>the right value is returned to the right process!</strong></p>
+<ol start="4">
+<li>Copy kernel thread(<code>thread_fork</code>)</li>
+</ol>
+<p><strong>When you fork a new process, you fork a new kernel thread to provide to the child process.</strong></p>
+<p><strong>To fork that thread, you need to provide it a function to run. You’ll need to write that function.</strong></p>
+<ol start="5">
+<li>Return to user mode</li>
+<li>Both the parent and child return to user mode</li>
+</ol>
+<p>The parent just returns from exception.</p>
+<p>The child returns via the <code>usermode</code> function.</p>
+<img src="/imgs/202410262324165.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 67%;" />
+<blockquote>
+<p>How does a thread enter user mode for the first time?</p>
+</blockquote>
+<p><code>mips_usermode</code> in <code>trap.c</code></p>
+<hr />
+<h3 id="sys_execv"><a class="markdownIt-Anchor" href="#sys_execv"></a> <code>sys_execv</code></h3>
+<p><code>sys_execv</code> is responsible for:</p>
+<p>• Replace the old address space with a new one</p>
+<p>• Copy the arguments into the new address space</p>
+<p>• Return to user mode</p>
+<p><strong>The mechanics of <code>exec()</code></strong>:</p>
+<img src="/imgs/202411041428372.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 67%;" />
+<p><strong>To think before starting exec():</strong></p>
+<blockquote>
+<p><strong>Where are the arguments located</strong> when the exec system call in invoked? In whose address space? How do you know their address?</p>
+</blockquote>
+<blockquote>
+<p>How do we get them into the kernel? How do you figure out their total size?</p>
+</blockquote>
+<blockquote>
+<p>Where do the arguments need to end up before we return to the user mode? Whose address space? Stack or heap?</p>
+</blockquote>
+<blockquote>
+<p>How do we get them there? How do we organize them there.</p>
+</blockquote>
+<p><strong>Passing arguments(<code>copyin</code> and <code>copyout</code>)</strong>:</p>
+<div class="note note-primary">
+            <p>It's important to emphasize that we need to pass not only the arguments, but also the pointers to those arguments.</p>
+          </div>
+<img src="/imgs/202411041449905.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:67%;" />
+<img src="/imgs/202411041450806.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:67%;" />
+<blockquote>
+<p>What if the arguments array is huge and you cannot allocate enough kernel memory contiguously?</p>
+</blockquote>
+<img src="/imgs/202411041454332.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:67%;" />
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/OS/" class="category-chain-item">OS</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/OS/" class="print-no-link">#OS</a>
+      
+        <a href="/tags/File-Descriptor/" class="print-no-link">#File Descriptor</a>
+      
+        <a href="/tags/Process/" class="print-no-link">#Process</a>
+      
+        <a href="/tags/Thread/" class="print-no-link">#Thread</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Processes and Threads</div>
+      <div>http://oooscar8.github.io/2024/10/24/Processes-and-Threads/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Alex Sun</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年10月24日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/11/11/OS161-A5/" title="OS161 Assignment 5">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">OS161 Assignment 5</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/10/22/OS161-A4/" title="OS161 Assignment 4">
+                        <span class="hidden-mobile">OS161 Assignment 4</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div class="disqus" style="width:100%">
+    <div id="disqus_thread"></div>
+    
+      <script type="text/javascript">
+        var disqus_config = function() {
+          this.page.url = 'http://oooscar8.github.io/2024/10/24/Processes-and-Threads/';
+          this.page.identifier = '/2024/10/24/Processes-and-Threads/';
+        };
+        Fluid.utils.loadComments('#disqus_thread', function() {
+          var d = document, s = d.createElement('script');
+          s.src = '//' + 'fluid' + '.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', new Date());
+          (d.head || d.body).appendChild(s);
+        });
+      </script>
+    
+    <noscript>Please enable JavaScript to view the comments</noscript>
+  </div>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

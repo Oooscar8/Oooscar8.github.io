@@ -1,0 +1,1069 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/imgs/wallhaven-p9qeze.jpg">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Alex Sun">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Implement kernel structures for open files and some file-related system calls">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OS161 Assignment 4">
+<meta property="og:url" content="http://oooscar8.github.io/2024/10/22/OS161-A4/index.html">
+<meta property="og:site_name" content="Alex&#39;s Space">
+<meta property="og:description" content="Implement kernel structures for open files and some file-related system calls">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://oooscar8.github.io/2024/10/22/imgs/202410111635355.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/10/22/imgs/202410252054616.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/10/22/imgs/202410111701382.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/10/22/imgs/202410171249246.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/10/22/imgs/202502151617124.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/10/22/imgs/202410252151787.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/10/22/imgs/202410252152964-1740031159640-118.png">
+<meta property="article:published_time" content="2024-10-21T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-02-25T08:55:12.875Z">
+<meta property="article:author" content="Alex Sun">
+<meta property="article:tag" content="OS">
+<meta property="article:tag" content="OS161">
+<meta property="article:tag" content="File Descriptor">
+<meta property="article:tag" content="System Calls">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://oooscar8.github.io/2024/10/22/imgs/202410111635355.png">
+  
+  
+  
+  <title>OS161 Assignment 4 - Alex&#39;s Space</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"oooscar8.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.1.1"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Alex&#39;s Space</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/imgs/chuyin.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="OS161 Assignment 4"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-10-22 00:00" pubdate>
+          2024年10月22日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2.5k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          21 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">OS161 Assignment 4</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="assignment4"><a class="markdownIt-Anchor" href="#assignment4"></a> Assignment4</h1>
+<blockquote>
+<p>In this assignment you will implement a few <strong>system calls that allow user programs to use files</strong>. This assignment will further train you how to navigate and understand a large and complex source base, and will teach you how to implement system calls and transfer control between the user mode and the kernel. You will implement part of the process management subsystem, which will be the subject of the next assignment.</p>
+</blockquote>
+<h2 id="code-reading-exercises"><a class="markdownIt-Anchor" href="#code-reading-exercises"></a> Code reading exercises</h2>
+<blockquote>
+<ol>
+<li>What are the ELF magic numbers?</li>
+</ol>
+</blockquote>
+<p>The ELF (Executable and Linkable Format) magic numbers are a sequence of bytes <strong>(0x7f, 'E', 'L', 'F')</strong> at the beginning of an ELF file that identify it as an ELF file and provide some basic information about its format.</p>
+<p>These magic numbers help operating systems and other tools quickly identify ELF files and determine their basic characteristics without having to parse the entire file structure.</p>
+<blockquote>
+<ol start="2">
+<li>What is the difference between <code>UIO_USERISPACE</code> and <code>UIO_USERSPACE</code>? When should one use UIO_SYSSPACE instead?</li>
+</ol>
+</blockquote>
+<p>The <code>enum uio_seg</code> is typically used in Unix-like operating systems to specify the memory segment for I/O operations.</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">/* Source/destination. */</span><br><span class="hljs-class"><span class="hljs-keyword">enum</span> <span class="hljs-title">uio_seg</span> &#123;</span><br>        UIO_USERISPACE,			<span class="hljs-comment">/* User process code. */</span><br>        UIO_USERSPACE,			<span class="hljs-comment">/* User process data. */</span><br>        UIO_SYSSPACE,			<span class="hljs-comment">/* Kernel. */</span><br>&#125;;<br></code></pre></td></tr></table></figure>
+<p><code>UIO_USERISPACE</code>(User process instruction space) refers to the memory segment where the user process's executable code (instructions) resides.</p>
+<p><code>UIO_USERSPACE</code>(User process data space) refers to the memory segment where the user process's data resides.</p>
+<p><code>UIO_SYSSPACE</code> is used when the memory being accessed is in kernel space rather than user space. It is typically used within kernel code or drivers when performing I/O operations on kernel-owned memory.</p>
+<blockquote>
+<ol start="3">
+<li>Why can the struct <code>uio</code> that is used to read in a segment be allocated on the stack in <code>load_segment()</code> (i.e., where does the memory read actually go)?</li>
+</ol>
+</blockquote>
+<p>The <code>uio</code> structure describes an I/O operation that will read data from the file (<code>vnode v</code>) into the user's address space at <code>vaddr</code>.</p>
+<p>The struct <code>uio</code> is allocated on the stack in the <code>load_segment()</code> function. This is fine because the structure is just used to describe the I/O operation, not to hold the actual data being read. The actual read operation (<code>VOP_READ</code>) will use this information to copy the data directly into the user's address space.</p>
+<p>The key is in this line:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c">iov.iov_ubase = (<span class="hljs-type">userptr_t</span>)vaddr;<br></code></pre></td></tr></table></figure>
+<p>Here, <code>vaddr</code> is the virtual address in the user's address space where the segment should be loaded.</p>
+<blockquote>
+<ol start="4">
+<li>In <code>runprogram()</code>, why is it important to call <code>vfs_close()</code> before going to user mode?</li>
+</ol>
+</blockquote>
+<p>Once the program is loaded, there's no need for the kernel to maintain access to the executable file. Closing the file before going to user mode ensures that the new user process doesn't have unnecessary open file handles.</p>
+<blockquote>
+<ol start="5">
+<li>What function forces the processor to switch into user mode? Is this function machine dependent?</li>
+</ol>
+</blockquote>
+<p>The function that forces the processor to switch into user mode is: <code>mips_usermode()</code>, which calls <code>asm_usermode()</code>.</p>
+<p>This function is machine dependent. Specifically, it's designed for the MIPS architecture.</p>
+<blockquote>
+<ol start="6">
+<li>In what file are <code>copyin</code> and <code>copyout</code> defined? <code>memmove</code>? Why can't <code>copyin</code> and <code>copyout</code> be implemented as simply as <code>memmove</code>?</li>
+</ol>
+</blockquote>
+<p><code>copyin</code> and <code>copyout</code> are defined in <code>~/src/kern/vm/copyinout.c</code></p>
+<p><code>memmove</code> is defined in <code>~/src/common/libc/string/memmove.c</code></p>
+<p>The <code>copyin</code> and <code>copyout</code> functions cannot be implemented as simply as <code>memmove</code> because they involve copying data between user space and kernel space, which introduces security and reliability concerns that <code>memmove</code> doesn't have to deal with.</p>
+<p>There's a <code>copycheck</code> function call at the beginning of both <code>copyin</code> and <code>copyout</code> because the kernel must verify that the user-provided addresses are valid and within the user's accessible memory range.</p>
+<p>The complexity in <code>copyin</code> and <code>copyout</code> comes from setting up safeguards (like <code>tm_badfaultfunc</code> and <code>setjmp</code>) to catch and handle potential faults, performing necessary checks, and ensuring the operation is secure and doesn't compromise the system's integrity.</p>
+<p>In contrast, <code>memmove</code> operates entirely within a single memory space (either all kernel or all user space) and can assume that all addresses it's working with are valid and accessible, which allows for a much simpler implementation.</p>
+<blockquote>
+<ol start="7">
+<li>What (briefly) is the purpose of <code>userptr_t</code>?</li>
+</ol>
+</blockquote>
+<p>The purpose of <code>userptr_t</code> is to create a distinct pointer type for user-space addresses that cannot be accidentally confused or mixed with kernel-space pointers. It serves as a safeguard in the kernel code to clearly differentiate and safely handle pointers to user-space memory.</p>
+<blockquote>
+<ol start="8">
+<li>What is the numerical value of the exception code for a MIPS system call?</li>
+</ol>
+</blockquote>
+<p>The exception code for a MIPS system call is 8.</p>
+<blockquote>
+<ol start="9">
+<li>How many bytes is an instruction in MIPS?</li>
+</ol>
+</blockquote>
+<p>By examining the <code>syscall(struct trapframe *tf)</code> function, we can determine that each MIPS instruction is <strong>4 bytes</strong>. This is evident from the following code snippet:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">/*</span><br><span class="hljs-comment"> * Now, advance the program counter, to avoid restarting</span><br><span class="hljs-comment"> * the syscall over and over again.</span><br><span class="hljs-comment"> */</span><br>tf-&gt;tf_epc += <span class="hljs-number">4</span>;<br></code></pre></td></tr></table></figure>
+<p>The line <code>tf-&gt;tf_epc += 4;</code> increments the program counter by 4, indicating that each instruction in MIPS occupies 4 bytes.</p>
+<blockquote>
+<ol start="10">
+<li>Why do you &quot;probably want to change&quot; the implementation of <code>kill_curthread()</code>?</li>
+</ol>
+</blockquote>
+<p>Since this function handles fatal faults in user-level code by calling <code>panic()</code>, which will crash the entire system. For a single user-level fault, we don't need to crash the entire kernel or system. We can simply signal the parent and clean up the process.</p>
+<blockquote>
+<ol start="11">
+<li>What would be required to implement a system call that took more than 4 arguments?</li>
+</ol>
+</blockquote>
+<p>To implement a system call with more than 4 arguments, the following steps would be necessary:</p>
+<ol>
+<li>
+<p><strong>Pass the first 4 arguments in registers <code>a0-a3</code></strong>.</p>
+</li>
+<li>
+<p><strong>Fetch the remaining arguments from the user stack</strong>: For arguments beyond the 4th, we need to get them from the user stack, in detail, fetching from <code>sp+16</code> to skip over the space reserved for the first 4 registerized arguments.
+(We need use the <code>copyin()</code> function to safely retrieve these arguments from the user space into the kernel space. )</p>
+</li>
+</ol>
+<blockquote>
+<ol start="12">
+<li>What is the purpose of the SYSCALL macro?</li>
+</ol>
+</blockquote>
+<p>The main purpose of the <code>SYSCALL</code> macro is to simplify the definition and handling of system calls, ensuring that each system call is properly numbered and recognized by the kernel.</p>
+<ol>
+<li>
+<p><strong>Generate Assembly Code for System Calls</strong>:
+It generates the necessary assembly code to load the system call number into the appropriate register and call the generic <code>__syscall</code> handler.</p>
+</li>
+<li>
+<p><strong>Simplify the Registration Process</strong>:
+By using the <code>SYSCALL</code> macro, developers don't have to manually write the assembly code for each system call. The script ( <code>gensyscalls.sh</code>) parses this file and generates the required assembly stubs, making the system calls automatically recognizable and executable by the kernel.</p>
+</li>
+</ol>
+<blockquote>
+<ol start="13">
+<li>What is the MIPS instruction that actually triggers a system call?</li>
+</ol>
+</blockquote>
+<p>The instruction that actually triggers a system call is:
+<code>syscall</code></p>
+<blockquote>
+<ol start="14">
+<li>
+<p>After reading syscalls-mips.S and syscall.c, you should be prepared to answer the following question:</p>
+<p>OS/161 supports 64-bit values; <code>lseek()</code> takes and returns a 64-bit offset value. Thus, lseek() takes a 32-bit file handle (arg0), a 64-bit offset (arg1), a 32-bit whence (arg2), and needs to return a 64-bit offset value. In <code>void syscall(struct trapframe *tf)</code> where will you find each of the three arguments (in which registers) and how will you return the 64-bit offset?</p>
+</li>
+</ol>
+</blockquote>
+<ul>
+<li><strong>arg0</strong> (file handle, 32-bit) is found in the <strong><code>a0</code></strong> register.</li>
+<li><strong>arg1</strong> (offset, 64-bit):
+<ul>
+<li>Lower 32 bits are stored in <strong><code>a2</code></strong>.</li>
+<li>Upper 32 bits are stored in <strong><code>a3</code></strong>.</li>
+<li>If registers are insufficient, additional arguments can be fetched from the user stack, starting at <strong><code>sp+16</code></strong> for the lower 32 bits and <strong><code>sp+20</code></strong> for the upper 32 bits.</li>
+</ul>
+</li>
+<li><strong>arg2</strong> (whence, 32-bit) is found on the user stack at <strong><code>sp+16</code></strong>.</li>
+</ul>
+<p>To return the 64-bit offset value:</p>
+<ul>
+<li><strong><code>v0</code></strong> holds the lower 32 bits of the return value.</li>
+<li><strong><code>v1</code></strong> holds the upper 32 bits of the return value.</li>
+</ul>
+<blockquote>
+<ol start="15">
+<li>As you were reading the code in <code>runprogram.c</code> and <code>loadelf.c</code>, you probably noticed how the kernel manipulates the files. Which kernel function is called to open a file? Which macro is called to read the file? What about to write a file? Which data structure is used in the kernel to represent an open file?</li>
+</ol>
+</blockquote>
+<p><strong>Kernel function to open a file</strong>:
+The kernel function to open a file is <code>vfs_open()</code>. In <code>runprogram()</code>, the file is opened with the call <code>vfs_open(progname, O_RDONLY, 0, &amp;v);</code>, where <code>O_RDONLY</code> specifies read-only mode.</p>
+<p><strong>Macro to read a file</strong>:
+The macro to read a file is <code>VOP_READ()</code>. In <code>loadelf.c</code>, it is used in <code>load_segment()</code> with the call <code>VOP_READ(v, &amp;u);</code> to read data from the file.</p>
+<p><strong>Macro to write a file</strong>:
+Although not explicitly used in the provided code, the macro to write a file is <code>VOP_WRITE()</code>, which functions similarly to <code>VOP_READ()</code> but for writing.</p>
+<p><strong>Data structure representing an open file in the kernel</strong>:
+The kernel uses the <code>struct vnode</code> data structure to represent an open file. In <code>runprogram.c</code>, a <code>vnode</code> represents the opened program file, stored in the variable <code>v</code>.</p>
+<blockquote>
+<ol start="16">
+<li>What is the purpose of VOP_INCREF and VOP_DECREF?</li>
+</ol>
+</blockquote>
+<p><strong>VOP_INCREF</strong>: Increases the reference count of a file (or <code>vnode</code>) to indicate that it is in use. This prevents the file from being released while it is still being accessed.</p>
+<p><strong>VOP_DECREF</strong>: Decreases the reference count of a file. When the count reaches zero, it indicates that the file is no longer in use, allowing the kernel to safely release its resources.</p>
+<h2 id="design-and-implementation"><a class="markdownIt-Anchor" href="#design-and-implementation"></a> Design and implementation</h2>
+<blockquote>
+<p>The system calls you need to implement in this assignment are:</p>
+<p><code>open(), read(), write(), lseek(), close(), dup2(), chdir(), and __getcwd()</code></p>
+</blockquote>
+<blockquote>
+<p><strong>How to begin:</strong></p>
+<ol>
+<li>Take a look at <code>kern/test/fstest.c</code> to learn about the functions available in the kernel for manipulating files. Another place to look for useful function is in the <code>kern/vfs</code> directory. These functions will be very helpful to you when implementing the solution to this assignment.</li>
+<li>Carefully study <code>kern/arch/mips/syscall/syscall.c</code>. Look at the existing system calls as well as the comments at the top of this file. They will tell you exactly how to pass the arguments in and out of the system calls.</li>
+</ol>
+</blockquote>
+<blockquote>
+<p>Things become even more complicated in Assignment 5, where you'll need to implement <code>fork()</code>, which dictates that <strong>the file objects be shared between the parent and child processes</strong>; since these can run concurrently, you will need some careful synchronization! Though you don't need to worry about this for the current assignment, designing your file-tracking system with Assignment 5 in mind might make your life easier later.</p>
+</blockquote>
+<div class="note note-success">
+            <p>That is to say, different processes that run concurrently may share the same file handle. Besides, although in this assignment we assume each process only has one thread, it is strongly recommended that we take multi-threaded processes into account in order to make our code more robust.</p>
+          </div>
+<blockquote>
+<p><strong>Important:</strong> Before sitting down to write code, get together with your partner and write down the following <strong>for every system call</strong>:</p>
+<ul>
+<li>the arguments it takes</li>
+<li>the return values it might return</li>
+<li>the errors it must check for</li>
+<li>the information it needs to access and update inside the file table</li>
+<li>the functions and macros available in os161 that you can use for its implementation</li>
+<li>the potential race conditions and how they must be prevented (assume no user-level threads for this assignment).</li>
+</ul>
+</blockquote>
+<blockquote>
+<p>For now, make the menu thread go away by having it block on some semaphore or run an infinite while loop after it launches the user program.</p>
+</blockquote>
+<h2 id="my-solution"><a class="markdownIt-Anchor" href="#my-solution"></a> My Solution</h2>
+<blockquote>
+<p>Task: Implement <code>open(), read(), write(), lseek(), close(), dup2(), chdir(), and __getcwd()</code> system calls.</p>
+</blockquote>
+<h3 id="kernel-structure-for-open-files"><a class="markdownIt-Anchor" href="#kernel-structure-for-open-files"></a> Kernel structure for open files</h3>
+<p>All the system calls that we implemented here are interact with files. So we first need to implement the OS/161 <strong>kernel structure for managing open files</strong>, including the <strong>file descriptor table</strong> and <strong>file handles</strong>.</p>
+<p>Details of OS/161 kernel structure for open files are shown below:</p>
+<div class="note note-primary">
+            <p><strong>Kernel three-table data structure for open files</strong>:</p><img src="/imgs/202410111635355.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 67%;" /><ul><li>Table1: <strong>Process table</strong></li></ul><p>Each process entry in the <strong>process table</strong> contains a <strong>file description table</strong>(a table of open file descriptors).</p><ul><li>Table2: <strong>Open file table</strong></li></ul><p>The file descriptors index the entries in the file description table. Each entry contains a <strong>pointer</strong> to an entry in the <strong>open files table</strong>(a table that the kernel maintains for all open files).</p><p>Each entry in this open files table contains the <strong>file status flags</strong> (read, write, append, etc.), the current <strong>file offset</strong>, and a <strong>pointer</strong> to the entry for this file in the so-called <strong>v-node table</strong>.</p><ul><li>Table3: <strong>V-node table</strong></li></ul><p>The v-node table (or part of it) is stored on the physical device. For now, you can think of its entries as the &quot;real'' file contents on a disk, with associated informations like file location on disk, size, name, owner, etc.</p><blockquote><p>What if two processes want to independently open the same physical file, i.e. with each process maintaining its own access mode (read, write or append) and file offset as well?</p></blockquote><p>Here the <strong>open files table has two independent entries for the same file</strong>, each associated to one of the processes.</p><img src="/imgs/202410252054616.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:60%;" /><blockquote><p>What if we need to have in one process <em>two</em> file descriptors opened for the same file?</p></blockquote><p>Duplication of file descriptors:</p><img src="/imgs/202410111701382.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:67%;" /><blockquote><p>How we achieve this?</p></blockquote><p>The <code>dup()</code> and <code>dup2()</code> system calls do this job.</p><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">/* duplicate the passed file descriptor, returning the smallest available one. */</span><br><span class="hljs-type">int</span> <span class="hljs-title function_">dup</span><span class="hljs-params">(<span class="hljs-type">int</span> fildes)</span>;<br><span class="hljs-comment">/* specify in what file descriptor you want the copy */</span><br><span class="hljs-type">int</span> <span class="hljs-title function_">dup2</span><span class="hljs-params">(<span class="hljs-type">int</span> fildes, <span class="hljs-type">int</span> fildes2)</span>;<br></code></pre></td></tr></table></figure><blockquote><p>Why we need the duplication of file descriptors?</p></blockquote><p>Example:</p><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs c">...<br>    <span class="hljs-keyword">if</span> (fork()==<span class="hljs-number">0</span>)<br>    &#123;<br>        close(STDIN_FILENO); <br>        dup(datafd); <span class="hljs-comment">/* datafd duplicated in stdin */</span><br>        execlp(<span class="hljs-string">&quot;sed&quot;</span>, <span class="hljs-string">&quot;sed&quot;</span>, (<span class="hljs-type">char</span> *)<span class="hljs-number">0</span>);<br>        perror(<span class="hljs-string">&quot;sed&quot;</span>);<br>    &#125;<br></code></pre></td></tr></table></figure><p>By duplicating <code>datafd</code> to <code>stdin</code>, we ensure <code>sed</code> can read from our desired file.</p><blockquote><p>What is the problem of <code>dup()</code>? How we solve this?</p></blockquote><p>The close-and-duplicate sequence above is not atomic. We can fix this with <code>dup2</code>:</p><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs c">...<br><span class="hljs-keyword">if</span> (fork()==<span class="hljs-number">0</span>)<br>&#123;<br>    <span class="hljs-comment">/* atomic operation */</span><br>    dup2(datafd, STDIN_FILENO);<br>    execlp(<span class="hljs-string">&quot;sed&quot;</span>, <span class="hljs-string">&quot;sed&quot;</span>, (<span class="hljs-type">char</span> *)<span class="hljs-number">0</span>);<br>    perror(<span class="hljs-string">&quot;sed&quot;</span>);<br>&#125;<br></code></pre></td></tr></table></figure>
+          </div>
+<p>Take time to fully understand the contents above before implementing your <strong>file descriptor table</strong> and <strong>file handle</strong> structures.</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">/* File handle structure */</span><br><span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">filehandle</span> &#123;</span><br>    <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">vnode</span> *<span class="hljs-title">vn</span>;</span>       <span class="hljs-comment">// Pointer to the v-node</span><br>    <span class="hljs-type">off_t</span> offset;           <span class="hljs-comment">// Current file offset</span><br>    <span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> refcount;  <span class="hljs-comment">// Reference count</span><br>    <span class="hljs-type">int</span> flags;              <span class="hljs-comment">// file status flags</span><br>    <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">lock</span> *<span class="hljs-title">fh_lock</span>;</span>   <span class="hljs-comment">// Lock for the file handle</span><br>&#125;;<br><br><span class="hljs-comment">/* Per-process file descriptor table */</span><br><span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">filetable</span> &#123;</span><br>    <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">filehandle</span> *<span class="hljs-title">file_handles</span>[<span class="hljs-title">OPEN_MAX</span>];</span><br>    <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">lock</span> *<span class="hljs-title">ft_lock</span>;</span>  <span class="hljs-comment">// Lock for the file descriptor table</span><br>&#125;;<br></code></pre></td></tr></table></figure>
+<div class="note note-danger">
+            <p>Notice that although in this lab we assume each process only has one thread, adding a lock to the file descriptor table makes our code more robust.</p>
+          </div>
+<p>Besides implementing the actual file table and file handle structure, we also need to implement some functions with which the system calls can perform operations on the file system.</p>
+<blockquote>
+<p>Think about what those functions are needed? Also within those functions, what kinds of synchronization do we need?</p>
+</blockquote>
+<p>You can first write some functions that come to mind after you finish implementing the file table and file handle structure, and gradually add more functions while trying to implement the file-related system calls.</p>
+<p>Here I show all the functions I need to operate on the file tables and file handles:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">/* File descriptor table functions */</span><br><span class="hljs-keyword">struct</span> filetable *<span class="hljs-title function_">filetable_create</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span>;<br><span class="hljs-type">void</span> <span class="hljs-title function_">filetable_stdio_init</span><span class="hljs-params">(<span class="hljs-keyword">struct</span> filetable *ft)</span>;<br><span class="hljs-type">void</span> <span class="hljs-title function_">filetable_destroy</span><span class="hljs-params">(<span class="hljs-keyword">struct</span> filetable *ft)</span>;<br><span class="hljs-type">int</span> <span class="hljs-title function_">filetable_add</span><span class="hljs-params">(<span class="hljs-keyword">struct</span> filetable *ft, <span class="hljs-keyword">struct</span> filehandle *fh)</span>;<br><span class="hljs-type">int</span> <span class="hljs-title function_">filetable_remove</span><span class="hljs-params">(<span class="hljs-keyword">struct</span> filetable *ft, <span class="hljs-type">int</span> fd)</span>;<br><span class="hljs-keyword">struct</span> filetable *<span class="hljs-title function_">filetable_copy</span><span class="hljs-params">(<span class="hljs-keyword">struct</span> filetable *old_ft)</span>;<br><br><span class="hljs-comment">/* File handle functions */</span><br><span class="hljs-keyword">struct</span> filehandle *<span class="hljs-title function_">create_stdio_handle</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span> *device, <span class="hljs-type">int</span> flags)</span>;<br><span class="hljs-keyword">struct</span> filehandle *<span class="hljs-title function_">filehandle_create</span><span class="hljs-params">(<span class="hljs-keyword">struct</span> vnode *vn, <span class="hljs-type">int</span> flags)</span>;<br><span class="hljs-type">void</span> <span class="hljs-title function_">filehandle_destroy</span><span class="hljs-params">(<span class="hljs-keyword">struct</span> filehandle *fh)</span>;<br><span class="hljs-type">void</span> <span class="hljs-title function_">filehandle_incref</span><span class="hljs-params">(<span class="hljs-keyword">struct</span> filehandle *fh)</span>;<br><span class="hljs-type">void</span> <span class="hljs-title function_">filehandle_decref</span><span class="hljs-params">(<span class="hljs-keyword">struct</span> filehandle *fh)</span>;<br></code></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br><span class="line">262</span><br><span class="line">263</span><br><span class="line">264</span><br><span class="line">265</span><br><span class="line">266</span><br><span class="line">267</span><br><span class="line">268</span><br><span class="line">269</span><br><span class="line">270</span><br><span class="line">271</span><br><span class="line">272</span><br><span class="line">273</span><br><span class="line">274</span><br><span class="line">275</span><br><span class="line">276</span><br><span class="line">277</span><br><span class="line">278</span><br><span class="line">279</span><br><span class="line">280</span><br><span class="line">281</span><br><span class="line">282</span><br><span class="line">283</span><br><span class="line">284</span><br><span class="line">285</span><br><span class="line">286</span><br><span class="line">287</span><br><span class="line">288</span><br><span class="line">289</span><br><span class="line">290</span><br><span class="line">291</span><br><span class="line">292</span><br><span class="line">293</span><br><span class="line">294</span><br><span class="line">295</span><br><span class="line">296</span><br><span class="line">297</span><br><span class="line">298</span><br><span class="line">299</span><br><span class="line">300</span><br><span class="line">301</span><br><span class="line">302</span><br><span class="line">303</span><br><span class="line">304</span><br><span class="line">305</span><br><span class="line">306</span><br><span class="line">307</span><br><span class="line">308</span><br><span class="line">309</span><br><span class="line">310</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">//////////////////////////////////////////////////</span><br><span class="hljs-comment">//</span><br><span class="hljs-comment">// File descriptor table functions</span><br><br><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * @brief Create a new file descriptor table.</span><br><span class="hljs-comment"> *</span><br><span class="hljs-comment"> * This function allocates memory for a new file descriptor table and initializes it by creating a lock</span><br><span class="hljs-comment"> * for synchronization. It also initializes the file handles array with standard I/O.</span><br><span class="hljs-comment"> *</span><br><span class="hljs-comment"> * @return A pointer to the newly created file descriptor table, </span><br><span class="hljs-comment"> * or NULL if memory allocation fails or if the lock creation fails.</span><br><span class="hljs-comment"> */</span><br><span class="hljs-keyword">struct</span> filetable *<br><span class="hljs-title function_">filetable_create</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span><br>&#123;<br>    <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">filetable</span> *<span class="hljs-title">ft</span> =</span> kmalloc(<span class="hljs-keyword">sizeof</span>(<span class="hljs-keyword">struct</span> filetable));<br>    <span class="hljs-keyword">if</span> (ft == <span class="hljs-literal">NULL</span>)<br>    &#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-literal">NULL</span>;<br>    &#125;<br><br>    ft-&gt;ft_lock = lock_create(<span class="hljs-string">&quot;filetable_lock&quot;</span>);<br>    <span class="hljs-keyword">if</span> (ft-&gt;ft_lock == <span class="hljs-literal">NULL</span>)<br>    &#123;<br>        kfree(ft);<br>        <span class="hljs-keyword">return</span> <span class="hljs-literal">NULL</span>;<br>    &#125;<br><br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; OPEN_MAX; i++)<br>    &#123;<br>        ft-&gt;file_handles[i] = <span class="hljs-literal">NULL</span>;<br>    &#125;<br><br>    <span class="hljs-keyword">return</span> ft;<br>&#125;<br><br><span class="hljs-type">void</span> <span class="hljs-title function_">filetable_stdio_init</span><span class="hljs-params">(<span class="hljs-keyword">struct</span> filetable *ft)</span> &#123;<br>    <span class="hljs-comment">// Initialize standard I/O</span><br>    <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">filehandle</span> *<span class="hljs-title">stdin_handle</span> =</span> create_stdio_handle(<span class="hljs-string">&quot;con:&quot;</span>, O_RDONLY);<br>    <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">filehandle</span> *<span class="hljs-title">stdout_handle</span> =</span> create_stdio_handle(<span class="hljs-string">&quot;con:&quot;</span>, O_WRONLY);<br>    <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">filehandle</span> *<span class="hljs-title">stderr_handle</span> =</span> create_stdio_handle(<span class="hljs-string">&quot;con:&quot;</span>, O_WRONLY);<br><br>    KASSERT(stdin_handle != <span class="hljs-literal">NULL</span>);<br>    KASSERT(stdout_handle != <span class="hljs-literal">NULL</span>);<br>    KASSERT(stderr_handle != <span class="hljs-literal">NULL</span>);<br><br>    <span class="hljs-type">int</span> fd0 = filetable_add(ft, stdin_handle);<br>    <span class="hljs-type">int</span> fd1 = filetable_add(ft, stdout_handle);<br>    <span class="hljs-type">int</span> fd2 = filetable_add(ft, stderr_handle);<br><br>    KASSERT(fd0 == <span class="hljs-number">0</span>);<br>    KASSERT(fd1 == <span class="hljs-number">1</span>);<br>    KASSERT(fd2 == <span class="hljs-number">2</span>);<br>&#125;<br><br><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * @brief Destroy the file descriptor table.</span><br><span class="hljs-comment"> * </span><br><span class="hljs-comment"> * This function releases all file handles in the file descriptor table by decrementing their reference counts</span><br><span class="hljs-comment"> * and setting them to NULL. It also destroys the lock associated with the file descriptor table and frees the memory.</span><br><span class="hljs-comment"> * </span><br><span class="hljs-comment"> * @param ft The file descriptor table to be destroyed.</span><br><span class="hljs-comment"> */</span><br><span class="hljs-type">void</span> <span class="hljs-title function_">filetable_destroy</span><span class="hljs-params">(<span class="hljs-keyword">struct</span> filetable *ft)</span><br>&#123;<br>    KASSERT(ft != <span class="hljs-literal">NULL</span>);<br><br>    lock_acquire(ft-&gt;ft_lock);<br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; OPEN_MAX; i++)<br>    &#123;<br>        <span class="hljs-keyword">if</span> (ft-&gt;file_handles[i] != <span class="hljs-literal">NULL</span>)<br>        &#123;<br>            filehandle_decref(ft-&gt;file_handles[i]);<br>            ft-&gt;file_handles[i] = <span class="hljs-literal">NULL</span>;<br>        &#125;<br>    &#125;<br>    lock_release(ft-&gt;ft_lock);<br><br>    lock_destroy(ft-&gt;ft_lock);<br>    kfree(ft);<br>&#125;<br><br><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * @brief Add an entry to the process&#x27;s file descriptor table that </span><br><span class="hljs-comment"> * maps a new file descriptor to this file handle.</span><br><span class="hljs-comment"> *</span><br><span class="hljs-comment"> * @param ft The file descriptor table to add the file handle to.</span><br><span class="hljs-comment"> * @param fh The file handle to add.</span><br><span class="hljs-comment"> *</span><br><span class="hljs-comment"> * @return The assigned file descriptor for the file handle, </span><br><span class="hljs-comment"> * or -1 if the file descriptor table is full.</span><br><span class="hljs-comment"> */</span><br><span class="hljs-type">int</span> <span class="hljs-title function_">filetable_add</span><span class="hljs-params">(<span class="hljs-keyword">struct</span> filetable *ft, <span class="hljs-keyword">struct</span> filehandle *fh)</span><br>&#123;<br>    <span class="hljs-type">int</span> fd = <span class="hljs-number">-1</span>;<br>    lock_acquire(ft-&gt;ft_lock);<br><br>    <span class="hljs-comment">// Find the first available file descriptor</span><br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; OPEN_MAX; i++)<br>    &#123;<br>        <span class="hljs-keyword">if</span> (ft-&gt;file_handles[i] == <span class="hljs-literal">NULL</span>)<br>        &#123;<br>            ft-&gt;file_handles[i] = fh;<br>            filehandle_incref(fh);<br>            fd = i;<br>            <span class="hljs-keyword">break</span>;<br>        &#125;<br>    &#125;<br><br>    lock_release(ft-&gt;ft_lock);<br>    <span class="hljs-keyword">return</span> fd;<br>&#125;<br><br><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * @brief Remove a file handle from the file descriptor table.</span><br><span class="hljs-comment"> *</span><br><span class="hljs-comment"> * This function removes the file handle associated with the specified</span><br><span class="hljs-comment"> * file descriptor from the file descriptor table by decrementing its</span><br><span class="hljs-comment"> * reference count and setting the entry to NULL. The operation is</span><br><span class="hljs-comment"> * protected by a lock to ensure thread safety.</span><br><span class="hljs-comment"> *</span><br><span class="hljs-comment"> * @param ft The file descriptor table to remove the file handle from.</span><br><span class="hljs-comment"> * @param fd The file descriptor whose associated file handle is to be removed.</span><br><span class="hljs-comment"> * @return 0 on success, or EBADF if the file descriptor is not valid.</span><br><span class="hljs-comment"> */</span><br><span class="hljs-type">int</span> <span class="hljs-title function_">filetable_remove</span><span class="hljs-params">(<span class="hljs-keyword">struct</span> filetable *ft, <span class="hljs-type">int</span> fd)</span><br>&#123;<br>    <span class="hljs-keyword">if</span> (fd &lt; <span class="hljs-number">0</span> || fd &gt;= OPEN_MAX)<br>    &#123;<br>        <span class="hljs-keyword">return</span> EBADF;<br>    &#125;<br><br>    lock_acquire(ft-&gt;ft_lock);<br>    <span class="hljs-keyword">if</span> (ft-&gt;file_handles[fd] != <span class="hljs-literal">NULL</span>)<br>    &#123;<br>        filehandle_decref(ft-&gt;file_handles[fd]);<br>        ft-&gt;file_handles[fd] = <span class="hljs-literal">NULL</span>;<br>    &#125;<br>    <span class="hljs-keyword">else</span> &#123;<br>        lock_release(ft-&gt;ft_lock);<br>        <span class="hljs-keyword">return</span> EBADF;<br>    &#125;<br>    lock_release(ft-&gt;ft_lock);<br>    <br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br><br><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * Creates a copy of an existing file table.</span><br><span class="hljs-comment"> *</span><br><span class="hljs-comment"> * This function is typically used during process forking. It allocates</span><br><span class="hljs-comment"> * memory for a new file table structure, copies all entries from the old</span><br><span class="hljs-comment"> * file table to the new one, increments the reference count for each file</span><br><span class="hljs-comment"> * handle in the new table, and creates new synchronization primitives for</span><br><span class="hljs-comment"> * the new table.</span><br><span class="hljs-comment"> *</span><br><span class="hljs-comment"> * @param old_ft Pointer to the file table to be copied.</span><br><span class="hljs-comment"> *</span><br><span class="hljs-comment"> * @return A pointer to the newly created copy of the file table on success,</span><br><span class="hljs-comment"> *         or NULL if memory allocation fails.</span><br><span class="hljs-comment"> *</span><br><span class="hljs-comment"> * @note This function creates a shallow copy of the file handles, meaning</span><br><span class="hljs-comment"> *       the actual file state is shared between the original and the copy.</span><br><span class="hljs-comment"> */</span><br><span class="hljs-keyword">struct</span> filetable *<br><span class="hljs-title function_">filetable_copy</span><span class="hljs-params">(<span class="hljs-keyword">struct</span> filetable *old_ft)</span><br>&#123;<br>    KASSERT(old_ft != <span class="hljs-literal">NULL</span>);<br><br>    <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">filetable</span> *<span class="hljs-title">new_ft</span> =</span> filetable_create();<br>    <span class="hljs-keyword">if</span> (new_ft == <span class="hljs-literal">NULL</span>) &#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-literal">NULL</span>;<br>    &#125;<br><br>    lock_acquire(old_ft-&gt;ft_lock);<br>    lock_acquire(new_ft-&gt;ft_lock);<br><br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; OPEN_MAX; i++) &#123;<br>        <span class="hljs-keyword">if</span> (old_ft-&gt;file_handles[i] != <span class="hljs-literal">NULL</span>) &#123;<br>            new_ft-&gt;file_handles[i] = old_ft-&gt;file_handles[i];<br>            new_ft-&gt;file_handles[i]-&gt;refcount++;<br>        &#125;<br>    &#125;<br><br>    lock_release(new_ft-&gt;ft_lock);<br>    lock_release(old_ft-&gt;ft_lock);<br><br>    <span class="hljs-keyword">return</span> new_ft;<br>&#125;<br><br><br><span class="hljs-comment">//////////////////////////////////////////////////</span><br><span class="hljs-comment">//</span><br><span class="hljs-comment">// File handle functions</span><br><br><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * @brief Create a file handle for standard I/O.</span><br><span class="hljs-comment"> * </span><br><span class="hljs-comment"> * @param device The device name (e.g., &quot;con:&quot;)</span><br><span class="hljs-comment"> * @param flags The flags for opening the device</span><br><span class="hljs-comment"> * @return The newly-create file handle</span><br><span class="hljs-comment"> */</span><br><span class="hljs-keyword">struct</span> filehandle *<br><span class="hljs-title function_">create_stdio_handle</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span> *device, <span class="hljs-type">int</span> flags)</span><br>&#123;<br>    <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">vnode</span> *<span class="hljs-title">vn</span>;</span><br>    <span class="hljs-type">int</span> result = vfs_open(kstrdup(device), flags, <span class="hljs-number">0</span>, &amp;vn);<br>    KASSERT(result == <span class="hljs-number">0</span>);<br>    <br>    <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">filehandle</span> *<span class="hljs-title">fh</span> =</span> kmalloc(<span class="hljs-keyword">sizeof</span>(<span class="hljs-keyword">struct</span> filehandle));<br>    KASSERT(fh != <span class="hljs-literal">NULL</span>);<br>    <br>    fh-&gt;vn = vn;<br>    fh-&gt;offset = <span class="hljs-number">0</span>;<br>    fh-&gt;refcount = <span class="hljs-number">0</span>;<br>    fh-&gt;flags = flags;<br>    fh-&gt;fh_lock = lock_create(<span class="hljs-string">&quot;file_handle_lock&quot;</span>);<br>    KASSERT(fh-&gt;fh_lock != <span class="hljs-literal">NULL</span>);<br>    <br>    <span class="hljs-keyword">return</span> fh;<br>&#125;<br><br><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * @brief Create a new file handle.</span><br><span class="hljs-comment"> *</span><br><span class="hljs-comment"> * This function allocates memory for a new file handle and initializes it with the provided vnode</span><br><span class="hljs-comment"> * and flags. It also initializes the file handle&#x27;s offset, reference count, and file status flags. </span><br><span class="hljs-comment"> * Additionally, it creates a lock for the file handle for synchronization purposes.</span><br><span class="hljs-comment"> * </span><br><span class="hljs-comment"> * @param vn The vnode associated with the file handle.</span><br><span class="hljs-comment"> * @param flags The file status flags for the file handle.</span><br><span class="hljs-comment"> * @return A pointer to the newly created file handle.</span><br><span class="hljs-comment"> */</span><br><span class="hljs-keyword">struct</span> filehandle *<br><span class="hljs-title function_">filehandle_create</span><span class="hljs-params">(<span class="hljs-keyword">struct</span> vnode *vn, <span class="hljs-type">int</span> flags)</span><br>&#123;<br>    <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">filehandle</span> *<span class="hljs-title">fh</span> =</span> kmalloc(<span class="hljs-keyword">sizeof</span>(<span class="hljs-keyword">struct</span> filehandle));<br>    KASSERT(fh != <span class="hljs-literal">NULL</span>);<br><br>    fh-&gt;vn = vn;<br>    fh-&gt;offset = <span class="hljs-number">0</span>;<br>    fh-&gt;refcount = <span class="hljs-number">0</span>;<br>    fh-&gt;flags = flags;<br>    fh-&gt;fh_lock = lock_create(<span class="hljs-string">&quot;file_handle_lock&quot;</span>);<br>    KASSERT(fh-&gt;fh_lock != <span class="hljs-literal">NULL</span>);<br><br>    <span class="hljs-keyword">return</span> fh;<br>&#125;<br><br><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * @brief Destroy a file handle.</span><br><span class="hljs-comment"> *</span><br><span class="hljs-comment"> * This function closes the vnode associated with the file handle, destroys the lock associated with the file handle, and</span><br><span class="hljs-comment"> * frees the memory allocated for the file handle.</span><br><span class="hljs-comment"> * It is called when the reference count of a file handle reaches 0 and the lock for the file handle is locked.</span><br><span class="hljs-comment"> *</span><br><span class="hljs-comment"> * @param fh The file handle to be destroyed.</span><br><span class="hljs-comment"> */</span><br><span class="hljs-type">void</span> <span class="hljs-title function_">filehandle_destroy</span><span class="hljs-params">(<span class="hljs-keyword">struct</span> filehandle *fh)</span><br>&#123;<br>    KASSERT(fh != <span class="hljs-literal">NULL</span>);<br>    KASSERT(lock_do_i_hold(fh-&gt;fh_lock));<br><br>    vfs_close(fh-&gt;vn);<br>    lock_release(fh-&gt;fh_lock);<br>    lock_destroy(fh-&gt;fh_lock);<br>    kfree(fh);<br>&#125;<br><br><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * @brief Increment the reference count of a file handle.</span><br><span class="hljs-comment"> *</span><br><span class="hljs-comment"> * This function increments the reference count of a file handle, which is used to determine when a file handle can be</span><br><span class="hljs-comment"> * safely destroyed. The reference count is incremented atomically to ensure the integrity of the file handle.</span><br><span class="hljs-comment"> *</span><br><span class="hljs-comment"> * @param fh The file handle whose reference count to increment.</span><br><span class="hljs-comment"> */</span><br><span class="hljs-type">void</span> <span class="hljs-title function_">filehandle_incref</span><span class="hljs-params">(<span class="hljs-keyword">struct</span> filehandle *fh)</span><br>&#123;<br>    KASSERT(fh != <span class="hljs-literal">NULL</span>);<br><br>    lock_acquire(fh-&gt;fh_lock);<br>    fh-&gt;refcount++;<br>    lock_release(fh-&gt;fh_lock);<br>&#125;<br><br><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * @brief Decrement the reference count of a file handle.</span><br><span class="hljs-comment"> *</span><br><span class="hljs-comment"> * This function decreases the reference count of the provided file handle.</span><br><span class="hljs-comment"> * If the reference count reaches zero, the file handle is destroyed, </span><br><span class="hljs-comment"> * releasing any resources associated with it. The function is protected</span><br><span class="hljs-comment"> * by a lock to ensure thread safety during the operation.</span><br><span class="hljs-comment"> * </span><br><span class="hljs-comment"> * @param fh The file handle whose reference count is to be decremented.</span><br><span class="hljs-comment"> */</span><br><span class="hljs-type">void</span> <span class="hljs-title function_">filehandle_decref</span><span class="hljs-params">(<span class="hljs-keyword">struct</span> filehandle *fh)</span><br>&#123;<br>    KASSERT(fh != <span class="hljs-literal">NULL</span>);<br><br>    lock_acquire(fh-&gt;fh_lock);<br>    fh-&gt;refcount--;<br>    <span class="hljs-keyword">if</span> (fh-&gt;refcount == <span class="hljs-number">0</span>)<br>    &#123;<br>        filehandle_destroy(fh);<br>        <span class="hljs-keyword">return</span>;<br>    &#125;<br>    lock_release(fh-&gt;fh_lock);<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>After implementing the file descriptor table and functions to operate on it, we need to add the <code>filetable</code> to the <code>proc</code> structure, create the file descriptor table during process creation and clean the file descriptor table during process destruction.</p>
+<div class="note note-primary">
+            <p>Notice that in OS/161, there are two ways to create a process:</p><ol><li><p>By <code>fork</code> system call</p><p>we will implement the <code>proc_create_fork</code> function in the next assignment. Since the child process share the same file descriptor table with the parent process, we just need to copy the entire <code>filetable</code> to the new process. That is why we need a <code>filetable_copy</code> function.</p></li><li><p>By <code>proc_create_runprogram</code></p><p>This function is used to create the first user process for the new program to run in. Since this is the first user process created, we need to initialize the standard I/O in its file descriptor table. Therefore, we need to call <code>filetable_stdio_init</code> in <code>proc_create_runprogram</code>.</p></li></ol><p>Notice that in either way, we first need to call the <code>proc_create</code> function to create a initial <code>proc</code> structure.</p>
+          </div>
+<h3 id="system-calls-from-system-call-api-to-disk"><a class="markdownIt-Anchor" href="#system-calls-from-system-call-api-to-disk"></a> System calls (From system call API to Disk)</h3>
+<p>Have the kernel structure for managing open files at hand, now it's time to write some file-related system calls!</p>
+<p>Things to think about before coding:</p>
+<blockquote>
+<p>What functions can we use to help us implementing those system calls?</p>
+</blockquote>
+<p>Focus on functions that are responsible for VOP operations(operate on <code>vnode</code>) and VFS layer operations(translate operations on abstract on-disk files to operations on specific filesystems).</p>
+<blockquote>
+<p>What kind of synchronizations do we need to implement in the kernel for those system calls?</p>
+</blockquote>
+<p>Notice that for this assignment, we assume each process has only one thread. However, different processes may share the same file handle and can run concurrently.</p>
+<blockquote>
+<p>What kinds of errors should each system call return?</p>
+</blockquote>
+<p>Read the OS/161 system calls man page carefully and look up the error types in <code>errno.h</code>.</p>
+<h4 id="sys_open"><a class="markdownIt-Anchor" href="#sys_open"></a> sys_open</h4>
+<blockquote>
+<p>How to copy the <code>filename</code> string from user space into kernel space.</p>
+</blockquote>
+<p>Use the <code>copyinstr</code> function to copy the <code>filename</code> from user space to kernel space.</p>
+<blockquote>
+<p>What function is used to actually open the file?</p>
+</blockquote>
+<p>We need to use the <code>vfs</code> functions to interact with <code>vnode</code>. Once we have the <code>vnode</code>, we can create the file handle that points to the <code>vnode</code> and add the file handle to the current process's file descriptor table.</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">int</span> <span class="hljs-title function_">sys_open</span><span class="hljs-params">(<span class="hljs-type">const_userptr_t</span> filename, <span class="hljs-type">int</span> flags, <span class="hljs-type">mode_t</span> mode, <span class="hljs-type">int32_t</span> *retval)</span><br>&#123;<br>    <span class="hljs-type">char</span> kfilename[PATH_MAX];<br>    <span class="hljs-type">size_t</span> actual_len;<br>    <span class="hljs-type">int</span> result;<br><br>    <span class="hljs-comment">/* Copy the filename from user space to kernel space */</span><br>    result = copyinstr(filename, kfilename, PATH_MAX, &amp;actual_len);<br>    <span class="hljs-keyword">if</span> (result)<br>    &#123;<br>        <span class="hljs-keyword">return</span> result;      <span class="hljs-comment">// Indicate failure</span><br>    &#125;<br><br>    <span class="hljs-comment">/* Open the file */</span><br>    <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">vnode</span> *<span class="hljs-title">vn</span>;</span><br>    result = vfs_open(kfilename, flags, mode, &amp;vn);<br>    <span class="hljs-keyword">if</span> (result)<br>    &#123;<br>        <span class="hljs-keyword">return</span> result;      <span class="hljs-comment">// Indicate failure</span><br>    &#125;<br><br>    <span class="hljs-comment">/* Create the file handle */</span><br>    <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">filehandle</span> *<span class="hljs-title">fh</span>;</span><br>    fh = filehandle_create(vn, flags);<br>    KASSERT(fh != <span class="hljs-literal">NULL</span>);<br><br>    <span class="hljs-comment">/* Add the file handle to the file descriptor table */</span><br>    <span class="hljs-type">int</span> fd = filetable_add(curproc-&gt;p_ft, fh);<br>    <span class="hljs-keyword">if</span> (fd == <span class="hljs-number">-1</span>)<br>    &#123;<br>        filehandle_decref(fh);<br>        <span class="hljs-keyword">return</span> EMFILE;      <span class="hljs-comment">// Indicate failure</span><br>    &#125;<br><br>    *retval = fd;<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h4 id="sys_close"><a class="markdownIt-Anchor" href="#sys_close"></a> sys_close</h4>
+<blockquote>
+<p>What functions in <code>filetable</code> can we use to close a file? How can we implement that function in <code>filetable</code>?</p>
+</blockquote>
+<p>We need to use the <code>vfs_close</code> to decrement the <code>refcount</code> in <code>vnode</code>.</p>
+<p>We also need to decrease the <code>refcount</code> of <code>filehandle</code> and remove <code>filehandle</code> from <code>filetable</code>.</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">int</span><br><span class="hljs-title function_">sys_close</span><span class="hljs-params">(<span class="hljs-type">int</span> fd)</span><br>&#123;   <br>    <span class="hljs-comment">/* Check if the file descriptor is valid */</span><br>    <span class="hljs-keyword">if</span> (fd &lt; <span class="hljs-number">0</span> || fd &gt;= OPEN_MAX) &#123;<br>        <span class="hljs-keyword">return</span> EBADF;       <span class="hljs-comment">// Indicate failure</span><br>    &#125;<br>    <br>    <span class="hljs-comment">/* Get the current process&#x27;s file descriptor table */</span><br>    <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">filetable</span> *<span class="hljs-title">ft</span> =</span> curproc-&gt;p_ft;<br>    KASSERT(ft != <span class="hljs-literal">NULL</span>);<br><br>    <span class="hljs-comment">/* Remove the file handle from the file descriptor table */</span><br>    <span class="hljs-type">int</span> result = filetable_remove(ft, fd);<br>    <span class="hljs-keyword">if</span> (result) &#123;<br>        <span class="hljs-keyword">return</span> result;      <span class="hljs-comment">// Indicate failure</span><br>    &#125;<br>    <br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h4 id="sys_read-and-sys_write"><a class="markdownIt-Anchor" href="#sys_read-and-sys_write"></a> sys_read and sys_write</h4>
+<p>Those two system calls' implementations are very similar.</p>
+<blockquote>
+<p>What synchronization problems can we face in the <code>read</code>/<code>write</code> system calls?</p>
+</blockquote>
+<p>Imagine two processes using the same file handle reading/writing from/to the same file concurrently. Therefore, we need to lock the file handle while reading as well as writing.</p>
+<p>To mention it again, although in this lab we assume each process only has one thread, it is strongly recommended that we lock the file descriptor table while we are trying to get the file handle to make our code more robust.</p>
+<blockquote>
+<p>What structures and functions should we use to actually read/write from/to a file.</p>
+</blockquote>
+<p>We read/write from/to a <code>vnode</code>, so we should use <code>VOP</code> operation to read/write from/to a <code>vnode</code>.</p>
+<p>Since <code>vnode</code> is the abstract representation of the file on disk, we also need some kind of I/O structure to describe the I/O operation(read/write).</p>
+<p>That is the <code>uio</code> structure! Just to clarify, the <code>uio</code> structure is used just to describe the I/O operation, not to hold the actual data to be transferred. The VOP I/O operation use this information to transfer data directly from/to the disk.</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">int</span> <span class="hljs-title function_">sys_read</span><span class="hljs-params">(<span class="hljs-type">int</span> fd, <span class="hljs-type">userptr_t</span> buf_ptr, <span class="hljs-type">size_t</span> nbytes, <span class="hljs-type">int32_t</span> *retval)</span><br>&#123;<br>    <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">filetable</span> *<span class="hljs-title">ft</span>;</span><br>    <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">filehandle</span> *<span class="hljs-title">fh</span>;</span><br>    <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">iovec</span> <span class="hljs-title">iov</span>;</span><br>    <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">uio</span> <span class="hljs-title">u</span>;</span><br>    <span class="hljs-type">int</span> result;<br><br>    <span class="hljs-comment">// Check if file descriptor is valid</span><br>    <span class="hljs-keyword">if</span> (fd &lt; <span class="hljs-number">0</span> || fd &gt;= OPEN_MAX)<br>    &#123;<br>        <span class="hljs-keyword">return</span> EBADF;<br>    &#125;<br><br>    <span class="hljs-comment">// Get the file descriptor table of the current process</span><br>    ft = curproc-&gt;p_ft;<br>    KASSERT(ft != <span class="hljs-literal">NULL</span>);<br><br>    <span class="hljs-comment">// Get the file handle from the file descriptor table</span><br>    lock_acquire(ft-&gt;ft_lock);<br>    fh = ft-&gt;file_handles[fd];<br>    <span class="hljs-keyword">if</span> (fh == <span class="hljs-literal">NULL</span>)<br>    &#123;<br>        lock_release(ft-&gt;ft_lock);<br>        <span class="hljs-keyword">return</span> EBADF;<br>    &#125;<br><br>    <span class="hljs-comment">// Acquire the lock for the file handle</span><br>    lock_acquire(fh-&gt;fh_lock);<br>    lock_release(ft-&gt;ft_lock);<br><br>    <span class="hljs-comment">// Check if the file is opened for reading</span><br>    <span class="hljs-keyword">if</span> ((fh-&gt;flags &amp; O_ACCMODE) == O_WRONLY)<br>    &#123;<br>        lock_release(fh-&gt;fh_lock);<br>        <span class="hljs-keyword">return</span> EBADF;<br>    &#125;<br><br>    <span class="hljs-comment">// Set up the uio structure</span><br>    uio_kinit(&amp;iov, &amp;u, (<span class="hljs-type">void</span> *)buf_ptr, nbytes, fh-&gt;offset, UIO_READ);<br>    u.uio_segflg = UIO_USERSPACE;<br>    u.uio_space = curproc-&gt;p_addrspace;<br><br>    <span class="hljs-comment">// Perform the read operation</span><br>    result = VOP_READ(fh-&gt;vn, &amp;u);<br><br>    <span class="hljs-keyword">if</span> (result)<br>    &#123;<br>        lock_release(fh-&gt;fh_lock);<br>        <span class="hljs-keyword">return</span> result;<br>    &#125;<br><br>    <span class="hljs-comment">// Update the file offset</span><br>    fh-&gt;offset = u.uio_offset;<br><br>    <span class="hljs-comment">// Calculate the number of bytes actually read</span><br>    *retval = nbytes - u.uio_resid;<br><br>    <span class="hljs-comment">// Release the lock for the file handle</span><br>    lock_release(fh-&gt;fh_lock);<br><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">int</span> <span class="hljs-title function_">sys_write</span><span class="hljs-params">(<span class="hljs-type">int</span> fd, <span class="hljs-type">const_userptr_t</span> buf_ptr, <span class="hljs-type">size_t</span> nbytes, <span class="hljs-type">int32_t</span> *retval)</span><br>&#123;<br>    <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">filetable</span> *<span class="hljs-title">ft</span>;</span><br>    <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">filehandle</span> *<span class="hljs-title">fh</span>;</span><br>    <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">iovec</span> <span class="hljs-title">iov</span>;</span><br>    <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">uio</span> <span class="hljs-title">u</span>;</span><br>    <span class="hljs-type">int</span> result;<br><br>    <span class="hljs-comment">// Check if file descriptor is valid</span><br>    <span class="hljs-keyword">if</span> (fd &lt; <span class="hljs-number">0</span> || fd &gt;= OPEN_MAX)<br>    &#123;<br>        <span class="hljs-keyword">return</span> EBADF;<br>    &#125;<br><br>    <span class="hljs-comment">// Get the file descriptor table of the current process</span><br>    ft = curproc-&gt;p_ft;<br>    KASSERT(ft != <span class="hljs-literal">NULL</span>);<br><br>    <span class="hljs-comment">// Get the file handle from the file descriptor table</span><br>    lock_acquire(ft-&gt;ft_lock);<br>    fh = ft-&gt;file_handles[fd];<br>    <span class="hljs-keyword">if</span> (fh == <span class="hljs-literal">NULL</span>)<br>    &#123;<br>        lock_release(ft-&gt;ft_lock);<br>        <span class="hljs-keyword">return</span> EBADF;<br>    &#125;<br><br>    <span class="hljs-comment">// lock the file handle</span><br>    lock_acquire(fh-&gt;fh_lock);<br>    lock_release(ft-&gt;ft_lock);<br><br>    <span class="hljs-comment">// Check if the file is opened for writing</span><br>    <span class="hljs-keyword">if</span> ((fh-&gt;flags &amp; O_ACCMODE) == O_RDONLY)<br>    &#123;<br>        lock_release(fh-&gt;fh_lock);<br>        <span class="hljs-keyword">return</span> EBADF;<br>    &#125;<br><br>    <span class="hljs-comment">// Set up the uio structure</span><br>    uio_kinit(&amp;iov, &amp;u, (<span class="hljs-type">void</span> *)buf_ptr, nbytes, fh-&gt;offset, UIO_WRITE);<br>    u.uio_segflg = UIO_USERSPACE;<br>    u.uio_space = curproc-&gt;p_addrspace;<br><br>    <span class="hljs-comment">// Perform the write operation</span><br>    result = VOP_WRITE(fh-&gt;vn, &amp;u);<br><br>    <span class="hljs-keyword">if</span> (result)<br>    &#123;<br>        lock_release(fh-&gt;fh_lock);<br>        <span class="hljs-keyword">return</span> result;<br>    &#125;<br><br>    <span class="hljs-comment">// Update the file offset</span><br>    fh-&gt;offset = u.uio_offset;<br>    *retval = nbytes - u.uio_resid;<br><br>    <span class="hljs-comment">// Release the lock for the file handle</span><br>    lock_release(fh-&gt;fh_lock);<br><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h4 id="sys_lseek"><a class="markdownIt-Anchor" href="#sys_lseek"></a> sys_lseek</h4>
+<p>Check the man page to understand how to calculate the new file offset given the parameter <code>whence</code>.</p>
+<blockquote>
+<p>What synchronization problems can we face in the <code>lseek</code> system call?</p>
+</blockquote>
+<p>Like read/write, imagine two processes using the same file handle seeking to different locations. We need to lock the file handle while seeking. Like mentioned before, it is strongly recommended that we also lock the file descriptor table while trying to get the file handle to support multi-threaded processes, making our code more robust.</p>
+<blockquote>
+<p>How to check if the file supports seeking and how to know the size of the file?</p>
+</blockquote>
+<p>Those all interact with <code>vnode</code>, so we need to use VOP operations.</p>
+<div class="note note-primary">
+            <p>When implementing <code>sys_lseek</code>, pay close attention to where you can find its parameters and how to pass its return value. If you are confused, review the coding reading exercises Q14.</p>
+          </div>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">int</span><br><span class="hljs-title function_">sys_lseek</span><span class="hljs-params">(<span class="hljs-type">int</span> fd, <span class="hljs-type">off_t</span> pos, <span class="hljs-type">int</span> whence, <span class="hljs-type">off_t</span> *retval)</span><br>&#123;<br>    <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">filetable</span> *<span class="hljs-title">ft</span>;</span><br>    <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">filehandle</span> *<span class="hljs-title">fh</span>;</span><br>    <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">stat</span> <span class="hljs-title">st</span>;</span><br>    <span class="hljs-type">off_t</span> new_pos;<br>    <span class="hljs-type">int</span> result;<br><br>    <span class="hljs-comment">// Check if file descriptor is valid</span><br>    <span class="hljs-keyword">if</span> (fd &lt; <span class="hljs-number">0</span> || fd &gt;= OPEN_MAX) &#123;<br>        <span class="hljs-keyword">return</span> EBADF;<br>    &#125;<br><br>    <span class="hljs-comment">// Get the file descriptor table of the current process</span><br>    ft = curproc-&gt;p_ft;<br>    KASSERT(ft != <span class="hljs-literal">NULL</span>);<br><br>    <span class="hljs-comment">// Get the file handle from the file descriptor table</span><br>    lock_acquire(ft-&gt;ft_lock);<br>    fh = ft-&gt;file_handles[fd];<br>    <span class="hljs-keyword">if</span> (fh == <span class="hljs-literal">NULL</span>) &#123;<br>        lock_release(ft-&gt;ft_lock);<br>        <span class="hljs-keyword">return</span> EBADF;<br>    &#125;<br><br>    <span class="hljs-comment">// Acquire the lock for the file handle</span><br>    lock_acquire(fh-&gt;fh_lock);<br>    lock_release(ft-&gt;ft_lock);<br><br>    <span class="hljs-comment">// Check if the file supports seeking</span><br>    <span class="hljs-keyword">if</span> (!VOP_ISSEEKABLE(fh-&gt;vn)) &#123;<br>        lock_release(fh-&gt;fh_lock);<br>        <span class="hljs-keyword">return</span> ESPIPE;<br>    &#125;<br><br>    <span class="hljs-comment">// Calculate the new position based on whence</span><br>    <span class="hljs-keyword">switch</span> (whence) &#123;<br>        <span class="hljs-keyword">case</span> SEEK_SET:<br>            new_pos = pos;<br>            <span class="hljs-keyword">break</span>;<br>        <span class="hljs-keyword">case</span> SEEK_CUR:<br>            new_pos = fh-&gt;offset + pos;<br>            <span class="hljs-keyword">break</span>;<br>        <span class="hljs-keyword">case</span> SEEK_END:<br>            <span class="hljs-comment">// Get the file size</span><br>            result = VOP_STAT(fh-&gt;vn, &amp;st);<br>            <span class="hljs-keyword">if</span> (result) &#123;<br>                lock_release(fh-&gt;fh_lock);<br>                <span class="hljs-keyword">return</span> result;<br>            &#125;<br>            new_pos = st.st_size + pos;<br>            <span class="hljs-keyword">break</span>;<br>        <span class="hljs-keyword">default</span>:<br>            lock_release(fh-&gt;fh_lock);<br>            <span class="hljs-keyword">return</span> EINVAL;<br>    &#125;<br><br>    <span class="hljs-comment">// Check if the new position is valid</span><br>    <span class="hljs-keyword">if</span> (new_pos &lt; <span class="hljs-number">0</span>) &#123;<br>        lock_release(fh-&gt;fh_lock);<br>        <span class="hljs-keyword">return</span> EINVAL;<br>    &#125;<br><br>    <span class="hljs-comment">// Update the file offset</span><br>    fh-&gt;offset = new_pos;<br><br>    <span class="hljs-comment">// Release the lock for the file handle</span><br>    lock_release(fh-&gt;fh_lock);<br><br>    <span class="hljs-comment">// Set the return value</span><br>    *retval = new_pos;<br><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h4 id="sys_dup2"><a class="markdownIt-Anchor" href="#sys_dup2"></a> sys_dup2</h4>
+<p>The <code>dup</code> process is really simple. We just make the <code>newfd</code> point to the same file handle as the <code>oldfd</code> and increase the <code>filehandle refcount</code>.</p>
+<blockquote>
+<p>What synchronization problems can we face in the <code>dup2</code> system call?</p>
+</blockquote>
+<p><code>dup2</code> operates on file descriptors. Since each process has its own file descriptor table, we won't need to worry about synchronization problems between processes. However, to make our code more robust, it is strongly recommended that we take multi-threaded processes into account.</p>
+<p>Imagine two threads within the same process use <code>dup2</code> to operate on the same file descriptor at the same time. We need to lock the file descriptor table during the <code>dup</code> process.</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">int</span> <span class="hljs-title function_">sys_dup2</span><span class="hljs-params">(<span class="hljs-type">int</span> oldfd, <span class="hljs-type">int</span> newfd, <span class="hljs-type">int32_t</span> *retval)</span><br>&#123;<br>    <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">filetable</span> *<span class="hljs-title">ft</span>;</span><br>    <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">filehandle</span> *<span class="hljs-title">old_fh</span>, *<span class="hljs-title">new_fh</span>;</span><br><br>    <span class="hljs-comment">// Check validity of file descriptors</span><br>    <span class="hljs-keyword">if</span> (oldfd &lt; <span class="hljs-number">0</span> || oldfd &gt;= OPEN_MAX || newfd &lt; <span class="hljs-number">0</span> || newfd &gt;= OPEN_MAX)<br>    &#123;<br>        <span class="hljs-keyword">return</span> EBADF;<br>    &#125;<br><br>    <span class="hljs-comment">// Get the current process&#x27;s file descriptor table</span><br>    ft = curproc-&gt;p_ft;<br>    KASSERT(ft != <span class="hljs-literal">NULL</span>);<br><br>    <span class="hljs-comment">// If oldfd and newfd are the same, return success immediately</span><br>    <span class="hljs-keyword">if</span> (oldfd == newfd)<br>    &#123;<br>        *retval = newfd;<br>        <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>    &#125;<br><br>    <span class="hljs-comment">// Acquire the lock for the file descriptor table</span><br>    lock_acquire(ft-&gt;ft_lock);<br><br>    <span class="hljs-comment">// Get the file handle for oldfd</span><br>    old_fh = ft-&gt;file_handles[oldfd];<br>    <span class="hljs-keyword">if</span> (old_fh == <span class="hljs-literal">NULL</span>)<br>    &#123;<br>        lock_release(ft-&gt;ft_lock);<br>        <span class="hljs-keyword">return</span> EBADF;<br>    &#125;<br><br>    <span class="hljs-comment">// Get the file handle for newfd</span><br>    new_fh = ft-&gt;file_handles[newfd];<br><br>    <span class="hljs-comment">// Check if newfd is already open, if so, close it</span><br>    <span class="hljs-keyword">if</span> (new_fh != <span class="hljs-literal">NULL</span>)<br>    &#123;<br>        filehandle_decref(new_fh);<br>        ft-&gt;file_handles[newfd] = <span class="hljs-literal">NULL</span>;<br>    &#125;<br><br>    <span class="hljs-comment">// Add old_fh to newfd</span><br>    ft-&gt;file_handles[newfd] = old_fh;<br>    filehandle_incref(old_fh);<br><br>    <span class="hljs-comment">// Release the lock for the file decriptor table</span><br>    lock_release(ft-&gt;ft_lock);<br><br>    <span class="hljs-comment">// Set the return value</span><br>    *retval = newfd;<br><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h4 id="sys___getcwd-and-sys_chdir"><a class="markdownIt-Anchor" href="#sys___getcwd-and-sys_chdir"></a> sys___getcwd and sys_chdir</h4>
+<blockquote>
+<p>What function should we use to get the current working directory?</p>
+</blockquote>
+<p>Getting the current working directory is like reading from a file. Changing the working directory is like writing to a file. Therefore, we still need the <code>uio</code> structure describe the I/O operation. The working directory of the process is associated with specific file systems. Therefore, we need to use <code>vfs</code> layer functions to interact with the file system.</p>
+<p>To get the current working directory(<code>cwd</code>):</p>
+<p>Take a look at <code>uio_kinit</code>, the <code>uio</code> structure is initiated with a kernel buffer. Therefore, we need to first read the <code>cwd</code> into a kernel buffer and then use <code>copyout</code> to copy the data to user buffer.</p>
+<p>To change the current working directory(<code>cwd</code>):</p>
+<p>We first need to use <code>copyinstr</code> to copy the pathname into a kernel buffer <code>kpath</code> and use <code>kpath</code> to do the work.</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">int</span><br><span class="hljs-title function_">sys___getcwd</span><span class="hljs-params">(<span class="hljs-type">userptr_t</span> buf, <span class="hljs-type">size_t</span> buflen, <span class="hljs-type">int32_t</span> *retval)</span><br>&#123;<br>    <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">iovec</span> <span class="hljs-title">iov</span>;</span><br>    <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">uio</span> <span class="hljs-title">u</span>;</span><br>    <span class="hljs-type">void</span> *kbuf;<br>    <span class="hljs-type">int</span> result;<br><br>    <span class="hljs-comment">// Handle zero-length buffer</span><br>    <span class="hljs-keyword">if</span> (buflen == <span class="hljs-number">0</span>) &#123;<br>        *retval = <span class="hljs-number">0</span>;<br>        <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>    &#125;<br><br>    <span class="hljs-comment">// Allocate kernel buffer</span><br>    kbuf = kmalloc(buflen);<br>    KASSERT(kbuf != <span class="hljs-literal">NULL</span>);<br><br>    <span class="hljs-comment">// Set up the uio structure</span><br>    uio_kinit(&amp;iov, &amp;u, kbuf, buflen, <span class="hljs-number">0</span>, UIO_READ);<br><br>    <span class="hljs-comment">// Perform the getcwd operation</span><br>    result = vfs_getcwd(&amp;u);<br>    <span class="hljs-keyword">if</span> (result) &#123;<br>        kfree(kbuf);<br>        <span class="hljs-keyword">return</span> result;<br>    &#125;<br><br>    <span class="hljs-comment">// Calculate the number of bytes actually read</span><br>    *retval = buflen - u.uio_resid;<br><br>    <span class="hljs-comment">// Copy data from kernel space to user space</span><br>    result = copyout(kbuf, buf, *retval);<br><br>    <span class="hljs-comment">// Free the kernel buffer</span><br>    kfree(kbuf);<br><br>    <span class="hljs-keyword">if</span> (result) &#123;<br>        <span class="hljs-keyword">return</span> result;<br>    &#125;<br><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">int</span><br><span class="hljs-title function_">sys_chdir</span><span class="hljs-params">(<span class="hljs-type">const_userptr_t</span> pathname)</span><br>&#123;<br>    <span class="hljs-type">int</span> result;<br>    <span class="hljs-type">char</span> *kpath;<br><br>    <span class="hljs-comment">// Allocate kernel buffer for the pathname</span><br>    kpath = kmalloc(PATH_MAX);<br>    KASSERT(kpath != <span class="hljs-literal">NULL</span>);<br><br>    <span class="hljs-comment">// Copy the pathname from user space to kernel space</span><br>    result = copyinstr(pathname, kpath, PATH_MAX, <span class="hljs-literal">NULL</span>);<br>    <span class="hljs-keyword">if</span> (result) &#123;<br>        kfree(kpath);<br>        <span class="hljs-keyword">return</span> result;<br>    &#125;<br><br>    <span class="hljs-comment">// Do the actual directory change</span><br>    result = vfs_chdir(kpath);<br><br>    <span class="hljs-comment">// Free the kernel buffer</span><br>    kfree(kpath);<br><br>    <span class="hljs-keyword">if</span> (result) &#123;<br>        <span class="hljs-keyword">return</span> result;<br>    &#125;<br><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h4 id="syscallc"><a class="markdownIt-Anchor" href="#syscallc"></a> <code>syscall.c</code></h4>
+<p>The parameters for those system calls lie mainly in the <code>trapframe</code>. The special case is <code>lseek</code>, whose last parameter lies on user stack.</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">// In `syscall` function</span><br>...<br>	<span class="hljs-keyword">case</span> SYS_open:<br>		err = sys_open((<span class="hljs-type">const_userptr_t</span>)tf-&gt;tf_a0, tf-&gt;tf_a1, tf-&gt;tf_a2, &amp;retval);<br>		<span class="hljs-keyword">break</span>;<br><br>	<span class="hljs-keyword">case</span> SYS_close:<br>		err = sys_close(tf-&gt;tf_a0);<br>		<span class="hljs-keyword">break</span>;<br><br>	<span class="hljs-keyword">case</span> SYS_write:<br>		err = sys_write(tf-&gt;tf_a0, (<span class="hljs-type">const_userptr_t</span>)tf-&gt;tf_a1, tf-&gt;tf_a2, &amp;retval);<br>		<span class="hljs-keyword">break</span>;<br><br>	<span class="hljs-keyword">case</span> SYS_read:<br>		err = sys_read(tf-&gt;tf_a0, (<span class="hljs-type">userptr_t</span>)tf-&gt;tf_a1, tf-&gt;tf_a2, &amp;retval);<br>		<span class="hljs-keyword">break</span>;<br><br>	<span class="hljs-keyword">case</span> SYS_lseek:<br>	&#123;<br>		<span class="hljs-type">int</span> whence;<br>		err = copyin((<span class="hljs-type">const_userptr_t</span>)(tf-&gt;tf_sp + <span class="hljs-number">16</span>), &amp;whence, <span class="hljs-keyword">sizeof</span>(<span class="hljs-type">int</span>));<br>		<span class="hljs-keyword">if</span> (err)<br>		&#123;<br>			<span class="hljs-keyword">break</span>;<br>		&#125;<br>		err = sys_lseek(tf-&gt;tf_a0, ((<span class="hljs-type">off_t</span>)tf-&gt;tf_a2 &lt;&lt; <span class="hljs-number">32</span>) | (<span class="hljs-type">off_t</span>)tf-&gt;tf_a3, whence, &amp;retval64);<br>		<span class="hljs-keyword">break</span>;<br>	&#125;<br><br>	<span class="hljs-keyword">case</span> SYS_dup2:<br>		err = sys_dup2(tf-&gt;tf_a0, tf-&gt;tf_a1, &amp;retval);<br>		<span class="hljs-keyword">break</span>;<br><br>	<span class="hljs-keyword">case</span> SYS_chdir:<br>		err = sys_chdir((<span class="hljs-type">const_userptr_t</span>)tf-&gt;tf_a0);<br>		<span class="hljs-keyword">break</span>;<br><br>	<span class="hljs-keyword">case</span> SYS___getcwd:<br>		err = sys___getcwd((<span class="hljs-type">userptr_t</span>)tf-&gt;tf_a0, tf-&gt;tf_a1, &amp;retval);<br>		<span class="hljs-keyword">break</span>;<br></code></pre></td></tr></table></figure>
+<p>The return values of those system calls are 32 bits long, with the exception of <code>lseek</code>, whose return value is 64 bits long.</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">// In `syscall` function</span><br>...<br><span class="hljs-keyword">if</span> (err)<br>	&#123;<br>		<span class="hljs-comment">/*</span><br><span class="hljs-comment">		 * Return the error code. This gets converted at</span><br><span class="hljs-comment">		 * userlevel to a return value of -1 and the error</span><br><span class="hljs-comment">		 * code in errno.</span><br><span class="hljs-comment">		 */</span><br>		tf-&gt;tf_v0 = err;<br>		tf-&gt;tf_a3 = <span class="hljs-number">1</span>; <span class="hljs-comment">/* signal an error */</span><br>	&#125;<br>	<span class="hljs-keyword">else</span><br>	&#123;<br>		<span class="hljs-comment">/* Success. */</span><br>		tf-&gt;tf_v0 = retval;<br>		tf-&gt;tf_a3 = <span class="hljs-number">0</span>; <span class="hljs-comment">/* signal no error */</span><br>		<span class="hljs-keyword">if</span> (callno == SYS_lseek)<br>		&#123;<br>			tf-&gt;tf_v0 = retval64 &gt;&gt; <span class="hljs-number">32</span>;<br>			tf-&gt;tf_v1 = retval64;<br>		&#125;<br>	&#125;<br></code></pre></td></tr></table></figure>
+<p>To sum up, we need to carefully pass the parameters to <code>sys_*</code> functions from the <code>trapframe</code> and pass the return values of those system calls to the <code>trapframe</code> where the user process can get them from when going back to user mode.</p>
+<h4 id="confkern"><a class="markdownIt-Anchor" href="#confkern"></a> <code>conf.kern</code></h4>
+<p><code>~/src/kern/conf/conf.kern</code>:</p>
+<p>Whenever creating a new file, include it in <code>conf.kern</code> and recompile the kernel.</p>
+<p><img src="/imgs/202410171249246.png" srcset="/img/loading.gif" lazyload alt="conf.kern" /></p>
+<h2 id="finish"><a class="markdownIt-Anchor" href="#finish"></a> Finish!</h2>
+<p>Those are the files I have modified/created. Do not get here unless you are stuck in coding!</p>
+<p><img src="/imgs/202502151617124.png" srcset="/img/loading.gif" lazyload alt="Files modified/created" /></p>
+<p>We have passed all tests in Assignment4!</p>
+<img src="/imgs/202410252151787.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:67%;" />
+<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br></pre></td><td class="code"><pre><code class="hljs pgsql">OS/<span class="hljs-number">161</span> kernel [? <span class="hljs-keyword">for</span> menu]: p /testbin/badcall<br>Operation took <span class="hljs-number">0.002373840</span> seconds<br>[a-|, <span class="hljs-number">1</span><span class="hljs-number">-4</span>, *, ?=menu, !=quit]<br>[a] execv                   [b] waitpid                 <br>[c] <span class="hljs-keyword">open</span>                    [d] <span class="hljs-keyword">read</span>                    <br>[e] <span class="hljs-keyword">write</span>                   [f] <span class="hljs-keyword">close</span>                   <br>[g] reboot                  [h] sbrk                    <br>[i] ioctl                   [j] lseek                   <br>[k] fsync                   [l] ftruncate               <br>[m] fstat                   [n] remove                  <br>[o] <span class="hljs-keyword">rename</span>                  [p] link                    <br>[q] mkdir                   [r] rmdir                   <br>[s] chdir                   [t] getdirentry             <br>[u] symlink                 [v] readlink                <br>[w] dup2                    [x] pipe                    <br>[y] __time                  [z] __getcwd                <br>[&#123;] stat                    [|] lstat                   <br>[<span class="hljs-number">1</span>] asst1                   [<span class="hljs-number">2</span>] asst2                   <br>[<span class="hljs-number">3</span>] asst3                   [<span class="hljs-number">4</span>] asst4                   <br>[*] <span class="hljs-keyword">all</span>                     [!] quit                    <br>Choose: c<br>(program <span class="hljs-type">name</span> <span class="hljs-type">unknown</span>): passed: <span class="hljs-keyword">open</span> <span class="hljs-keyword">with</span> <span class="hljs-keyword">NULL</span> path<br>(program <span class="hljs-type">name</span> <span class="hljs-type">unknown</span>): passed: <span class="hljs-keyword">open</span> <span class="hljs-keyword">with</span> invalid-pointer path<br>(program <span class="hljs-type">name</span> <span class="hljs-type">unknown</span>): passed: <span class="hljs-keyword">open</span> <span class="hljs-keyword">with</span> kernel-pointer path<br>(program <span class="hljs-type">name</span> <span class="hljs-type">unknown</span>): passed: <span class="hljs-keyword">open</span> <span class="hljs-keyword">null</span>: <span class="hljs-keyword">with</span> bad flags<br>(program <span class="hljs-type">name</span> <span class="hljs-type">unknown</span>): passed: <span class="hljs-keyword">open</span> empty string<br>Choose: d<br>(program <span class="hljs-type">name</span> <span class="hljs-type">unknown</span>): passed: <span class="hljs-keyword">read</span> <span class="hljs-keyword">using</span> fd <span class="hljs-number">-1</span><br>(program <span class="hljs-type">name</span> <span class="hljs-type">unknown</span>): passed: <span class="hljs-keyword">read</span> <span class="hljs-keyword">using</span> fd <span class="hljs-number">-5</span><br>(program <span class="hljs-type">name</span> <span class="hljs-type">unknown</span>): passed: <span class="hljs-keyword">read</span> <span class="hljs-keyword">using</span> closed fd<br>(program <span class="hljs-type">name</span> <span class="hljs-type">unknown</span>): passed: <span class="hljs-keyword">read</span> <span class="hljs-keyword">using</span> impossible fd<br>(program <span class="hljs-type">name</span> <span class="hljs-type">unknown</span>): passed: <span class="hljs-keyword">read</span> <span class="hljs-keyword">using</span> fd OPEN_MAX<br>(program <span class="hljs-type">name</span> <span class="hljs-type">unknown</span>): passed: <span class="hljs-keyword">read</span> <span class="hljs-keyword">using</span> fd opened <span class="hljs-keyword">write</span>-<span class="hljs-keyword">only</span><br>(program <span class="hljs-type">name</span> <span class="hljs-type">unknown</span>): passed: <span class="hljs-keyword">read</span> <span class="hljs-keyword">with</span> <span class="hljs-keyword">NULL</span> buffer<br><span class="hljs-type">Unknown</span> syscall <span class="hljs-number">68</span><br>(program <span class="hljs-type">name</span> <span class="hljs-type">unknown</span>): passed: <span class="hljs-keyword">read</span> <span class="hljs-keyword">with</span> invalid buffer<br><span class="hljs-type">Unknown</span> syscall <span class="hljs-number">68</span><br>(program <span class="hljs-type">name</span> <span class="hljs-type">unknown</span>): passed: <span class="hljs-keyword">read</span> <span class="hljs-keyword">with</span> kernel-space buffer<br><span class="hljs-type">Unknown</span> syscall <span class="hljs-number">68</span><br>Choose: e<br>(program <span class="hljs-type">name</span> <span class="hljs-type">unknown</span>): passed: <span class="hljs-keyword">write</span> <span class="hljs-keyword">using</span> fd <span class="hljs-number">-1</span><br>(program <span class="hljs-type">name</span> <span class="hljs-type">unknown</span>): passed: <span class="hljs-keyword">write</span> <span class="hljs-keyword">using</span> fd <span class="hljs-number">-5</span><br>(program <span class="hljs-type">name</span> <span class="hljs-type">unknown</span>): passed: <span class="hljs-keyword">write</span> <span class="hljs-keyword">using</span> closed fd<br>(program <span class="hljs-type">name</span> <span class="hljs-type">unknown</span>): passed: <span class="hljs-keyword">write</span> <span class="hljs-keyword">using</span> impossible fd<br>(program <span class="hljs-type">name</span> <span class="hljs-type">unknown</span>): passed: <span class="hljs-keyword">write</span> <span class="hljs-keyword">using</span> fd OPEN_MAX<br>(program <span class="hljs-type">name</span> <span class="hljs-type">unknown</span>): passed: <span class="hljs-keyword">write</span> <span class="hljs-keyword">using</span> fd opened <span class="hljs-keyword">read</span>-<span class="hljs-keyword">only</span><br>(program <span class="hljs-type">name</span> <span class="hljs-type">unknown</span>): passed: <span class="hljs-keyword">write</span> <span class="hljs-keyword">with</span> <span class="hljs-keyword">NULL</span> buffer<br><span class="hljs-type">Unknown</span> syscall <span class="hljs-number">68</span><br>(program <span class="hljs-type">name</span> <span class="hljs-type">unknown</span>): passed: <span class="hljs-keyword">write</span> <span class="hljs-keyword">with</span> invalid buffer<br><span class="hljs-type">Unknown</span> syscall <span class="hljs-number">68</span><br>(program <span class="hljs-type">name</span> <span class="hljs-type">unknown</span>): passed: <span class="hljs-keyword">write</span> <span class="hljs-keyword">with</span> kernel-space buffer<br><span class="hljs-type">Unknown</span> syscall <span class="hljs-number">68</span><br>Choose: f<br>(program <span class="hljs-type">name</span> <span class="hljs-type">unknown</span>): passed: <span class="hljs-keyword">close</span> <span class="hljs-keyword">using</span> fd <span class="hljs-number">-1</span><br>(program <span class="hljs-type">name</span> <span class="hljs-type">unknown</span>): passed: <span class="hljs-keyword">close</span> <span class="hljs-keyword">using</span> fd <span class="hljs-number">-5</span><br>(program <span class="hljs-type">name</span> <span class="hljs-type">unknown</span>): passed: <span class="hljs-keyword">close</span> <span class="hljs-keyword">using</span> closed fd<br>(program <span class="hljs-type">name</span> <span class="hljs-type">unknown</span>): passed: <span class="hljs-keyword">close</span> <span class="hljs-keyword">using</span> impossible fd<br>(program <span class="hljs-type">name</span> <span class="hljs-type">unknown</span>): passed: <span class="hljs-keyword">close</span> <span class="hljs-keyword">using</span> fd OPEN_MAX<br>Choose: s<br>(program <span class="hljs-type">name</span> <span class="hljs-type">unknown</span>): passed: chdir <span class="hljs-keyword">with</span> <span class="hljs-keyword">NULL</span> path<br>(program <span class="hljs-type">name</span> <span class="hljs-type">unknown</span>): passed: chdir <span class="hljs-keyword">with</span> invalid-pointer path<br>(program <span class="hljs-type">name</span> <span class="hljs-type">unknown</span>): passed: chdir <span class="hljs-keyword">with</span> kernel-pointer path<br>(program <span class="hljs-type">name</span> <span class="hljs-type">unknown</span>): passed: chdir <span class="hljs-keyword">to</span> empty string<br>Choose: w<br>(program <span class="hljs-type">name</span> <span class="hljs-type">unknown</span>): passed: dup2 <span class="hljs-keyword">using</span> fd <span class="hljs-number">-1</span><br>(program <span class="hljs-type">name</span> <span class="hljs-type">unknown</span>): passed: dup2 <span class="hljs-keyword">using</span> fd <span class="hljs-number">-5</span><br>(program <span class="hljs-type">name</span> <span class="hljs-type">unknown</span>): passed: dup2 <span class="hljs-keyword">using</span> closed fd<br>(program <span class="hljs-type">name</span> <span class="hljs-type">unknown</span>): passed: dup2 <span class="hljs-keyword">using</span> impossible fd<br>(program <span class="hljs-type">name</span> <span class="hljs-type">unknown</span>): passed: dup2 <span class="hljs-keyword">using</span> fd OPEN_MAX<br>(program <span class="hljs-type">name</span> <span class="hljs-type">unknown</span>): passed: dup2 <span class="hljs-keyword">to</span> <span class="hljs-number">-1</span><br>(program <span class="hljs-type">name</span> <span class="hljs-type">unknown</span>): passed: dup2 <span class="hljs-keyword">to</span> <span class="hljs-number">-5</span><br>(program <span class="hljs-type">name</span> <span class="hljs-type">unknown</span>): passed: dup2 <span class="hljs-keyword">to</span> impossible fd<br>(program <span class="hljs-type">name</span> <span class="hljs-type">unknown</span>): passed: dup2 <span class="hljs-keyword">to</span> OPEN_MAX<br>(program <span class="hljs-type">name</span> <span class="hljs-type">unknown</span>): passed: dup2 <span class="hljs-keyword">to</span> same fd<br><span class="hljs-type">Unknown</span> syscall <span class="hljs-number">82</span><br>(program <span class="hljs-type">name</span> <span class="hljs-type">unknown</span>): passed: lseek fd <span class="hljs-keyword">after</span> dup2 <span class="hljs-keyword">to</span> itself<br>Choose: z<br>(program <span class="hljs-type">name</span> <span class="hljs-type">unknown</span>): passed: getcwd <span class="hljs-keyword">with</span> <span class="hljs-keyword">NULL</span> buffer<br>(program <span class="hljs-type">name</span> <span class="hljs-type">unknown</span>): passed: getcwd <span class="hljs-keyword">with</span> invalid buffer<br>(program <span class="hljs-type">name</span> <span class="hljs-type">unknown</span>): passed: getcwd <span class="hljs-keyword">with</span> kernel-space buffer<br>Choose: j<br>(program <span class="hljs-type">name</span> <span class="hljs-type">unknown</span>): passed: lseek <span class="hljs-keyword">using</span> fd <span class="hljs-number">-1</span><br>(program <span class="hljs-type">name</span> <span class="hljs-type">unknown</span>): passed: lseek <span class="hljs-keyword">using</span> fd <span class="hljs-number">-5</span><br>(program <span class="hljs-type">name</span> <span class="hljs-type">unknown</span>): passed: lseek <span class="hljs-keyword">using</span> closed fd<br>(program <span class="hljs-type">name</span> <span class="hljs-type">unknown</span>): passed: lseek <span class="hljs-keyword">using</span> impossible fd<br>(program <span class="hljs-type">name</span> <span class="hljs-type">unknown</span>): passed: lseek <span class="hljs-keyword">using</span> fd OPEN_MAX<br>(program <span class="hljs-type">name</span> <span class="hljs-type">unknown</span>): passed: lseek <span class="hljs-keyword">on</span> device<br><span class="hljs-type">Unknown</span> syscall <span class="hljs-number">0</span><br>(program <span class="hljs-type">name</span> <span class="hljs-type">unknown</span>): UH-OH: fork failed: <span class="hljs-keyword">Function</span> <span class="hljs-keyword">not</span> implemented<br>(program <span class="hljs-type">name</span> <span class="hljs-type">unknown</span>): passed: lseek <span class="hljs-keyword">to</span> negative <span class="hljs-keyword">offset</span><br><span class="hljs-type">Unknown</span> syscall <span class="hljs-number">68</span><br>(program <span class="hljs-type">name</span> <span class="hljs-type">unknown</span>): passed: seek past/<span class="hljs-keyword">to</span> EOF<br><span class="hljs-type">Unknown</span> syscall <span class="hljs-number">68</span><br>(program <span class="hljs-type">name</span> <span class="hljs-type">unknown</span>): passed: lseek <span class="hljs-keyword">with</span> invalid whence code<br><span class="hljs-type">Unknown</span> syscall <span class="hljs-number">68</span><br></code></pre></td></tr></table></figure>
+<p><img src="/imgs/202410252152964-1740031159640-118.png" srcset="/img/loading.gif" lazyload alt="bigseek test" /></p>
+<p>We have finished Assignment4!😊</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/OS/" class="category-chain-item">OS</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/OS/OS161/" class="category-chain-item">OS161</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/OS/" class="print-no-link">#OS</a>
+      
+        <a href="/tags/OS161/" class="print-no-link">#OS161</a>
+      
+        <a href="/tags/File-Descriptor/" class="print-no-link">#File Descriptor</a>
+      
+        <a href="/tags/System-Calls/" class="print-no-link">#System Calls</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>OS161 Assignment 4</div>
+      <div>http://oooscar8.github.io/2024/10/22/OS161-A4/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Alex Sun</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年10月22日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/10/24/Processes-and-Threads/" title="Processes and Threads">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Processes and Threads</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/10/10/Scheduling/" title="Scheduling">
+                        <span class="hidden-mobile">Scheduling</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div class="disqus" style="width:100%">
+    <div id="disqus_thread"></div>
+    
+      <script type="text/javascript">
+        var disqus_config = function() {
+          this.page.url = 'http://oooscar8.github.io/2024/10/22/OS161-A4/';
+          this.page.identifier = '/2024/10/22/OS161-A4/';
+        };
+        Fluid.utils.loadComments('#disqus_thread', function() {
+          var d = document, s = d.createElement('script');
+          s.src = '//' + 'fluid' + '.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', new Date());
+          (d.head || d.body).appendChild(s);
+        });
+      </script>
+    
+    <noscript>Please enable JavaScript to view the comments</noscript>
+  </div>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

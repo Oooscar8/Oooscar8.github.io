@@ -1,0 +1,857 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/imgs/wallhaven-p9qeze.jpg">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Alex Sun">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="热身一下，实现一个简易的Web Fetcher和一个Reliable Byte Stream">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CS144 Lab 0">
+<meta property="og:url" content="http://oooscar8.github.io/2025/01/19/cs144-lab0/index.html">
+<meta property="og:site_name" content="Alex&#39;s Space">
+<meta property="og:description" content="热身一下，实现一个简易的Web Fetcher和一个Reliable Byte Stream">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://oooscar8.github.io/2025/01/19/imgs/202501171812928-1739988551547-84.png">
+<meta property="og:image" content="http://oooscar8.github.io/2025/01/19/imgs/202501171816688.png">
+<meta property="og:image" content="http://oooscar8.github.io/2025/01/19/imgs/202501191501409-1739986305650-9-1739988551547-86.png">
+<meta property="og:image" content="http://oooscar8.github.io/2025/01/19/imgs/202502192350617-1739986312677-11-1739988551547-85.png">
+<meta property="article:published_time" content="2025-01-18T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-02-26T18:19:25.543Z">
+<meta property="article:author" content="Alex Sun">
+<meta property="article:tag" content="CS144">
+<meta property="article:tag" content="计算机网络">
+<meta property="article:tag" content="Protocol Stack">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://oooscar8.github.io/2025/01/19/imgs/202501171812928-1739988551547-84.png">
+  
+  
+  
+  <title>CS144 Lab 0 - Alex&#39;s Space</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"oooscar8.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.1.1"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Alex&#39;s Space</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/imgs/chuyin.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="CS144 Lab 0"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-01-19 00:00" pubdate>
+          2025年1月19日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          739 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          7 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">CS144 Lab 0</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="lab-checkpoint-0-networking-warmup"><a class="markdownIt-Anchor" href="#lab-checkpoint-0-networking-warmup"></a> Lab Checkpoint 0: networking warmup</h1>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://cs144.github.io/assignments/check0.pdf">Checkpoint0 spec</a></p>
+<p>Expected hours to complete: 2-6 hours</p>
+<p>Over the course of this 8-part lab assignment, you’ll be building up your own implementation of a significant portion of the Internet—<strong>a router, a network interface, and the TCP protocol</strong>.</p>
+<p>在Lab0中，我们需要实现一个使用TCP套接字获取网页的简易Web客户端和一个内存中的可靠字节流(ByteStream)。</p>
+</blockquote>
+<h2 id="faqs"><a class="markdownIt-Anchor" href="#faqs"></a> FAQs</h2>
+<blockquote>
+<ol>
+<li>What should the behavior of my program be if the caller tries to pop with a <code>len</code> greater than what is available?</li>
+</ol>
+</blockquote>
+<p>We don't have any preference on the behavior if the caller tries to pop more than is buffered in the stream, as long as you behave reasonably and don't crash in that situation. If you want to pop the maximum available, that is fine with us. If you want to throw an exception, that is also fine with us.</p>
+<blockquote>
+<ol start="2">
+<li>How fast should my code be?</li>
+</ol>
+</blockquote>
+<p>Here's a reasonable rule: if any of your tests are taking longer than 2 seconds, it's probably good to keep exploring other ways of representing the <code>ByteStream</code>. And if your benchmark results at the end of the test are worse than 0.1 Gbit/s (100 million bits per second), that's another sign the design may need to be rethought. This lab doesn't require any sophisticated data structures, but it might still take some trial-and-error to find a reasonable approach. Sometimes &quot;big-O&quot; analysis can be misleading about the performance of real programs—the constant factors can matter a lot!</p>
+<h2 id="set-up-gnulinux-on-your-computer"><a class="markdownIt-Anchor" href="#set-up-gnulinux-on-your-computer"></a> Set up GNU/Linux on your computer</h2>
+<p>Install the CS144 VirtualBox virtual-machine image (instructions at <a target="_blank" rel="noopener" href="https://stanford.edu/class/cs144/vm_howto/vm-howto-image.html">https://stanford.edu/class/cs144/vm_howto/vm-howto-image.html</a>).</p>
+<p>需要注意的是，VirtualBox需要直接在主机操作系统上运行，比如如果你是Windows主机，那么就需要在Windows系统中安装和运行VirtualBox（不能在WSL这样的虚拟环境中运行）</p>
+<h2 id="networking-by-hand"><a class="markdownIt-Anchor" href="#networking-by-hand"></a> Networking by hand</h2>
+<h3 id="fetch-a-web-page"><a class="markdownIt-Anchor" href="#fetch-a-web-page"></a> Fetch a Web Page</h3>
+<ol>
+<li>Fetch a web page <a target="_blank" rel="noopener" href="http://cs144.keithw.org/hello">http://cs144.keithw.org/hello</a></li>
+</ol>
+<figure class="highlight avrasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs avrasm">telnet cs144.keithw<span class="hljs-meta">.org</span> http <br><br>GET /hello HTTP/<span class="hljs-number">1.1</span><br><span class="hljs-symbol">Host:</span> cs144.keithw<span class="hljs-meta">.org</span><br><span class="hljs-symbol">Connection:</span> close<br></code></pre></td></tr></table></figure>
+<img src="/imgs/202501171812928-1739988551547-84.png" srcset="/img/loading.gif" lazyload>
+<ol start="2">
+<li>Fetch a web page <a target="_blank" rel="noopener" href="http://cs144.keithw.org/lab0/sunetid">http://cs144.keithw.org/lab0/sunetid</a></li>
+</ol>
+<p><img src="/imgs/202501171816688.png" srcset="/img/loading.gif" lazyload alt="Fetch a web page" /></p>
+<h3 id="send-yourself-an-email"><a class="markdownIt-Anchor" href="#send-yourself-an-email"></a> Send yourself an email</h3>
+<p>这部分只有连接Stanford内部网络才能完成</p>
+<h3 id="listening-and-connecting"><a class="markdownIt-Anchor" href="#listening-and-connecting"></a> Listening and connecting</h3>
+<p>In this part, we play around with server and client.</p>
+<h2 id="writing-a-network-program-using-an-os-stream-socket"><a class="markdownIt-Anchor" href="#writing-a-network-program-using-an-os-stream-socket"></a> Writing a network program using an OS stream socket</h2>
+<blockquote>
+<p>You’ll write a program called “webget” that creates a TCP stream socket, connects to a Web server, and fetches a page.</p>
+</blockquote>
+<h3 id="set-up"><a class="markdownIt-Anchor" href="#set-up"></a> Set up</h3>
+<p>注意在<code>git clone</code>之前可能需要先在虚拟机中配置Git代理(使用主机的VPN)：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">使用 10809 端口</span><br>git config --global http.proxy http://10.0.2.2:10809<br>git config --global https.proxy http://10.0.2.2:10809<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">查看当前代理设置</span><br>git config --global --get http.proxy<br>git config --global --get https.proxy<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">如果需要取消 Git 代理</span><br>git config --global --unset http.proxy<br>git config --global --unset https.proxy<br></code></pre></td></tr></table></figure>
+<h3 id="modern-c"><a class="markdownIt-Anchor" href="#modern-c"></a> Modern  C++</h3>
+<ul>
+<li>
+<p>Use the language documentation at <a target="_blank" rel="noopener" href="https://en.cppreference.com">https://en.cppreference.com</a> as a resource. (We’d recommend you avoid <a target="_blank" rel="noopener" href="http://cplusplus.com">cplusplus.com</a> which is more likely to be out-of-date.)</p>
+</li>
+<li>
+<p>Never use malloc() or free().</p>
+</li>
+<li>
+<p>Never use new or delete.</p>
+</li>
+<li>
+<p>Essentially <strong>never use raw pointers (*)</strong>, and use “smart” pointers (unique ptr or shared ptr) only when necessary. (You will not need to use these in CS144.)</p>
+</li>
+<li>
+<p>Avoid templates, threads, locks, and virtual functions. (You will not need to use these in CS144.)</p>
+</li>
+<li>
+<p>Avoid C-style <code>strings (char *str)</code> or string functions (<code>strlen()</code>, <code>strcpy()</code>). These are pretty error-prone. Use a <code>std::string</code> instead.</p>
+</li>
+<li>
+<p>Never use C-style casts (e.g., <code>(FILE *)x</code>). Use a C++ <code>static_cast</code> if you have to (you generally will not need this in CS144)</p>
+</li>
+<li>
+<p>Prefer passing function arguments by const reference (e.g.: <code>const Address &amp; address</code>)</p>
+</li>
+<li>
+<p>Make every variable const unless it needs to be mutated.</p>
+</li>
+<li>
+<p>Make every method const unless it needs to mutate the object.</p>
+</li>
+<li>
+<p>Avoid global variables, and give every variable the smallest scope possible.</p>
+</li>
+<li>
+<p>For suggestions on how to improve the code related to C++ programming practices:</p>
+<figure class="highlight brainfuck"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs brainfuck"><span class="hljs-comment">cmake</span> <span class="hljs-literal">--</span><span class="hljs-comment">build build</span> <span class="hljs-literal">--</span><span class="hljs-comment">target tidy</span><br></code></pre></td></tr></table></figure>
+<p>To format the code:</p>
+<figure class="highlight brainfuck"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs brainfuck"><span class="hljs-comment">cmake</span> <span class="hljs-literal">--</span><span class="hljs-comment">build build</span> <span class="hljs-literal">--</span><span class="hljs-comment">target format</span><br></code></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="writing-webget"><a class="markdownIt-Anchor" href="#writing-webget"></a> Writing webget</h3>
+<blockquote>
+<p>Before writing <code>webget</code>, read over the public interfaces (the part that comes after “public:” in the files <code>util/socket.hh</code> and <code>util/file descriptor.hh</code>).</p>
+</blockquote>
+<p>In this part, we need to implement a simple Web client that fetches Web pages using a TCP socket provided by the operating system.</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">get_URL</span><span class="hljs-params">( <span class="hljs-type">const</span> string&amp; host, <span class="hljs-type">const</span> string&amp; path )</span></span><br><span class="hljs-function"></span>&#123;<br>    TCPSocket clientSocket;<br>    <span class="hljs-function">Address <span class="hljs-title">serverAddress</span><span class="hljs-params">( host, <span class="hljs-string">&quot;http&quot;</span> )</span></span>;<br><br>    <span class="hljs-comment">// Connect to the server.</span><br>    clientSocket.<span class="hljs-built_in">connect</span>( serverAddress );<br><br>    <span class="hljs-comment">// Send the HTTP request.</span><br>    string request = <span class="hljs-string">&quot;GET &quot;</span> + path + <span class="hljs-string">&quot; HTTP/1.1\r\nHost: &quot;</span> + host + <span class="hljs-string">&quot;\r\n&quot;</span> +           <span class="hljs-string">&quot;Connection: close\r\n\r\n&quot;</span>;<br>    clientSocket.<span class="hljs-built_in">write</span>( (string_view)request );<br><br>    <span class="hljs-comment">// Read and print the response</span><br>    <span class="hljs-keyword">while</span> ( !clientSocket.<span class="hljs-built_in">eof</span>() ) &#123;<br>        string response;<br>        clientSocket.<span class="hljs-built_in">read</span>( response );<br>        cout &lt;&lt; response;<br>    &#125;<br><br>    clientSocket.<span class="hljs-built_in">close</span>();<br>&#125;<br></code></pre></td></tr></table></figure>
+<p><img src="/imgs/202501191501409-1739986305650-9-1739988551547-86.png" srcset="/img/loading.gif" lazyload alt="Test webget" /></p>
+<h2 id="an-in-memory-reliable-byte-stream"><a class="markdownIt-Anchor" href="#an-in-memory-reliable-byte-stream"></a> An in-memory reliable byte stream</h2>
+<p>In this part, we need to implement a <code>ByteStream</code> object that provides reliable byte stream in memory. The Writer writes data into the stream and the Reader reads data from the stream.</p>
+<blockquote>
+<p>What is the design of my <code>ByteStream</code> implementatino? What data structures and approach are taken?</p>
+</blockquote>
+<p>设计这个<code>ByteStream</code>的关键在于选择用什么data structure来表示内存中存储数据的stream。这个data structure需要方便从一端写入，从另一端读出，以及peek其中存储的数据。</p>
+<p>我第一个想到的是用queue，但是queue只能读取队列首尾的元素，不方便peek。</p>
+<p>因此可以用<code>vector&lt;char&gt;</code>或者string，我这里选择用最直观的string。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++">std::string buffer_ &#123;&#125;;<br></code></pre></td></tr></table></figure>
+<p>这样的话Writer的push很简单，直接用string的append函数：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">Writer::push</span><span class="hljs-params">( string data )</span></span><br><span class="hljs-function"></span>&#123;<br>  <span class="hljs-comment">// Push data to the buffer, but only as much as available capacity allows.</span><br>  <span class="hljs-type">uint64_t</span> to_write = <span class="hljs-built_in">min</span>( <span class="hljs-built_in">available_capacity</span>(), data.<span class="hljs-built_in">size</span>() );<br>  buffer_.<span class="hljs-built_in">append</span>( data, <span class="hljs-number">0</span>, to_write );<br>  bytes_pushed_ += to_write;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>那Reader的pop如何实现呢?</p>
+<p>最容易想到的是每次pop <code>len</code> bytes的时候都将<code>buffer_</code>的前<code>len</code>个字符截掉：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++">buffer_ = buffer_.<span class="hljs-built_in">substr</span>( len );<br></code></pre></td></tr></table></figure>
+<p>但是这样的话每次pop <code>buffer_</code>的内存都会重新分配，不符合pop 操作是 O(1) 的时间复杂度要求。</p>
+<p>因此我想到用一个<code>read_index_</code>来追踪当前<code>buffer_</code>中读到的位置，这样每次pop只需要<code>read_index_ += len</code>，只在<code>buffer_</code>中已读过的bytes过多（超过<code>buffer_ </code>size的一半）时再重新整理：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">Reader::pop</span><span class="hljs-params">( <span class="hljs-type">uint64_t</span> len )</span></span><br><span class="hljs-function"></span>&#123;<br>    <span class="hljs-comment">// Pop as much data as possible from the buffer if len is greater than the         amount of data available.</span><br>    <span class="hljs-type">uint64_t</span> to_read = <span class="hljs-built_in">min</span>( <span class="hljs-built_in">bytes_buffered</span>(), len );<br>    read_index_ += to_read;<br>    bytes_popped_ += to_read;<br><br>    <span class="hljs-comment">// When more than half of the buffer is read, shrink it to avoid unnecessary       memory usage.</span><br>    <span class="hljs-keyword">if</span> ( read_index_ &gt;= buffer_.<span class="hljs-built_in">size</span>() / <span class="hljs-number">2</span> ) &#123;<br>        buffer_ = buffer_.<span class="hljs-built_in">substr</span>( read_index_ );<br>        read_index_ = <span class="hljs-number">0</span>;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>这样的话<code>buffer_</code>中<code>read_index</code>之前的bytes是已经读过out of date的bytes，<code>read_index</code>之后的bytes才是被push进stream中等待被读取的bytes。</p>
+<h2 id="finish"><a class="markdownIt-Anchor" href="#finish"></a> Finish!</h2>
+<p>All tests in check0 pass!</p>
+<p><img src="/imgs/202502192350617-1739986312677-11-1739988551547-85.png" srcset="/img/loading.gif" lazyload alt="Test check0" /></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Computer-Networking/" class="category-chain-item">Computer Networking</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/Computer-Networking/CS144/" class="category-chain-item">CS144</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/CS144/" class="print-no-link">#CS144</a>
+      
+        <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" class="print-no-link">#计算机网络</a>
+      
+        <a href="/tags/Protocol-Stack/" class="print-no-link">#Protocol Stack</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>CS144 Lab 0</div>
+      <div>http://oooscar8.github.io/2025/01/19/cs144-lab0/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Alex Sun</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年1月19日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2025/01/22/cs144-lab1/" title="CS144 Lab 1">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">CS144 Lab 1</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2025/01/18/NTU-C++/" title="NTU C++ Note">
+                        <span class="hidden-mobile">NTU C++ Note</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div class="disqus" style="width:100%">
+    <div id="disqus_thread"></div>
+    
+      <script type="text/javascript">
+        var disqus_config = function() {
+          this.page.url = 'http://oooscar8.github.io/2025/01/19/cs144-lab0/';
+          this.page.identifier = '/2025/01/19/cs144-lab0/';
+        };
+        Fluid.utils.loadComments('#disqus_thread', function() {
+          var d = document, s = d.createElement('script');
+          s.src = '//' + 'fluid' + '.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', new Date());
+          (d.head || d.body).appendChild(s);
+        });
+      </script>
+    
+    <noscript>Please enable JavaScript to view the comments</noscript>
+  </div>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

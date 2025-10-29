@@ -1,0 +1,878 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/imgs/wallhaven-p9qeze.jpg">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Alex Sun">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Solve a synchronization problem - AirBalloon using the synchronization primitives in OS&#x2F;161">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OS161 Assignment 3">
+<meta property="og:url" content="http://oooscar8.github.io/2024/10/07/OS161-A3/index.html">
+<meta property="og:site_name" content="Alex&#39;s Space">
+<meta property="og:description" content="Solve a synchronization problem - AirBalloon using the synchronization primitives in OS&#x2F;161">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://oooscar8.github.io/2024/10/07/imgs/202410100947774.png">
+<meta property="article:published_time" content="2024-10-06T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-02-25T08:55:08.087Z">
+<meta property="article:author" content="Alex Sun">
+<meta property="article:tag" content="OS">
+<meta property="article:tag" content="OS161">
+<meta property="article:tag" content="Synchronization">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://oooscar8.github.io/2024/10/07/imgs/202410100947774.png">
+  
+  
+  
+  <title>OS161 Assignment 3 - Alex&#39;s Space</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"oooscar8.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.1.1"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Alex&#39;s Space</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/imgs/chuyin.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="OS161 Assignment 3"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-10-07 00:00" pubdate>
+          2024年10月7日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.2k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          11 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">OS161 Assignment 3</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="assignment3"><a class="markdownIt-Anchor" href="#assignment3"></a> Assignment3</h1>
+<blockquote>
+<p>In this assignment you will solve a synchronization problem using the synchronization primitives in OS161, two of which you have implemented in the previous assignment. You will also learn about having multiple remotes configured for your git clone, and about branching and merging with git.</p>
+</blockquote>
+<h2 id="step-1-prepare"><a class="markdownIt-Anchor" href="#step-1-prepare"></a> <strong>Step 1. Prepare</strong></h2>
+<p>Pull some new code required for this assignment:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs shell">git remote add instructor http://dev.ece.ubc.ca/git/OS161<br>git fetch instructor<br>git merge --allow-unrelated-histories instructor/synchprobs<br></code></pre></td></tr></table></figure>
+<p>At this point, git will probably complain about merge conflicts. Follow <a target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/os161-site/git-merge.html">this tutorial</a> to resolve them before proceeding.</p>
+<p>Now, push the new code into your master repository and tag your tree to indicate that you are beginning to work on Assignment 3:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs shell">git push<br>git tag asst3-start<br>git push --tags<br></code></pre></td></tr></table></figure>
+<h2 id="step-2-understand-the-problem"><a class="markdownIt-Anchor" href="#step-2-understand-the-problem"></a> <strong>Step 2. Understand the problem</strong></h2>
+<blockquote>
+<p>Why we need to solve this synchronization problem?</p>
+</blockquote>
+<p>As you will realize in the future programming assignments, which all directly involve <strong>programming kernel services</strong>, proper synchronization among threads is essential. You will not get far if you are unable to properly synchronize the code in the scheduler, virtual memory system and the file system. This exercise lets you practice concurrent programming and the use of synchronization primitives in a less challenging environment.</p>
+<blockquote>
+<p>Here is the synchronization problem you will have to solve. This is a well-known and a very serious known as <code>AirBalloon</code>.</p>
+<p>After a war erupts in their kingdom, Princess Marigold must help Prince Dandelion (her younger brother) escape from danger. Marigold places Dandelion in a hot air balloon, which is connected to the ground by NROPES ropes -- each rope is connected to a hook on the balloon as well as a stake in the ground. Marigold and Dandelion must work together to sever all of these ropes so that Dandelion can escape. Marigold unties the ropes from the ground stakes while Dandelion unhooks the ropes from the balloon. To free a rope it must be either severed from the ground or unhooked from the balloon: not both.</p>
+<p>Unfortunately, one of Princess Marigold and Prince Dandelion's enemy, Lord <code>FlowerKiller</code>, is also at work. <code>FlowerKiller</code> is rearranging the ropes to thwart Princess Marigold and Prince Dandelion. He will randomly switch ropes attached to two different stakes. This leads to chaos!</p>
+<p>Without Lord <code>FlowerKiller's</code> dastardly behavior, there would be a simple 1:1 correspondence between balloon hooks and ground stakes (each hook corresponds to exactly one stake, and each stake corresponds to exactly one hoop). However, while Lord <code>FlowerKiller</code> may break this symmetry. Say, Lord <code>FlowerKiller</code> decides to switch ropes connected to Stake 1 and Stake 5. Before the switch, the rope connected to Stake 1 on the ground is also connected to Hook 1 on the balloon, and the rope connected to Stake 5 on the ground is also connected to Hook 5 on the balloon. After the switch, however, one rope is connected to Stake 1 on the ground and to Hook 5 on the balloon, and vice versa.</p>
+<p>As Marigold and Dandelion cut ropes, they must <strong>delete mappings</strong>, so that they remove all the ropes as efficiently as possible. <strong>Each character is represented by a thread</strong>. Dandelion selects ropes to sever by generating a random balloon hook index, and Marigold selects ropes by generating a random ground stake index.</p>
+<p>Marigold and Dandelion must work as efficiently as possible, so one should not try to disconnect a rope that has already been disconnected. For example, if Dandelion already unhooked a rope, Marigold should see that the rope is hanging loose and not try to unook it from the stake. Similarly, Dandelion should not try to unook a rope that Marigold disconnected on the ground.</p>
+<p>Lord <code>FlowerKiller</code> is on the ground, so like Marigold, he selects ropes by their ground stake index.</p>
+<p>Due to recent advances in genetic technology, there is another unfortunate circumstance: Lord <code>FlowerKiller</code> figured out how to clone himself, so now there are <code>N_LORD_FLOWERKILLER</code> copies of of him at work (each is a separate thread)!</p>
+</blockquote>
+<div class="note note-danger">
+            <p><strong>problems to avoid in your implementation</strong>:</p><p>Marigold randomly selects Stake 7, sees that the rope is still attached. She marks the rope as severed. Suppose that the hook corresponding to the severed rope is Hook 11. If Dandelion now randomly selects Hook 11, he must see that the rope is severed and not try to sever it again. <strong>What data structures might you use to avoid a race condition in this situation? What would you need to lock to make sure that Marigold and Dandelion don't sever the same rope twice?</strong></p><p>Worse yet, Lord <code>FlowerKiller</code> might be wreaking havoc with the same ropes. For example, imagine that he decides to swap the rope attached to Stake 7 with the rope attached to Stake 4, and vice versa. <strong>How do you make sure to avoid race conditions that this situation creates?</strong></p><p>Now consider how Lord <code>FlowerKillers</code> might step on each other toes. Suppose Lord FlowerKiller1 grabs Stake1 and Stake4 to swap the corresponding ropes, and Lord FlowerKiller2 grabs Stake4 and Stake1. <strong>How might this cause deadlock? What would you do to prevent it?</strong></p>
+          </div>
+<p>In addition to our character threads, there is also a <strong>Balloon thread</strong> that does not do much. It gets started in the beginning of the program, at the same time as the other threads, and just sits there and <strong>waits until all the ropes have been severed</strong>. Then it announces that Prince Dandelion escaped and exits.</p>
+<h2 id="step-3-understand-the-requirements"><a class="markdownIt-Anchor" href="#step-3-understand-the-requirements"></a> <strong>Step 3. Understand the requirements</strong></h2>
+<p>Your solution must satisfy these conditions:</p>
+<ul>
+<li>Avoid deadlocks and race conditions</li>
+<li>You may use <strong>semaphores, locks and condition variables</strong> available in OS161, but <strong>do not use spinlocks, <code>wchans</code>, or atomic primitives</strong> directly, and <strong>don't turn on/off the interrupts</strong>.</li>
+<li>Permit Marigold, Dandelion and Lord <code>FlowerKiller</code> threads to operate concurrently (<strong>no &quot;big lock&quot; solutions</strong>)</li>
+<li>The Balloon thread exits after all ropes have been severed</li>
+<li>The Main thread (the one that starts all other threads) exits after all threads are done.</li>
+<li>You must <strong>deallocate all the memory</strong> allocated by your code <strong>before all threads exit</strong>. If you don't, there will be a memory leak! We will run your program multiple times to make sure your kernel does not leak.</li>
+<li>Marigold must access the ropes via stakes. She does not have access to hooks. Programmatically, this means that you need to have some kind of data structure representing stakes, which Marigold indexes. Marigold can update stakes and ropes (that are connected to stakes), but she may not update hooks. Similarly, <code>LordFlowerkillers</code> may access ropes via stakes only. Dandelion, on the other hand, may access ropes only via hooks. He cannot see or access stakes.</li>
+</ul>
+<blockquote>
+<p>What your code should print?</p>
+</blockquote>
+<ul>
+<li>
+<p>Every time Marigold severs the rope, the Marigold thread prints: &quot;<strong>Marigold severed rope N from stake K</strong>&quot;, where N is the index of the severed rope, which can range from 0 to NROPES - 1, and K is the index of the stake to which the rope was attached. K also ranges from 0 to NROPES-1. Be sure to print the statement exactly as shown, with no extra characters. The print statement must appear on its own line.</p>
+</li>
+<li>
+<p>Every time Dandelion severs the rope, the Dandelion thread prints: &quot;<strong>Dandelion severed rope N</strong>&quot;, where N is the index of the severed rope, which can range from 0 to NROPES - 1. Be sure to print the statement exactly as shown, with no extra characters. The print statement must appear on its own line.</p>
+</li>
+<li>
+<p>Lord <code>FlowerKiller</code> prints the following statement every time he switches a rope: &quot;<strong>Lord <code>FlowerKiller</code> switched rope N from stake K to stake P</strong>&quot;. N, K and P are corresponding rope and stake indices. If he switches two ropes, which is exactly what he will do every time, <strong>he must print two statements: one for each rope.</strong></p>
+</li>
+<li>
+<p>There must be a print statement for every rope indicating that it was severed by either Dandelion or Marigold.</p>
+</li>
+<li>
+<p>Each rope must be severed exactly one: only one &quot;severed&quot; print statement for each rope.</p>
+</li>
+<li>
+<p>To randomly select a stake to unhook (or two stakes to swap) or a hook, use <strong><code>random()</code></strong> function in OS161.</p>
+</li>
+<li>
+<p>Every time a character succeeded unhooking one rope or switching one pair of ropes, the corresponding thread must yield (<strong>call thread_yield()</strong>).</p>
+</li>
+<li>
+<p>Marigold's print statements must indicate that she is severing the ropes from correct stakes. For example, if there is a print statement from Lord <code>FlowerKiller</code> saying &quot;Lord <code>FlowerKiller</code> switched rope 4 from stake 4 to stake 2&quot;, then Marigold's statement about severing rope 2 must say: &quot;Marigold severed rope 4 from stake 2&quot;. (Dandelion's print statements do print the stake index corresponding to the severed rope, because Dandelion cannot access stakes.)</p>
+</li>
+<li>
+<p>When all ropes have been severed (after the &quot;severed&quot; print statements for all NROPES ropes were displayed), the Balloon thread must print &quot;<strong>Balloon freed and Prince Dandelion escapes!</strong>&quot; and exit.</p>
+</li>
+<li>
+<p>Each thread, except the main one, must print the &quot;thread starting&quot; message just as it begins running. I.e.:</p>
+<blockquote>
+<p>&quot;Dandelion thread starting&quot;</p>
+<p>&quot;Marigold thread starting&quot;</p>
+<p>&quot;Lord <code>FlowerKiller</code> thread starting&quot;</p>
+<p>&quot;Balloon thread starting&quot;</p>
+</blockquote>
+</li>
+<li>
+<p>Each thread, including the main one, must print the &quot;thread done&quot; message just before it exits. I.e.:</p>
+<blockquote>
+<p>&quot;Dandelion thread done&quot;</p>
+<p>&quot;Marigold thread done&quot;</p>
+<p>&quot;Lord <code>FlowerKiller</code> thread done&quot;</p>
+<p>&quot;Balloon thread done&quot;</p>
+<p>&quot;Main thread done&quot;</p>
+</blockquote>
+</li>
+<li>
+<p>The main thread must print only after all other threads have printed their departing statements. That is, the &quot;Main thread done&quot; statement must be the last one to appear before your kernel returns to the main menu.</p>
+</li>
+<li>
+<p>The print statements must be atomic: characters from one print statement must not interleave with another.</p>
+</li>
+<li>
+<p>The print statements from different actors must interleave: for instance you can't have all Dandelion print statements appear together first, and then all Marigold statements appear together. You will accomplish it by <strong>using fine-grained locks</strong> (no one big lock) and by calling <strong><code>thread_yield()</code></strong> every time after Dandelion or Marigold sever the rope or after Lord <code>FlowerKiller</code> switches the ropes.</p>
+</li>
+</ul>
+<h2 id="step-4-write-test-and-debug-the-code"><a class="markdownIt-Anchor" href="#step-4-write-test-and-debug-the-code"></a> <strong>Step 4. Write, test and debug the code</strong></h2>
+<p>configure the kernel:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs shell">cd kern/conf<br>./config SYNCHPROBS<br>cd ../compile/SYNCHPROBS<br>bmake depend<br>bmake<br>bmake install<br></code></pre></td></tr></table></figure>
+<p>Test your code by <strong>invoking <code>sp1</code></strong> from the kernel menu.</p>
+<p><strong>Debugging tips:</strong></p>
+<ol>
+<li>Get one type of thread working first, e.g., Marigold or Dandelion. Make sure it does not deadlock with itself and otherwise works as you expect. Then add other thread types.</li>
+<li>Deadlocks are easier to debug than race conditions. If you are struggling, <strong>put one big lock around the critical sections that are causing you trouble</strong>. Make sure your code is working. Then gradually reduce the size of the critical section, making your big lock cover a smaller and smaller area of the code, until your code breaks. This way you will narrow down the few lines of code where the error is occurring.</li>
+<li>If you encounter <strong>assertions in the VM system</strong> (e.g., in the kmalloc.c file), chances are you are freeing a pointer that you did not allocate or are doing something else funky with the memory. If your kernel panics on a <strong>TLB fault</strong>, you are probably accessing a pointer that you did not allocate or a null pointer.</li>
+<li>If you need to figure out where a thread is stuck, <strong>print the address of the thread struct</strong> in your code: <code>kprintf(&quot;%p\n&quot;, curthread)</code>;. We will call the pointer that is printed <code>threadaddr</code>. Then you can print the contents of the thread struct in GDB: <code>print *(struct thread) &lt;threadaddr&gt;</code>. You can also figure out which thread holds the lock by printing the lock struct in gdb, for example: <code>print stake-&gt;lk_stake</code>;. If you are keeping track of the lock holder inside the lock structure, that field will show the <code>threadaddr</code> or the holder thread.</li>
+<li>If your code is stuck in a deadlock, you should be able to attach to it with the debugger using the <code>os161-gdb</code> command and following the instructions linked in A1. <em>This should work even if you did not launch your sys161 with -w flag.</em></li>
+</ol>
+<h2 id="my-solution"><a class="markdownIt-Anchor" href="#my-solution"></a> <strong>My Solution</strong></h2>
+<div class="note note-info">
+            <p>Use the synchronization primitives(lock, CV, semaphore) implemented in A2 to solve this synchronization problem. Specifically, I choose to use a lock for each object in the problem(stake, rope, hook) and use condition variables for some threads to wait for other threads to exit.</p>
+          </div>
+<blockquote>
+<p>Why and How I represent each object(stake, rope, hook) in the problem?</p>
+</blockquote>
+<p>Object-oriented programming makes this problem easier. Plus, there needs to be some kind of separation between stakes and hooks as they can only operate on their own side of the rope. Use a lock for each object to avoid big lock.</p>
+<p>Also, we need to protect shared global variables if they exist.</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">/* Data structures for rope mappings */</span><br><br><span class="hljs-comment">/* rope structure */</span><br><span class="hljs-keyword">typedef</span> <span class="hljs-class"><span class="hljs-keyword">struct</span></span><br><span class="hljs-class">&#123;</span><br>    <span class="hljs-type">bool</span> is_cut;<br>    <span class="hljs-type">int</span> rope_number;<br>    <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">lock</span> *<span class="hljs-title">lock</span>;</span><br>&#125; rope;<br><br><span class="hljs-comment">/* stake structure, containing the connected rope */</span><br><span class="hljs-keyword">typedef</span> <span class="hljs-class"><span class="hljs-keyword">struct</span></span><br><span class="hljs-class">&#123;</span><br>    rope *connected_rope;<br>    <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">lock</span> *<span class="hljs-title">lock</span>;</span><br>&#125; stake;<br><br><span class="hljs-comment">/* hook structure, containing the connected rope */</span><br><span class="hljs-keyword">typedef</span> <span class="hljs-class"><span class="hljs-keyword">struct</span></span><br><span class="hljs-class">&#123;</span><br>    rope *connected_rope;<br>&#125; hook;<br><br><span class="hljs-comment">/* represent each rope, stake and hook */</span><br><span class="hljs-type">static</span> rope ropes[NROPES];<br><span class="hljs-type">static</span> stake stakes[NROPES];<br><span class="hljs-type">static</span> hook hooks[NROPES];<br><br><span class="hljs-comment">/* Synchronization primitives */</span><br><span class="hljs-comment">// protect global variable ropes_left</span><br><span class="hljs-type">static</span> <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">lock</span> *<span class="hljs-title">ropes_left_lock</span>;</span> <br></code></pre></td></tr></table></figure>
+<blockquote>
+<p>How to have some threads to wait for other threads to exit?</p>
+</blockquote>
+<p>Specifically, I use a condition variable for balloon thread waiting for all dandelion, marigold and flowerkiller threads to exit. I use another cv for main thread waiting for balloon thread to exit.</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">/* CV for balloon thread waiting for all dandelion, marigold and flowerkiller threads done */</span><br><span class="hljs-type">static</span> <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">cv</span> *<span class="hljs-title">all_threads_done_cv</span>;</span><br><span class="hljs-type">static</span> <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">lock</span> *<span class="hljs-title">threads_exit_lock</span>;</span><br><span class="hljs-type">static</span> <span class="hljs-type">int</span> threads_exited = <span class="hljs-number">0</span>;<br><br><span class="hljs-comment">/* CV for main thread waiting for balloon thread finished. */</span><br><span class="hljs-type">static</span> <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">cv</span> *<span class="hljs-title">balloon_thread_done_cv</span>;</span><br><span class="hljs-type">static</span> <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">lock</span> *<span class="hljs-title">balloon_exit_lock</span>;</span><br><span class="hljs-type">static</span> <span class="hljs-type">bool</span> balloon_finished = <span class="hljs-literal">false</span>;<br></code></pre></td></tr></table></figure>
+<blockquote>
+<p>Let's go into the core of the problem. What is my design and locking protocols that must be maintained? How do all threads know when they are done?</p>
+</blockquote>
+<p>Use three structures: rope, stake and hook.</p>
+<p>Each rope and stake has its own lock. Actually we don't need a lock for hooks as they always maintain 1:1 correspondence to the ropes. Dandelion accesses each rope only from its hook, required to lock the rope before severing it. Marigold should lock the stake first before accessing the rope from its stake, and lock the rope before severing it. Flowerkiller should lock both stakes first before accessing the ropes from them, and lock the corresponding ropes(in particular order) before swaping them.</p>
+<p>Dandelion and marigold threads should exit when global variable <code>ropes_left = 0</code>.  Flowerkiller threads should exit when global variable <code>ropes_left &lt; 2</code>. Balloon thread should wait for all dandelion, marigold and flowerkillers threads to exit before exiting. Airballoon(main) thread should wait for balloon thread to exit before exiting.</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br><span class="line">262</span><br><span class="line">263</span><br><span class="line">264</span><br><span class="line">265</span><br><span class="line">266</span><br><span class="line">267</span><br><span class="line">268</span><br><span class="line">269</span><br><span class="line">270</span><br><span class="line">271</span><br><span class="line">272</span><br><span class="line">273</span><br><span class="line">274</span><br><span class="line">275</span><br><span class="line">276</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">// Threads</span><br><br><span class="hljs-comment">/* Dandelion severs ropes from hooks. */</span><br><span class="hljs-type">static</span> <span class="hljs-type">void</span> <span class="hljs-title function_">dandelion</span><span class="hljs-params">(<span class="hljs-type">void</span> *p, <span class="hljs-type">unsigned</span> <span class="hljs-type">long</span> arg)</span><br>&#123;<br>	(<span class="hljs-type">void</span>)p;<br>	(<span class="hljs-type">void</span>)arg;<br><br>	kprintf(<span class="hljs-string">&quot;Dandelion thread starting\n&quot;</span>);<br><br>	<span class="hljs-comment">/* Implement this function */</span><br><br>	<span class="hljs-comment">/* Loop until all the ropes have been severed. */</span><br>	<span class="hljs-keyword">while</span> (<span class="hljs-literal">true</span>)<br>	&#123;<br>		<span class="hljs-comment">/* Check if all the ropes are severed. If so, break and exit. */</span><br>		lock_acquire(ropes_left_lock);<br>		<span class="hljs-keyword">if</span> (ropes_left == <span class="hljs-number">0</span>)<br>		&#123;<br>			lock_release(ropes_left_lock);<br>			<span class="hljs-keyword">break</span>;<br>		&#125;<br>		lock_release(ropes_left_lock);<br><br>		<span class="hljs-comment">/* Randomly select a hook and get its connected rope. */</span><br>		<span class="hljs-type">int</span> hook = random() % NROPES;<br>		rope *current_rope = hooks[hook].connected_rope;<br><br>		<span class="hljs-comment">/* If the rope has already been severed by himself, abort. */</span><br>		<span class="hljs-keyword">if</span> (current_rope == <span class="hljs-literal">NULL</span>)<br>		&#123;<br>			<span class="hljs-keyword">continue</span>;<br>		&#125;<br><br>		<span class="hljs-comment">/* lock the rope before trying to sever it */</span><br>		lock_acquire(current_rope-&gt;lock);<br>		<span class="hljs-comment">/* If the rope is not severed, sever it from the hook. */</span><br>		<span class="hljs-keyword">if</span> (!current_rope-&gt;is_cut)<br>		&#123;<br>			current_rope-&gt;is_cut = <span class="hljs-literal">true</span>;<br>			hooks[hook].connected_rope = <span class="hljs-literal">NULL</span>;<br><br>			lock_acquire(ropes_left_lock);<br>			ropes_left--;<br>			kprintf(<span class="hljs-string">&quot;Dandelion severed rope %d\n&quot;</span>, hook);<br>			lock_release(ropes_left_lock);<br>		&#125;<br>		lock_release(current_rope-&gt;lock);<br>		<span class="hljs-comment">/* give up the cpu and switch to another thread. */</span><br>		thread_yield();<br>	&#125;<br><br>	kprintf(<span class="hljs-string">&quot;Dandelion thread done\n&quot;</span>);<br>	notify_thread_exit();<br>	thread_exit();<br>&#125;<br><br><span class="hljs-comment">/* Marigold severs ropes from stakes. */</span><br><span class="hljs-type">static</span> <span class="hljs-type">void</span> <span class="hljs-title function_">marigold</span><span class="hljs-params">(<span class="hljs-type">void</span> *p, <span class="hljs-type">unsigned</span> <span class="hljs-type">long</span> arg)</span><br>&#123;<br>	(<span class="hljs-type">void</span>)p;<br>	(<span class="hljs-type">void</span>)arg;<br><br>	kprintf(<span class="hljs-string">&quot;Marigold thread starting\n&quot;</span>);<br><br>	<span class="hljs-comment">/* Implement this function */</span><br><br>	<span class="hljs-comment">/* Loop until all the ropes have been severed. */</span><br>	<span class="hljs-keyword">while</span> (<span class="hljs-literal">true</span>)<br>	&#123;<br>		<span class="hljs-comment">/* Check if all the ropes are severed. If so, break and exit. */</span><br>		lock_acquire(ropes_left_lock);<br>		<span class="hljs-keyword">if</span> (ropes_left == <span class="hljs-number">0</span>)<br>		&#123;<br>			lock_release(ropes_left_lock);<br>			<span class="hljs-keyword">break</span>;<br>		&#125;<br>		lock_release(ropes_left_lock);<br><br>		<span class="hljs-comment">/* Randomly select a stake and get its connected rope, protected by its lock. */</span><br>		<span class="hljs-type">int</span> stake = random() % NROPES;<br>		lock_acquire(stakes[stake].lock);<br>		rope *current_rope = stakes[stake].connected_rope;<br><br>		<span class="hljs-comment">/* If the rope has already been severed by herself, abort. */</span><br>		<span class="hljs-keyword">if</span> (current_rope == <span class="hljs-literal">NULL</span>)<br>		&#123;<br>			lock_release(stakes[stake].lock);<br>			<span class="hljs-keyword">continue</span>;<br>		&#125;<br><br>		<span class="hljs-comment">/* lock the rope before trying to sever it */</span><br>		lock_acquire(current_rope-&gt;lock);<br>		<span class="hljs-comment">/* If the rope is not severed, sever it from the stake. */</span><br>		<span class="hljs-keyword">if</span> (!current_rope-&gt;is_cut)<br>		&#123;<br>			current_rope-&gt;is_cut = <span class="hljs-literal">true</span>;<br>			stakes[stake].connected_rope = <span class="hljs-literal">NULL</span>;<br><br>			lock_acquire(ropes_left_lock);<br>			ropes_left--;<br>			kprintf(<span class="hljs-string">&quot;Marigold severed rope %d from stake %d\n&quot;</span>, current_rope-&gt;rope_number, stake);<br>			lock_release(ropes_left_lock);<br>		&#125;<br>		<span class="hljs-comment">/* release the lock in reverse order, avoiding deadlock */</span><br>		lock_release(current_rope-&gt;lock);<br>		lock_release(stakes[stake].lock);<br>		<span class="hljs-comment">/* give up the cpu and switch to another thread. */</span><br>		thread_yield();<br>	&#125;<br><br>	kprintf(<span class="hljs-string">&quot;Marigold thread done\n&quot;</span>);<br>	notify_thread_exit();<br>	thread_exit();<br>&#125;<br><br><span class="hljs-type">static</span> <span class="hljs-type">void</span> <span class="hljs-title function_">flowerkiller</span><span class="hljs-params">(<span class="hljs-type">void</span> *p, <span class="hljs-type">unsigned</span> <span class="hljs-type">long</span> arg)</span><br>&#123;<br>	(<span class="hljs-type">void</span>)p;<br>	(<span class="hljs-type">void</span>)arg;<br><br>	kprintf(<span class="hljs-string">&quot;Lord FlowerKiller thread starting\n&quot;</span>);<br><br>	<span class="hljs-comment">/* Implement this function */</span><br><br>	<span class="hljs-comment">/* Loop until all the ropes have been severed. */</span><br>	<span class="hljs-keyword">while</span> (<span class="hljs-literal">true</span>)<br>	&#123;<br>		<span class="hljs-comment">/* Check if there are at least two ropes left. If not, break and exit. */</span><br>		lock_acquire(ropes_left_lock);<br>		<span class="hljs-keyword">if</span> (ropes_left &lt; <span class="hljs-number">2</span>)<br>		&#123;<br>			lock_release(ropes_left_lock);<br>			<span class="hljs-keyword">break</span>;<br>		&#125;<br>		lock_release(ropes_left_lock);<br><br>		<span class="hljs-comment">/* Randomly select two different stakes to swap. */</span><br>		<span class="hljs-type">int</span> stake1, stake2;<br>		<span class="hljs-keyword">do</span><br>		&#123;<br>			stake1 = random() % NROPES;<br>			stake2 = random() % NROPES;<br>		&#125; <span class="hljs-keyword">while</span> (stake1 == stake2);<br><br>		<span class="hljs-comment">/* get the smaller stake and bigger stake by their number */</span><br>		<span class="hljs-type">int</span> first_stake = (stake1 &lt; stake2) ? stake1 : stake2;<br>		<span class="hljs-type">int</span> second_stake = (stake1 &lt; stake2) ? stake2 : stake1;<br><br>		<span class="hljs-comment">/* lock the smaller stake first, then lock the bigger stake, avoiding deadlock, before getting the connected ropes */</span><br>		lock_acquire(stakes[first_stake].lock);<br>		lock_acquire(stakes[second_stake].lock);<br>		rope *rope1 = stakes[stake1].connected_rope;<br>		rope *rope2 = stakes[stake2].connected_rope;<br><br>		<span class="hljs-comment">/* If either rope has already been severed from its stake, abort. */</span><br>		<span class="hljs-keyword">if</span> (rope1 == <span class="hljs-literal">NULL</span> || rope2 == <span class="hljs-literal">NULL</span>)<br>		&#123;<br>			lock_release(stakes[second_stake].lock);<br>			lock_release(stakes[first_stake].lock);<br>			<span class="hljs-keyword">continue</span>;<br>		&#125;<br>        <br>		<span class="hljs-comment">/* get the smaller rope and bigger rope by their number */</span><br>		rope *first_rope = (rope1-&gt;rope_number &lt; rope2-&gt;rope_number) ? rope1 : rope2;<br>		rope *second_rope = (rope1-&gt;rope_number &lt; rope2-&gt;rope_number) ? rope2 : rope1;<br><br>        <span class="hljs-comment">/* lock the smaller rope first, then lock the bigger rope, avoiding deadlock, before trying to swap them. */</span><br>		lock_acquire(first_rope-&gt;lock);<br>		lock_acquire(second_rope-&gt;lock);<br>		<span class="hljs-comment">/* If neither rope is severed, swap them from their stakes */</span><br>		<span class="hljs-keyword">if</span> (!rope1-&gt;is_cut &amp;&amp; !rope2-&gt;is_cut)<br>		&#123;<br>			stakes[stake1].connected_rope = rope2;<br>			stakes[stake2].connected_rope = rope1;<br><br>			kprintf(<span class="hljs-string">&quot;Lord FlowerKiller switched rope %d from stake %d to stake %d\n&quot;</span>, rope1-&gt;rope_number, stake1, stake2);<br>			kprintf(<span class="hljs-string">&quot;Lord FlowerKiller switched rope %d from stake %d to stake %d\n&quot;</span>, rope2-&gt;rope_number, stake2, stake1);<br>		&#125;<br>		<span class="hljs-comment">/* release the lock in reverse order, avoiding deadlock */</span><br>		lock_release(second_rope-&gt;lock);<br>		lock_release(first_rope-&gt;lock);<br>		lock_release(stakes[second_stake].lock);<br>		lock_release(stakes[first_stake].lock);<br>		<span class="hljs-comment">/* give up the cpu and switch to another thread. */</span><br>		thread_yield();<br>	&#125;<br><br>	kprintf(<span class="hljs-string">&quot;Lord FlowerKiller thread done\n&quot;</span>);<br>	notify_thread_exit();<br>	thread_exit();<br>&#125;<br><br><span class="hljs-type">static</span> <span class="hljs-type">void</span> <span class="hljs-title function_">balloon</span><span class="hljs-params">(<span class="hljs-type">void</span> *p, <span class="hljs-type">unsigned</span> <span class="hljs-type">long</span> arg)</span><br>&#123;<br>	(<span class="hljs-type">void</span>)p;<br>	(<span class="hljs-type">void</span>)arg;<br><br>	kprintf(<span class="hljs-string">&quot;Balloon thread starting\n&quot;</span>);<br><br>	<span class="hljs-comment">/* Implement this function */</span><br><br>    <span class="hljs-comment">/* wait until all dandelion, marigold and flowerkiller threads are done */</span><br>	lock_acquire(threads_exit_lock);<br>	<span class="hljs-keyword">while</span> (threads_exited != N_LORD_FLOWERKILLER + <span class="hljs-number">2</span>)<br>	&#123;<br>		cv_wait(all_threads_done_cv, threads_exit_lock);<br>	&#125;<br>	lock_release(threads_exit_lock);<br><br>    <span class="hljs-comment">/* print the messages */</span><br>	kprintf(<span class="hljs-string">&quot;Balloon freed and Prince Dandelion escapes!\n&quot;</span>);<br>	kprintf(<span class="hljs-string">&quot;Balloon thread done\n&quot;</span>);<br><br>	<span class="hljs-comment">/* wake up the airballoon(main) thread */</span><br>	lock_acquire(balloon_exit_lock);<br>	balloon_finished = <span class="hljs-literal">true</span>;<br>	cv_signal(balloon_thread_done_cv, balloon_exit_lock);<br>	lock_release(balloon_exit_lock);<br><br>	<span class="hljs-comment">/* then exit */</span><br>	thread_exit();<br>&#125;<br><br><span class="hljs-comment">// Change this function as necessary</span><br><span class="hljs-type">int</span> <span class="hljs-title function_">airballoon</span><span class="hljs-params">(<span class="hljs-type">int</span> nargs, <span class="hljs-type">char</span> **args)</span><br>&#123;<br>	<span class="hljs-type">int</span> err = <span class="hljs-number">0</span>, i;<br><br>	(<span class="hljs-type">void</span>)nargs;<br>	(<span class="hljs-type">void</span>)args;<br>	(<span class="hljs-type">void</span>)ropes_left;<br>    <br>    <span class="hljs-comment">/* Initialize global variables. */</span><br>	main_thread_init();<br><br>    <span class="hljs-comment">/* Initialize rope mappings and synchronization primitives. */</span><br>	initialize_mappings();<br>	initialize_synchronization();<br><br>	err = thread_fork(<span class="hljs-string">&quot;Marigold Thread&quot;</span>,<br>					  <span class="hljs-literal">NULL</span>, marigold, <span class="hljs-literal">NULL</span>, <span class="hljs-number">0</span>);<br>	<span class="hljs-keyword">if</span> (err)<br>		<span class="hljs-keyword">goto</span> panic;<br><br>	err = thread_fork(<span class="hljs-string">&quot;Dandelion Thread&quot;</span>,<br>					  <span class="hljs-literal">NULL</span>, dandelion, <span class="hljs-literal">NULL</span>, <span class="hljs-number">0</span>);<br>	<span class="hljs-keyword">if</span> (err)<br>		<span class="hljs-keyword">goto</span> panic;<br><br>	<span class="hljs-keyword">for</span> (i = <span class="hljs-number">0</span>; i &lt; N_LORD_FLOWERKILLER; i++)<br>	&#123;<br>		err = thread_fork(<span class="hljs-string">&quot;Lord FlowerKiller Thread&quot;</span>,<br>						  <span class="hljs-literal">NULL</span>, flowerkiller, <span class="hljs-literal">NULL</span>, <span class="hljs-number">0</span>);<br>		<span class="hljs-keyword">if</span> (err)<br>			<span class="hljs-keyword">goto</span> panic;<br>	&#125;<br><br>	err = thread_fork(<span class="hljs-string">&quot;Air Balloon&quot;</span>,<br>					  <span class="hljs-literal">NULL</span>, balloon, <span class="hljs-literal">NULL</span>, <span class="hljs-number">0</span>);<br>	<span class="hljs-keyword">if</span> (err)<br>		<span class="hljs-keyword">goto</span> panic;<br><br>	<span class="hljs-keyword">goto</span> done;<br>panic:<br>	panic(<span class="hljs-string">&quot;airballoon: thread_fork failed: %s)\n&quot;</span>,<br>		  strerror(err));<br><br>done:<br>    <span class="hljs-comment">/* wait until balloon thread is done */</span><br>	wait_for_balloon();<br>	kprintf(<span class="hljs-string">&quot;Main thread done\n&quot;</span>);<br>	cleanup_synchronization();<br>	<br>	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>As shown in the code, I encapsulate some operations into helper functions in order to clarify the main logic.</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">// Helper functions</span><br><br><span class="hljs-comment">/* This function initializes the main thread global variables. */</span><br><span class="hljs-type">static</span> <span class="hljs-type">void</span> <span class="hljs-title function_">main_thread_init</span><span class="hljs-params">()</span> &#123;<br>	ropes_left = NROPES;<br>	threads_exited = <span class="hljs-number">0</span>;<br>    balloon_finished = <span class="hljs-literal">false</span>;<br>&#125;<br><br><span class="hljs-comment">/* Initialize rope mappings. */</span><br><span class="hljs-type">static</span> <span class="hljs-type">void</span> <span class="hljs-title function_">initialize_mappings</span><span class="hljs-params">()</span><br>&#123;<br>	<span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; NROPES; ++i)<br>	&#123;<br>		ropes[i].is_cut = <span class="hljs-literal">false</span>;<br>		ropes[i].rope_number = i;<br>		ropes[i].lock = lock_create(<span class="hljs-string">&quot;rope lock&quot;</span>);<br><br>		stakes[i].connected_rope = &amp;ropes[i];<br>		stakes[i].lock = lock_create(<span class="hljs-string">&quot;stake lock&quot;</span>);<br><br>		hooks[i].connected_rope = &amp;ropes[i];<br>	&#125;<br>&#125;<br><br><span class="hljs-comment">/* Initialize sychronization primitives */</span><br><span class="hljs-type">static</span> <span class="hljs-type">void</span> <span class="hljs-title function_">initialize_synchronization</span><span class="hljs-params">()</span><br>&#123;<br>	ropes_left_lock = lock_create(<span class="hljs-string">&quot;ropes_left lock&quot;</span>);<br>	all_threads_done_cv = cv_create(<span class="hljs-string">&quot;all threads done cv&quot;</span>);<br>	threads_exit_lock = lock_create(<span class="hljs-string">&quot;threads exit lock&quot;</span>);<br>	balloon_thread_done_cv = cv_create(<span class="hljs-string">&quot;balloon thread done cv&quot;</span>);<br>	balloon_exit_lock = lock_create(<span class="hljs-string">&quot;balloon exit lock&quot;</span>);<br>&#125;<br><br><span class="hljs-comment">/* Clean up synchronization primitives */</span><br><span class="hljs-type">static</span> <span class="hljs-type">void</span> <span class="hljs-title function_">cleanup_synchronization</span><span class="hljs-params">()</span><br>&#123;<br>	lock_destroy(ropes_left_lock);<br>	cv_destroy(all_threads_done_cv);<br>	lock_destroy(threads_exit_lock);<br>	cv_destroy(balloon_thread_done_cv);<br>	lock_destroy(balloon_exit_lock);<br>	<span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; NROPES; ++i)<br>	&#123;<br>		lock_destroy(ropes[i].lock);<br>		lock_destroy(stakes[i].lock);<br>	&#125;<br>&#125;<br><br><span class="hljs-comment">/*</span><br><span class="hljs-comment"> * Dandelion, marigold and all flowerkiller threads should call this right before exiting,</span><br><span class="hljs-comment"> * notifying their exit and waking up balloon thread when all of them have exited.</span><br><span class="hljs-comment"> */</span><br><span class="hljs-type">static</span> <span class="hljs-type">void</span> <span class="hljs-title function_">notify_thread_exit</span><span class="hljs-params">()</span><br>&#123;<br>	lock_acquire(threads_exit_lock);<br>	threads_exited++;<br>	<span class="hljs-keyword">if</span> (threads_exited == N_LORD_FLOWERKILLER + <span class="hljs-number">2</span>)<br>	&#123;<br>		cv_signal(all_threads_done_cv, threads_exit_lock);<br>	&#125;<br>	lock_release(threads_exit_lock);<br>&#125;<br><br><span class="hljs-comment">/* Airballoon(main) thread should call this before exiting, waiting for balloon thread to exit. */</span><br><span class="hljs-type">static</span> <span class="hljs-type">void</span> <span class="hljs-title function_">wait_for_balloon</span><span class="hljs-params">()</span><br>&#123;<br>	lock_acquire(balloon_exit_lock);<br>	<span class="hljs-keyword">while</span> (!balloon_finished)<br>	&#123;<br>		cv_wait(balloon_thread_done_cv, balloon_exit_lock);<br>	&#125;<br>	lock_release(balloon_exit_lock);<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>Test sp1 passes!</p>
+<p><img src="/imgs/202410100947774.png" srcset="/img/loading.gif" lazyload alt="sp1" /></p>
+<p>We have finished Assignment3!😊</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/OS/" class="category-chain-item">OS</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/OS/OS161/" class="category-chain-item">OS161</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/OS/" class="print-no-link">#OS</a>
+      
+        <a href="/tags/OS161/" class="print-no-link">#OS161</a>
+      
+        <a href="/tags/Synchronization/" class="print-no-link">#Synchronization</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>OS161 Assignment 3</div>
+      <div>http://oooscar8.github.io/2024/10/07/OS161-A3/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Alex Sun</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年10月7日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/10/10/Scheduling/" title="Scheduling">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Scheduling</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/09/27/OS161-A2/" title="OS161 Assignment 2">
+                        <span class="hidden-mobile">OS161 Assignment 2</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div class="disqus" style="width:100%">
+    <div id="disqus_thread"></div>
+    
+      <script type="text/javascript">
+        var disqus_config = function() {
+          this.page.url = 'http://oooscar8.github.io/2024/10/07/OS161-A3/';
+          this.page.identifier = '/2024/10/07/OS161-A3/';
+        };
+        Fluid.utils.loadComments('#disqus_thread', function() {
+          var d = document, s = d.createElement('script');
+          s.src = '//' + 'fluid' + '.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', new Date());
+          (d.head || d.body).appendChild(s);
+        });
+      </script>
+    
+    <noscript>Please enable JavaScript to view the comments</noscript>
+  </div>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

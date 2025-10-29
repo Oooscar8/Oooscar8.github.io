@@ -1,0 +1,908 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/imgs/wallhaven-p9qeze.jpg">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Alex Sun">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="实现具备Retransmission功能的TCP发送端TCPSender">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CS144 Lab 3">
+<meta property="og:url" content="http://oooscar8.github.io/2025/02/14/cs144-lab3/index.html">
+<meta property="og:site_name" content="Alex&#39;s Space">
+<meta property="og:description" content="实现具备Retransmission功能的TCP发送端TCPSender">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://oooscar8.github.io/2025/02/14/imgs/202502132132652-1739988789628-100.jpeg">
+<meta property="og:image" content="http://oooscar8.github.io/2025/02/14/imgs/202502132139485-1739988798925-102.jpg">
+<meta property="og:image" content="http://oooscar8.github.io/2025/02/14/imgs/202502131916226-1739984591383-24-1739988806450-104.png">
+<meta property="og:image" content="http://oooscar8.github.io/2025/02/14/imgs/202502132342058-1739988814201-106.png">
+<meta property="article:published_time" content="2025-02-13T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-02-26T18:18:49.418Z">
+<meta property="article:author" content="Alex Sun">
+<meta property="article:tag" content="CS144">
+<meta property="article:tag" content="计算机网络">
+<meta property="article:tag" content="Protocol Stack">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://oooscar8.github.io/2025/02/14/imgs/202502132132652-1739988789628-100.jpeg">
+  
+  
+  
+  <title>CS144 Lab 3 - Alex&#39;s Space</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"oooscar8.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.1.1"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Alex&#39;s Space</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/imgs/chuyin.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="CS144 Lab 3"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-02-14 00:00" pubdate>
+          2025年2月14日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.3k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          11 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">CS144 Lab 3</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="lab-checkpoint-3-the-tcp-sender"><a class="markdownIt-Anchor" href="#lab-checkpoint-3-the-tcp-sender"></a> Lab Checkpoint 3: the TCP sender</h1>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://cs144.github.io/assignments/check3.pdf">Checkpoint3 spec</a></p>
+</blockquote>
+<blockquote>
+<p>In Checkpoint0, we implemented a flow-controlled byte stream(<code>ByteStream</code>).</p>
+<p>In Checkpoint1 and 2, we implement a <code>Reassembler</code> and <code>TCPReceiver</code> to translate from segments carried in unreliable datagrams to an incoming byte stream.</p>
+<p>In Checkpoint3, we'll implement the <strong>sender side</strong> of the TCP connection. The TCPSender translates from an outbound byte stream to segments that will become the payloads of unreliable datagrams.</p>
+</blockquote>
+<h2 id="the-tcp-sender"><a class="markdownIt-Anchor" href="#the-tcp-sender"></a> The TCP Sender</h2>
+<blockquote>
+<p>In this lab, you will implement the &quot;<strong>sender</strong>&quot; part of TCP, responsible for reading from a <code>ByteStream</code>(created and written to by some sender-side application), and turning the stream into a sequence of outgoing TCP segments.</p>
+</blockquote>
+<p><strong><code>TCPSender</code></strong> is responsible for:</p>
+<ol>
+<li>Keep track of the receiver's window.</li>
+<li>Keep sending segments until either the window is full or the outbound <code>ByteStream</code> has nothing more to send.</li>
+<li>Keep track of which segments have been sent but not yet acknowledged(&quot;outstanding&quot; segments) by the receiver.</li>
+<li>Re-send outstanding segments if enough time passes since they were sent, and they haven't been acknowledged yet.</li>
+</ol>
+<blockquote>
+<p>How does the <code>TCPSender</code> know if a segment was lost?</p>
+</blockquote>
+<p>Periodically, the owner of the TCPSender will call the <code>tick</code> method. The <code>TCPSender</code> is responsible for looking through its collection of outstanding <code>TCPSenderMessages</code> and deciding if the oldest-sent segment has been outstanding for too long without acknowledgement.</p>
+<p>To be specific:</p>
+<ol>
+<li>
+<p>The <code>TCPSender</code> stores the initial value of RTO(retransmission timeout).</p>
+</li>
+<li>
+<p>You will implement the <strong>retransmission timer</strong>: an alarm that can be started at a certain time, and the alarm expires once the RTO has elapsed. Every time a segment containing data is sent, if the timer is not running, start it running. <strong>When all outstanding data has been acknowledged, stop the retransmission timer.</strong></p>
+</li>
+<li>
+<p>When <code>tick</code> is called and the retransmission timer has expired:</p>
+<ul>
+<li>
+<p>Retransmit the earliest(lowest sequence number) segment that hasn't been fully acknowledged by the TCP receiver. You should store the outstanding segments in some internal data structure.</p>
+</li>
+<li>
+<p>If the window size is nonzero:</p>
+<p>(a). Keep track of and update the number of consecutive retransmissions.</p>
+<p>(b). Double the value of RTO.</p>
+</li>
+<li>
+<p>Reset the retransmission timer and start it.</p>
+</li>
+</ul>
+</li>
+<li>
+<p>When the receiver gives the sender a new <code>ack</code> message:</p>
+<ul>
+<li>Set the RTO back to its initial value.</li>
+<li>If the sender has any outstanding data, restart the retransmission timer.</li>
+<li>Reset the consecutive retransmissions back to zero.</li>
+</ul>
+</li>
+</ol>
+<p>以上就是<code>TCPSender</code>的retransmission logic，详细见cs144官方spec。</p>
+<p>简单总结一下就是<code>TCPSender</code>会在内部存储outstanding segments。<code>TCPSender</code>的owner会周期性地调用<code>tick</code>函数查看retransmission timer是否expired，如果是则retransmit最早的outstanding segment，double RTO防止网络堵塞加剧retranmission的负担(exponential backoff)，并重启retransmission timer。当<code>TCPSender</code>接收到新的acknowledgement的时候，重设RTO为最初值并重启retransmission timer(如果还有outstanding segments)。</p>
+<h2 id="implement-the-tcp-sender"><a class="markdownIt-Anchor" href="#implement-the-tcp-sender"></a> Implement the TCP sender</h2>
+<p>You should implement the interface that your <code>TCPSender</code> provides:</p>
+<ul>
+<li><strong><code>void push( const TransmitFunction&amp; transmit );</code></strong></li>
+</ul>
+<p>Read from the outbound byte stream and <strong>send as many <code>TCPSenderMessages</code> as possible, as long as there are new bytes to be read and space available in the window</strong>.</p>
+<p>Make sure that every <code>TCPSenderMessage</code> you send fits fully inside the receiver’s window. Make each individual message as big as possible, but no bigger than the value given by <code>TCPConfig::MAX PAYLOAD SIZE</code>.</p>
+<blockquote>
+<p>What should my TCPSender assume as the receiver’s window size before the receive method informs it otherwise?</p>
+</blockquote>
+<p>One.</p>
+<blockquote>
+<p>What if the window size is zero?</p>
+</blockquote>
+<p>If the receiver has announced a window size of zero, the push method should pretend like the window size is one. The sender might end up sending a single byte that gets rejected by the receiver, but this can also provoke the receiver into sending a new acknowledgment segment where it reveals that more space has opened up in its window.</p>
+<p>This is the only special-case behavior your implementation should have for the case of a zero-size window. The TCPSender shouldn’t actually remember a false window size of 1. The special case is only within the push method. Also, N.B. that <strong>even if the window size is one (or 20, or 200), the window might still be full. A “full” window is not the same as a “zero-size” window.</strong></p>
+<ul>
+<li><strong><code>void receive( const TCPReceiverMessage&amp; msg );</code></strong></li>
+</ul>
+<p>A message is received from the receiver, conveying the new left (= <code>ackno</code>) and right (= <code>ackno + window size</code>) edges of the window. The TCPSender should look through its collection of outstanding segments and remove any that have now been fully acknowledged (<strong>the <code>ackno</code> is greater than all of the sequence numbers in the segment</strong>).</p>
+<ul>
+<li><strong><code>void tick( uint64 t ms since last tick, const TransmitFunction&amp; transmit );</code></strong></li>
+</ul>
+<p>The sender may need to retransmit an outstanding segment.</p>
+<ul>
+<li><strong><code>TCPSenderMessage make_empty_message() const;</code></strong></li>
+</ul>
+<p>The TCPSender should generate and send a zero-length message with the sequence number set correctly.</p>
+<p>Note: a segment like this one, which occupies no sequence numbers, doesn’t need to be kept track of as “outstanding” and won’t ever be retransmitted.</p>
+<h2 id="我的实现思路"><a class="markdownIt-Anchor" href="#我的实现思路"></a> 我的实现思路</h2>
+<blockquote>
+<p>前言：认真读spec！至少将spec的第二板块读3遍再开始coding：</p>
+<figure class="highlight basic"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs basic"><span class="hljs-symbol">2 </span>Checkpoint <span class="hljs-number">3</span>: The TCP Sender<br></code></pre></td></tr></table></figure>
+<p>这个lab的整体实现难度不难，很大一部分原因是因为spec讲解得非常清晰。就我自己实现起来比lab2还要轻松一些。主要难度在于细节点和corner case非常多，因此需要大量的时间面向test来debug。我自己debug花的时间比coding的时间还要长。</p>
+</blockquote>
+<p>接下来进入正题：</p>
+<p>TCP Sender的实现可以分成3大部分，难度我认为也是逐级递增的：</p>
+<ol>
+<li>Retransmission (retransmission timer + tick)</li>
+<li>Window (sender's window + receiver's window)</li>
+<li>Push + Receive</li>
+</ol>
+<ul>
+<li><strong>Retransmission</strong></li>
+</ul>
+<p>Retransmission的逻辑其实是TCP Sender的一大重难点，但这部分(retransmission timer + tick)在spec中讲解得非常详细。并且，在这个lab中要求我们实现的Retransmission逻辑其实是真实的TCP协议的Retransmission逻辑的简化版本，真实的TCP协议的Retransmission包含更多细节(如3次duplicate ACK的应对, congestion control…)。因此这部分实现起来比较轻松。</p>
+<blockquote>
+<p>这里再放一下我总结的Retransmission logic，如果spec读起来有点费解的话可以参考：</p>
+<p><code>TCPSender</code>会在内部存储outstanding segments。<code>TCPSender</code>的owner会周期性地调用<code>tick</code>函数查看retransmission timer是否expired，如果是则retransmit最早的outstanding segment，double RTO防止网络堵塞加剧retranmission的负担(exponential backoff)，并重启retransmission timer。当<code>TCPSender</code>接收到新的acknowledgement的时候，重设RTO为最初值并重启retransmission timer(如果还有outstanding segments)。</p>
+</blockquote>
+<div class="note note-success">
+            <p>我建议单独创建一个Retransmission timer类，与TCPSender类区分开来，结构更清晰。</p>
+          </div>
+<ul>
+<li><strong>Window</strong></li>
+</ul>
+<div class="note note-danger">
+            <p>这部分在spec中讲解得比较模糊，需要自行理解与实现！</p>
+          </div>
+<p>在spec中反复提到的window，其实指的是<code>TCPSender</code>接收到的acknowledge message中包含的Receiver's window。回顾Checkpoint1，我们画过一张Receiver's window:</p>
+<p><img src="/imgs/202502132132652-1739988789628-100.jpeg" srcset="/img/loading.gif" lazyload alt="TCP Receiver's window" /></p>
+<p>但spec中没有提到，需要我们自己理解的是，<code>TCPSender</code>的window与<code>TCPReceiver</code>的window是不同的，为了区分这两端的window，我在<code>TCPSender</code>端维护了一个sender's window，用来与上面的receiver's window进行区分，如下图：</p>
+<p><img src="/imgs/202502132139485-1739988798925-102.jpg" srcset="/img/loading.gif" lazyload alt="TCP Sender's window" /></p>
+<p>希望这张图能帮助你理解Sender's window和Receiver’s window的区别与联系。其中绿色区域代表的是Receiver已经acknowledge的bytes范围，红色区域代表的是outstanding segments，蓝色区域是<code>push</code>方法允许transmit的bytes范围，也就是Sender's window。</p>
+<p><code>TCPSender</code>需要一种数据结构来存储outstanding segments，以便在传输过程中丢失时可以retransmit。由Retransmission logic可知我们每次retransmit的是earliest outstanding segment，也就是seqno最小的segment，所以思考可以用什么数据结构来存储outstanding segments？</p>
+<p>联系Checkpoint1，最容易想到的就是用map，这样每次retransmit只要移除map的第一个元素就可以了。</p>
+<ul>
+<li><strong>Push + Receive</strong></li>
+</ul>
+<p>这也是这个lab最tricky的部分，尤其是<code>push</code>的实现，细节点很多。主要的实现逻辑在spec中已经说明得比较详细，我在此提示一些注意点：</p>
+<ol>
+<li>
+<blockquote>
+<p><code>void push( const TransmitFunction&amp; transmit );</code></p>
+<p>The TCPSender is asked to fill the window from the outbound byte stream: it reads from the stream and <strong>sends as many TCPSenderMessages as possible, as long as there are new bytes to be read and space available in the window.</strong></p>
+</blockquote>
+<p>好好理解上面加粗的这段话，什么叫做只要outbound stream中还有可读取的new bytes和window(Sender's window)还有空间就不停地send segments?</p>
+</li>
+<li>
+<p>当<code>receive</code>方法接收到一个message告知自己Receiver's window size = 0时，<code>push</code>需要将其作为special case处理，详细见spec。</p>
+</li>
+<li>
+<p>在debug时尤其注意<code>SYN</code>和<code>FIN</code> flag带来的各种corner case。这部分我们在Checkpoint2中已经有一定的应对经验，但在这个lab中处理起来会更麻烦一点。</p>
+</li>
+<li>
+<p>在<code>push</code>和<code>receive</code>中，需要时刻注意Sender's window的变化。</p>
+</li>
+</ol>
+<h2 id="tcp-sender-finish"><a class="markdownIt-Anchor" href="#tcp-sender-finish"></a> TCP Sender Finish!</h2>
+<p>All tests in check3 pass!</p>
+<img src="/imgs/202502131916226-1739984591383-24-1739988806450-104.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:80%;" />
+<p>恭喜！到这里你已经实现了一个完整可运行的TCP协议了！</p>
+<h2 id="hands-on-activity"><a class="markdownIt-Anchor" href="#hands-on-activity"></a> Hands-on activity</h2>
+<p>恭喜！到这里你应该已经实现了一个完整可运行的TCP协议了！</p>
+<p>在这一部分，我们要实际验证这个TCP协议栈确实能work，我们要：</p>
+<ol>
+<li>尝试让你的TCP协议与Linux的TCP协议对话</li>
+<li>尝试在你的TCP协议与Linux的TCP协议之间传送文件</li>
+<li>与其他同学的TCP协议通话（要用到CS144内部网络，我们做不了）</li>
+<li>在你的TCP协议栈之上重新实现Web fetcher</li>
+</ol>
+<p>我这里就只展示最后一条：</p>
+<h3 id="webget-revisited"><a class="markdownIt-Anchor" href="#webget-revisited"></a> webget revisited</h3>
+<p>在lab0中，我们在Linux的TCP协议之上，实现了一个使用TCP Socket传输http协议信息，来获取网页的Web fetcher(<code>get_URL</code>)。</p>
+<p>如今，尝试换成在<strong>我们自己实现的完整TCP协议栈</strong>之上，改写这个Web fetcher（只需要将Linux的TCPSocket换成我们自己的CS144TCPSocket）。</p>
+<img src="/imgs/202502132342058-1739988814201-106.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:80%;" />
+<p>Our own TCP implementation works! 😊</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Computer-Networking/" class="category-chain-item">Computer Networking</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/Computer-Networking/CS144/" class="category-chain-item">CS144</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/CS144/" class="print-no-link">#CS144</a>
+      
+        <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" class="print-no-link">#计算机网络</a>
+      
+        <a href="/tags/Protocol-Stack/" class="print-no-link">#Protocol Stack</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>CS144 Lab 3</div>
+      <div>http://oooscar8.github.io/2025/02/14/cs144-lab3/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Alex Sun</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年2月14日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2025/02/19/cs144-lab5/" title="CS144 Lab 5">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">CS144 Lab 5</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2025/02/11/cs144-lab2/" title="CS144 Lab 2">
+                        <span class="hidden-mobile">CS144 Lab 2</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div class="disqus" style="width:100%">
+    <div id="disqus_thread"></div>
+    
+      <script type="text/javascript">
+        var disqus_config = function() {
+          this.page.url = 'http://oooscar8.github.io/2025/02/14/cs144-lab3/';
+          this.page.identifier = '/2025/02/14/cs144-lab3/';
+        };
+        Fluid.utils.loadComments('#disqus_thread', function() {
+          var d = document, s = d.createElement('script');
+          s.src = '//' + 'fluid' + '.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', new Date());
+          (d.head || d.body).appendChild(s);
+        });
+      </script>
+    
+    <noscript>Please enable JavaScript to view the comments</noscript>
+  </div>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

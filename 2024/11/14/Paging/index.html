@@ -1,0 +1,854 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/imgs/wallhaven-p9qeze.jpg">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Alex Sun">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Notes on Paging when studying OS">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Paging">
+<meta property="og:url" content="http://oooscar8.github.io/2024/11/14/Paging/index.html">
+<meta property="og:site_name" content="Alex&#39;s Space">
+<meta property="og:description" content="Notes on Paging when studying OS">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://oooscar8.github.io/2024/11/14/imgs/202411191055926.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/11/14/imgs/202410291208365.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/11/14/imgs/202411221844280.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/11/14/imgs/202411231627475.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/11/14/imgs/202411232002776.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/11/14/imgs/202411262252428.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/11/14/imgs/202411262252356.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/11/14/imgs/202411261139273.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/11/14/imgs/202411262254163.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/11/14/imgs/202411232013748.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/11/14/imgs/202411232038054.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/11/14/imgs/202411232018049.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/11/14/imgs/202411232038812.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/11/14/imgs/202411232040973.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/11/14/imgs/202411232048424.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/11/14/imgs/202411241636311.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/11/14/imgs/202411241748500.png">
+<meta property="article:published_time" content="2024-11-13T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-03-05T13:04:46.563Z">
+<meta property="article:author" content="Alex Sun">
+<meta property="article:tag" content="OS">
+<meta property="article:tag" content="Paging">
+<meta property="article:tag" content="Virtual Memory">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://oooscar8.github.io/2024/11/14/imgs/202411191055926.png">
+  
+  
+  
+  <title>Paging - Alex&#39;s Space</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"oooscar8.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.1.1"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Alex&#39;s Space</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/imgs/chuyin.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Paging"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-11-14 00:00" pubdate>
+          2024年11月14日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          153 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          2 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Paging</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>Think about this problem while you are learning this part:</p>
+<blockquote>
+<p>Why we are doing paging?</p>
+</blockquote>
+<p>This part is crucial for you to implementing OS/161 Assignment 6 correctly!</p>
+<h1 id="paging"><a class="markdownIt-Anchor" href="#paging"></a> Paging</h1>
+<blockquote>
+<p><strong>Learning Materials</strong></p>
+<p>Video:</p>
+<p><a target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/download/cs161-video-materials/www.eecs.harvard.edu/~margo/cs161/videos/vm1-waudio.mp4">Intro to Virtual Memory</a></p>
+<p><a target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/download/cs161-video-materials/www.eecs.harvard.edu/~margo/cs161/videos/vm-tlb-waudio.mp4">Translation Lookaside Buffer (TLB)</a></p>
+<p><a target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/download/cs161-video-materials/www.eecs.harvard.edu/~margo/cs161/videos/vm-x86.mp4">Virtual memory on x86</a></p>
+<p><a target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/download/cs161-video-materials/www.eecs.harvard.edu/~margo/cs161/videos/vm-paging-waudio.mp4">Intro to paging</a></p>
+<p><a target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/download/cs161-video-materials/www.eecs.harvard.edu/~margo/cs161/videos/vm-paging2-waudio.mp4">Continuation of paging by Margo Seltzer</a></p>
+<p>Lecture Slides:</p>
+<p><a target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/LECTURE-SLIDES/VM-new.pptx"> Virtual memory (Intro)</a></p>
+<p><a target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/LECTURE-SLIDES/Paging-new.pptx">Paging</a></p>
+<p><a target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/LECTURE-SLIDES/Paging-disk.pptx">Paging to disk</a></p>
+<p>Readings:</p>
+<p>[<a target="_blank" rel="noopener" href="http://pages.cs.wisc.edu/~remzi/OSTEP/vm-api.pdf">OSTEP] Memory API</a></p>
+<p>[<a target="_blank" rel="noopener" href="http://pages.cs.wisc.edu/~remzi/OSTEP/vm-tlbs.pdf">OSTEP] Translation lookaside buffers</a></p>
+<p>[<a target="_blank" rel="noopener" href="http://pages.cs.wisc.edu/~remzi/OSTEP/vm-freespace.pdf">OSTEP] Free space management</a></p>
+<p><a target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/download/mips-TLB.pdf">MIPS MMU and TLB</a></p>
+<p>[<a target="_blank" rel="noopener" href="http://pages.cs.wisc.edu/~remzi/OSTEP/vm-paging.pdf">OSTEP] Introduction to Paging</a></p>
+<p>[<a target="_blank" rel="noopener" href="http://pages.cs.wisc.edu/~remzi/OSTEP/vm-smalltables.pdf">OSTEP] Advanced paging</a></p>
+</blockquote>
+<h2 id="paging-2"><a class="markdownIt-Anchor" href="#paging-2"></a> Paging</h2>
+<h3 id="definition-and-concept"><a class="markdownIt-Anchor" href="#definition-and-concept"></a> Definition and Concept</h3>
+<h4 id="define-paging"><a class="markdownIt-Anchor" href="#define-paging"></a> Define paging</h4>
+<p>The operating system creates the illusion of unlimited memory by using physical memory as a cache of virtual pages.</p>
+<img src="/imgs/202411191055926.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:67%;" />
+<h4 id="page-faults"><a class="markdownIt-Anchor" href="#page-faults"></a> Page Faults</h4>
+<p>Paging relaxes the requirement that all the pages in a process's virtual address space must be in physical memory. Instead, we allow a process to have pages either on disk or in memory. When the process issues an access to a page that is on disk, a page fault occurs. The operating system must retrieve the page from disk and bring it into memory.</p>
+<img src="/imgs/202410291208365.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:67%;" />
+<p>The translation does not exist in the page table (<strong>the page is on disk</strong>), the OS must:</p>
+<ol>
+<li>Allocate a place in physical memory to store the page.</li>
+<li>(If physical memory is full, evict a page. If the evicted page is modified or does not currently have a copy on disk, write the page to disk)</li>
+<li>Read the page from disk.</li>
+<li>Update the page table entry with the new virtual-to-physical address translation.</li>
+<li>Update the TLB to contain the new translation.</li>
+<li>Resume execution of the user program.</li>
+</ol>
+<p>Notice that when the operating system selects a location in physical memory in which to place the new page, the space may already be occupied. In this case, the operating system must <strong>evict</strong> that other page from memory. If the page has been <strong>modified</strong> or <strong>does not currently have a copy on disk</strong>, then the old page must first be written to disk before the physical page can be reallocated. If the old page has <strong>not been modified</strong> and <strong>already has a copy on disk</strong>, then the write to disk can be avoided. The appropriate page table entry must be updated to reflect the fact that the page is no longer in memory.</p>
+<p>Memory serves as the cache of disk. As with any caching system, performance of your virtual memory system depends on the policy used to decide which things are kept in memory(cache) and which are evicted (to disk). On a page fault, the kernel must decide which page to replace. Ideally, it will evict a page that will not be needed soon. Many systems (such as UNIX) avoid the delay of synchronously writing memory pages to disk on a page fault by <strong>writing modified pages to disk in advance</strong>, so that subsequent page faults can be completed more quickly.</p>
+<h4 id="multi-level-page-tables"><a class="markdownIt-Anchor" href="#multi-level-page-tables"></a> Multi-Level Page Tables</h4>
+<p>Two-level page table:</p>
+<p>Use a page directory which points to pages of the page table.</p>
+<img src="/imgs/202411221844280.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:67%;" />
+<img src="/imgs/202411231627475.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 67%;" />
+<h3 id="mips-virtual-memory-map"><a class="markdownIt-Anchor" href="#mips-virtual-memory-map"></a> MIPS Virtual Memory Map</h3>
+<p>KSEG0, KSEG1 addresses: directly map to physical RAM starting at 0</p>
+<p>KUSEG, KSEG2 addresses: translate with the help of the TLB</p>
+<img src="/imgs/202411232002776.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:67%;" />
+<h3 id="tlb"><a class="markdownIt-Anchor" href="#tlb"></a> TLB</h3>
+<h4 id="associative-tlb"><a class="markdownIt-Anchor" href="#associative-tlb"></a> Associative TLB</h4>
+<img src="/imgs/202411262252428.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 50%;" />
+<h4 id="address-translation-process"><a class="markdownIt-Anchor" href="#address-translation-process"></a> Address Translation Process</h4>
+<img src="/imgs/202411262252356.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 50%;" />
+<h4 id="mips-mmu-and-tlb"><a class="markdownIt-Anchor" href="#mips-mmu-and-tlb"></a> MIPS MMU and TLB</h4>
+<p>No hardware support for page tables.</p>
+<p>MIPS makes the format and contents of the TLB entry public to the kernel.</p>
+<img src="/imgs/202411261139273.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:80%;" />
+<img src="/imgs/202411262254163.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:80%;" />
+<p>MIPS R3000 TLB:</p>
+<img src="/imgs/202411232013748.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 67%;" />
+<ul>
+<li><code>global</code>: 1 bit; if set, ignore the pid bits in the TLB.</li>
+<li><code>valid</code>: 1 bit; set if the TLB entry contains a valid translation.</li>
+<li><code>dirty</code>: 1 bit; enables writing to the page referenced by the entry; if this bit is 0, the page is only accessible for reading.</li>
+<li><code>nocache</code>: 1 bit; <strong>unused in System/161</strong>. In a real processor, indicates that the hardware cache will be disabled when accessing this page.</li>
+<li><code>pid</code>: 6 bits; a process or address space ID that can be used to allow entries to remain in the TLB after a process switch.</li>
+</ul>
+<blockquote>
+<p>How to handle TLB miss in OS/161?</p>
+</blockquote>
+<p>Write <strong><code>vm_fault</code></strong> function:</p>
+<img src="/imgs/202411232038054.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 50%;" />
+<blockquote>
+<p>What is the <strong>TLB shootdown</strong>?</p>
+</blockquote>
+<p>If we want to evict a page whose virtual-to-physical translation might be in one/more TLBs, we need to revoke the corresponding TLB entry in all the TLBs. But, from one processor you can't directly access another processor's TLB; instead you have to poke the other processor and ask it to do the revocation for you. The process of doing so is called &quot;TLB shootdown&quot;.</p>
+<blockquote>
+<p>How to implement the <strong>TLB shootdown</strong>?</p>
+</blockquote>
+<p>Issue an inter-processor interrupt (IPI) to the processors that (may) have the mappings you want removed in their TLBs. These processors, upon receiving the interrupt, do the necessary TLB flush operations, and then signal back in some fashion that they've finished.</p>
+<h3 id="mips-r3000-virtual-addresses"><a class="markdownIt-Anchor" href="#mips-r3000-virtual-addresses"></a> MIPS R3000 Virtual Addresses</h3>
+<img src="/imgs/202411232018049.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 50%;" />
+<blockquote>
+<p>How to manage physical memory in OS/161?</p>
+</blockquote>
+<img src="/imgs/202411232038812.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 60%;" />
+<h3 id="roadmap-to-a6"><a class="markdownIt-Anchor" href="#roadmap-to-a6"></a> Roadmap to A6</h3>
+<img src="/imgs/202411232040973.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 50%;" />
+<h2 id="paging-to-disk"><a class="markdownIt-Anchor" href="#paging-to-disk"></a> Paging to disk</h2>
+<img src="/imgs/202411232048424.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:60%;" />
+<blockquote>
+<p>How to choose pages to be evicted to disk? Which pages won't be needed soon? Which pages are easier to evict?(Do all pages need to be written to disk?)</p>
+</blockquote>
+<p><strong>Page replacement algorithm.</strong></p>
+<p>Clean pages(Code pages) are easier to evict since they don't need to be written to disk.</p>
+<img src="/imgs/202411241636311.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 50%;" />
+<img src="/imgs/202411241748500.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:50%;" />
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs pseudocode">/* Function call chain */<br>foo() -&gt; kmalloc -&gt; getppages -&gt; evict -&gt; write to swap<br></code></pre></td></tr></table></figure>
+<p>When a page get evicted, we need to <strong>invalidate the page in TLB</strong>.</p>
+<p>If the page you evict might be in another TLB, do a <strong>TLB shootdown</strong>.</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/OS/" class="category-chain-item">OS</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/OS/" class="print-no-link">#OS</a>
+      
+        <a href="/tags/Paging/" class="print-no-link">#Paging</a>
+      
+        <a href="/tags/Virtual-Memory/" class="print-no-link">#Virtual Memory</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Paging</div>
+      <div>http://oooscar8.github.io/2024/11/14/Paging/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Alex Sun</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年11月14日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/12/16/Top-down-approach/" title="A Top-Down Approach Studying Notes">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">A Top-Down Approach Studying Notes</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/11/11/OS161-A5/" title="OS161 Assignment 5">
+                        <span class="hidden-mobile">OS161 Assignment 5</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div class="disqus" style="width:100%">
+    <div id="disqus_thread"></div>
+    
+      <script type="text/javascript">
+        var disqus_config = function() {
+          this.page.url = 'http://oooscar8.github.io/2024/11/14/Paging/';
+          this.page.identifier = '/2024/11/14/Paging/';
+        };
+        Fluid.utils.loadComments('#disqus_thread', function() {
+          var d = document, s = d.createElement('script');
+          s.src = '//' + 'fluid' + '.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', new Date());
+          (d.head || d.body).appendChild(s);
+        });
+      </script>
+    
+    <noscript>Please enable JavaScript to view the comments</noscript>
+  </div>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

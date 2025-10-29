@@ -1,0 +1,949 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/imgs/wallhaven-p9qeze.jpg">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Alex Sun">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Notes on Job Scheduling when studying OS">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Scheduling">
+<meta property="og:url" content="http://oooscar8.github.io/2024/10/10/Scheduling/index.html">
+<meta property="og:site_name" content="Alex&#39;s Space">
+<meta property="og:description" content="Notes on Job Scheduling when studying OS">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://oooscar8.github.io/2024/10/10/imgs/202410011046870.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/10/10/imgs/202410011049694.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/10/10/imgs/202410011052076.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/10/10/imgs/202410031046437.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/10/10/imgs/202410011150498.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/10/10/imgs/202410011218661.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/10/10/imgs/202410031119223.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/10/10/imgs/202410040048866.jpg">
+<meta property="og:image" content="http://oooscar8.github.io/2024/10/10/imgs/202410042248052.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/10/10/imgs/202410042249814.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/10/10/imgs/202410042238024.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/10/10/imgs/202410081154427.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/10/10/imgs/202410081159768.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/10/10/imgs/image-20250222160917877.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/10/10/imgs/202410081357697.png">
+<meta property="article:published_time" content="2024-10-09T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-02-22T15:38:55.530Z">
+<meta property="article:author" content="Alex Sun">
+<meta property="article:tag" content="OS">
+<meta property="article:tag" content="Scheduling">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://oooscar8.github.io/2024/10/10/imgs/202410011046870.png">
+  
+  
+  
+  <title>Scheduling - Alex&#39;s Space</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"oooscar8.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.1.1"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Alex&#39;s Space</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/imgs/chuyin.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Scheduling"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-10-10 00:00" pubdate>
+          2024年10月10日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          391 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          4 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Scheduling</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>In this part, we will talk about the topics of Job Scheduling in OS. We will cover different scheduling algorithm and real-life schedulers. Prepare for the journey of Scheduling!</p>
+<h1 id="scheduling"><a class="markdownIt-Anchor" href="#scheduling"></a> Scheduling</h1>
+<blockquote>
+<p><strong>Learning Materials</strong></p>
+<p>Videos:</p>
+<p><a target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/download/cs161-video-materials/www.eecs.harvard.edu/~margo/cs161/videos/architecture.mp4">Computer Architecture Primer</a></p>
+<p>Lecture Slides:</p>
+<p><a target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/LECTURE-SLIDES/Scheduling.pptx">Scheduling</a></p>
+<p><a target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/LECTURE-SLIDES/AdvancedScheduling.pptx"> Advanced scheduling</a></p>
+<p>Readings:</p>
+<p>[<a target="_blank" rel="noopener" href="http://pages.cs.wisc.edu/~remzi/OSTEP/cpu-sched.pdf">OSTEP] Scheduling</a></p>
+<p>[<a target="_blank" rel="noopener" href="https://pages.cs.wisc.edu/~remzi/OSTEP/cpu-sched-mlfq.pdf">OSTEP] The multi-level feedback queue</a></p>
+<p>[<a target="_blank" rel="noopener" href="http://pages.cs.wisc.edu/~remzi/OSTEP/cpu-sched-lottery.pdf">OSTEP] Lottery scheduling and Linux CFS</a></p>
+<p>[<a target="_blank" rel="noopener" href="https://pages.cs.wisc.edu/~remzi/OSTEP/cpu-sched-multi.pdf">OSTEP] Multiprocessor scheduling</a></p>
+<p><a target="_blank" rel="noopener" href="http://people.ece.ubc.ca/~sasha/papers/eurosys16-final29.pdf">A Decade of Wasted Cores (Paper)</a></p>
+</blockquote>
+<h2 id="architecture-overview"><a class="markdownIt-Anchor" href="#architecture-overview"></a> Architecture Overview</h2>
+<p>Basic Processor:</p>
+<img src="/imgs/202410011046870.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 67%;" />
+<p>Multicore:</p>
+<img src="/imgs/202410011049694.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:67%;" />
+<p>Modern Multiprocessor:</p>
+<img src="/imgs/202410011052076.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 80%;" />
+<p><code>sys/161</code>:</p>
+<p>Not multithreaded: Each core/processor has only one thread</p>
+<p>Do not distinguish cores from processors; N-way <strong>single-core multiprocessors</strong></p>
+<h2 id="scheduling-introduction"><a class="markdownIt-Anchor" href="#scheduling-introduction"></a> Scheduling: Introduction</h2>
+<blockquote>
+<p>How to build an optimal scheduler if we only consider <code>turnaround</code> time?</p>
+</blockquote>
+<ul>
+<li>
+<p>FIFO(First in First out)</p>
+</li>
+<li>
+<p>SJF(Shortest Job First)</p>
+</li>
+<li>
+<p>STCF(Shortest Time-to-Completion First)</p>
+</li>
+</ul>
+<p>Optimal, if we know job lengths and our only metric is <code>turnaround</code> time.</p>
+<blockquote>
+<p>How can we build a scheduler that is sensitive to response time?</p>
+</blockquote>
+<ul>
+<li>RR(Round Robin)</li>
+</ul>
+<p>A tradeoff between turnaround time and response time</p>
+<blockquote>
+<p>How to take I/O into account?</p>
+</blockquote>
+<p>The answer is <strong>Overlap</strong>!: Treat each CPU burst as a job.</p>
+<img src="/imgs/202410031046437.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 80%;" />
+<blockquote>
+<p>How to determine the <code>timeslice</code>?</p>
+</blockquote>
+<p><code>timeslice</code> should be short, maximizing multitasking, but shouldn't be too short, otherwise context switch time would be long</p>
+<p><strong>context switch</strong>:</p>
+<ul>
+<li>save the register of the old thread</li>
+<li>find the new thread from the <code>runqueue</code></li>
+<li>restore the new thread's register</li>
+</ul>
+<img src="/imgs/202410011150498.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:80%;" />
+<blockquote>
+<p>How do we pick the next thread from the <code>runqueue</code>?</p>
+</blockquote>
+<p><strong>Scheduling Algorithm</strong>:</p>
+<p>Multiple queues with different priority and <code>timeslice</code></p>
+<p>Short <code>timeslice</code> thread has higher priority.</p>
+<p>If a lower priority thread hasn't run for a long time, it will be moved to upper priority.</p>
+<img src="/imgs/202410011218661.png" srcset="/img/loading.gif" lazyload alt=""  />
+<h2 id="the-multi-level-feedback-queue"><a class="markdownIt-Anchor" href="#the-multi-level-feedback-queue"></a> The multi-level feedback queue</h2>
+<p>MLFQ observes the execution of a job and prioritizes it accordingly.</p>
+<ul>
+<li>Rule 1: If Priority(A) &gt; Priority(B), A runs (B doesn’t).</li>
+<li>Rule 2: If Priority(A) = Priority(B), A &amp; B run in <strong>Round-Robin</strong> fashion using the <strong>time slice</strong> (quantum length) of the given queue.</li>
+<li>Rule 3: When a job enters the system, it is placed at the highest priority (the topmost queue).</li>
+<li>Rule 4: Once a job uses up its time allotment at a given level (<strong>regardless of how many times it has given up the CPU</strong>), its priority is reduced (i.e., it moves down one queue).</li>
+<li>Rule 5: After some time period S, move all the jobs in the system to the topmost queue.</li>
+</ul>
+<p><strong>MLFQ Problem</strong>:</p>
+<blockquote>
+<p>Simulate the Multi-Level Feedback Queue Algorithm discussed in the book. Assume the final version of the algorithm presented in the book, but no tuning. You have the following parameters and constraints:</p>
+<ol>
+<li>Time starts at 0ms.</li>
+<li>There are three queues: highest-priority, middle-priority and low-priority.</li>
+<li><code>Timeslice</code> equals to 10ms.</li>
+<li>Allotment equals to 20ms.</li>
+<li><em>S</em> equals to 100ms.</li>
+<li>All jobs use up their entire timeslice every time they are scheduled.</li>
+<li>Job J1 arrives at 0ms.</li>
+<li>Job J2 arrives at 20ms.</li>
+<li>J1 requires 60ms of CPU time to complete.</li>
+<li>J2 requires 70ms of CPU time to complete.</li>
+</ol>
+</blockquote>
+<p>bright color: J1;    light color: J2</p>
+<img src="/imgs/202410031119223.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:120%;" />
+<img src="/imgs/202410040048866.jpg" srcset="/img/loading.gif" lazyload alt="" style="zoom: 40%;" />
+<h2 id="scheduling-proportional-share"><a class="markdownIt-Anchor" href="#scheduling-proportional-share"></a> Scheduling: Proportional Share</h2>
+<p>Guarantee that each job obtains a certain percentage of CPU time.</p>
+<p>Use <strong>tickets</strong> to represent a process's share of the CPU</p>
+<hr />
+<h3 id="lottery-scheduling-decision-code"><a class="markdownIt-Anchor" href="#lottery-scheduling-decision-code"></a> Lottery Scheduling Decision Code</h3>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">// counter: used to track if we’ve found the winner yet</span><br><span class="hljs-type">int</span> counter = <span class="hljs-number">0</span>;<br><br><span class="hljs-comment">// winner: call some random number generator to</span><br><span class="hljs-comment">// get a value &gt;= 0 and &lt;= (totaltickets - 1)</span><br><span class="hljs-type">int</span> winner = getrandom(<span class="hljs-number">0</span>, totaltickets);<br><br><span class="hljs-comment">// current: use this to walk through the list of jobs</span><br><span class="hljs-type">node_t</span> *current = head;<br><span class="hljs-keyword">while</span> (current) &#123;<br>    counter = counter + current-&gt;tickets;<br>    <span class="hljs-keyword">if</span> (counter &gt; winner)<br>        <span class="hljs-keyword">break</span>; <span class="hljs-comment">// found the winner</span><br>    current = current-&gt;next;<br>&#125;<br><span class="hljs-comment">// ’current’ is the winner: schedule it...</span><br></code></pre></td></tr></table></figure>
+<hr />
+<h3 id="stride-scheduling"><a class="markdownIt-Anchor" href="#stride-scheduling"></a> Stride Scheduling</h3>
+<p>Deterministic fair-share scheduler</p>
+<p><strong>Stride</strong> is inverse in proportion to the number of tickets it has, computed by dividing some large number by the number of tickets each process has been assigned.</p>
+<p>Every time a process runs, we will <strong>increment a counter</strong> for it (called its pass value) <strong>by its stride</strong> to track its global progress. At any given time, the scheduler picks the process to run that has the lowest pass value so far.</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs c">curr = remove_min(<span class="hljs-built_in">queue</span>); <span class="hljs-comment">// pick client with min pass</span><br>schedule(curr); <span class="hljs-comment">// run for quantum</span><br>curr-&gt;pass += curr-&gt;stride; <span class="hljs-comment">// update pass using stride</span><br>insert(<span class="hljs-built_in">queue</span>, curr); <span class="hljs-comment">// return curr to queue</span><br></code></pre></td></tr></table></figure>
+<div class="note note-primary">
+            <p>Lottery scheduling makes more sense than stride scheduling when incorporating new processes.</p>
+          </div>
+<hr />
+<h3 id="linux-completely-fair-scheduler-cfs"><a class="markdownIt-Anchor" href="#linux-completely-fair-scheduler-cfs"></a> Linux Completely Fair Scheduler (CFS)</h3>
+<p>As each process runs, it accumulates <code>vruntime</code> at the same rate in proportion with real time.</p>
+<p>When a scheduling decision occurs, CFS will pick the process with the lowest <code>vruntime</code> to run next.</p>
+<p>CFS uses <code>sched_latency</code> to determine how long one process should run before considering a switch, determining its time slice but in a dynamic fashion.</p>
+<p>CFS will never set the time slice to less than <code>min_granularity</code>.</p>
+<ul>
+<li><strong>Weighting (Niceness)</strong></li>
+</ul>
+<p>CFS gives each process a <strong>nice value</strong> indicating its priority.</p>
+<p>CFS maps the <strong>nice value</strong> of each process to a <strong>weight</strong>:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">static</span> <span class="hljs-type">const</span> <span class="hljs-type">int</span> prio_to_weight[<span class="hljs-number">40</span>] = &#123;<br><span class="hljs-comment">/* -20 */</span> <span class="hljs-number">88761</span>, <span class="hljs-number">71755</span>, <span class="hljs-number">56483</span>, <span class="hljs-number">46273</span>, <span class="hljs-number">36291</span>,<br><span class="hljs-comment">/* -15 */</span> <span class="hljs-number">29154</span>, <span class="hljs-number">23254</span>, <span class="hljs-number">18705</span>, <span class="hljs-number">14949</span>, <span class="hljs-number">11916</span>,<br><span class="hljs-comment">/* -10 */</span> <span class="hljs-number">9548</span>, <span class="hljs-number">7620</span>, <span class="hljs-number">6100</span>, <span class="hljs-number">4904</span>, <span class="hljs-number">3906</span>,<br><span class="hljs-comment">/* -5 */</span> <span class="hljs-number">3121</span>, <span class="hljs-number">2501</span>, <span class="hljs-number">1991</span>, <span class="hljs-number">1586</span>, <span class="hljs-number">1277</span>,<br><span class="hljs-comment">/* 0 */</span> <span class="hljs-number">1024</span>, <span class="hljs-number">820</span>, <span class="hljs-number">655</span>, <span class="hljs-number">526</span>, <span class="hljs-number">423</span>,<br><span class="hljs-comment">/* 5 */</span> <span class="hljs-number">335</span>, <span class="hljs-number">272</span>, <span class="hljs-number">215</span>, <span class="hljs-number">172</span>, <span class="hljs-number">137</span>,<br><span class="hljs-comment">/* 10 */</span> <span class="hljs-number">110</span>, <span class="hljs-number">87</span>, <span class="hljs-number">70</span>, <span class="hljs-number">56</span>, <span class="hljs-number">45</span>,<br><span class="hljs-comment">/* 15 */</span> <span class="hljs-number">36</span>, <span class="hljs-number">29</span>, <span class="hljs-number">23</span>, <span class="hljs-number">18</span>, <span class="hljs-number">15</span>,<br>&#125;;<br></code></pre></td></tr></table></figure>
+<p>Then calculate each process's time slice:</p>
+<img src="/imgs/202410042248052.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:50%;" />
+<p>Change the way CFS calculates <code>vruntime</code>:</p>
+<img src="/imgs/202410042249814.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:50%;" />
+<p>That is to say, a process has higher priority will dominate CPU for a longer time but its <code>vruntime</code> increases slower.</p>
+<ul>
+<li><strong>CFS Red Black Tree</strong></li>
+</ul>
+<p>CFS uses a red black tree to keep the runnable processes by their <code>vruntime</code>.</p>
+<img src="/imgs/202410042238024.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 40%;" />
+<p>CFS handles sleeping processes by setting the <code>vruntime</code> of a job to the minimum value found in the tree when it wakes up.</p>
+<hr />
+<h3 id="problems-of-fair-share-schedulers"><a class="markdownIt-Anchor" href="#problems-of-fair-share-schedulers"></a> Problems of fair-share schedulers</h3>
+<ul>
+<li>
+<p>Do not particularly mesh well with I/O.</p>
+</li>
+<li>
+<p>leave open the hard problem of ticket or priority assignment (How to assign tickets? How to set nice values?)</p>
+</li>
+</ul>
+<h2 id="multiprocessor-scheduling"><a class="markdownIt-Anchor" href="#multiprocessor-scheduling"></a> Multiprocessor scheduling</h2>
+<blockquote>
+<p>How should the OS schedule jobs on multiple CPUs?</p>
+</blockquote>
+<h3 id="cache-affinity"><a class="markdownIt-Anchor" href="#cache-affinity"></a> Cache Affinity</h3>
+<p>A process, when run on a particular CPU, builds up a fair bit of state in the caches (and TLBs) of the CPU. Therefore, a multiprocessor scheduler should consider <strong>keeping a process on the same CPU if at all possible</strong>.</p>
+<hr />
+<h3 id="single-queue-scheduling"><a class="markdownIt-Anchor" href="#single-queue-scheduling"></a> Single-Queue Scheduling</h3>
+<p>It does not scale well (due to <strong>synchronization overheads</strong>), and it does not readily preserve <strong>cache affinity</strong>.</p>
+<hr />
+<h3 id="multi-queue-scheduling"><a class="markdownIt-Anchor" href="#multi-queue-scheduling"></a> Multi-Queue Scheduling</h3>
+<blockquote>
+<p>How to deal with load imbalance?</p>
+</blockquote>
+<p><strong>work stealing</strong>: A (source) queue that is low on jobs will occasionally peek at another (target) queue, to see how full it is. If the target queue is (notably) more full than the source queue, the source will “steal” one or more jobs from the target to help balance load.</p>
+<h2 id="advanced-scheduling"><a class="markdownIt-Anchor" href="#advanced-scheduling"></a> Advanced Scheduling</h2>
+<p>Avoid scheduling memory-intensive threads on the same shared cache to prevent <strong>cache contention</strong>.</p>
+<img src="/imgs/202410081154427.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 67%;" />
+<blockquote>
+<p>Why  did performance suck on a NUMA system?</p>
+<img src="/imgs/202410081159768.png" srcset="/img/loading.gif" lazyload alt="" />
+</blockquote>
+<p>We didn't take account where the data lives in memory, resulting in <strong>remote latency</strong>.</p>
+<p><strong>Our algorithm:</strong></p>
+<p>Continuously measure traffic(memory requests) of the thread.</p>
+<blockquote>
+<p>Why placing on random node?</p>
+</blockquote>
+<p>Balance the nodes and memory controllers.</p>
+<img src="/imgs/image-20250222160917877.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:80%;" />
+<h2 id="linuxs-completely-fair-scheduling-cfs"><a class="markdownIt-Anchor" href="#linuxs-completely-fair-scheduling-cfs"></a> Linux’s Completely Fair Scheduling (CFS)</h2>
+<div class="note note-danger">
+            <p>Bugs in the Linux Scheduler: Cores may stay idle for seconds while ready threads are waiting in <code>runqueue</code>s.</p>
+          </div>
+<ul>
+<li><strong>On a single-CPU system, CFS is very simple</strong></li>
+</ul>
+<p>The scheduler defines a fixed time interval(<code>sched_latency</code>) during which each thread in the system must run at least once. The interval is divided among threads proportionally to their weights. The resulting interval (after division) is what we call the <code>timeslice</code>.</p>
+<p>Threads are organized in a <code>runqueue</code>, implemented as a red-black tree.</p>
+<ul>
+<li><strong>On multi-core systems, CFS becomes quite complex</strong></li>
+</ul>
+<p>Periodically run a <strong>load-balancing algorithm</strong> that will keep the queues roughly balanced.</p>
+<p>The scheduler also invokes <strong>“emergency” load balancing when a core becomes idle</strong>.</p>
+<ul>
+<li><strong>The (Hierarchical) load balancing algorithm</strong></li>
+</ul>
+<p>CFS balances <code>runqueues</code> based on a metric called <strong>load</strong>, which is the <strong>combination of the thread’s weight and its average CPU utilization</strong>. If a thread does not use much of a CPU, its load will be decreased accordingly.</p>
+<p><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>l</mi><mi>o</mi><mi>a</mi><mi>d</mi><mo>=</mo><mi>w</mi><mi>e</mi><mi>i</mi><mi>g</mi><mi>h</mi><mi>t</mi><mo>∗</mo><mo stretchy="false">(</mo><mi>c</mi><mi>p</mi><mi>u</mi><mi>U</mi><mi>s</mi><mi>e</mi><msup><mo stretchy="false">)</mo><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">load = weight * (cpuUse)^2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.01968em;">l</span><span class="mord mathnormal">o</span><span class="mord mathnormal">a</span><span class="mord mathnormal">d</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathnormal" style="margin-right:0.02691em;">w</span><span class="mord mathnormal">e</span><span class="mord mathnormal">i</span><span class="mord mathnormal" style="margin-right:0.03588em;">g</span><span class="mord mathnormal">h</span><span class="mord mathnormal">t</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1.064108em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathnormal">c</span><span class="mord mathnormal">p</span><span class="mord mathnormal">u</span><span class="mord mathnormal" style="margin-right:0.10903em;">U</span><span class="mord mathnormal">s</span><span class="mord mathnormal">e</span><span class="mclose"><span class="mclose">)</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span></span></p>
+<img src="/imgs/202410081357697.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:67%;" />
+<p>Function running on each cpu cur_cpu:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><code class="hljs pseudocode">/* iterate through each scheduling domain */<br>for all sd in sched domains of cur_cpu do<br><br>  /* At each level, either the first idle core of the scheduling domain or the first core of the scheduling<br>domain is reponsible for balancing the load. */<br>  if sd has idle cores then<br>     first cpu = 1st idle CPU of sd<br>  else<br>     first cpu = 1st CPU of sd<br>  end if<br>  if cur_cpu != first cpu then<br>     continue<br>  end if<br>  <br>  /* Compute the average load of each scheduling group of the scheduling domain and pick the busiest group. */<br>  for all sched group sg in sd do<br>    sg.load = average loads of CPUs in sg<br>  end for<br>  busiest = overloaded sg with the highest load<br>    (or, if nonexistent) imbalanced sg with highest load<br>    (or, if nonexistent) sg with highest load<br>  <br>  /* If the busiest group’s load is lower than the local group’s load, the load is considered balanced at this level. */<br>  local = sg containing cur_cpu<br>  if busiest.load ≤ local.load then<br>     continue<br>  end if<br>  <br>  /*  Otherwise, the load is balanced between the local CPU and the busiest CPU of the group. */<br>  busiest cpu = pick busiest cpu of sg<br>  try to balance load between busiest cpu and cur_cpu<br>  if load cannot be balanced due to tasksets then<br>     exclude busiest cpu, goto line 29<br>  end if<br>  <br>end for<br></code></pre></td></tr></table></figure>
+<ul>
+<li><strong>Special case</strong></li>
+</ul>
+<p>When a thread <strong>wakes up</strong>, after sleeping or waiting for a resource (e.g., locks, I/O), the scheduler tries to place it on the <strong>idlest core</strong>.</p>
+<p>When the thread is awoken by another thread (<code>waker</code> thread). In that case the scheduler will favor cores <strong>sharing a cache with the <code>waker</code> thread</strong> to improve cache reuse.</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/OS/" class="category-chain-item">OS</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/OS/" class="print-no-link">#OS</a>
+      
+        <a href="/tags/Scheduling/" class="print-no-link">#Scheduling</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Scheduling</div>
+      <div>http://oooscar8.github.io/2024/10/10/Scheduling/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Alex Sun</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年10月10日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/10/22/OS161-A4/" title="OS161 Assignment 4">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">OS161 Assignment 4</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/10/07/OS161-A3/" title="OS161 Assignment 3">
+                        <span class="hidden-mobile">OS161 Assignment 3</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div class="disqus" style="width:100%">
+    <div id="disqus_thread"></div>
+    
+      <script type="text/javascript">
+        var disqus_config = function() {
+          this.page.url = 'http://oooscar8.github.io/2024/10/10/Scheduling/';
+          this.page.identifier = '/2024/10/10/Scheduling/';
+        };
+        Fluid.utils.loadComments('#disqus_thread', function() {
+          var d = document, s = d.createElement('script');
+          s.src = '//' + 'fluid' + '.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', new Date());
+          (d.head || d.body).appendChild(s);
+        });
+      </script>
+    
+    <noscript>Please enable JavaScript to view the comments</noscript>
+  </div>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

@@ -1,0 +1,821 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/imgs/wallhaven-p9qeze.jpg">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Alex Sun">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="SJTU ICS2 Y86-64 Assembler Lab">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Assembler Lab">
+<meta property="og:url" content="http://oooscar8.github.io/2025/03/18/Assembler/index.html">
+<meta property="og:site_name" content="Alex&#39;s Space">
+<meta property="og:description" content="SJTU ICS2 Y86-64 Assembler Lab">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://oooscar8.github.io/2025/03/18/imgs/image-20250318041709740-1742299662991-1.png">
+<meta property="og:image" content="http://oooscar8.github.io/2025/03/18/imgs/202502171432021-1740397650876-106-1742299662992-2.png">
+<meta property="og:image" content="http://oooscar8.github.io/2025/03/18/imgs/image-20250318040412107-1742299662992-3.png">
+<meta property="article:published_time" content="2025-03-18T12:07:32.000Z">
+<meta property="article:modified_time" content="2025-03-18T12:14:09.455Z">
+<meta property="article:author" content="Alex Sun">
+<meta property="article:tag" content="Y86">
+<meta property="article:tag" content="CSAPP">
+<meta property="article:tag" content="Assembler">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://oooscar8.github.io/2025/03/18/imgs/image-20250318041709740-1742299662991-1.png">
+  
+  
+  
+  <title>Assembler Lab - Alex&#39;s Space</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"oooscar8.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.1.1"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Alex&#39;s Space</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/imgs/chuyin.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Assembler Lab"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-03-18 20:07" pubdate>
+          2025年3月18日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          17 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Assembler Lab</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="ics-lab6-y86-64-assembler"><a class="markdownIt-Anchor" href="#ics-lab6-y86-64-assembler"></a> ICS Lab6: Y86-64 Assembler</h1>
+<blockquote>
+<p>我Coding + Debugging的总耗时约13小时（Wakatime统计）</p>
+<p>代码量：</p>
+<p><img src="/imgs/image-20250318041709740-1742299662991-1.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+<p>本篇文章将从整体上拆解一下代码框架和实现思路，以及Debug的时候容易遇到的错误，不涉及具体的实现细节（<strong>无代码剧透</strong>）。</p>
+</blockquote>
+<p>在Lab6，我们继续深入认识Y86-64指令集架构，实现一个Assembler将Y86-64汇编代码转化为Y86-64二进制代码。</p>
+<h2 id="skeleton-code"><a class="markdownIt-Anchor" href="#skeleton-code"></a> Skeleton Code</h2>
+<p>在开始Coding之前，一定要先阅读并梳理代码框架！这里我简单讲解一下：</p>
+<p>我们的Assembler需要负责将y86-64汇编源代码转化为机器能够直接执行的二进制代码。也就是说，Assembler的input是一个y64汇编文件（<code>.ys</code>），output是一个y64二进制文件。</p>
+<p>那么如何做到呢？观察<code>main</code>函数，代码框架处理的思路如下：</p>
+<ol>
+<li>按行扫描并解析input <code>.ys</code> file，存储每一行汇编代码对应的字节码</li>
+<li>重定位第一遍扫描未解析的symbol</li>
+<li>将解析完成的结果（字节流）写入output file中</li>
+</ol>
+<p>具体来说：</p>
+<p><code>assemble</code>函数负责解析input file，一行行读取y64汇编代码。每读取一行，交给<code>parse_line</code>对这一行汇编代码进行分词与解析。然后将该行的解析结果（字节码）存入一个<code>line_t</code>结构，加入到line table中。</p>
+<p><code>assemble</code>会按行将input file从头到尾扫描一遍，将每一行汇编代码转化成字节码存在<code>line_t</code>中，但是可能会留有未解析的<code>symbol</code>。代码框架的策略是当扫描到一个label时，将这个label的内存地址和名字存储在<code>symbol_t</code>结构中，加入到全局的symbol table。当扫描到一个无法解析的<code>symbol</code>时，将该行未完整解析的字节码和<code>symbol</code>的名字存储在<code>reloc_t</code>中，加入到relocation table。</p>
+<p>在<code>assemble</code>扫描完一遍input file过后，<code>relocate</code>会被调用。<code>relocate</code>负责遍历relocation table，对每一个未解析<code>symbol</code>的行，在symbol table中找到这个<code>symbol</code>，用这个<code>symbol</code>的内存地址对应的字节码替换该行字节码中的符号占位。</p>
+<p><code>assemble</code>和<code>relocate</code>结束，就说明整个input <code>.ys</code> file全部解析完成，所有行的字节码都存在了line table中。这时候<code>binfile</code>会被调用。<code>binfile</code>会遍历line table，将每行的字节码写入到ouput file中。</p>
+<h2 id="implementation"><a class="markdownIt-Anchor" href="#implementation"></a> Implementation</h2>
+<h3 id="扫描分词和解析"><a class="markdownIt-Anchor" href="#扫描分词和解析"></a> 扫描，分词和解析</h3>
+<p>我们核心要实现的是<code>parse_line</code>，也就是对一行汇编代码进行分词和解析的工作。</p>
+<p>一行汇编代码可能包含几个部分：注释、标签、指令、汇编器伪指令。你的<code>parse_line</code>需要能识别出这几部分。框架代码提供了很多宏和<code>parse_xxx</code>函数来帮助你解析。</p>
+<p>我在这里梳理一些主要的实现逻辑：</p>
+<ol>
+<li>解析指令</li>
+</ol>
+<p>注释和标签都不需要解析为字节码，因此我们关注的重点在解析指令上：</p>
+<p>根据指令的类型（<code>icode</code>），需要不同的parse逻辑。因此需要一个switch语句分类parse不同类型的指令。可以思考的是哪些指令可以合并parse，查看下图的Y86-64指令集：</p>
+<img src="/imgs/202502171432021-1740397650876-106-1742299662992-2.png" srcset="/img/loading.gif" lazyload alt="Y86-64指令集" style="zoom: 60%;" />
+<p>相同字节码格式的指令可以在switch里面合并处理。因为我们关心的只是字节码，与不同指令的执行行为和<code>op code</code>都没有关系。比如<code>rrmovq</code>, <code>cmovXX</code>, <code>OPq</code>可以合并，因为都是只需要解析<code>rA</code>和<code>rB</code>两个寄存器。</p>
+<ol start="2">
+<li>解析汇编器伪指令</li>
+</ol>
+<p>汇编器伪指令（assembler directives）其实不是真正的指令，但是可以统一当作指令一样处理。因为我们关心的只是翻译成的字节码而已。其中<code>.pos</code>和<code>.align</code>这两条伪指令很特殊，他们并不会翻译成字节码，但是可能会改变当前的内存地址。**想一想这会对我们的字节流的输出产生什么影响？**如果你现在想不到，可以到Debug的时候再处理。</p>
+<ol start="3">
+<li>处理symbol占位</li>
+</ol>
+<p>有三处位置可能会有symbol占位，在最后<code>relocate</code>部分需要用<code>symbol</code>对应的地址（字节码）替换：</p>
+<ol>
+<li><code>irmovq</code>中的立即数可能是<code>symbol</code></li>
+<li><code>jXX</code>和<code>call</code>后面的<code>Dest</code>可能是<code>symbol</code></li>
+<li>汇编器伪指令<code>.byte</code>, <code>.word</code>, <code>.long</code>, <code>.quad</code>后面的data可能是<code>symbol</code></li>
+</ol>
+<p>因此在遇到label的时候，需要将其存入<code>symbol_t</code>加入到symbol table。在遇到symbol的时候，需要先将该行的其余部分解析完成，将未完整解析的字节码和symbol的名字一起存入<code>reloc_t</code>，加入到relocation table。</p>
+<ol start="4">
+<li>错误处理</li>
+</ol>
+<p>当遇到解析错误时，需要<code>err_print</code>打印正确的错误信息。</p>
+<h3 id="assemble和binfile"><a class="markdownIt-Anchor" href="#assemble和binfile"></a> <code>assemble</code>和<code>binfile</code></h3>
+<p>在扫描完所有行汇编代码后，assemble还需要做一件事来<strong>确保你解析的汇编代码是正确的</strong>。这个在你实现的时候想不到很正常，可以留到Debug的时候再处理。</p>
+<p><code>binfile</code>需要遍历line table，将每行的字节码写入到ouput file中。这里的写法也有很容易忽略的点，前面其实我已经埋下了伏笔。</p>
+<h2 id="debugging"><a class="markdownIt-Anchor" href="#debugging"></a> Debugging</h2>
+<p>在Coding的过程中，你应该会发现我们的Assembler实现细节非常琐碎，而且我前面也提到容易出错/忽略的点很多（我在下面会罗列出来），因此花费Debug的时间会比较多。</p>
+<ol>
+<li>
+<p>在<code>parse_line</code>中不能移动<code>line-&gt;y64asm</code>指针，这个指针永远指向这一行汇编代码的开头。因为后面<code>print_line</code>需要用到这个指针来打印这一行的汇编代码；并且<code>line-&gt;y64asm</code>是在<code>assemble</code>中用<code>malloc</code>初始化的，因此在<code>finit</code>中需要传递同一个指针给<code>free</code>。</p>
+</li>
+<li>
+<p>注意symbol table和relocation table中的第一个entry是一个dummy head，你第一个向里面添加的<code>symbol_t</code>/<code>reloc_t</code>应该接在这个dummy head后面。</p>
+</li>
+<li>
+<p>只有标签(label)的行需要解析为instruction(<code>TYPE_INS</code>)类型，这样<code>print_line</code>才会打印标签行的内存地址。</p>
+</li>
+<li>
+<p><code>parse_digit</code>需要将<code>*ptr</code>指向的字符串数据解析为<code>long</code>类型的数据。注释里提示的<code>strtoll</code>是将数据解析成(signed) long long类型，因此如果字符串数据大于<code>0x7FFFFFFF</code>就会overflow，会返回signed long long的最大值<code>0x7FFFFFFF</code>。但是我们需要能够解析<code>0 - 0xFFFFFFFF</code>的任意字符串数据，那怎么办呢？可以用<code>strtoull</code>将字符串数据解析为<code>unsigned long long</code>，再cast成<code>long</code>。<code>cast</code>的过程不会改变bit pattern，只不过大于<code>0x7FFFFFFF</code>的数<code>long</code>类型会解析成负数。但只要不改变bit pattern，就不影响最终字节码的翻译。</p>
+</li>
+<li>
+<p><code>.pos</code>和<code>.align</code> directive可能会改变<code>vmaddr</code>，会有什么影响呢？这里就是伏笔回收。这两个汇编器指令的前一条指令和后一条指令间可能会空出来一段内存地址，需要向output binary file中添加padding zeros来填补前后两条指令间的空白。我的做法是不将<code>.pos</code>和<code>.align</code>翻译成字节码，但是在<code>binfile</code>中每次写入output file前检查当前output file中的位置是否等于当前要写入的指令的内存地址。如果不是，说明要向output file中添加padding zeros。</p>
+</li>
+<li>
+<p><code>assemble</code>里面<code>parse</code>完所有的行后还需要做什么？伏笔回收：需要检查<code>JXX</code>/<code>call</code>指令的destination address是否有效。如果这个destination address不等于整个文件中任一一条指令/标签的地址，说明这个destination address是无效的，需要报错。</p>
+</li>
+</ol>
+<p>Debug的时候用好<code>y64asm</code>和<code>y64asm-base</code>程序的<code>-v</code>功能，对照汇编源代码和（你的assembler和标准y64 assembler的）二进制输出，以及比较你的assembler和标准y64 assembler输出的<code>.bin</code>文件的区别。</p>
+<h2 id="test"><a class="markdownIt-Anchor" href="#test"></a> Test</h2>
+<p>To test and evaluate your Assembler:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs shell">yat -h <br><span class="hljs-meta prompt_"># </span><span class="language-bash">Show <span class="hljs-built_in">help</span> information of yat</span><br><br>yat -s &lt;instruction&gt; <br><span class="hljs-meta prompt_"># </span><span class="language-bash">Test correctness of single instruction <span class="hljs-keyword">in</span> y64-ins directory</span><br><br>yat -s &lt;error&gt; <br><span class="hljs-meta prompt_"># </span><span class="language-bash">Test correctness of processing with specific error <span class="hljs-keyword">in</span> y64-err directory</span><br><br>yat -S <br><span class="hljs-meta prompt_"># </span><span class="language-bash">Test correctness of processing all instructions and errors.</span><br><br>yat -a &lt;program&gt; <br><span class="hljs-meta prompt_"># </span><span class="language-bash">Test correctness of processing single .ys file <span class="hljs-keyword">in</span> y64-app directory</span><br><br>yat -A <br><span class="hljs-meta prompt_"># </span><span class="language-bash">Test correctness of processing all .ys files provided <span class="hljs-keyword">in</span> y64-app directory</span><br><br>yat -F <br><span class="hljs-meta prompt_"># </span><span class="language-bash">Test correctness of processing all instructions, error types and programs.</span><br></code></pre></td></tr></table></figure>
+<p>All tests pass!🤗</p>
+<p><img src="/imgs/image-20250318040412107-1742299662992-3.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+<h2 id="总结"><a class="markdownIt-Anchor" href="#总结"></a> 总结</h2>
+<p>总体来说，Assembler的实现思路代码框架还是提示的很完整的，也很简洁。但是具体实现起来琐碎的细节很多，需要有耐心慢慢地水磨功夫和Debug。</p>
+<p>经过Lab6和Lab7，现在给我们一段汇编代码，我们的Assembler可以将其转化成二进制代码。我们的Simulator可以根据转化来的二进制代码，模拟硬件的行为执行这段汇编代码。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/ICS/" class="category-chain-item">ICS</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/ICS/Lab/" class="category-chain-item">Lab</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/Y86/" class="print-no-link">#Y86</a>
+      
+        <a href="/tags/CSAPP/" class="print-no-link">#CSAPP</a>
+      
+        <a href="/tags/Assembler/" class="print-no-link">#Assembler</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Assembler Lab</div>
+      <div>http://oooscar8.github.io/2025/03/18/Assembler/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Alex Sun</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年3月18日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2025/03/12/copilot-issue/" title="解决Github Copilot在VSCode中无法使用问题">
+                        <span class="hidden-mobile">解决Github Copilot在VSCode中无法使用问题</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div class="disqus" style="width:100%">
+    <div id="disqus_thread"></div>
+    
+      <script type="text/javascript">
+        var disqus_config = function() {
+          this.page.url = 'http://oooscar8.github.io/2025/03/18/Assembler/';
+          this.page.identifier = '/2025/03/18/Assembler/';
+        };
+        Fluid.utils.loadComments('#disqus_thread', function() {
+          var d = document, s = d.createElement('script');
+          s.src = '//' + 'fluid' + '.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', new Date());
+          (d.head || d.body).appendChild(s);
+        });
+      </script>
+    
+    <noscript>Please enable JavaScript to view the comments</noscript>
+  </div>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

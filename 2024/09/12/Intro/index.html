@@ -1,0 +1,1078 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/imgs/wallhaven-p9qeze.jpg">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Alex Sun">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Notes on OS Introduction">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Introduction to Operating Systems">
+<meta property="og:url" content="http://oooscar8.github.io/2024/09/12/Intro/index.html">
+<meta property="og:site_name" content="Alex&#39;s Space">
+<meta property="og:description" content="Notes on OS Introduction">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://oooscar8.github.io/2024/09/12/imgs/202409101132215.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/09/12/imgs/202409071727314.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/09/12/imgs/202409162140360-1740411340153-24.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/09/12/imgs/202410262356423-1740411340153-25.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/09/12/imgs/202410241132668.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/09/12/imgs/202409082242329.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/09/12/imgs/202409082254703.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/09/12/imgs/202409092154279.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/09/12/imgs/202409092207753.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/09/12/imgs/202409121951307.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/09/12/imgs/202409112244003.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/09/12/imgs/202409112257475.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/09/12/imgs/202409141920846.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/09/12/imgs/202409112349239.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/09/12/imgs/202409112350501.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/09/12/imgs/202409120001748.png">
+<meta property="og:image" content="http://oooscar8.github.io/2024/09/12/imgs/202409121132415.png">
+<meta property="article:published_time" content="2024-09-11T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-02-24T20:48:32.854Z">
+<meta property="article:author" content="Alex Sun">
+<meta property="article:tag" content="OS">
+<meta property="article:tag" content="Boot">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://oooscar8.github.io/2024/09/12/imgs/202409101132215.png">
+  
+  
+  
+  <title>Introduction to Operating Systems - Alex&#39;s Space</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"oooscar8.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.1.1"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Alex&#39;s Space</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/imgs/chuyin.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Introduction to Operating Systems"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-09-12 00:00" pubdate>
+          2024年9月12日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          905 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          8 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Introduction to Operating Systems</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>In this part, we will introduce you to the world of Operating Systems! We will first introduce the 3 major parts of Operating Systems: Virtualization, Concurrency and Persistence, which we will go into the details in later days. Then, we will introduce some basic Operating System interfaces and concepts. At last, we will talk about the OS boot sequence, especially how the OS boot in OS/161.</p>
+<h1 id="introduction-to-operating-systems"><a class="markdownIt-Anchor" href="#introduction-to-operating-systems"></a> Introduction to Operating Systems</h1>
+<blockquote>
+<p><strong>Learning Materials</strong></p>
+<p>Readings:</p>
+<p><a target="_blank" rel="noopener" href="http://pages.cs.wisc.edu/~remzi/OSTEP/intro.pdf">OSTEP book Chapter 2</a></p>
+<p><a target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/download/book-rev8.pdf">xv6 book Chapter 0</a></p>
+<p><a target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/download/book-rev8.pdf">xv6 book Chapter 3</a></p>
+<p><a target="_blank" rel="noopener" href="https://pages.cs.wisc.edu/~remzi/OSTEP/vm-intro.p">Address Spaces</a></p>
+<p><a target="_blank" rel="noopener" href="https://pages.cs.wisc.edu/~remzi/OSTEP/vm-mechanism.pdf">Address Translation</a></p>
+<p><a target="_blank" rel="noopener" href="https://docs.google.com/document/d/1HLHXxTnW6Cb96wZVViH-7gIoF57AdBBMvVmgUxdA1KM">How does an OS boot?</a></p>
+<p><a target="_blank" rel="noopener" href="http://os161.eecs.harvard.edu/documentation/sys161-2.0.2/lamebus.html"><code>LAMEbus</code> documentation</a></p>
+<p><a target="_blank" rel="noopener" href="https://people.ece.ubc.ca/~os161/download/book-rev8.pdf">xv6 book Chapter 1</a></p>
+<p><a target="_blank" rel="noopener" href="http://littleosbook.github.io/#booting">Short section on booting in The Little Book About OS Development</a></p>
+<p>Lecture Slides:</p>
+<p><a target="_blank" rel="noopener" href="https://people.ece.ubc.ca/os161/LECTURE-SLIDES/Introduction.pptx">Introduction</a></p>
+<p><a target="_blank" rel="noopener" href="https://people.ece.ubc.ca/os161/LECTURE-SLIDES/bootstrap-kernel-mode.pptx">Bootstrapping. What does it mean to be the <em>kernel</em>?</a></p>
+</blockquote>
+<h2 id="3-major-parts-of-operating-systems"><a class="markdownIt-Anchor" href="#3-major-parts-of-operating-systems"></a> 3 Major Parts of Operating Systems</h2>
+<p>In this part, we will briefly introduce the 3 major parts of Operating Systems: Virtualization, Concurrency and Persistence.</p>
+<h3 id="virtualization"><a class="markdownIt-Anchor" href="#virtualization"></a> Virtualization</h3>
+<p>The crux of the problem:</p>
+<blockquote>
+<p>How does OS virtualize resources?</p>
+</blockquote>
+<ul>
+<li>Virtualizing the CPU</li>
+</ul>
+<p>OS creates an illusion that the system has a very large number of virtual CPUs.</p>
+<p>Each running program is represented in the kernel as a process.</p>
+<p>Each process has its own state: Program counter, registers, memory, open files, …</p>
+<p>A process runs for a while…Then the system is interrupted by a <strong>timer interrupt</strong>.</p>
+<p>The kernel performs a <strong>context switch</strong>:</p>
+<blockquote>
+<p>Saves the state of the old process to memory</p>
+<p>Loads the state of the new process onto the CPU</p>
+<p>Let the new process run</p>
+</blockquote>
+<p>After a while, there is another interrupt, and the kernel switches back to the old process.</p>
+<ul>
+<li>Virtualizing Memory</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-number">1</span>  <span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;unistd.h&gt;</span></span><br><span class="hljs-number">2</span>  <span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br><span class="hljs-number">3</span>  <span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdlib.h&gt;</span></span><br><span class="hljs-number">4</span>  <span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;common.h&quot;</span></span><br><span class="hljs-number">5</span><br><span class="hljs-number">6</span>  <span class="hljs-type">int</span><br><span class="hljs-number">7</span>  main(<span class="hljs-type">int</span> argc, <span class="hljs-type">char</span> *argv[])<br><span class="hljs-number">8</span>  &#123;<br><span class="hljs-number">9</span>  <span class="hljs-type">int</span> *p = <span class="hljs-built_in">malloc</span>(<span class="hljs-keyword">sizeof</span>(<span class="hljs-type">int</span>)); <span class="hljs-comment">// a1</span><br><span class="hljs-number">10</span> assert(p != <span class="hljs-literal">NULL</span>);<br><span class="hljs-number">11</span> <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;(%d) address pointed to by p: %p\n&quot;</span>,<br><span class="hljs-number">12</span> getpid(), p); <span class="hljs-comment">// a2</span><br><span class="hljs-number">13</span> *p = <span class="hljs-number">0</span>; <span class="hljs-comment">// a3</span><br><span class="hljs-number">14</span> <span class="hljs-keyword">while</span> (<span class="hljs-number">1</span>) &#123;<br><span class="hljs-number">15</span> Spin(<span class="hljs-number">1</span>);<br><span class="hljs-number">16</span> *p = *p + <span class="hljs-number">1</span>;<br><span class="hljs-number">17</span> <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;(%d) p: %d\n&quot;</span>, getpid(), *p); <span class="hljs-comment">// a4</span><br><span class="hljs-number">18</span> &#125;<br><span class="hljs-number">19</span> <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br><span class="hljs-number">20</span> &#125;<br></code></pre></td></tr></table></figure>
+<p>output:</p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs less"><span class="hljs-selector-tag">prompt</span>&gt; ./<span class="hljs-selector-tag">mem</span> <span class="hljs-selector-tag">&amp;</span> ./<span class="hljs-selector-tag">mem</span> <span class="hljs-selector-tag">&amp;</span><br><span class="hljs-selector-attr">[1]</span> <span class="hljs-number">24113</span><br><span class="hljs-selector-attr">[2]</span> <span class="hljs-number">24114</span><br>(<span class="hljs-number">24113</span>) <span class="hljs-selector-tag">address</span> <span class="hljs-selector-tag">pointed</span> <span class="hljs-selector-tag">to</span> <span class="hljs-selector-tag">by</span> <span class="hljs-selector-tag">p</span>: <span class="hljs-number">0</span><span class="hljs-selector-tag">x200000</span><br>(<span class="hljs-number">24114</span>) <span class="hljs-selector-tag">address</span> <span class="hljs-selector-tag">pointed</span> <span class="hljs-selector-tag">to</span> <span class="hljs-selector-tag">by</span> <span class="hljs-selector-tag">p</span>: <span class="hljs-number">0</span><span class="hljs-selector-tag">x200000</span><br>(<span class="hljs-number">24113</span>) <span class="hljs-selector-tag">p</span>: <span class="hljs-number">1</span><br>(<span class="hljs-number">24114</span>) <span class="hljs-selector-tag">p</span>: <span class="hljs-number">1</span><br>(<span class="hljs-number">24114</span>) <span class="hljs-selector-tag">p</span>: <span class="hljs-number">2</span><br>(<span class="hljs-number">24113</span>) <span class="hljs-selector-tag">p</span>: <span class="hljs-number">2</span><br>(<span class="hljs-number">24113</span>) <span class="hljs-selector-tag">p</span>: <span class="hljs-number">3</span><br>(<span class="hljs-number">24114</span>) <span class="hljs-selector-tag">p</span>: <span class="hljs-number">3</span><br>(<span class="hljs-number">24113</span>) <span class="hljs-selector-tag">p</span>: <span class="hljs-number">4</span><br>(<span class="hljs-number">24114</span>) <span class="hljs-selector-tag">p</span>: <span class="hljs-number">4</span><br>...<br></code></pre></td></tr></table></figure>
+<p>Each process accesses its own <strong>address space</strong>, which the OS maps onto the physical memory of the machine. We will talk more about address spaces and how virtual memory is translated into physical memory later.</p>
+<p>Virtual memory may be much larger than physical memory.</p>
+<img src="/imgs/202409101132215.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 67%;" />
+<hr />
+<h3 id="concurrency"><a class="markdownIt-Anchor" href="#concurrency"></a> Concurrency</h3>
+<p>A Multi-threaded Program:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-number">1</span>  <span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br><span class="hljs-number">2</span>  <span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdlib.h&gt;</span></span><br><span class="hljs-number">3</span>  <span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;common.h&quot;</span></span><br><span class="hljs-number">4</span>  <span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;common_threads.h&quot;</span></span><br><span class="hljs-number">5</span><br><span class="hljs-number">6</span>  <span class="hljs-keyword">volatile</span> <span class="hljs-type">int</span> counter = <span class="hljs-number">0</span>;<br><span class="hljs-number">7</span>  <span class="hljs-type">int</span> loops;<br><span class="hljs-number">8</span><br><span class="hljs-number">9</span>  <span class="hljs-type">void</span> *<span class="hljs-title function_">worker</span><span class="hljs-params">(<span class="hljs-type">void</span> *arg)</span> &#123;<br><span class="hljs-number">10</span> <span class="hljs-type">int</span> i;<br><span class="hljs-number">11</span> <span class="hljs-keyword">for</span> (i = <span class="hljs-number">0</span>; i &lt; loops; i++) &#123;<br><span class="hljs-number">12</span> counter++;<br><span class="hljs-number">13</span> &#125;<br><span class="hljs-number">14</span> <span class="hljs-keyword">return</span> <span class="hljs-literal">NULL</span>;<br><span class="hljs-number">15</span> &#125;<br><span class="hljs-number">16</span><br><span class="hljs-number">17</span> <span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">(<span class="hljs-type">int</span> argc, <span class="hljs-type">char</span> *argv[])</span> &#123;<br><span class="hljs-number">18</span> <span class="hljs-keyword">if</span> (argc != <span class="hljs-number">2</span>) &#123;<br><span class="hljs-number">19</span> <span class="hljs-built_in">fprintf</span>(<span class="hljs-built_in">stderr</span>, <span class="hljs-string">&quot;usage: threads &lt;value&gt;\n&quot;</span>);<br><span class="hljs-number">20</span> <span class="hljs-built_in">exit</span>(<span class="hljs-number">1</span>);<br><span class="hljs-number">21</span> &#125;<br><span class="hljs-number">22</span> loops = atoi(argv[<span class="hljs-number">1</span>]);<br><span class="hljs-number">23</span> <span class="hljs-type">pthread_t</span> p1, p2;<br><span class="hljs-number">24</span> <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Initial value : %d\n&quot;</span>, counter);<br><span class="hljs-number">25</span><br><span class="hljs-number">26</span> Pthread_create(&amp;p1, <span class="hljs-literal">NULL</span>, worker, <span class="hljs-literal">NULL</span>);<br><span class="hljs-number">27</span> Pthread_create(&amp;p2, <span class="hljs-literal">NULL</span>, worker, <span class="hljs-literal">NULL</span>);<br><span class="hljs-number">28</span> Pthread_join(p1, <span class="hljs-literal">NULL</span>);<br><span class="hljs-number">29</span> Pthread_join(p2, <span class="hljs-literal">NULL</span>);<br><span class="hljs-number">30</span> <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Final value : %d\n&quot;</span>, counter);<br><span class="hljs-number">31</span> <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br><span class="hljs-number">32</span> &#125;<br></code></pre></td></tr></table></figure>
+<p>output:</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-string">prompt&gt;</span> <span class="hljs-string">gcc</span> <span class="hljs-string">-o</span> <span class="hljs-string">threads</span> <span class="hljs-string">threads.c</span> <span class="hljs-string">-Wall</span> <span class="hljs-string">-pthread</span><br><span class="hljs-string">prompt&gt;</span> <span class="hljs-string">./threads</span> <span class="hljs-number">1000</span><br><span class="hljs-attr">Initial value :</span> <span class="hljs-number">0</span><br><span class="hljs-attr">Final value :</span> <span class="hljs-number">2000</span><br></code></pre></td></tr></table></figure>
+<p>Each thread increments <code>counter</code> 1000 times</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">prompt</span>&gt; ./threads <span class="hljs-number">100000</span><br><span class="hljs-attribute">Initial</span> value : <span class="hljs-number">0</span><br><span class="hljs-attribute">Final</span> value : <span class="hljs-number">143012</span> // huh??<br><span class="hljs-attribute">prompt</span>&gt; ./threads <span class="hljs-number">100000</span><br><span class="hljs-attribute">Initial</span> value : <span class="hljs-number">0</span><br><span class="hljs-attribute">Final</span> value : <span class="hljs-number">137298</span> // what the??<br></code></pre></td></tr></table></figure>
+<p>What?</p>
+<blockquote>
+<p>Incrementing <code>counter</code> takes 3 instructions:</p>
+</blockquote>
+<blockquote>
+<p>One to load the value of the counter from memory into a register, one to increment it, and one to store it back into memory.</p>
+</blockquote>
+<blockquote>
+<p>These three instructions do not execute atomically.</p>
+</blockquote>
+<p>So it leads to the crux of the problem:</p>
+<blockquote>
+<p>How to build correct concurrent problems?</p>
+</blockquote>
+<hr />
+<h3 id="persistence"><a class="markdownIt-Anchor" href="#persistence"></a> Persistence</h3>
+<p>The crux of the problem:</p>
+<blockquote>
+<p>How to store data persistently</p>
+</blockquote>
+<p>The <strong>file system</strong> is the part of the OS in charge of managing persistent data</p>
+<hr />
+<h3 id="design-goals"><a class="markdownIt-Anchor" href="#design-goals"></a> Design Goals</h3>
+<p>Finding the right set of trade-offs is a key to building systems.</p>
+<p>Our goals:</p>
+<ul>
+<li>
+<p>build up some <strong>abstractions</strong></p>
+</li>
+<li>
+<p>provide <strong>high performance</strong></p>
+</li>
+</ul>
+<p>provide virtualization and other OS features without excessive overheads (extra time, extra space).</p>
+<ul>
+<li>provide <strong>protection</strong> between applications</li>
+</ul>
+<p>main principles of OS: <strong>isolation</strong></p>
+<ul>
+<li>
+<p><strong>reliability</strong></p>
+</li>
+<li>
+<p>other: energy-efficiency, security, mobility</p>
+</li>
+</ul>
+<h2 id="operating-system-interfaces"><a class="markdownIt-Anchor" href="#operating-system-interfaces"></a> Operating System Interfaces</h2>
+<h3 id="user-space-and-kernel-space"><a class="markdownIt-Anchor" href="#user-space-and-kernel-space"></a> user space and kernel space</h3>
+<p>A process alternates between executing in user space and kernel space.</p>
+<img src="/imgs/202409071727314.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:50%;" />
+<hr />
+<h3 id="shell"><a class="markdownIt-Anchor" href="#shell"></a> shell</h3>
+<p>An ordinary user program that reads commands from the user and executes them</p>
+<p>The primary user interface to traditional Unix-like systems</p>
+<hr />
+<h3 id="processes-and-memory"><a class="markdownIt-Anchor" href="#processes-and-memory"></a> Processes and memory</h3>
+<p><code>fork()</code></p>
+<p><code>wait()</code></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">int</span> pid = fork();<br><span class="hljs-keyword">if</span>(pid &gt; <span class="hljs-number">0</span>)&#123;<br><span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;parent: child=%d\n&quot;</span>, pid);<br>pid = wait();<br><span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;child %d is done\n&quot;</span>, pid);<br>&#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(pid == <span class="hljs-number">0</span>)&#123;<br><span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;child: exiting\n&quot;</span>);<br><span class="hljs-built_in">exit</span>();<br>&#125; <span class="hljs-keyword">else</span> &#123;<br><span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;fork error\n&quot;</span>);<br>&#125;<br></code></pre></td></tr></table></figure>
+<p><code>exec(filename, *argv)</code></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">char</span> *argv[<span class="hljs-number">3</span>];<br>argv[<span class="hljs-number">0</span>] = <span class="hljs-string">&quot;echo&quot;</span>;<br>argv[<span class="hljs-number">1</span>] = <span class="hljs-string">&quot;hello&quot;</span>;<br>argv[<span class="hljs-number">2</span>] = <span class="hljs-number">0</span>;<br>exec(<span class="hljs-string">&quot;/bin/echo&quot;</span>, argv);<br><span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;exec error\n&quot;</span>);<br></code></pre></td></tr></table></figure>
+<hr />
+<h3 id="io-and-file-descriptors"><a class="markdownIt-Anchor" href="#io-and-file-descriptors"></a> I/O and File descriptors</h3>
+<p>The file descriptor interface <strong>abstracts</strong> away the differences between files, pipes, and devices, making them all look like streams of bytes</p>
+<ul>
+<li>I/O redirection</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">char</span> *argv[<span class="hljs-number">2</span>];<br>argv[<span class="hljs-number">0</span>] = <span class="hljs-string">&quot;cat&quot;</span>;<br>argv[<span class="hljs-number">1</span>] = <span class="hljs-number">0</span>;<br><span class="hljs-keyword">if</span>(fork() == <span class="hljs-number">0</span>) &#123;<br>close(<span class="hljs-number">0</span>);<br>open(<span class="hljs-string">&quot;input.txt&quot;</span>, O_RDONLY);<br>exec(<span class="hljs-string">&quot;cat&quot;</span>, argv);<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>Now it is clear why it is a good idea that <code>fork</code> and <code>exec</code> are separate calls. This separation allows the shell to fix up (e.g. I/O redirection) the child process before the child runs the intended program (<code>exec</code>).</p>
+<ul>
+<li><code>fork</code> system call</li>
+</ul>
+<p>Although fork copies the file descriptor table, each underlying file offset is shared between parent and child.</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-keyword">if</span>(fork() == <span class="hljs-number">0</span>) &#123;<br>write(<span class="hljs-number">1</span>, <span class="hljs-string">&quot;hello &quot;</span>, <span class="hljs-number">6</span>);<br><span class="hljs-built_in">exit</span>();<br>&#125; <span class="hljs-keyword">else</span> &#123;<br>wait();<br>write(<span class="hljs-number">1</span>, <span class="hljs-string">&quot;world\n&quot;</span>, <span class="hljs-number">6</span>);<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>output: &quot;hello world&quot;</p>
+<ul>
+<li><code>dup</code> system call</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs c">fd = dup(<span class="hljs-number">1</span>);<br>write(<span class="hljs-number">1</span>, <span class="hljs-string">&quot;hello &quot;</span>, <span class="hljs-number">6</span>);<br>write(fd, <span class="hljs-string">&quot;world\n&quot;</span>, <span class="hljs-number">6</span>);<br></code></pre></td></tr></table></figure>
+<p>output: &quot;hello world&quot;</p>
+<hr />
+<h3 id="pipes"><a class="markdownIt-Anchor" href="#pipes"></a> Pipes</h3>
+<p>A small kernel buffer exposed to processes as a pair of file descriptors, one for reading and one for writing</p>
+<img src="/imgs/202409162140360-1740411340153-24.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:33%;" />
+<p>The pipe file is just a <strong>memory buffer</strong>.</p>
+<p>The mechanics of pipe is that it creates a special &quot;pipe&quot; file in memory. Parent process's two file descriptors refer to its <code>vnode</code>: one for reading (<code>pfd[0]</code>), one for writing (<code>pfd[1]</code>). Then the parent process forks a child process, which shares file handles with the parent and can read/write the same pipe. The parent and the child each close one side of the pipe(read/write) and can communicate with each other.</p>
+<p><img src="/imgs/202410262356423-1740411340153-25.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+<ul>
+<li><strong>Redirecting Pipe I/O</strong>:</li>
+</ul>
+<p>As shown below, parent redirects output end of the pipe (<code>pfd[1]</code>) to STDOUT via the <code>dup2</code> system  call. In this way, whatever the parent is writing to STDOUT can be read by the child from the input end of the pipe (<code>pfd[0]</code>).</p>
+<p><img src="/imgs/202410241132668.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">int</span> p[<span class="hljs-number">2</span>];<br><span class="hljs-type">char</span> *argv[<span class="hljs-number">2</span>];<br>argv[<span class="hljs-number">0</span>] = <span class="hljs-string">&quot;wc&quot;</span>;<br>argv[<span class="hljs-number">1</span>] = <span class="hljs-number">0</span>;<br>pipe(p);<br><span class="hljs-keyword">if</span>(fork() == <span class="hljs-number">0</span>) &#123;<br>    close(<span class="hljs-number">0</span>);<br>    dup(p[<span class="hljs-number">0</span>]);    <span class="hljs-comment">//duplicate p[0] to 0</span><br>    close(p[<span class="hljs-number">0</span>]);<br>    close(p[<span class="hljs-number">1</span>]);<br>    exec(<span class="hljs-string">&quot;/bin/wc&quot;</span>, argv);<br>&#125; <span class="hljs-keyword">else</span> &#123;<br>    write(p[<span class="hljs-number">1</span>], <span class="hljs-string">&quot;hello world\n&quot;</span>, <span class="hljs-number">12</span>);<br>    close(p[<span class="hljs-number">0</span>]);<br>    close(p[<span class="hljs-number">1</span>]);<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>The program redirect child process's stdin to the read end of the pipe</p>
+<p>p[0] is the read end of the pipe</p>
+<p>p[1] is the write end of the pipe</p>
+<hr />
+<h3 id="file-system"><a class="markdownIt-Anchor" href="#file-system"></a> File System</h3>
+<ul>
+<li><code>chdir</code> system call</li>
+</ul>
+<p>They open the same file:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs c">chdir(<span class="hljs-string">&quot;/a&quot;</span>);<br>chdir(<span class="hljs-string">&quot;b&quot;</span>);<br>open(<span class="hljs-string">&quot;c&quot;</span>, O_RDONLY);<br><br>open(<span class="hljs-string">&quot;/a/b/c&quot;</span>, O_RDONLY);<br></code></pre></td></tr></table></figure>
+<ul>
+<li><code>O_CREATE</code> flag and <code>mknod</code> system call</li>
+</ul>
+<p><code>open</code> with the <code>O_CREATE</code> flag creates a new data file</p>
+<p><code>mknod</code> creates a new device file</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs c">mkdir(<span class="hljs-string">&quot;/dir&quot;</span>);<br>fd = open(<span class="hljs-string">&quot;/dir/file&quot;</span>, O_CREATE|O_WRONLY);<br>close(fd);<br>mknod(<span class="hljs-string">&quot;/console&quot;</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>);<br></code></pre></td></tr></table></figure>
+<ul>
+<li><code>fstat</code></li>
+</ul>
+<p><code>fstat</code> retrieves information about the object a file descriptor refers to.</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">define</span> T_DIR 1 <span class="hljs-comment">// Directory</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> T_FILE 2 <span class="hljs-comment">// File</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> T_DEV 3 <span class="hljs-comment">// Device</span></span><br><span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">stat</span> &#123;</span><br><span class="hljs-type">short</span> type; <span class="hljs-comment">// Type of file</span><br><span class="hljs-type">int</span> dev; <span class="hljs-comment">// File system’s disk device</span><br>uint ino; <span class="hljs-comment">// Inode number</span><br><span class="hljs-type">short</span> nlink; <span class="hljs-comment">// Number of links to file</span><br>uint size; <span class="hljs-comment">// Size of file in bytes</span><br>&#125;;<br></code></pre></td></tr></table></figure>
+<ul>
+<li><code>link</code> system call</li>
+</ul>
+<p>The same underlying file, called an <strong><code>inode</code></strong>, can have multiple names, called <strong>links</strong>,</p>
+<p>Create a new file named both a and b:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c">open(<span class="hljs-string">&quot;a&quot;</span>, O_CREATE|O_WRONLY);<br>link(<span class="hljs-string">&quot;a&quot;</span>, <span class="hljs-string">&quot;b&quot;</span>);<br></code></pre></td></tr></table></figure>
+<p>Each <code>inode</code> is identified by a unique <strong><code>inode number</code></strong></p>
+<ul>
+<li><code>unlink</code> system call</li>
+</ul>
+<p>Removes a name from the file system</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c">unlink(<span class="hljs-string">&quot;a&quot;</span>);<br></code></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c">fd = open(<span class="hljs-string">&quot;/tmp/xyz&quot;</span>, O_CREATE|O_RDWR);<br>unlink(<span class="hljs-string">&quot;/tmp/xyz&quot;</span>);<br></code></pre></td></tr></table></figure>
+<h2 id="traps-interrupts-and-drivers-in-x86"><a class="markdownIt-Anchor" href="#traps-interrupts-and-drivers-in-x86"></a> Traps, Interrupts, and Drivers (in x86)</h2>
+<h3 id="systems-calls-exceptions-and-interrupts"><a class="markdownIt-Anchor" href="#systems-calls-exceptions-and-interrupts"></a> Systems Calls, Exceptions, and Interrupts</h3>
+<ul>
+<li>interrupt</li>
+</ul>
+<p>An interrupts stops the normal processor loop and starts executing a new sequence called an <strong>interrupt handler</strong></p>
+<p>Processor should switch from <strong>user mode</strong> to <strong>kernel mode</strong>, and back</p>
+<ul>
+<li>Difference between traps and interrupts</li>
+</ul>
+<p><strong>traps</strong> are caused by the current process running on a processor (e.g. system call)</p>
+<p><strong>interrupts</strong> are caused by devices and may not be related to the currently running process</p>
+<hr />
+<h3 id="x86-protection"><a class="markdownIt-Anchor" href="#x86-protection"></a> x86 protection</h3>
+<p>To make a system call on the x86, a program invokes the int n instruction</p>
+<p>n specifies the index into the IDT (interrupt descriptor table), representing different types of interrupt</p>
+<img src="/imgs/202409082242329.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 50%;" />
+<hr />
+<h3 id="code-assembly-trap-handlers"><a class="markdownIt-Anchor" href="#code-assembly-trap-handlers"></a> Code: Assembly trap handlers</h3>
+<p>The user mode processor registers are saved in the <code>trapframe</code> on the kernel stack</p>
+<img src="/imgs/202409082254703.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 67%;" />
+<hr />
+<h3 id="code-c-trap-handler"><a class="markdownIt-Anchor" href="#code-c-trap-handler"></a> Code: C trap handler</h3>
+<p>Each handler sets up a <strong>trap frame</strong> and then calls the C function <code>trap</code></p>
+<p>If the trap is <code>T_SYSCALL</code>, trap calls the <strong>system call handler</strong> <code>syscall</code></p>
+<p>After checking for a system call, trap looks for <strong>hardware interrupts</strong></p>
+<p>If the trap is not a system call and not a hardware device looking for attention, trap assumes it was caused by <strong>incorrect behavior</strong> as part of the code that was executing before the trap</p>
+<p>If the code was a <strong>user program</strong>, clean it up</p>
+<p>If it was <strong>kernel</strong> running, there must be a kernel bug: trap prints details about the surprise and then calls <code>panic</code>.</p>
+<hr />
+<h3 id="code-system-calls"><a class="markdownIt-Anchor" href="#code-system-calls"></a> Code: System Calls</h3>
+<p><code>trap</code> invoke <code>syscall</code></p>
+<p><code>syscall</code> loads the system call number from the trap frame and indexes into the system call table</p>
+<hr />
+<h3 id="code-interrupts"><a class="markdownIt-Anchor" href="#code-interrupts"></a> Code: Interrupts</h3>
+<p>Can occur at any time</p>
+<p>Signal the CPU when a device needs attention</p>
+<hr />
+<h3 id="drivers"><a class="markdownIt-Anchor" href="#drivers"></a> Drivers</h3>
+<p>A driver manage a particular device: it provides interrupt handlers for a device, causes a device to perform operations, causes a device to generate interrupts, …</p>
+<hr />
+<h3 id="code-disk-driver"><a class="markdownIt-Anchor" href="#code-disk-driver"></a> Code: Disk driver</h3>
+<ul>
+<li>Disk sectors</li>
+</ul>
+<p>A numbered sequence of 512-byte blocks</p>
+<p>The disk driver <strong>represent disk sectors</strong> with a data structure called a <strong>buffer</strong></p>
+<p>Each buffer represents the contents of one sector on a particular disk device</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-number">3500</span> <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">buf</span> &#123;</span><br><span class="hljs-number">3501</span> <span class="hljs-type">int</span> flags;    <span class="hljs-comment">//track the relationship between memory and disk</span><br><span class="hljs-number">3502</span> uint dev;<br><span class="hljs-number">3503</span> uint sector;<br><span class="hljs-number">3504</span> <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">buf</span> *<span class="hljs-title">prev</span>;</span> <span class="hljs-comment">// LRU cache list</span><br><span class="hljs-number">3505</span> <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">buf</span> *<span class="hljs-title">next</span>;</span><br><span class="hljs-number">3506</span> <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">buf</span> *<span class="hljs-title">qnext</span>;</span> <span class="hljs-comment">// disk queue</span><br><span class="hljs-number">3507</span> uchar data[<span class="hljs-number">512</span>];<br><span class="hljs-number">3508</span> &#125;;<br></code></pre></td></tr></table></figure>
+<h2 id="address-space-and-address-translation"><a class="markdownIt-Anchor" href="#address-space-and-address-translation"></a> Address Space and Address Translation</h2>
+<h3 id="address-spaces"><a class="markdownIt-Anchor" href="#address-spaces"></a> Address Spaces</h3>
+<ul>
+<li>Time sharing</li>
+</ul>
+<p>Where the programs actually lives:</p>
+<img src="/imgs/202409092154279.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 67%;" />
+<ul>
+<li>Address Space</li>
+</ul>
+<p>Layout of an user address space:</p>
+<img src="/imgs/202409092207753.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 33%;" />
+<p>Layout of a virtual address space:</p>
+<img src="/imgs/202409121951307.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:50%;" />
+<hr />
+<h3 id="address-translation"><a class="markdownIt-Anchor" href="#address-translation"></a> Address Translation</h3>
+<ul>
+<li>Dynamic (Hardware-based) Relocation</li>
+</ul>
+<p>When a program starts running, the OS decides where in physical memory it should be loaded and sets the base register to that value.</p>
+<p>physical address = virtual address + base</p>
+<p><code>base</code> is the process's <strong>physical starting address</strong> (first instruction)</p>
+<p><code>bounds</code> holds the <strong>size</strong> of the process's <strong>address space</strong> to help with protection</p>
+<ul>
+<li>OS Issues</li>
+</ul>
+<p>what OS does at boot time (After the kernel is loaded into memory by bootloader):</p>
+<img src="/imgs/202409112244003.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:50%;" />
+<p>what happens when a process (Process A) starts running:</p>
+<p>Address Translation is done by hardware only, except for exception</p>
+<p>when starting a new process A,</p>
+<blockquote>
+<p>allocate entry in process table</p>
+<p>allocate memory for process (looking for free memory via <code>free list</code>)</p>
+<p>set base/bound registers</p>
+<p>return from trap into A</p>
+</blockquote>
+<p>when a context switch occurs,</p>
+<blockquote>
+<p>save regs(A) to proc-struct(A) (including base/bounds, PC…);</p>
+<p>restore regs(B) from proc-struct(B) (including base/bounds, PC…)</p>
+<p>return from trap into B</p>
+</blockquote>
+<img src="/imgs/202409112257475.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 67%;" />
+<h2 id="os-booting"><a class="markdownIt-Anchor" href="#os-booting"></a> OS Booting</h2>
+<h3 id="general-booting-sequence"><a class="markdownIt-Anchor" href="#general-booting-sequence"></a> General booting sequence</h3>
+<p>Booting an operating system consists of transferring control along a chain of small programs</p>
+<p>An example of the boot process. Each box is a program:</p>
+<img src="/imgs/202409141920846.png" srcset="/img/loading.gif" lazyload alt="" style="zoom: 33%;" />
+<ul>
+<li>BIOS</li>
+</ul>
+<p>Today, BIOS mainly runs some early diagnostics (power-on-self-test) and then transfers control to the bootloader.</p>
+<ul>
+<li>The Bootloader</li>
+</ul>
+<p>task: transfer control to the operating system</p>
+<p>Using GRUB, the OS can be built as an ordinary ELF executable, which will be loaded by GRUB into the correct memory location.</p>
+<ul>
+<li>Kernel ELF Information</li>
+</ul>
+<p>Entry point address: where CPU executes the first instruction <strong>after the kernel is loaded into memory by the bootloader</strong>.</p>
+<p>In OS161:</p>
+<figure class="highlight elixir"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs elixir">root<span class="hljs-variable">@xxxxxxxxxxxx</span><span class="hljs-symbol">:~/os161/root</span><span class="hljs-comment"># os161-readelf -h kernel</span><br><span class="hljs-title class_">ELF</span> <span class="hljs-symbol">Header:</span><br>  ...<br>  <span class="hljs-title class_">Entry</span> point <span class="hljs-symbol">address:</span>               <span class="hljs-number">0x8002d6f0</span>    //the first instruction to run<br>  ...<br></code></pre></td></tr></table></figure>
+<hr />
+<h3 id="how-does-the-os-boot-in-os161"><a class="markdownIt-Anchor" href="#how-does-the-os-boot-in-os161"></a> How does the OS boot in OS161?</h3>
+<blockquote>
+<p><strong>Q:</strong> Where does the processor expect to find the very first instruction to run, after it is powered on?</p>
+</blockquote>
+<p>We first need to know the design of MIPS processors.</p>
+<ul>
+<li>MIPS processors</li>
+</ul>
+<p>Physical Memory MIPS assumes:</p>
+<p><img src="/imgs/202409112349239.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+<p>Virtual Memory MIPS assumes:</p>
+<p><img src="/imgs/202409112350501.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+<p>Boot ROM area is where the <strong><code>bootloader</code></strong> lives. So 0xbfc00000 is where the very first instruction to run. Namely, after the processor is powered on, the <code>bootloader</code> runs first.</p>
+<p>kernel area:</p>
+<p><img src="/imgs/202409120001748.png" srcset="/img/loading.gif" lazyload alt="" /></p>
+<p>Draw a <a target="_blank" rel="noopener" href="https://drive.google.com/file/d/1UEE5l3ZmK0VskThRifhHr8tAQUrBBvYB/">diagram</a> showing how kseg0 and kseg1 map to the same physical memory area:</p>
+<img src="/imgs/202409121132415.png" srcset="/img/loading.gif" lazyload alt="" style="zoom:50%;" />
+<blockquote>
+<p><strong>Q:</strong> Based on that, can you tell what is the maximum amount of virtual memory that a user program can use?</p>
+</blockquote>
+<p>2G</p>
+<blockquote>
+<p><strong>Q:</strong> What is an <strong>exception address</strong> and why is it critical for the boot sequence? Where does the hardware expect to find exception code AFTER we boot (boot flag not set)?</p>
+</blockquote>
+<p><strong>Exception Address</strong> refers to a specific memory location where the processor jumps to when an exception or interrupt occurs.</p>
+<p>After we boot up, boot flag is no longer set, we find exception code in kernel area(0x80000000 and 0x80000080)</p>
+<p>Look at os161 source code:</p>
+<p>Begin with <code>main.c</code> -- it is located in <code>~/os161/src/kern/main/main.c</code>.</p>
+<p>Look at the <code>boot()</code> function. In particular, trace all the way through <code>ram_bootstrap()</code>. Find the lowest-level function that reads the size of the RAM from the hardware:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">void</span> *<br><span class="hljs-title function_">lamebus_map_area</span><span class="hljs-params">(<span class="hljs-keyword">struct</span> lamebus_softc *bus, <span class="hljs-type">int</span> slot, <span class="hljs-type">uint32_t</span> offset)</span><br>&#123;<br>	<span class="hljs-type">uint32_t</span> address;<br><br>	(<span class="hljs-type">void</span>)bus;   <span class="hljs-comment">// not needed</span><br><br>	KASSERT(slot &gt;= <span class="hljs-number">0</span> &amp;&amp; slot &lt; LB_NSLOTS);<br><br>	address = LB_BASEADDR + slot*LB_SLOT_SIZE + offset;<br>	<span class="hljs-keyword">return</span> (<span class="hljs-type">void</span> *)address;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>Take a look at <code>~/os161/src/kern/arch/sys161/main/start.S</code>. <strong>Since we are running on the simulator, the early boot code is located not in the boot ROM, but in sys161 -- the hardware simulator.</strong> The code in <code>start.S</code> is the very first code that runs on the system! It sets up the operating system to run and gives you the idea of what the actual boot ROM code looks like.</p>
+<div class="note note-info">
+            <p>Note that the code in <code>start.S</code> is executed by the hardware simulator and it serves the same purpose as the actual bootloader.</p>
+          </div>
+<blockquote>
+<p><strong>Q:</strong> How does <code>kmain()</code> get called?</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs assembly">/*<br>* Now, copy the exception handler code onto the first page of memory.<br>*/<br><br>li a0, EXADDR_UTLB<br>la a1, mips_utlb_handler<br>la a2, mips_utlb_end<br>sub a2, a2, a1<br>jal memmove<br>nop<br><br>li a0, EXADDR_GENERAL<br>la a1, mips_general_handler<br>la a2, mips_general_end<br>sub a2, a2, a1<br>jal memmove<br>nop<br></code></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs assembly">/*<br>* We&#x27;re all set up!<br>* Fetch the copy of the bootstring as the argument, and call main.<br>*/<br>jal kmain<br>move a0, s0			/* in delay slot */<br></code></pre></td></tr></table></figure>
+<div class="note note-primary">
+            <p>To sum up, after the MIPS processor is powered on, it starts executing the code in <code>start.S</code>, which is executed by the sys161 hardware simulator to serve the purpose of the bootloader. The code in <code>start.S</code>, or the bootloader, initialize hardware and load the kernel into memory (including copy the exception handlers to specific memory locations), then transfer controls to the kernel entry point (<code>kmain</code>).</p>
+          </div>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/OS/" class="category-chain-item">OS</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/OS/" class="print-no-link">#OS</a>
+      
+        <a href="/tags/Boot/" class="print-no-link">#Boot</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Introduction to Operating Systems</div>
+      <div>http://oooscar8.github.io/2024/09/12/Intro/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Alex Sun</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年9月12日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/09/16/OS161-A1/" title="OS161 Assignment 1">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">OS161 Assignment 1</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div class="disqus" style="width:100%">
+    <div id="disqus_thread"></div>
+    
+      <script type="text/javascript">
+        var disqus_config = function() {
+          this.page.url = 'http://oooscar8.github.io/2024/09/12/Intro/';
+          this.page.identifier = '/2024/09/12/Intro/';
+        };
+        Fluid.utils.loadComments('#disqus_thread', function() {
+          var d = document, s = d.createElement('script');
+          s.src = '//' + 'fluid' + '.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', new Date());
+          (d.head || d.body).appendChild(s);
+        });
+      </script>
+    
+    <noscript>Please enable JavaScript to view the comments</noscript>
+  </div>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
