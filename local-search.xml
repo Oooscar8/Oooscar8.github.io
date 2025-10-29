@@ -22,11 +22,11 @@
     
     <tags>
       
-      <tag>Y86</tag>
-      
       <tag>CSAPP</tag>
       
       <tag>Assembler</tag>
+      
+      <tag>Y86</tag>
       
     </tags>
     
@@ -74,9 +74,9 @@
     
     <tags>
       
-      <tag>ICS</tag>
-      
       <tag>Y86</tag>
+      
+      <tag>ICS</tag>
       
       <tag>Processor</tag>
       
@@ -200,9 +200,9 @@
     
     <tags>
       
-      <tag>Y86</tag>
-      
       <tag>CSAPP</tag>
+      
+      <tag>Y86</tag>
       
       <tag>Simulator</tag>
       
